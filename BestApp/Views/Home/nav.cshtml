@@ -1,0 +1,69 @@
+﻿<!-- list -->
+<ul class="nav">
+    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+        <span>Navigation</span>
+    </li>
+    <li ui-sref-active="active">
+        <a ui-sref="app.dashboard">
+            <i class="glyphicon glyphicon-stats icon text-light"></i>
+            <span class="font-bold">Dashboard</span>
+        </a>
+    </li>
+    <li ng-class="{active:$state.includes('app.cat')}">
+        <a class="auto">
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="glyphicon glyphicon-th-large icon text-light"></i>
+            <span class="font-bold">Cat</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active">
+                <a ui-sref="app.cat.index">
+                    <span>Cat list</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.todo">
+                    <span>Add Cat</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li ng-class="{active:$state.includes('app.staff')}">
+        <a class="auto">
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="glyphicon glyphicon-user icon text-light"></i>
+            <span class="font-bold">Staff</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active">
+                <a ui-sref="app.staff.index">
+                    <span>Staff list</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.staff.create">
+                    <span>Add Staff</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li ui-sref-active="active">
+        <a ui-sref="account.login">
+            <i class="glyphicon glyphicon-user icon text-light"></i>
+            <span class="font-bold">Login</span>
+        </a>
+    </li>
+    <li ui-sref-active="active">
+        <a ui-sref="account.register">
+            <i class="glyphicon glyphicon-user icon text-light"></i>
+            <span class="font-bold">Register</span>
+        </a>
+    </li>
+</ul>
+<!-- / list -->
