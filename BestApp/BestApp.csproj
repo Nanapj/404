@@ -308,6 +308,7 @@
     <Content Include="Views\Cat\Index.cshtml" />
     <Content Include="Views\Staff\Create.cshtml" />
     <Content Include="Views\Staff\Index.cshtml" />
+    <Content Include="Views\Staff\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\BestApp.Core\BestApp.Core.csproj">
