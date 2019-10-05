@@ -77,6 +77,10 @@ angular.module('app')
                         url: '/create',
                         templateUrl: '/staff/create'
                     })
+                    .state('app.staff.edit', {
+                        url: '/edit',
+                        templateUrl: '/staff/edit'
+                    })
                     .state('account', {
                         url: '/account',
                         template: '<div ui-view class="fade-in-right-big smooth"></div>'

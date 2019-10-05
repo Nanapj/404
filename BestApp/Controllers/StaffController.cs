@@ -18,5 +18,10 @@ namespace BestApp.Controllers
         {
             return PartialView();
         }
+
+        public ActionResult Edit()
+        {
+            return PartialView();
+        }
     }
 }
