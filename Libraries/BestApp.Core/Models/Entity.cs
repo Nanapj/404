@@ -8,7 +8,7 @@ namespace BestApp.Core.Models
 {
     public class Entity
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public DateTime CreatDate { get; set; }
         public bool Delete { get; set; }
         public ApplicationUser UserAccount { get; set; }
