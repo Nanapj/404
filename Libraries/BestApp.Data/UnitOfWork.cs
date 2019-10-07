@@ -99,7 +99,7 @@ namespace Repository.Pattern
 
         public virtual bool Commit()
         {
-            Transaction.Commit();
+             _context.SaveChanges();
             return true;
         }
 
