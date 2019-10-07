@@ -17,6 +17,9 @@ namespace BestApp.Core.Models
         public List<CustomerTag> CustomerTags { get; set; }
         public virtual ICollection<Customer> Customers { get; set; }
         public List<Event> Events { get; set; }
+        public string District { get; set; }
+        public string Ward { get; set; }
+        public string City { get; set; }
 
     }
 }

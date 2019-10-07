@@ -18,5 +18,8 @@ namespace BestApp.Domain
         public List<CustomerTagViewModel> CustomerTags { get; set; } = new List<CustomerTagViewModel>();
         public List<CustomerViewModel> Customers { get; set; } = new List<CustomerViewModel>();
         public List<EventViewModel> Events { get; set; } = new List<EventViewModel>();
+        public string District { get; set; }
+        public string Ward { get; set; }
+        public string City { get; set; }
     }
 }
