@@ -26,10 +26,16 @@ namespace BestApp.Services
         }
 
         private readonly IRepositoryAsync<Staff> _repository;
+        private readonly IRepository<ApplicationUser> _userRepository;
+        protected readonly DataContext db;
+        protected UserManager<ApplicationUser> userManager;
 
         public StaffService(IRepositoryAsync<Staff> repository) : base(repository)
         {
             _repository = repository;
+            db = new DataContext();
+            userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            
         }
 
         public Staff Insert(StaffViewModel model)
@@ -45,11 +51,9 @@ namespace BestApp.Services
             };
 
             // Nếu muốn tạo tài khoản
-            if(data.HasAccount)
+            if (data.HasAccount)
             {
-                DataContext context = new DataContext();
-                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+               
 
                 var user = new ApplicationUser();
 
@@ -57,7 +61,7 @@ namespace BestApp.Services
                 user.UserName = model.Email;
                 string userPWD = model.Password;
 
-                var result = UserManager.Create(user, userPWD);
+                var result = userManager.Create(user, userPWD);
             }
 
             base.Insert(data);
