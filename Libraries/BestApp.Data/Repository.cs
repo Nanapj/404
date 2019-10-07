@@ -39,7 +39,7 @@ namespace Repository.Pattern
 
         public virtual void Insert(TEntity entity)
         {
-            _dbSet.Attach(entity);
+            _dbSet.Add(entity);
         }
 
         public virtual void InsertRange(IEnumerable<TEntity> entities)

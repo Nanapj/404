@@ -12,8 +12,8 @@ angular.module('app')
 
       // config
       $scope.app = {
-        name: 'BestApp',
-        version: '2.2.0',
+        name: '404 System',
+        version: '0.5.0',
         // for chart colors
         color: {
           primary: '#7266ba',

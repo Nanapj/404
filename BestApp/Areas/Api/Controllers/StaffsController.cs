@@ -31,6 +31,7 @@ namespace BestApp.Areas.Api.Controllers
             return await _staffService.GetAllStaffsAsync();
         }
 
+        [HttpPost]
         public async Task<IHttpActionResult> Post(StaffViewModel model)
         {
             if (!ModelState.IsValid)

@@ -44,21 +44,21 @@ namespace BestApp.Services
                 Phone = model.Phone
             };
 
-            // Nếu muốn tạo tài khoản
-            if(data.HasAccount)
-            {
-                DataContext context = new DataContext();
-                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            //// Nếu muốn tạo tài khoản
+            //if(data.HasAccount)
+            //{
+            //    DataContext context = new DataContext();
+            //    var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            //    var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
-                var user = new ApplicationUser();
+            //    var user = new ApplicationUser();
 
-                user.Email = model.Email;
-                user.UserName = model.Email;
-                string userPWD = model.Password;
+            //    user.Email = model.Email;
+            //    user.UserName = model.Email;
+            //    string userPWD = model.Password;
 
-                var result = UserManager.Create(user, userPWD);
-            }
+            //    var result = UserManager.Create(user, userPWD);
+            //}
 
             base.Insert(data);
 
