@@ -1,11 +1,12 @@
 ﻿
 <div class="bg-light lter b-b wrapper-md">
-    <h1 class="m-n font-thin h3">Cat Management</h1>
+    <h1 class="m-n font-thin h3">Staff Management</h1>
 </div>
 <div class="wrapper-sm" ng-controller="StaffCtrl as vm">
     <div class="row">
         <div class="col-md-12">
-            <div kendo-grid
+            <div id="staffgrid"
+                 kendo-grid
                  k-options="mainGridOptions"
                  k-selectable="true"
                  k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'
@@ -25,4 +26,4 @@
             </div>
         </div>
     </script>
-</div>
+</>

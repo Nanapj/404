@@ -51,5 +51,22 @@ namespace BestApp.Areas.Api.Controllers
                 throw ex;
             }
         }
+
+        public async Task<IHttpActionResult> Put(Guid key, StaffViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                await _staffService.UpdateAsync(model);
+                _unitOfWorkAsync.Commit();
+                return Updated(model);
+            } catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }

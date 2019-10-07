@@ -65,7 +65,7 @@ angular.module('app')
                         template: '<div ui-view class="fade-in-down"></div>',
                         resolve: {
                             deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                                return $ocLazyLoad.load('/App/ctrl/staffCtrl.js'); // Resolve promise and load before view 
+                                return $ocLazyLoad.load('/App/ctrl/StaffController/staffCtrl.js'); // Resolve promise and load before view 
                             }]
                         }
                     })
@@ -78,8 +78,13 @@ angular.module('app')
                         templateUrl: '/staff/create'
                     })
                     .state('app.staff.edit', {
-                        url: '/edit',
-                        templateUrl: '/staff/edit'
+                        url: '/edit/:Id',
+                        templateUrl: '/staff/edit',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/StaffController/editStaffCtrl.js'); // Resolve promise and load before view 
+                            }]
+                        }
                     })
                     .state('account', {
                         url: '/account',
