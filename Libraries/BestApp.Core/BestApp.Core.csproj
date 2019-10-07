@@ -83,5 +83,11 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BestApp.Ultilities\BestApp.Ultilities.csproj">
+      <Project>{F20D8112-E0DC-4CDB-874B-19A234D016E4}</Project>
+      <Name>BestApp.Ultilities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
