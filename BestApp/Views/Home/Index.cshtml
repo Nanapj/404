@@ -2,7 +2,7 @@
 <html lang="en" data-ng-app="app">
 <head>
     <meta charset="utf-8" />
-    <title>BestApp | Pistore</title>
+    <title>404 System | Pistore</title>
     <meta name="description" content="Angularjs, Html5, Music, Landing, 4 in 1 ui kits package" />
     <meta name="keywords" content="AngularJS, angular, bootstrap, admin, dashboard, panel, app, charts, components,flat, responsive, layout, kit, ui, route, web, app, widgets" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -15,9 +15,13 @@
     <!-- build:css css/app.min.css -->
     <link rel="stylesheet" href="/App/css/font.css" type="text/css" />
     <link rel="stylesheet" href="/App/css/app.css" type="text/css" />
+    <link href="~/App/css/toaster.min.css" rel="stylesheet" />
+    <link href="~/libs/block-ui/dist/angular-block-ui.css" rel="stylesheet" />
+
     <!-- endbuild -->
 </head>
 <body ng-controller="AppCtrl">
+    <toaster-container></toaster-container>
     <div class="app" id="app" ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}" ui-view></div>
 
     <!-- build:js js/app.angular.js -->
@@ -25,13 +29,14 @@
     <script src="/Content/kendoui/js/jquery.min.js"></script>
     <script src="/libs/angular/angular/angular.js"></script>
     <script src="/Content/kendoui/js/kendo.all.min.js"></script>
-
     <!-- Bootstrap -->
     <script src="/libs/jquery/bootstrap/dist/js/bootstrap.js"></script>
 
     <!-- Angular -->
     <script src="/Content/kendoui/js/kendo.angular.min.js"></script>
     <script src="/libs/angular/angular-animate/angular-animate.js"></script>
+    <script src="~/libs/toaster.min.js"></script>
+    <script src="~/libs/block-ui/dist/angular-block-ui.js"></script>
     <script src="/libs/angular/angular-aria/angular-aria.js"></script>
     <script src="/libs/angular/angular-cookies/angular-cookies.js"></script>
     <script src="/libs/angular/angular-messages/angular-messages.js"></script>
@@ -73,6 +78,7 @@
     <script src="/App/js/directives/ui-shift.js"></script>
     <script src="/App/js/directives/ui-toggleclass.js"></script>
     <script src="/App/js/controllers/bootstrap.js"></script>
+
     <!-- endbuild -->
     <!-- Lazy loading -->
 </body>

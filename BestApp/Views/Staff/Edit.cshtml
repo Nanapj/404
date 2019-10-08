@@ -3,15 +3,16 @@
     <h1 class="m-n font-thin h3">Edit Staff</h1>
 </div>
 <div class="wrapper-sm" ng-controller="EditStaffCtrl as vm">
-    <div class="row">
+    <toaster-container></toaster-container>
+    <div class="row" >
         <div class="col-md-6">
-            <div class="panel panel-default">
+            <div class="panel panel-default" >
                 <div class="panel-heading font-bold">Edit form</div>
-                <div class="panel-body">
+                <div class="panel-body" block-ui="EditBlockUI">
                     <form role="form">
                         <div class="form-group">
                             <label>Fullname</label>
-                            <input type="text" class="form-control" ng-model="vm.model.FullName" >
+                            <input type="text" class="form-control" ng-model="vm.model.FullName">
                         </div>
                         <div class="form-group">
                             <label>Phone</label>

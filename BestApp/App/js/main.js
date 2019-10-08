@@ -16,7 +16,7 @@ angular.module('app')
         version: '0.5.0',
         // for chart colors
         color: {
-          primary: '#7266ba',
+          primary: '#1971a9',
           info:    '#23b7e5',
           success: '#27c24c',
           warning: '#fad733',

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app')
-    .controller('accountCtrl', ['$scope', '$state', '$http', '$localStorage', '$rootScope', function ($scope, $state, $http, $localStorage, $rootScope){
+    .controller('accountCtrl', ['$scope', '$state', '$http', '$localStorage', '$rootScope', 'toaster', function ($scope, $state, $http, $localStorage, $rootScope, toaster){
         console.log('accountCtrl loaded!');
         var vm = this;
         vm.user = {};
@@ -17,7 +17,7 @@ angular.module('app')
                 }
             }).then(function(response){
                 if(response.data == true){
-                    alert("Password của bạn đã được thay đổi! Yêu cầu đăng nhập lại.");
+                    toaster.pop('success', "Thành công", "Password của bạn đã được thay đổi! Yêu cầu đăng nhập lại.");
                     $state.go('account.login');
                 }else{
                     alert("Yêu cầu nhập chính xác password!");

@@ -82,10 +82,32 @@ namespace BestApp.Services
             }
             if(user != null)
             {
-                if(model.HasAccount == false && user.LockoutEnabled == false)
+                if(model.HasAccount == false && user.IsBanned == false)
                 {
-                    user.LockoutEnabled = true;
+                    user.IsBanned = true;
                     userManager.Update(user);
+                } else if(model.HasAccount == true && (model.Password != null && model.Password != ""))
+                {
+                    String hashedNewPassword = userManager.PasswordHasher.HashPassword(model.Password);
+
+                    userManager.RemovePassword(user.Id);
+                    var result = userManager.AddPassword(user.Id, model.Password);
+                    if(!result.Succeeded)
+                    {
+                        throw new Exception("Thay đổi mật khẩu thất bại");
+                    }
+                }
+                
+            } else
+            {
+                if(model.HasAccount == true)
+                {
+                    var newUser = new ApplicationUser();
+                    newUser.Email = model.Email;
+                    newUser.UserName = model.Email;
+                    string userPWD = model.Password;
+
+                    var result = userManager.Create(user, userPWD);
                 }
             }
         }
