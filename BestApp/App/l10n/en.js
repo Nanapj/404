@@ -1,5 +1,4 @@
 {
-
 "header" : {
   "navbar" : {
     "UPLOAD" : "Upload",
@@ -68,5 +67,4 @@
   "MILESTONE" : "Milestone",
   "RELEASE" : "Release"
 }
-
 }

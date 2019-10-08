@@ -86,6 +86,29 @@ angular.module('app')
                             }]
                         }
                     })
+                    .state('app.crevent', {
+                        abstract:true,
+                        url: '/crevent',
+                        template: '<div ui-view class="fade-in-down"></div>',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function($ocLazyLoad) { 
+                                return $ocLazyLoad.load('/App/ctrl/CREventController/crEventIndexCtrl.js');
+                            }]
+                        }
+                    })
+                    .state('app.crevent.index', {
+                        url: '/index',
+                        templateUrl: '/crevent/Index'
+                    })
+                    .state('app.crevent.creventcreation', {
+                        url: '/creventcreation',
+                        templateUrl: '/crevent/EventCreation',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/CREventController/crEventCreateCtrl.js');
+                            }]
+                        }
+                    })
                     .state('account', {
                         url: '/account',
                         template: '<div ui-view class="fade-in-right-big smooth"></div>'
