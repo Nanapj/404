@@ -31,6 +31,7 @@ namespace BestApp.Areas.Api.Controllers
             return await _staffService.GetAllStaffsAsync();
         }
 
+        [HttpPost]
         public async Task<IHttpActionResult> Post(StaffViewModel model)
         {
             if (!ModelState.IsValid)
@@ -48,6 +49,23 @@ namespace BestApp.Areas.Api.Controllers
             {
                 _unitOfWorkAsync.Rollback();
                 throw ex;
+            }
+        }
+
+        public async Task<IHttpActionResult> Put(Guid key, StaffViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                await _staffService.UpdateAsync(model);
+                _unitOfWorkAsync.Commit();
+                return Updated(model);
+            } catch (Exception e)
+            {
+                throw e;
             }
         }
     }

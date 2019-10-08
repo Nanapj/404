@@ -23,6 +23,7 @@ namespace BestApp.Services
             Staff Insert(StaffViewModel model);
             Task<Staff> InsertAsync(StaffViewModel model);
             Task<IQueryable<StaffViewModel>> GetAllStaffsAsync();
+            Task<StaffViewModel> UpdateAsync(StaffViewModel model);
         }
 
         private readonly IRepositoryAsync<Staff> _repository;
@@ -52,11 +53,8 @@ namespace BestApp.Services
 
             // Nếu muốn tạo tài khoản
             if (data.HasAccount)
-            {
-               
-
+            {            
                 var user = new ApplicationUser();
-
                 user.Email = model.Email;
                 user.UserName = model.Email;
                 string userPWD = model.Password;
@@ -68,11 +66,12 @@ namespace BestApp.Services
 
             return data;
         }
-
+        
         public void Update(StaffViewModel model)
         {
             var data = Find(model.Id);
-            if(data != null)
+            var user = userManager.FindByEmail(model.Email);
+            if (data != null)
             {
                 data.FullName = model.FullName;
                 data.Address = model.Address;
@@ -80,6 +79,14 @@ namespace BestApp.Services
                 data.CreatDate = DateTime.Now;
                 data.HasAccount = model.HasAccount;
                 data.Phone = model.Phone;
+            }
+            if(user != null)
+            {
+                if(model.HasAccount == false && user.LockoutEnabled == false)
+                {
+                    user.LockoutEnabled = true;
+                    userManager.Update(user);
+                }
             }
         }
 
@@ -92,7 +99,18 @@ namespace BestApp.Services
         {
             return await Task.Run(() => Insert(model));
         }
-
+        public async Task<StaffViewModel> UpdateAsync(StaffViewModel model)
+        {
+            try
+            {
+                await Task.Run(() => Update(model));
+                return model;
+            }
+            catch(Exception e)
+            {
+                throw (e);
+            }
+        }
         public Task<IQueryable<StaffViewModel>> GetAllStaffsAsync()
         {
             return Task.Run(() => GetAllStaffs().Select(x => new StaffViewModel() {

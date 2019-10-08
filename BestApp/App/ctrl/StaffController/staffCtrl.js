@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('app')
-    .controller('StaffCtrl', ['$scope', '$state', '$http', function ($scope, $state, $http, $rootScope){
-        console.log('StaffCtrl loaded!');
+    .controller('StaffCtrl', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http, $rootScope){
         var _url = "/odata/Staffs";
         var vm = this;
         vm.access_token = localStorage.getItem('access_token');
         vm.model = {};
+        vm.selectedStaff = {};
         vm.model.HasAccount = false;
         vm.toolbarTemplate = toolbarTemplate;
         vm.create = create;
@@ -14,10 +14,13 @@ angular.module('app')
         
         function create(){
             $state.go('app.staff.create');
+            vm.editMode = false;
         }
 
         function edit(){
-            $state.go('app.staff.edit');
+            $state.go('app.staff.edit', {
+                Id: vm.selectedStaff.Id
+            });
         }
 
         function toolbarTemplate() {
@@ -57,13 +60,12 @@ angular.module('app')
             sortable: true,
             pageable: true,
             height: 600,
-            dataBound: function() {
-                this.expandRow(this.tbody.find("tr.k-master-row").first());
-            },
+            dataBound: onDataBound,
+            change: onChange,
             columns: [
                 {
-                    field: "Fullname",
-                    title: "Fullname",
+                    field: "FullName",
+                    title: "Full Name",
                     width: "50px"
                 },
                 {
@@ -83,4 +85,13 @@ angular.module('app')
                 }
             ]
         };
+        function onDataBound(e) {
+            this.expandRow(this.tbody.find("tr.k-master-row").first());
+        }
+        function onChange(e) {
+            var grid = $('#staffgrid').data('kendoGrid');
+            var selectedItem = grid.dataItem(grid.select());
+            vm.selectedStaff = selectedItem;
+            console.log(vm.selectedStaff);
+        }
 }]);
