@@ -104,6 +104,5 @@ angular.module('app')
             var grid = $('#staffgrid').data('kendoGrid');
             var selectedItem = grid.dataItem(grid.select());
             vm.selectedStaff = selectedItem;
-            console.log(vm.selectedStaff);
         }
 }]);
