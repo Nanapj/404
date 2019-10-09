@@ -105,7 +105,7 @@ angular.module('app')
                         templateUrl: '/crevent/EventCreation',
                         resolve: {
                             deps: ['$ocLazyLoad', function($ocLazyLoad) {
-                                return $ocLazyLoad.load('/App/ctrl/CREventController/crEventCreateCtrl.js');
+                                return $ocLazyLoad.load('/App/ctrl/CREventController/crEventCreationCtrl.js');
                             }]
                         }
                     })

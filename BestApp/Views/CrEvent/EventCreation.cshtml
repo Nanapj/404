@@ -1,121 +1,212 @@
 ﻿
-<div class="wrapper-md" >
-    <div ng-controller="crEventCreationCtrl">
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading font-bold">TẠO SỰ KIỆN</div>
-                    <div class="panel-body">
-                        <form action="#" class="m-b-md">
-                            <div class="input-group">
-                                <input type="text" class="form-control input-lg" placeholder="Số điện thoại khách hàng">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-lg btn-default" type="button">Tiếp tục</button>
-                                </span>
-                            </div>
-                        </form>
+<div class="wrapper-md" ng-controller="crEventCreationCtrl as vm">
+    <tabset class="tab-container" ng-init="steps={percent:40, step1:true, step2:false}">
+        <tab heading="Bước 1" active="steps.step1" select="steps.percent=10">
+            <progressbar value="steps.percent" class="progress-xs" type="success"></progressbar>
+            <h4>SỰ KIỆN</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading font-bold">TẠO SỰ KIỆN</div>
+                        <div class="panel-body">
+                            <form action="#" class="m-b-md">
+                                <div class="input-group">
+                                    <input type="text" class="form-control input-lg" placeholder="Số điện thoại khách hàng">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-lg btn-default" type="button" ng-click="steps.step2=true">Tiếp tục</button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </tab>
+        <tab heading="Bước 2" disabled="step1.$invalid" active="steps.step2" select="steps.percent=60">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading font-bold">THÔNG TIN KHÁCH HÀNG 404</div>
+                        <div class="panel-body">
+                            <form role="form">
+                                <div class="form-group">
+                                    <label>Tên khách hàng</label>
+                                    <input type="text" class="form-control" placeholder="Tên khách hàng" ng-model="vm.systemCustomer.FullName">
+                                </div>
+                                <div class="form-group">
+                                    <label>Địa chỉ</label>
+                                    <input type="text" class="form-control" placeholder="Địa chỉ" ng-model="vm.systemCustomer.Address">
+                                </div>
+                                <div class="row ">
+                                    <div class="col-md-6 btn-group m-b-md col-sm-12">
+                                        <label>Thành phố / Tỉnh</label>
+                                        <select kendo-drop-down-list
+                                                k-data-text-field="'ProductName'"
+                                                k-data-value-field="'ProductID'"
+                                                k-data-source="vm.cityData"
+                                                k-option-label="' Thành phố... '"
+                                                k-filter="'contains'"
+                                                style="width: 100%"></select>
+                                    </div>
+                                    <div class="col-md-6 btn-group m-b-md col-sm-12">
+                                        <label>Quận / Huyện</label>
+                                        <select kendo-drop-down-list
+                                                k-data-text-field="'ProductName'"
+                                                k-data-value-field="'ProductID'"
+                                                k-data-source="vm.districtData"
+                                                k-option-label="' Quận / Huyện... '"
+                                                k-filter="'contains'"
+                                                style="width: 100%"></select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 btn-group m-b-md col-sm-12">
+                                        <label>Phường / Xã</label>
+                                        <select kendo-drop-down-list
+                                                k-data-text-field="'ProductName'"
+                                                k-data-value-field="'ProductID'"
+                                                k-data-source="vm.wardData"
+                                                k-option-label="' Phường / Xã... '"
+                                                k-filter="'contains'"
+                                                style="width: 100%"></select>
+                                    </div>
+                                    <div class="col-md-6 btn-group m-b-md col-sm-12">
+                                        <label>Ngày sinh</label>
+                                        <input kendo-date-picker
+                                               k-options="{format: 'dd/MM/yyyy'}"
+                                               style="width: 100%;" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <footer class="panel-footer text-right bg-light lter cr-submit">
+                                        <button type="submit" class="btn btn-success">Submit</button>
+                                    </footer>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading font-bold">THÔNG TIN KHÁCH HÀNG PITECH</div>
+                        <div class="panel-body">
+                            <form role="form">
+                                <div class="form-group">
+                                    <label><b>Tên khách hàng</b></label>
+                                    <p class="form-control-static">{{vm.pitechCutomer.FullName}}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label><b>Địa chỉ</b></label>
+                                    <p class="form-control-static">
+                                        {{vm.pitechCutomer.Address}}
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label><b>Thành phố / Tỉnh</b></label>
+                                        <p class="form-control-static">  {{vm.pitechCutomer.City}}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label><b>Quận / Huyện</b></label>
+                                        <p class="form-control-static">  {{vm.pitechCutomer.District}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label><b>Phường / Xã</b></label>
+                                    <p class="form-control-static">  {{vm.pitechCutomer.Ward}}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label><b>Ngày sinh</b></label>
+                                    <p class="form-control-static">  {{vm.pitechCutomer.Birthday}}</p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading font-bold">PHÂN LOẠI PHIẾU</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6 k-content">
+                                    <label>Sự kiện</label>
+                                    <select kendo-drop-down-list
+                                            k-data-text-field="'ProductName'"
+                                            k-data-value-field="'ProductID'"
+                                            k-data-source="vm.eventData"
+                                            k-option-label="' Sự kiện... '"
+                                            k-filter="'contains'"
+                                            style="width: 100%"></select>
+                                </div>
+                                <div class="col-md-6 k-content">
+                                    <label>Mục đích</label>
+                                    <select kendo-drop-down-list
+                                            k-data-text-field="'ProductName'"
+                                            k-data-value-field="'ProductID'"
+                                            k-data-source="vm.purposeData"
+                                            k-option-label="' Mục đích... '"
+                                            k-filter="'contains'"
+                                            style="width: 100%"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading font-bold">THÔNG TIN PHIẾU</div>
+                        <div class="panel-body">
+                            <div kendo-tab-strip k-content-urls="[ null, null]" style="background-color: #edf1f2; border-color: white">
+                                <!-- tab list -->
+                                <ul>
+                                    <li class="k-state-active" style="background-color: #7793a7; border-color: white;">Sự kiện</li>
+                                    <li style="background-color: #7793a7; border-color: white;">Phiếu hẹn</li>
+                                </ul>
 
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading font-bold">THÔNG TIN KHÁCH HÀNG 404</div>
-                    <div class="panel-body">
-                        <form role="form">
-                            <div class="form-group">
-                                <label>Email address</label>
-                                <input type="email" class="form-control" placeholder="Enter email">
-                            </div>
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input type="password" class="form-control" placeholder="Password">
-                            </div>
-                            <div class="row">
-                                <div class="btn-group m-b-md col-md-6">
-                                    <div class="btn-group dropdown">
-                                        <button type="button" class="btn btn-default" data-toggle="dropdown">
-                                            Dropdown
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a href>Dropdown link</a></li>
-                                            <li><a href>Dropdown link</a></li>
-                                            <li><a href>Dropdown link</a></li>
-                                        </ul>
+                                <div class="row">
+                                    <div class="row col-md-12">
+                                        <div class="col-md-3">
+                                            <label>Sản phẩm</label>
+                                            <select kendo-drop-down-list
+                                                    k-data-text-field="'ProductName'"
+                                                    k-data-value-field="'ProductID'"
+                                                    k-data-source="vm.productData"
+                                                    k-option-label="' Sản phẩm... '"
+                                                    k-filter="'contains'"
+                                                    style="width: 100%"></select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Serial</label>
+                                                <input type="text" class="form-control" placeholder="Tên khách hàng" ng-model="vm.systemCustomer.FullName">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-12">
+                                        <div class="col-md-3">
+                                            Hello 3
+                                        </div>
+                                        <div class="col-md-3">
+                                            Hello 4
+                                        </div>
+                                        <div class="col-md-3">
+                                            Hello 5
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="btn-group m-b-md col-md-6">
-                                    <div class="btn-group dropdown">
-                                        <button type="button" class="btn btn-default" data-toggle="dropdown">
-                                            Dropdown
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a href>Dropdown link</a></li>
-                                            <li><a href>Dropdown link</a></li>
-                                            <li><a href>Dropdown link</a></li>
-                                        </ul>
-                                    </div>
+
+                                <div style="padding: 1em">
+                                    This is the second tab
                                 </div>
                             </div>
-                            <div class="btn-group m-b-md col-md-6">
-                                <div class="btn-group dropdown">
-                                    <button type="button" class="btn btn-default" data-toggle="dropdown">
-                                        Dropdown
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a href>Dropdown link</a></li>
-                                        <li><a href>Dropdown link</a></li>
-                                        <li><a href>Dropdown link</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-sm btn-primary">Submit</button>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading font-bold">THÔNG TIN KHÁCH HÀNG PITECH</div>
-                    <div class="panel-body">
-                        <form role="form">
-                            <div class="form-group">
-                                <label><b>Tên khách hàng</b></label>
-                                <p class="form-control-static">Nguyễn Văn A</p>
-                            </div>
-                            <div class="form-group">
-                                <label><b>Địa chỉ</b></label>
-                                <p class="form-control-static">
-                                    1 Lê Duẩn Bến Nghé, Quận 1, Hồ Chí Minh
-                                </p>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label><b>Thành phố / Tỉnh</b></label>
-                                    <p class="form-control-static">Hồ Chí Minh</p>
-                                </div>
-                                <div class="col-md-6">
-                                    <label><b>Quận / Huyện</b></label>
-                                    <p class="form-control-static">Quận 1</p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label><b>Phường / Xã</b></label>
-                                <p class="form-control-static">1</p>
-                            </div>
-                            <div class="form-group">
-                                <label><b>Ngày sinh</b></label>
-                                <p class="form-control-static">01/01/1900</p>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        </tab>
+    </tabset>
 </div>
