@@ -9,6 +9,28 @@
             <span class="font-bold">Dashboard</span>
         </a>
     </li>
+    <li ng-class="{active:$state.includes('app.crevent')}">
+        <a class="auto">
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="glyphicon glyphicon-th-large icon text-light"></i>
+            <span class="font-bold">CR</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active">
+                <a ui-sref="app.crevent.index">
+                    <span>Tổng quan</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.crevent.creventcreation">
+                    <span>Tạo sự kiện</span>
+                </a>
+            </li>
+        </ul>
+    </li>
     <li ng-class="{active:$state.includes('app.cat')}">
         <a class="auto">
             <span class="pull-right text-muted">

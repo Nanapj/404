@@ -244,6 +244,7 @@
     <Compile Include="Areas\Api\Controllers\StaffsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CatController.cs" />
+    <Compile Include="Controllers\CrEventController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
@@ -311,6 +312,8 @@
     <Content Include="Views\Staff\Edit.cshtml" />
     <Content Include="Views\Cat\Edit.cshtml" />
     <Content Include="Views\Cat\Create.cshtml" />
+    <Content Include="Views\CrEvent\Index.cshtml" />
+    <Content Include="Views\CrEvent\EventCreation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\BestApp.Core\BestApp.Core.csproj">

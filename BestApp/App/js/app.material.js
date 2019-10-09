@@ -18,5 +18,6 @@ angular.module('app', [
     'ui.jq',
     'oc.lazyLoad',
     'pascalprecht.translate',
-    'ngMaterial'
+    'ngMaterial',
+    'toaster'
 ]);

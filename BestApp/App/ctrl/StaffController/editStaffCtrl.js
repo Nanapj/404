@@ -2,13 +2,14 @@
 
 
 angular.module('app')
-    .controller('EditStaffCtrl', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http, $rootScope){
+    .controller('EditStaffCtrl', ['$scope','$state', '$stateParams', '$http', 'toaster', 'blockUI', function ($scope, $state, $stateParams, $http, toaster,blockUI){
         var _url = "/odata/Staffs";
         var vm = this;
         vm.access_token = localStorage.getItem('access_token');
         vm.model = {};
         vm.selectedStaff = {};
         vm.model.HasAccount = false;
+        var editBlock = blockUI.instances.get('EditBlockUI');
         $scope.initStaffEdit = function() {
             $http({
                 method: 'GET',
@@ -23,7 +24,7 @@ angular.module('app')
                     vm.model = staff;
                   } else 
                   {
-                    alert('Không tìm thấy kết quả');
+                    toaster.pop('warning', "Rỗng", "Không tìm thấy thông tin nhân viên");
                   }
                 
                 }, function errorCallback(response) {
@@ -31,8 +32,8 @@ angular.module('app')
             });
         }
         $scope.initStaffEdit();
-
         vm.editSubmit = function() {
+            editBlock.start();
             $http({
                 url: _url+'('+ $stateParams.Id.replace(/['"]+/g, '') +')',
                 method: 'PUT',
@@ -42,7 +43,12 @@ angular.module('app')
                     'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
                 },
             }).then(function(response){
-                console.log(response);
+                if(response.status == 204) {
+                    editBlock.stop();
+                    toaster.pop('success', "Thành công", "Đã cập nhật xong");
+                } else {
+                    toaster.pop('error', "Lỗi", "Có lỗi trong quá trình cập nhật");
+                }
             });
         }
 }]);

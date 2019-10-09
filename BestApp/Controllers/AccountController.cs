@@ -74,10 +74,18 @@ namespace BestApp.Controllers
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var isBanned = UserManager.FindByEmail(model.Email).IsBanned;
             switch (result)
             {
-                case SignInStatus.Success:
-                    return Json(true, JsonRequestBehavior.AllowGet);
+                case SignInStatus.Success: {
+                        if(isBanned)
+                        {
+                            return Json(false, JsonRequestBehavior.AllowGet);
+                        } else
+                        {
+                            return Json(true, JsonRequestBehavior.AllowGet);
+                        }   
+                    }            
                 case SignInStatus.LockedOut:
                     return Json(false, JsonRequestBehavior.AllowGet);
                 case SignInStatus.RequiresVerification:
