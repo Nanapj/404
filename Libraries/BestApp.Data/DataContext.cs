@@ -23,6 +23,15 @@ namespace Repository.Pattern
 
         public DbSet<Cat> Cats { get; set; }
         public DbSet<Staff> Staffs { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<CustomerTag> CustomerTags { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<DetailEvent> Detailevents { get; set; }
+        public DbSet<InteractionHistory> InteractionHistorys { get; set; }
+        public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<ReminderNote> ReminderNotes { get; set; }
 
         public override int SaveChanges()
         {
