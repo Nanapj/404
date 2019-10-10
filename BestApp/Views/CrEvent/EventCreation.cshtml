@@ -1,19 +1,17 @@
 ﻿
 <div class="wrapper-md" ng-controller="crEventCreationCtrl as vm">
     <tabset class="tab-container" ng-init="steps={percent:40, step1:true, step2:false}">
-        <tab heading="Bước 1" active="steps.step1" select="steps.percent=10">
-            <progressbar value="steps.percent" class="progress-xs" type="success"></progressbar>
-            <h4>SỰ KIỆN</h4>
+        <tab heading="Bước 1" active="steps.step1" disabled="!vm.tabDisable" select="steps.percent=40">
             <div class="row">
                 <div class="col-sm-6">
                     <div class="panel panel-default">
                         <div class="panel-heading font-bold">TẠO SỰ KIỆN</div>
                         <div class="panel-body">
-                            <form action="#" class="m-b-md">
+                            <form class="m-b-md" ng-submit="steps.step2=true" >
                                 <div class="input-group">
-                                    <input type="text" class="form-control input-lg" placeholder="Số điện thoại khách hàng">
+                                    <input type="text" name="masked" ng-change="phoneNumChange()" ui-mask="999 999 9999" ng-model="vm.searchingNumber" placeholder="___ ___ ____" class="form-control m-b" required>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-lg btn-default" type="button" ng-click="steps.step2=true">Tiếp tục</button>
+                                        <button class="btn btn-md btn-default" ng-disabled="vm.tabDisable" type="button" ng-click="steps.step2=true">Tiếp tục</button>
                                     </span>
                                 </div>
                             </form>
@@ -22,7 +20,7 @@
                 </div>
             </div>
         </tab>
-        <tab heading="Bước 2" disabled="step1.$invalid" active="steps.step2" select="steps.percent=60">
+        <tab heading="Bước 2" disabled="vm.tabDisable" active="steps.step2" select="steps.percent=60">
             <div class="row">
                 <div class="col-sm-6">
                     <div class="panel panel-default">
@@ -77,10 +75,10 @@
                                                style="width: 100%;" />
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <footer class="panel-footer text-right bg-light lter cr-submit">
-                                        <button type="submit" class="btn btn-success">Submit</button>
-                                    </footer>
+                                <div class="row col-md-12">
+                                    <div class="form-group" style="padding-top: 10px;">
+                                        <button class="btn btn-success btn-default" ng-click="vm.createClicked">Tạo mới / Chỉnh sửa</button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -163,50 +161,160 @@
                             <div kendo-tab-strip k-content-urls="[ null, null]" style="background-color: #edf1f2; border-color: white">
                                 <!-- tab list -->
                                 <ul>
-                                    <li class="k-state-active" style="background-color: #7793a7; border-color: white;">Sự kiện</li>
-                                    <li style="background-color: #7793a7; border-color: white;">Phiếu hẹn</li>
+                                    <li class="k-state-active">Sự kiện</li>
+                                    <li>Phiếu hẹn</li>
                                 </ul>
 
                                 <div class="row">
                                     <div class="row col-md-12">
-                                        <div class="col-md-3">
-                                            <label>Sản phẩm</label>
-                                            <select kendo-drop-down-list
-                                                    k-data-text-field="'ProductName'"
-                                                    k-data-value-field="'ProductID'"
-                                                    k-data-source="vm.productData"
-                                                    k-option-label="' Sản phẩm... '"
-                                                    k-filter="'contains'"
-                                                    style="width: 100%"></select>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Serial</label>
-                                                <input type="text" class="form-control" placeholder="Tên khách hàng" ng-model="vm.systemCustomer.FullName">
+                                        <div class="form-group">
+                                            <div class="col-md-3">
+                                                <label>Sản phẩm</label>
+                                                <select kendo-drop-down-list
+                                                        k-data-text-field="'ProductName'"
+                                                        k-data-value-field="'ProductID'"
+                                                        k-data-source="vm.productData"
+                                                        k-option-label="' Sản phẩm... '"
+                                                        k-filter="'contains'"
+                                                        style="width: 100%"></select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Serial</label>
+                                                    <input style="height:17px; width:93%" type="text" class="form-control" placeholder="Serial" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row col-md-12">
                                         <div class="col-md-3">
-                                            Hello 3
+                                            <label>Đại lý</label>
+                                            <input style="height:17px; width:93%" type="text" class="form-control" placeholder="Serial" />
                                         </div>
                                         <div class="col-md-3">
-                                            Hello 4
+                                            <label>Nhân viên bán hàng</label>
+                                            <input style="height:17px; width:93%" type="text" class="form-control" placeholder="Nhân viên bán hàng" />
                                         </div>
                                         <div class="col-md-3">
-                                            Hello 5
+                                            <label>Ngày mua</label>
+                                            <input kendo-date-picker
+                                                   k-options="{format: 'dd/MM/yyyy'}"
+                                                   style="width: 100%;" />
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-12">
+                                        <div class="form-group" style="padding: 15px;">
+                                            <label>Nội dung</label>
+                                            <ng-quill-editor ng-model="vm.message" modules="{toolbar: false}"></ng-quill-editor>
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-12">
+                                        <div class="form-group" style="padding:15px;">
+                                            <label><b>Tags:</b></label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Bộ phận</label>
+                                                <select kendo-multi-select k-options="vm.departmentSelectOptions" k-ng-model="vm.departmentSelectedIds"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="form-group" style="padding: 15px;">
+                                                <h4>Tag</h4>
+                                                <select kendo-multi-select k-options="vm.selectOptions" k-ng-model="vm.selectedIds"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="form-group" style="padding: 15px;">
+                                                <h4>Ghi chú</h4>
+                                                <ng-quill-editor ng-model="vm.message" modules="{toolbar: false}"></ng-quill-editor>
+                                            </div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="form-group" style="padding: 15px;">
+                                                <button class="btn btn-default">Tạo sự kiện</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div style="padding: 1em">
-                                    This is the second tab
+                                <div class="row">
+                                    <div class="row col-md-12">
+                                        <div class="form-group">
+                                            <div class="col-md-3">
+                                                <label>Sản phẩm</label>
+                                                <select kendo-drop-down-list
+                                                        k-data-text-field="'ProductName'"
+                                                        k-data-value-field="'ProductID'"
+                                                        k-data-source="vm.productData"
+                                                        k-option-label="' Sản phẩm... '"
+                                                        k-filter="'contains'"
+                                                        style="width: 100%"></select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Serial</label>
+                                                    <input style="height:17px; width:93%" type="text" class="form-control" placeholder="Serial" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="col-md-3">
+                                                <label>Lịch hẹn</label>
+                                                <input kendo-date-picker
+                                                       k-options="{format: 'dd/MM/yyyy'}"
+                                                       style="width: 100%;" />
+                                            </div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="form-group" style="padding: 15px;">
+                                                <label>Lời nhắc</label>
+                                                <ng-quill-editor ng-model="vm.reminderNote" modules="{toolbar: false}"></ng-quill-editor>
+                                            </div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="form-group" style="padding:15px;">
+                                                <label><b>Tags:</b></label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Bộ phận</label>
+                                                    <select kendo-multi-select k-options="vm.departmentSelectOptions" k-ng-model="vm.departmentSelectedIds"></select>
+                                                </div>
+                                            </div>
+                                            <div class="row col-md-12">
+                                                <div class="form-group" style="padding: 15px;">
+                                                    <h4>Tag</h4>
+                                                    <select kendo-multi-select k-options="vm.selectOptions" k-ng-model="vm.selectedIds"></select>
+                                                </div>
+                                            </div>
+                                            <div class="row col-md-12">
+                                                <div class="form-group" style="padding: 15px;">
+                                                    <h4>Ghi chú</h4>
+                                                    <ng-quill-editor ng-model="vm.message" modules="{toolbar: false}"></ng-quill-editor>
+                                                </div>
+                                            </div>
+                                            <div class="row col-md-12">
+                                                <div class="form-group" style="padding: 15px;">
+                                                    <button class="btn btn-default">Tạo phiếu hẹn</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="row col-md-12">
+                        <button class="btn btn-danger btn-default" ng-show="!dialogVisible" ng-click="dialog.open()">Reset</button>
+                        <div kendo-dialog="dialog" k-title="'Reset'" k-on-open="dialogVisible = true"
+                             k-on-close="dialogVisible = false" k-width="450"
+                             k-actions="actions" k-modal="false">
+                            <p>Bạn có chắc muốn xóa thông tin đang thao tác ?</p>
+                        </div>
+                    </div>
                 </div>
             </div>
+            
         </tab>
     </tabset>
 </div>

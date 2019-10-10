@@ -19,5 +19,6 @@ angular.module('app', [
     'oc.lazyLoad',
     'pascalprecht.translate',
     'toaster',
-    'blockUI'
+    'blockUI',
+    'ngQuill'
 ]);
