@@ -142,6 +142,5 @@ angular.module('app')
         $scope.initialEventCreationCtrl = function() {  
         }
         $scope.initialEventCreationCtrl();
-    
     }
 ]);
