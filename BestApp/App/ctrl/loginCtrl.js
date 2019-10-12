@@ -2,7 +2,6 @@
 
 angular.module('app')
     .controller('LoginCtrl', ['$scope', '$state', '$http', '$window', '$localStorage', '$rootScope', 'toaster', function ($scope, $state, $http, $window, $localStorage, $rootScope,toaster){
-        console.log('LoginCtrl loaded!');
         var vm = this;
         vm.user = {};
         $scope.actions = [
@@ -43,7 +42,7 @@ angular.module('app')
                         $state.go('app.dashboard');
                     });
                 }else{
-                    swal("SOMETHING WRONG","Thông tin đăng nhập không chính xác hoặc tài khoản đã bị khóa");
+                    swal("Opps...", "Wrong email or password or you're banned", "error");
                 }
             });
         }

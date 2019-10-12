@@ -2,7 +2,6 @@
 
 angular.module('app')
     .controller('accountCtrl', ['$scope', '$state', '$http', '$localStorage', '$rootScope', 'toaster', function ($scope, $state, $http, $localStorage, $rootScope, toaster){
-        console.log('accountCtrl loaded!');
         var vm = this;
         vm.user = {};
         vm.username = $rootScope.UserLogged;

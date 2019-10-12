@@ -2,7 +2,6 @@
 
 angular.module('app')
     .controller('RegisterCtrl', ['$scope', '$http', '$window', function($scope, $http, $window){
-        console.log('register loaded!');
         var vm = this;
         vm.user = {};
         vm.signup = function(){

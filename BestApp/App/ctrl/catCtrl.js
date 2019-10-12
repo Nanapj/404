@@ -2,7 +2,6 @@
 
 angular.module('app')
     .controller('CatCtrl', ['$scope', '$state', '$http', function ($scope, $state, $http){
-        console.log('CatCtrl loaded!');
         var _url = "/odata/Cats";
         var vm = this;
 
