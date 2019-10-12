@@ -105,9 +105,23 @@ angular.module('app')
                         templateUrl: '/crevent/EventCreation',
                         resolve: {
                             deps: ['$ocLazyLoad', function($ocLazyLoad) {
-                                return $ocLazyLoad.load('/App/ctrl/CREventController/crEventCreateCtrl.js');
+                                return $ocLazyLoad.load('/App/ctrl/CREventController/crEventCreationCtrl.js');
                             }]
                         }
+                    })
+                    .state('app.department', {
+                        abstract: true,
+                        url: '/department',
+                        template: '<div ui-view class="fade-in-down"></div>',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/DepartmentController/DepartmentCtrl.js'); // Resolve promise and load before view 
+                            }]
+                        }
+                    }).
+                    state('app.department.index', {
+                        url: '/index',
+                        templateUrl: '/department/Index'
                     })
                     .state('account', {
                         url: '/account',

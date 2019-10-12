@@ -10,14 +10,17 @@
     <link rel="stylesheet" href="/libs/assets/font-awesome/css/font-awesome.min.css" type="text/css" />
     <link rel="stylesheet" href="/libs/assets/simple-line-icons/css/simple-line-icons.css" type="text/css" />
     <link rel="stylesheet" href="/libs/jquery/bootstrap/dist/css/bootstrap.css" type="text/css" />
-    <link href="~/Content/kendoui/styles/kendo.common.min.css" rel="stylesheet" />
-    <link href="~/Content/kendoui/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="~/Content/kendoui2019/styles/kendo.common.min.css" rel="stylesheet" />
+    @*<link href="~/Content/kendoui2019/styles/kendo.default.min.css" rel="stylesheet" />*@
+    <link href="~/Content/kendoui2019/styles/kendo.office365.min.css" rel="stylesheet" />
+
     <!-- build:css css/app.min.css -->
     <link rel="stylesheet" href="/App/css/font.css" type="text/css" />
     <link rel="stylesheet" href="/App/css/app.css" type="text/css" />
     <link href="~/App/css/toaster.min.css" rel="stylesheet" />
     <link href="~/libs/block-ui/dist/angular-block-ui.css" rel="stylesheet" />
-
+    <link href="~/Content/custom.css" rel="stylesheet" />
+    <link href="~/App/css/quill.snow.css" rel="stylesheet" />
     <!-- endbuild -->
 </head>
 <body ng-controller="AppCtrl">
@@ -28,12 +31,12 @@
     <!-- jQuery -->
     <script src="/Content/kendoui/js/jquery.min.js"></script>
     <script src="/libs/angular/angular/angular.js"></script>
-    <script src="/Content/kendoui/js/kendo.all.min.js"></script>
+    <script src="~/Content/kendoui2019/js/kendo.all.min.js"></script>
     <!-- Bootstrap -->
     <script src="/libs/jquery/bootstrap/dist/js/bootstrap.js"></script>
 
     <!-- Angular -->
-    <script src="/Content/kendoui/js/kendo.angular.min.js"></script>
+    <script src="~/Content/kendoui2019/js/kendo.angular.min.js"></script>
     <script src="/libs/angular/angular-animate/angular-animate.js"></script>
     <script src="~/libs/toaster.min.js"></script>
     <script src="~/libs/block-ui/dist/angular-block-ui.js"></script>
@@ -43,7 +46,7 @@
     <script src="/libs/angular/angular-resource/angular-resource.js"></script>
     <script src="/libs/angular/angular-sanitize/angular-sanitize.js"></script>
     <script src="/libs/angular/angular-touch/angular-touch.js"></script>
-
+    <script src="~/libs/sweetalert.min.js"></script>
     <script src="/libs/angular/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="/libs/angular/ngstorage/ngStorage.js"></script>
     <script src="/libs/angular/angular-ui-utils/ui-utils.js"></script>
@@ -64,6 +67,7 @@
     <script src="/App/js/config.lazyload.js"></script>
     <script src="/App/js/config.router.js"></script>
     <script src="/App/js/main.js"></script>
+    <script src="~/libs/quill.js"></script>
 
     <script src="/App/js/services/ui-load.js"></script>
     <script src="/App/js/filters/fromNow.js"></script>
@@ -78,6 +82,7 @@
     <script src="/App/js/directives/ui-shift.js"></script>
     <script src="/App/js/directives/ui-toggleclass.js"></script>
     <script src="/App/js/controllers/bootstrap.js"></script>
+    <script src="~/libs/ng-quill.js"></script>
 
     <!-- endbuild -->
     <!-- Lazy loading -->

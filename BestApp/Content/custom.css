@@ -1,0 +1,7 @@
+﻿.bg-light.lter .cr-submit {
+    background-color: white !important;
+    border:none !important;
+}
+[ng-quill-editor] {
+    padding: 15px !important;
+}

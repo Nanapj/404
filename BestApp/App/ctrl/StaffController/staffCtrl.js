@@ -11,6 +11,7 @@ angular.module('app')
         vm.toolbarTemplate = toolbarTemplate;
         vm.create = create;
         vm.edit = edit;
+        vm.destroy = destroy;
         
         function create(){
             $state.go('app.staff.create');
@@ -21,6 +22,10 @@ angular.module('app')
             $state.go('app.staff.edit', {
                 Id: vm.selectedStaff.Id
             });
+        }
+
+        function destroy(){
+            alert('Deleted Button clicked');
         }
 
         function toolbarTemplate() {

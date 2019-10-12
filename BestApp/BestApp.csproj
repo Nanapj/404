@@ -246,6 +246,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CatController.cs" />
     <Compile Include="Controllers\CrEventController.cs" />
+    <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
@@ -259,6 +260,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\custom.css" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -316,6 +318,9 @@
     <Content Include="Views\Cat\Create.cshtml" />
     <Content Include="Views\CrEvent\Index.cshtml" />
     <Content Include="Views\CrEvent\EventCreation.cshtml" />
+    <Content Include="Views\Department\Index.cshtml" />
+    <Content Include="Views\Department\Create.cshtml" />
+    <Content Include="Views\Department\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\BestApp.Core\BestApp.Core.csproj">

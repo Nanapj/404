@@ -1,11 +1,14 @@
 'use strict';
 
 angular.module('app')
-    .controller('LoginCtrl', ['$scope', '$state', '$http', '$window', '$localStorage', '$rootScope', function ($scope, $state, $http, $window, $localStorage, $rootScope){
+    .controller('LoginCtrl', ['$scope', '$state', '$http', '$window', '$localStorage', '$rootScope', 'toaster', function ($scope, $state, $http, $window, $localStorage, $rootScope,toaster){
         console.log('LoginCtrl loaded!');
         var vm = this;
         vm.user = {};
-
+        $scope.actions = [
+            { text: 'Thử lại', function() { vm.dialogVisible = false;} }
+        ];
+        vm.dialogVisible = false;
         // Delete local
         localStorage.removeItem("UserLogged");
         localStorage.removeItem("access_token");
@@ -16,13 +19,13 @@ angular.module('app')
         $rootScope.Agencies = {};
 
         vm.login = function(){
+           
             vm.user.RememberMe = true;
             $http({
                 url: '/account/login',
                 method: 'POST',
                 data: JSON.stringify(vm.user),
             }).then(function(response){
-                console.log(response);
                 if(response.data == true){
                     $http({
                         url: '/Token',
@@ -40,7 +43,7 @@ angular.module('app')
                         $state.go('app.dashboard');
                     });
                 }else{
-                    alert("Sai username hoặc password!");
+                    swal("SOMETHING WRONG","Thông tin đăng nhập không chính xác hoặc tài khoản đã bị khóa");
                 }
             });
         }
