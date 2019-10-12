@@ -241,6 +241,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Api\Controllers\CatsController.cs" />
+    <Compile Include="Areas\Api\Controllers\DepartmentController.cs" />
     <Compile Include="Areas\Api\Controllers\StaffsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CatController.cs" />
@@ -295,6 +296,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Api\Models\" />
+    <Folder Include="Areas\Api\Views\Department\" />
     <Folder Include="Areas\Api\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>

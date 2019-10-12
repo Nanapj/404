@@ -24,6 +24,7 @@ namespace BestApp.Services
             Task<Staff> InsertAsync(StaffViewModel model);
             Task<IQueryable<StaffViewModel>> GetAllStaffsAsync();
             Task<StaffViewModel> UpdateAsync(StaffViewModel model);
+            Task<StaffViewModel> DeleteAsync(StaffViewModel model);
         }
 
         private readonly IRepositoryAsync<Staff> _repository;
@@ -111,6 +112,21 @@ namespace BestApp.Services
                 }
             }
         }
+        public void Delete(StaffViewModel model)
+        {
+            var data = Find(model.Id);
+            var user = userManager.FindByEmail(model.Email);
+            if (data != null)
+            {
+                data.Delete = true;
+            }
+            if (user != null)
+            {
+                user.IsBanned = true;
+                user.LockoutEnabled = true;
+                userManager.Update(user);
+            }
+        }
 
         public IQueryable<Staff> GetAllStaffs()
         {
@@ -129,6 +145,18 @@ namespace BestApp.Services
                 return model;
             }
             catch(Exception e)
+            {
+                throw (e);
+            }
+        }
+        public async Task<StaffViewModel> DeleteAsync(StaffViewModel model)
+        {
+            try
+            {
+                await Task.Run(() => Delete(model));
+                return model;
+            }
+            catch (Exception e)
             {
                 throw (e);
             }
