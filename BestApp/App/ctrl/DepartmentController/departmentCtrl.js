@@ -14,12 +14,12 @@ angular.module('app')
             return kendo.template($("#toolbar").html());
         }
         function create(){
-            $state.go('app.staff.create');
+            $state.go('app.department.create');
             vm.editMode = false;
         }
 
         function edit(){
-            $state.go('app.staff.edit', {
+            $state.go('app.department.edit', {
                 Id: vm.selectedStaff.Id
             });
         }

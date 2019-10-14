@@ -115,13 +115,26 @@ angular.module('app')
                         template: '<div ui-view class="fade-in-down"></div>',
                         resolve: {
                             deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                                return $ocLazyLoad.load('/App/ctrl/DepartmentController/DepartmentCtrl.js'); // Resolve promise and load before view 
+                                return $ocLazyLoad.load('/App/ctrl/DepartmentController/departmentCtrl.js'); // Resolve promise and load before view 
                             }]
                         }
                     }).
                     state('app.department.index', {
                         url: '/index',
                         templateUrl: '/department/Index'
+                    })
+                    .state('app.department.create', {
+                        url:'/create',
+                        templateUrl: '/department/Create'
+                    })
+                    .state('app.department.edit', {
+                        url: '/edit/:Id',
+                        templateUrl:'/department/Edit',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/DepartmentController/departmentEditCtrl.js');
+                            }]
+                        }
                     })
                     .state('account', {
                         url: '/account',
