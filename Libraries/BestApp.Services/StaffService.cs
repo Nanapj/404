@@ -24,6 +24,7 @@ namespace BestApp.Services
             Task<Staff> InsertAsync(StaffViewModel model);
             Task<IQueryable<StaffViewModel>> GetAllStaffsAsync();
             Task<StaffViewModel> UpdateAsync(StaffViewModel model);
+            Task<StaffViewModel> DeleteAsync(StaffViewModel model);
         }
 
         private readonly IRepositoryAsync<Staff> _repository;
@@ -48,6 +49,7 @@ namespace BestApp.Services
                 Email = model.Email,
                 CreatDate = DateTime.Now,
                 HasAccount = model.HasAccount,
+                LastModifiedDate = DateTime.Now,
                 Phone = model.Phone
             };
 
@@ -79,6 +81,7 @@ namespace BestApp.Services
                 data.CreatDate = DateTime.Now;
                 data.HasAccount = model.HasAccount;
                 data.Phone = model.Phone;
+                data.LastModifiedDate = DateTime.Now;
             }
             if(user != null)
             {
@@ -111,6 +114,22 @@ namespace BestApp.Services
                 }
             }
         }
+        public void Delete(StaffViewModel model)
+        {
+            var data = Find(model.Id);
+            var user = userManager.FindByEmail(model.Email);
+            if (data != null)
+            {
+                data.Delete = true;
+                data.LastModifiedDate = DateTime.Now;
+            }
+            if (user != null)
+            {
+                user.IsBanned = true;
+                user.LockoutEnabled = true;
+                userManager.Update(user);
+            }
+        }
 
         public IQueryable<Staff> GetAllStaffs()
         {
@@ -129,6 +148,18 @@ namespace BestApp.Services
                 return model;
             }
             catch(Exception e)
+            {
+                throw (e);
+            }
+        }
+        public async Task<StaffViewModel> DeleteAsync(StaffViewModel model)
+        {
+            try
+            {
+                await Task.Run(() => Delete(model));
+                return model;
+            }
+            catch (Exception e)
             {
                 throw (e);
             }
