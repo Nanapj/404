@@ -18,5 +18,14 @@ namespace BestApp.Controllers
         {
             return PartialView();
         }
+
+        public ActionResult ReminderManager()
+        {
+            return PartialView();
+        }
+        public ActionResult EventManager()
+        {
+            return PartialView();
+        }
     }
 }

@@ -7,7 +7,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading font-bold">TẠO SỰ KIỆN</div>
                         <div class="panel-body">
-                            <form class="m-b-md" ng-submit="steps.step2=true" >
+                            <form class="m-b-md" ng-submit="!vm.tabDisable ? (steps.step2=true) : (steps.step2=false)" >
                                 <div class="input-group">
                                     <input type="text" name="masked" ng-change="phoneNumChange()" ui-mask="999 999 9999" ng-model="vm.searchingNumber" placeholder="___ ___ ____" class="form-control m-b" required>
                                     <span class="input-group-btn">
