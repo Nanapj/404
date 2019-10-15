@@ -1,59 +1,88 @@
 'use strict';
 angular.module('app')
     .controller('crEventIndexCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', function ($scope, $state, $stateParams, $http, toaster){
-        $scope.d = [ [1,6.5],[2,6.5],[3,7],[4,8],[5,7.5],[6,7],[7,6.8],[8,7],[9,7.2],[10,7],[11,6.8],[12,7] ];
-
-        $scope.d0_1 = [ [0,7],[1,6.5],[2,12.5],[3,7],[4,9],[5,6],[6,11],[7,6.5],[8,8],[9,7] ];
-    
-        $scope.d0_2 = [ [0,4],[1,4.5],[2,7],[3,4.5],[4,3],[5,3.5],[6,6],[7,3],[8,4],[9,3] ];
-    
-        $scope.d1_1 = [ [10, 120], [20, 70], [30, 70], [40, 60] ];
-    
-        $scope.d1_2 = [ [10, 50],  [20, 60], [30, 90],  [40, 35] ];
-    
-        $scope.d1_3 = [ [10, 80],  [20, 40], [30, 30],  [40, 20] ];
-    
-        $scope.d2 = [];
-    
-        for (var i = 0; i < 20; ++i) {
-          $scope.d2.push([i, Math.round( Math.sin(i)*100)/100] );
-        }   
-    
-        $scope.d3 = [ 
-          { label: "iPhone5S", data: 40 }, 
-          { label: "iPad Mini", data: 10 },
-          { label: "iPad Mini Retina", data: 20 },
-          { label: "iPhone4S", data: 12 },
-          { label: "iPad Air", data: 18 }
-        ];
-    
-        $scope.refreshData = function(){
-          $scope.d0_1 = $scope.d0_2;
+        var canvasctx = document.getElementById('canvasChart').getContext('2d');
+        var piectx = document.getElementById('pieChart').getContext('2d');
+        var colandlinectx = document.getElementById('columnAndLineChart').getContext('2d');
+        var barctx = document.getElementById('barChart').getContext('2d');
+        var pieData = {
+              datasets: [{
+                  data: [10, 20, 30],
+                  backgroundColor: ['#878BB6','#4ACAB4','#FF8153']
+              }],
+          
+              // These labels appear in the legend and in the tooltips when hovering different arcs
+              labels: [
+                  'Red',
+                  'Yellow',
+                  'Blue'
+              ]
+          };
+        var canvasData = {
+          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+          datasets: [{
+              label: 'Thống kê cuộc gọi hàng tháng',
+              backgroundColor: 'rgb(255, 99, 132)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: [2000, 3500, 3005, 2498, 1220, 2230, 2045]
+          }]
         };
-    
-        $scope.getRandomData = function() {
-          var data = [],
-          totalPoints = 150;
-          if (data.length > 0)
-            data = data.slice(1);
-          while (data.length < totalPoints) {
-            var prev = data.length > 0 ? data[data.length - 1] : 50,
-              y = prev + Math.random() * 10 - 5;
-            if (y < 0) {
-              y = 0;
-            } else if (y > 100) {
-              y = 100;
-            }
-            data.push(Math.round(y*100)/100);
-          }
-          // Zip the generated y values with the x values
-          var res = [];
-          for (var i = 0; i < data.length; ++i) {
-            res.push([i, data[i]])
-          }
-          return res;
+        var colandlineData = {
+            datasets: [{
+              label: 'Bar Dataset',
+              data: [10, 20, 30, 40],
+              backgroundColor: 'rgba(255,0,0,0.2)'
+            }, {
+                label: 'Line Dataset',
+                data: [50, 50, 50, 50],
+                // Changes this dataset to become a line
+                type: 'line',
+                backgroundColor: 'rgba(135,206,250,0.2)'
+            }],
+            labels: ['January', 'February', 'March', 'April']
+        };
+        var barData = {
+          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+          datasets: [{
+              label: 'Thống kê cuộc gọi hàng tháng',
+              backgroundColor: 'rgb(255, 99, 132)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: [2000, 3500, 3005, 2498, 1220, 2230, 2045]
+          }]
         }
-    
-        $scope.d4 = $scope.getRandomData();
+        var barDataOptions = {
+          scales: {
+              xAxes: [{
+                  barPercentage: 0.5,
+                  barThickness: 20,
+                  maxBarThickness: 8,
+                  minBarLength: 2,
+                  gridLines: {
+                      offsetGridLines: true
+                  }
+              }]
+          }
+      };
+        var canvasChart = new Chart(canvasctx, {
+            // The type of chart we want to create
+            type: 'line',
+            // The data for our dataset
+            data: canvasData,
+            // Configuration options go here
+            options: {}
+        });
+        var pieChart = new Chart(piectx, {
+          type: 'pie',
+          data: pieData
+        });
+        var colandlineChart = new Chart(colandlinectx, {
+          type:'bar',
+          data: colandlineData
+        });
+        var barChart = new Chart(barctx, {
+          type:'bar',
+          data: barData,
+          options: barDataOptions
+        })
     }
 ]);
