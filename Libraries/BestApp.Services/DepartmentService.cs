@@ -51,13 +51,15 @@ namespace BestApp.Services
             }
             else
             {
-                var data = new Department()
-                {
-                    Name = model.Name,
-                    CreatDate = DateTime.Now,
-                    Delete = false,
-                    UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId()),
-                };
+                var data = new Department();
+
+                data.Name = model.Name;
+                data.CreatDate = DateTime.Now;
+                data.Delete = false;
+                data.LastModifiedDate = DateTime.Now;
+                //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
+                    
+                
                 base.Insert(data);
                 return data;
             }

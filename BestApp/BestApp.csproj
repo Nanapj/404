@@ -241,7 +241,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Api\Controllers\CatsController.cs" />
-    <Compile Include="Areas\Api\Controllers\DepartmentController.cs" />
+    <Compile Include="Areas\Api\Controllers\DepartmentsController.cs" />
     <Compile Include="Areas\Api\Controllers\StaffsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CatController.cs" />

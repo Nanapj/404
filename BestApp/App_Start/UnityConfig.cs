@@ -16,6 +16,7 @@ using Unity.AspNet.Mvc;
 using Unity.Injection;
 using Unity.Lifetime;
 using static BestApp.Services.CatService;
+using static BestApp.Services.DepartmentService;
 using static BestApp.Services.StaffService;
 
 namespace BestApp
@@ -42,6 +43,7 @@ namespace BestApp
             // Custom services
             .RegisterType<ICatService, CatService>()
             .RegisterType<IStaffService, StaffService>()
+            .RegisterType<IDepartmentService, DepartmentService>()
 
             .RegisterType<UserManager<ApplicationUser>>(new HierarchicalLifetimeManager())
             .RegisterType<AccountController>(new InjectionConstructor())

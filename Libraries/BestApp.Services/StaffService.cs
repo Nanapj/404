@@ -49,6 +49,7 @@ namespace BestApp.Services
                 Email = model.Email,
                 CreatDate = DateTime.Now,
                 HasAccount = model.HasAccount,
+                LastModifiedDate = DateTime.Now,
                 Phone = model.Phone
             };
 
@@ -80,6 +81,7 @@ namespace BestApp.Services
                 data.CreatDate = DateTime.Now;
                 data.HasAccount = model.HasAccount;
                 data.Phone = model.Phone;
+                data.LastModifiedDate = DateTime.Now;
             }
             if(user != null)
             {
@@ -119,6 +121,7 @@ namespace BestApp.Services
             if (data != null)
             {
                 data.Delete = true;
+                data.LastModifiedDate = DateTime.Now;
             }
             if (user != null)
             {
