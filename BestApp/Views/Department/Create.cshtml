@@ -7,7 +7,7 @@
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading font-bold">Create form</div>
-                <div class="panel-body">
+                <div class="panel-body" style="height:500px;">
                     <form role="form">
                         <div class="form-group">
                             <label>Fullname</label>
@@ -38,6 +38,32 @@
                     </form>
                 </div>
             </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading font-bold">Department's Tag</div>
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <div id="departmentTagGrid"
+                             kendo-grid
+                             k-options="tagGridOptions"
+                             k-selectable="true"
+                             k-sortable="true"
+                             k-reorderable="true"
+                             k-toolbar="['create']"></div>
+                    </div>
+                </div>
+            </div>
+            <script type="text/x-kendo-template" id="toolbar">
+                <div class="toolbar">
+                    <!-- Use your own button -->
+                    <button class="k-button k-grid-add">Add Row</button>
+                    <!-- Use the default HTML rendering of the built-in command -->
+                    <a class="k-button k-button-icontext k-grid-add" href="\\#">
+                        <span class="k-icon k-add"></span>Add new record
+                    </a>
+                </div>
+            </script>
         </div>
     </div>
 </div>
