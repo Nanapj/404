@@ -32,7 +32,12 @@
                     </div>
                 </div>
             </div>
+            
             <div class="wrapper-sm">
+                <div kendo-scheduler k-options="schedulerOptions">
+                    <span k-event-template class='custom-event'>{{dataItem.title}}</span>
+                    <div k-all-day-event-template class='custom-all-day-event'>{{dataItem.title}}</div>
+                </div>
                 <div class="row">
                     <canvas id="canvasChart" width="400" height="50"></canvas>
                 </div>

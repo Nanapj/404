@@ -9,7 +9,6 @@ angular.module('app')
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       if(isIE){ angular.element($window.document.body).addClass('ie');}
       if(isSmartDevice( $window ) ){ angular.element($window.document.body).addClass('smart')};
-
       // config
       $scope.app = {
         name: '404 System',
@@ -27,8 +26,8 @@ angular.module('app')
         },
         settings: {
           themeID: 6,
-          navbarHeaderColor: 'bg-dark',
-          navbarCollapseColor: 'bg-dark',
+          navbarHeaderColor: 'bg-info dker',
+          navbarCollapseColor: 'bg-info dk',
           asideColor: 'bg-dark',
           headerFixed: false,
           asideFixed: false,

@@ -2,19 +2,15 @@
 
 angular.module('app')
     .controller('DepartmentEditCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', 'blockUI', function ($scope, $state, $stateParams, $http, toaster, blockUI){
-        var _url = "/odata/Staffs";
+        var _url = "/odata/Departments";
         var vm = this;
         vm.access_token = localStorage.getItem('access_token');
         vm.model = {};
-        vm.selectedStaff = {};
-        vm.model.HasAccount = false;
-        vm.toolbarTemplate = toolbarTemplate;
         var editBlock = blockUI.instances.get('EditBlockUI');
-        var crudServiceBaseUrl = "https://demos.telerik.com/kendo-ui/service";
         function toolbarTemplate() {
             return kendo.template($("#toolbar").html());
         }
-        $scope.initStaffEdit = function() {
+        $scope.initDepartmentEdit = function() {
             $http({
                 method: 'GET',
                 url: _url+'?$filter=Id eq ' + $stateParams.Id.replace(/['"]+/g, ''),
@@ -28,14 +24,14 @@ angular.module('app')
                     vm.model = staff;
                   } else 
                   {
-                    toaster.pop('warning', "Rỗng", "Không tìm thấy thông tin nhân viên");
+                    toaster.pop('warning', "Rỗng", "Không tìm thấy thông tin phòng ban");
                   }
                 
                 }, function errorCallback(response) {
                   console.log(response);
             });
         }
-        $scope.initStaffEdit();
+        $scope.initDepartmentEdit();
         vm.editSubmit = function() {
             editBlock.start();
             $http({
@@ -105,10 +101,7 @@ angular.module('app')
             pageable: true,
             height: 468,
             columns: [
-                "ProductName",
-                { field: "UnitPrice", title: "Unit Price", format: "{0:c}", width: "120px" },
-                { field: "UnitsInStock", title:"Units In Stock", width: "120px" },
-                { field: "Discontinued", width: "120px", editor: customBoolEditor },
+                { field: "ProductName", title: "Tên tag", format: "{0:c}", width: "120px" },
                 { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
             ],
             editable: "inline"
