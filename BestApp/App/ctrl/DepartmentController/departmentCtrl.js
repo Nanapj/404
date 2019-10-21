@@ -1,15 +1,17 @@
 'use strict';
 
 angular.module('app')
-    .controller('DepartmentCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', function ($scope, $state, $stateParams, $http, toaster){
-        var _url = "/odata/Staffs";
+    .controller('DepartmentCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', 'blockUI', function ($scope, $state, $stateParams, $http, toaster, blockUI){
+        var _url = "/odata/Departments";
         var vm = this;
         vm.model = {};
-        vm.selectedStaff = {};
+        vm.access_token = localStorage.getItem('access_token');
+        vm.selectedDepartment = {};
         vm.toolbarTemplate = toolbarTemplate;
         vm.create = create;
         vm.edit = edit;
         vm.destroy = destroy;
+        var blockui = blockUI.instances.get('BlockUI');
         function toolbarTemplate() {
             return kendo.template($("#toolbar").html());
         }
@@ -20,13 +22,45 @@ angular.module('app')
 
         function edit(){
             $state.go('app.department.edit', {
-                Id: vm.selectedStaff.Id
+                Id: vm.selectedDepartment.ID
             });
         }
 
         function destroy(){
-            alert('Deleted Button clicked');
+           if(vm.selectedDepartment.ID != undefined && vm.selectedDepartment.ID != null) {
+               swal({
+                  title: "Xác nhận xóa?",
+                  text: "Bạn có chắc xóa phòng ban",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true,
+               })
+               .then((willDelete) => {
+                  if (willDelete) {
+                        //   swal("Poof! Your imaginary file has been deleted!", {
+                        //     icon: "success",
+                        //   });
+                        // $http({
+                        //     method: 'DELETE',
+                        //     url: _url+'(' + vm.selectedStaff.Id +')',
+                        //     headers: {
+                        //         'Content-Type': 'application/json',
+                        //         'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                        //     },
+                        // }).then(function successCallback(response) {
+                        //     toaster.pop('success', "Thành công", "Đã xóa thông tin nhân viên và vô hiệu hóa tài khoản");
+                        // });
+                        toaster.pop('info', "Thành công", "Đã xóa thông tin phòng ban"); 
+                  
+                  } else {
+                  
+                  }
+               });
+           } else {
+            toaster.pop('warning', "Chưa chọn", "Không có thông tin nào được chọn");
+           }
         }
+
         $scope.mainGridOptions = {
             dataSource: {
                 type: "odata-v4",
@@ -39,29 +73,14 @@ angular.module('app')
             },
             sortable: true,
             pageable: true,
-            height: 600,
+            height: 700,
             dataBound: onDataBound,
             change: onChange,
             columns: [
                 {
-                    field: "FullName",
-                    title: "Full Name",
+                    field: "Name",
+                    title: "Tên phòng ban",
                     width: "50px"
-                },
-                {
-                    field: "Phone",
-                    title: "Phone",
-                    width: "50px"
-                },
-                {
-                    field: "Email",
-                    title: "Email",
-                    width: "50px"
-                },
-                {
-                    field: "Address",
-                    title: "Address",
-                    width: "80px"
                 }
             ]
         };
@@ -71,7 +90,39 @@ angular.module('app')
         function onChange(e) {
             var grid = $('#departmentGrid').data('kendoGrid');
             var selectedItem = grid.dataItem(grid.select());
-            vm.selectedStaff = selectedItem;
+            console.log(selectedItem);
+            vm.selectedDepartment = selectedItem;
         }
+        function customBoolEditor(container, options) {
+            var guid = kendo.guid();
+            $('<input class="k-checkbox" id="' + guid + '" type="checkbox" name="Discontinued" data-type="boolean" data-bind="checked:Discontinued">').appendTo(container);
+            $('<label class="k-checkbox-label" for="' + guid + '">&#8203;</label>').appendTo(container);
+        }
+        vm.createSubmit = function() {
+            blockui.start();
+            if((vm.model.Name != "" && vm.model.Name != null) 
+            ){
+               $http({
+                  url: _url,
+                  method: 'POST',
+                  data: JSON.stringify(vm.model),
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                  },
+              }).then(function(response){
+                  if(response.status == 201) {
+                      toaster.pop('success', "Thành công", "Đã tạo thông tin nhân viên");
+                      $state.go('app.department.index');
+                      blockui.stop();
+                  }
+              });
+
+            } else {
+               toaster.pop('warning', "Rỗng tên", "Vui lòng điền tên phòng ban");
+               blockui.stop();
+            }
+           
+         }
     }
 ]);

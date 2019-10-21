@@ -83,6 +83,6 @@ angular.module('app')
           type:'bar',
           data: barData,
           options: barDataOptions
-        })
+        });
     }
 ]);

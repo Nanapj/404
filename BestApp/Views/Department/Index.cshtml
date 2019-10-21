@@ -15,9 +15,9 @@
     <script type="text/x-kendo-template" id="toolbar">
         <div>
             <div class="toolbar">
-                <button kendo-button ng-click="vm.create(this)"><span class="fa fa-plus-circle"></span>&nbsp;Thêm</button>
-                <button kendo-button ng-click="vm.edit(this)"><span class="fa fa-pencil"></span>&nbsp;Sửa</button>
-                <button kendo-button ng-click="vm.destroy(this)"><span class="fa fa-trash"></span>&nbsp;Xóa</button>
+                <button class="btn btn-success k-button-large"  ng-click="vm.create(this)"><span class="fa fa-plus-circle"></span>&nbsp;Thêm</button>
+                <button class="btn btn-info k-button-large" ng-click="vm.edit(this)"><span class="fa fa-pencil"></span>&nbsp;Sửa</button>
+                <button class="btn btn-danger k-button-large" ng-click="vm.destroy(this)"><span class="fa fa-trash"></span>&nbsp;Xóa</button>
             </div>
             <div class="toolbar" style="display:none">
                 <button kendo-button ng-click="vm.save(this)"><span class="fa fa-floppy-o"></span>&nbsp;Lưu</button>

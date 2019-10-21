@@ -1,0 +1,32 @@
+﻿
+<div class="col">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n font-thin h3">Customer Management</h1>
+    </div>
+    <div class="bg-light lter b-b wrapper-md" ng-controller="CustomerCtrl as vm">
+            <div class="row">
+                <kendo-grid options="mainGridOptions" >
+                    <div k-detail-template>
+                        <kendo-tabstrip>
+                            <ul>
+                                <li class="k-state-active">Danh sách phiếu</li>
+                                <li>Chi tiết phiếu</li>
+                            </ul>
+                            <div>
+                                <div kendo-grid k-options="detailGridOptions(dataItem)"></div>
+                            </div>
+                            <div>
+                                <ul class="contact-info-form">
+                                    <li><label>Country:</label> <input class="k-textbox" ng-model="dataItem.Country" /></li>
+                                    <li><label>City:</label> <input class="k-textbox" ng-model="dataItem.City" /></li>
+                                    <li><label>Address:</label> {{dataItem.Address}}</li>
+                                    <li><label>Home phone:</label> {{dataItem.HomePhone}}</li>
+                                </ul>
+                            </div>
+                        </kendo-tabstrip>
+                    </div>
+                </kendo-grid>
+            
+            </div>
+    </div>
+</div>

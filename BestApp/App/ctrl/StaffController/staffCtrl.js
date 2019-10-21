@@ -12,7 +12,7 @@ angular.module('app')
         vm.create = create;
         vm.edit = edit;
         vm.destroy = destroy;
-        
+        vm.dialogVisible = false;
         function create(){
             $state.go('app.staff.create');
             vm.editMode = false;
@@ -25,9 +25,40 @@ angular.module('app')
         }
 
         function destroy(){
-            alert('Deleted Button clicked');
+            vm.dialogVisible = true;
+            if(vm.selectedStaff.Id != undefined && vm.selectedStaff.Id != null) {
+                swal({
+                   title: "Xác nhận xóa?",
+                   text: "Bạn có chắc xóa, nếu xóa thì thông tin tài khoản sẽ bị vô hiệu hóa",
+                   icon: "warning",
+                   buttons: true,
+                   dangerMode: true,
+                })
+                .then((willDelete) => {
+                   if (willDelete) {
+                         //   swal("Poof! Your imaginary file has been deleted!", {
+                         //     icon: "success",
+                         //   });
+                         // $http({
+                         //     method: 'DELETE',
+                         //     url: _url+'(' + vm.selectedStaff.Id +')',
+                         //     headers: {
+                         //         'Content-Type': 'application/json',
+                         //         'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                         //     },
+                         // }).then(function successCallback(response) {
+                         //     toaster.pop('success', "Thành công", "Đã xóa thông tin nhân viên và vô hiệu hóa tài khoản");
+                         // });
+                         toaster.pop('info', "Thành công", "Đã xóa thông tin nhân viên"); 
+                   
+                   } else {
+                   
+                   }
+                });
+            } else {
+             toaster.pop('warning', "Chưa chọn", "Không có thông tin nào được chọn");
+            }
         }
-
         function toolbarTemplate() {
             return kendo.template($("#toolbar").html());
         }
@@ -60,10 +91,6 @@ angular.module('app')
             }
         }
 
-        vm.submit = function(){
-            alert('Submit button clicked');
-        }
-
         $scope.mainGridOptions = {
             dataSource: {
                 type: "odata-v4",
@@ -76,18 +103,18 @@ angular.module('app')
             },
             sortable: true,
             pageable: true,
-            height: 600,
+            height: 900,
             dataBound: onDataBound,
             change: onChange,
             columns: [
                 {
                     field: "FullName",
-                    title: "Full Name",
+                    title: "Họ tên",
                     width: "50px"
                 },
                 {
                     field: "Phone",
-                    title: "Phone",
+                    title: "Số điện thoại",
                     width: "50px"
                 },
                 {
@@ -97,7 +124,7 @@ angular.module('app')
                 },
                 {
                     field: "Address",
-                    title: "Address",
+                    title: "Địa chỉ",
                     width: "80px"
                 }
             ]

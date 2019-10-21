@@ -34,7 +34,12 @@ angular.module('app')
                     })
                     .state('app.dashboard', {
                         url: '/dashboard',
-                        templateUrl: '/home/dashboard'
+                        templateUrl: '/home/dashboard',
+                        resolve: {
+                            deps: ['uiLoad', function (uiLoad) {
+                                return uiLoad.load('/App/ctrl/DashboardController/dashboardCtrl.js'); // Resolve promise and load before view 
+                            }]
+                        }
                     })
                     .state('app.profile', {
                       url: '/profile',
@@ -109,6 +114,24 @@ angular.module('app')
                             }]
                         }
                     })
+                    .state('app.crevent.creventmanager', {
+                        url: '/creventmanager',
+                        templateUrl:'/crevent/EventManager',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/CREventController/crEventManagerCtrl.js');
+                            }]
+                        }
+                    })
+                    .state('app.crevent.crremindermanager', {
+                        url: '/crremindermanager',
+                        templateUrl:'/crevent/ReminderManager',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/CREventController/crReminderManagerCtrl.js');
+                            }]
+                        }
+                    })
                     .state('app.department', {
                         abstract: true,
                         url: '/department',
@@ -135,6 +158,19 @@ angular.module('app')
                                 return $ocLazyLoad.load('/App/ctrl/DepartmentController/departmentEditCtrl.js');
                             }]
                         }
+                    })
+                    .state('app.customer', {
+                        url:'/customer',
+                        template: '<div ui-view class="fade-in-down"></div>',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/CustomerController/cusCtrl.js'); // Resolve promise and load before view 
+                            }]
+                        }
+                    })
+                    .state('app.customer.index', {
+                        url:'/index',
+                        templateUrl: '/customer/Index'
                     })
                     .state('account', {
                         url: '/account',

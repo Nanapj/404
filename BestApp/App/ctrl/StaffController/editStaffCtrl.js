@@ -7,7 +7,6 @@ angular.module('app')
         var vm = this;
         vm.access_token = localStorage.getItem('access_token');
         vm.model = {};
-        vm.selectedStaff = {};
         vm.model.HasAccount = false;
         var editBlock = blockUI.instances.get('EditBlockUI');
         $scope.initStaffEdit = function() {

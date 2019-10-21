@@ -5,11 +5,50 @@
     <!-- main -->
     <div class="col">
         <!-- main header -->
-        <div class="bg-light lter b-b wrapper-md">
+        <div class="bg-light lter b-b wrapper-md" ng-controller="DashboardCtrl as vm">
             <div class="row">
                 <div class="col-sm-6 col-xs-12">
                     <h1 class="m-n font-thin h3 text-black">Dashboard</h1>
                     <small class="text-muted">Welcome to 404 system</small>
+                </div>
+                <div class="col-sm-6 text-right hidden-xs">
+                    <div class="inline m-r text-left">
+                        <div class="m-b-xs">200,000 <span class="text-muted">Khách hàng</span></div>
+                        <div ng-init="d3_1=[ 1000,2108,1110,1505,1510,2109,1505,2104,2107,1509,2105,2100,1505,2102,2101,1199,1098 ]"
+                             ui-jq="sparkline"
+                             ui-options="{{d3_1}}, {type:'bar', height:20, barWidth:5, barSpacing:1, barColor:'#dce5ec'}"
+                             class="sparkline inline">
+                            loading...
+                        </div>
+                    </div>
+                    <div class="inline text-left">
+                        <div class="m-b-xs">150,000 <span class="text-muted">Phiếu chăm sóc</span></div>
+                        <div ng-init="d3_2=[ 105,102,106,107,105,104,101,99,98,109,105,100,108,110,105,110,109 ]"
+                             ui-jq="sparkline"
+                             ui-options="{{d3_2}}, {type:'bar', height:20, barWidth:5, barSpacing:1, barColor:'#dce5ec'}"
+                             class="sparkline inline">
+                            loading...
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="wrapper-sm">
+                <div kendo-scheduler k-options="schedulerOptions">
+                    <span k-event-template class='custom-event'>{{dataItem.title}}</span>
+                    <div k-all-day-event-template class='custom-all-day-event'>{{dataItem.title}}</div>
+                </div>
+                <div class="row">
+                    <canvas id="canvasChart" width="400" height="50"></canvas>
+                </div>
+                <div class="row">
+                    <canvas id="pieChart" width="400" height="50"></canvas>
+                </div>
+                <div class="row">
+                    <canvas id="columnAndLineChart" width="400" height="50"></canvas>
+                </div>
+                <div class="row">
+                    <canvas id="barChart" width="400" height="50"></canvas>
                 </div>
             </div>
         </div>
