@@ -10,6 +10,6 @@ namespace BestApp.Core.Models
     {
         public string Name { get; set; }
         public string Code { get; set; }
-        public List<DetailEvent> DetailEvents { get; set; }
+        public List<DetailEvent> DetailEvents { get; set; } = new List<DetailEvent>();
     }
 }

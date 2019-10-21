@@ -4,6 +4,7 @@ using Repository.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -47,6 +48,32 @@ namespace BestApp.Areas.Api.Controllers
                 _unitOfWorkAsync.Rollback();
                 throw ex;
             }
+        }
+        public async Task<IHttpActionResult> Put(Guid key, DepartmentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                await _departmentService.UpdateAsync(model);
+                _unitOfWorkAsync.Commit();
+                return Updated(model);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        [HttpDelete]
+
+        public IHttpActionResult Delete(Guid key)
+        { 
+            _departmentService.Delete(key);
+            _unitOfWorkAsync.Commit();
+            return StatusCode(HttpStatusCode.OK);
+          
         }
     }
 }

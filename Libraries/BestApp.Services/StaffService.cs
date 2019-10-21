@@ -24,7 +24,7 @@ namespace BestApp.Services
             Task<Staff> InsertAsync(StaffViewModel model);
             Task<IQueryable<StaffViewModel>> GetAllStaffsAsync();
             Task<StaffViewModel> UpdateAsync(StaffViewModel model);
-            Task<StaffViewModel> DeleteAsync(StaffViewModel model);
+            bool Delete(Guid Id);
         }
 
         private readonly IRepositoryAsync<Staff> _repository;
@@ -71,7 +71,7 @@ namespace BestApp.Services
         
         public void Update(StaffViewModel model)
         {
-            var data = Find(model.Id);
+            var data = Find(model.ID);
             var user = userManager.FindByEmail(model.Email);
             if (data != null)
             {
@@ -114,21 +114,27 @@ namespace BestApp.Services
                 }
             }
         }
-        public void Delete(StaffViewModel model)
+        public bool Delete(Guid Id)
         {
-            var data = Find(model.Id);
-            var user = userManager.FindByEmail(model.Email);
+            var data = Find(Id);
+            var user = userManager.FindByEmail(data.Email);
             if (data != null)
             {
                 data.Delete = true;
                 data.LastModifiedDate = DateTime.Now;
+                if (user != null)
+                {
+                    user.IsBanned = true;
+                    user.LockoutEnabled = true;
+                    userManager.Update(user);
+                }
+                return true;
             }
-            if (user != null)
+            else
             {
-                user.IsBanned = true;
-                user.LockoutEnabled = true;
-                userManager.Update(user);
+                throw new Exception("Không tìm thấy nhân viên");
             }
+
         }
 
         public IQueryable<Staff> GetAllStaffs()
@@ -152,22 +158,11 @@ namespace BestApp.Services
                 throw (e);
             }
         }
-        public async Task<StaffViewModel> DeleteAsync(StaffViewModel model)
-        {
-            try
-            {
-                await Task.Run(() => Delete(model));
-                return model;
-            }
-            catch (Exception e)
-            {
-                throw (e);
-            }
-        }
+        
         public Task<IQueryable<StaffViewModel>> GetAllStaffsAsync()
         {
             return Task.Run(() => GetAllStaffs().Select(x => new StaffViewModel() {
-                Id = x.Id,
+                ID = x.Id,
                 FullName = x.FullName,
                 Email = x.Email,
                 Address = x.Address,

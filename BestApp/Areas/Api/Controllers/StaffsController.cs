@@ -51,8 +51,8 @@ namespace BestApp.Areas.Api.Controllers
                 throw ex;
             }
         }
-
-        public async Task<IHttpActionResult> Put(Guid key, StaffViewModel model)
+    
+        public async Task<IHttpActionResult> Put(StaffViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -67,6 +67,13 @@ namespace BestApp.Areas.Api.Controllers
             {
                 throw e;
             }
+        }
+        public IHttpActionResult Delete(Guid key)
+        {
+            _staffService.Delete(key);
+            _unitOfWorkAsync.Commit();
+            return StatusCode(HttpStatusCode.OK);
+
         }
     }
 }

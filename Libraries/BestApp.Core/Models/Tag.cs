@@ -12,7 +12,7 @@ namespace BestApp.Core.Models
         public string NameTag { get; set; }
         public StatusTag Status { get; set; }
         public string CodeTag { get; set; }
-        public virtual ICollection<Department> Departments { get; set; }
+        public virtual Department Departments { get; set; }
         public virtual ICollection<Event> Events { get; set; }
     }
 }

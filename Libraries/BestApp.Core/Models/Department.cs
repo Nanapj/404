@@ -9,6 +9,6 @@ namespace BestApp.Core.Models
     public class Department : Entity
     {
         public string Name { get; set; }
-        public virtual ICollection<Tag> Tags { get; set; }
+        public List<Tag> Tags { get; set; } = new List<Tag>();
     }
 }

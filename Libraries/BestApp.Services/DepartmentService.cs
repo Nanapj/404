@@ -25,6 +25,9 @@ namespace BestApp.Services
             Task<IQueryable<DepartmentViewModel>> GetAllDepartmentsAsync();
             Task<Department> InsertAsync(DepartmentViewModel model);
             IQueryable<Department> GetAllDepartments();
+            Task<DepartmentViewModel> UpdateAsync(DepartmentViewModel model);
+            bool Delete(Guid Id);
+            
             //Task<DepartmentViewModel> UpdateAsync(DepartmentViewModel model);
         }
         private readonly IRepositoryAsync<Department> _repository;
@@ -77,9 +80,21 @@ namespace BestApp.Services
             return true;
            
         }
+        public async Task<DepartmentViewModel> UpdateAsync(DepartmentViewModel model)
+        {
+            try
+            {
+                await Task.Run(() => Update(model));
+                return model;
+            }
+            catch (Exception e)
+            {
+                throw (e);
+            }
+        }
         public bool Delete(Guid Id)
         {
-            var result = Queryable().Where(x => x.Id == Id).FirstOrDefault();
+            var result = Find(Id);
             if(result != null)
             {
                 if (result.Tags.Any())
@@ -90,7 +105,6 @@ namespace BestApp.Services
                 {
                     result.Delete = true;
                     result.LastModifiedDate = DateTime.Now;
-                    Update(result);
                     return true;
                 }
                 
@@ -100,6 +114,7 @@ namespace BestApp.Services
                 throw new Exception("Không tìm thấy phòng ban");
             }
         }
+       
         public Task<IQueryable<DepartmentViewModel>> GetAllDepartmentsAsync()
         {
             return Task.Run(() => GetAllDepartments().Select(x => new DepartmentViewModel()
