@@ -243,6 +243,7 @@
     <Compile Include="Areas\Api\Controllers\CatsController.cs" />
     <Compile Include="Areas\Api\Controllers\DepartmentsController.cs" />
     <Compile Include="Areas\Api\Controllers\StaffsController.cs" />
+    <Compile Include="Areas\Api\Controllers\TagsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CatController.cs" />
     <Compile Include="Controllers\CrEventController.cs" />
@@ -303,6 +304,7 @@
     <Folder Include="Areas\Api\Models\" />
     <Folder Include="Areas\Api\Views\Department\" />
     <Folder Include="Areas\Api\Views\Shared\" />
+    <Folder Include="Areas\Api\Views\Tags\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Api\Views\web.config" />

@@ -18,6 +18,7 @@ using Unity.Lifetime;
 using static BestApp.Services.CatService;
 using static BestApp.Services.DepartmentService;
 using static BestApp.Services.StaffService;
+using static BestApp.Services.TagService;
 
 namespace BestApp
 {
@@ -44,6 +45,7 @@ namespace BestApp
             .RegisterType<ICatService, CatService>()
             .RegisterType<IStaffService, StaffService>()
             .RegisterType<IDepartmentService, DepartmentService>()
+            .RegisterType<ITagService, TagService>()
 
             .RegisterType<UserManager<ApplicationUser>>(new HierarchicalLifetimeManager())
             .RegisterType<AccountController>(new InjectionConstructor())

@@ -18,9 +18,9 @@ namespace BestApp.Areas.Api.Controllers
         private readonly IDepartmentService _departmentService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
         // GET: Api/Department
-        public DepartmentsController(IDepartmentService departmenService, IUnitOfWorkAsync unitOfWorkAsync)
+        public DepartmentsController(IDepartmentService departmentService, IUnitOfWorkAsync unitOfWorkAsync)
         {
-            _departmentService = departmenService;
+            _departmentService = departmentService;
             _unitOfWorkAsync = unitOfWorkAsync;
         }
         [HttpGet]

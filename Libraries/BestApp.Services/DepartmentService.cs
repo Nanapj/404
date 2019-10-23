@@ -76,7 +76,6 @@ namespace BestApp.Services
                 data.Name = model.Name;
                 data.LastModifiedDate = DateTime.Now;
             }
-            Update(data);
             return true;
            
         }
@@ -121,7 +120,7 @@ namespace BestApp.Services
             {
                 ID = x.Id,
                 Name = x.Name,
-                Tags = x.Tags.Where(t=> t.Status.ToString() == "1").Select(t => new TagViewModel()
+                Tags = x.Tags.Where(t=> t.Status == Core.Enum.StatusTag.New).Select(t => new TagViewModel()
                 {
                     NameTag = t.NameTag,
                     CodeTag = t.CodeTag,
