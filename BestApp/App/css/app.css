@@ -3427,13 +3427,13 @@ fieldset[disabled] .i-checks input + i:before {
 
 .bg-info.dk,
 .bg-info .dk {
-  background-color: #16aad8;
+    background-color: #4285F4;
 }
 
-.bg-info.dker,
-.bg-info .dker {
-  background-color: #1199c4;
-}
+    .bg-info.dker,
+    .bg-info .dker {
+        background-color: #4285F4;
+    }
 
 .bg-info.bg,
 .bg-info .bg {
@@ -5108,7 +5108,9 @@ a.text-#000000:hover {
      -moz-animation: movingbar 0.75s infinite;
           animation: movingbar 0.75s infinite;
 }
-
+.tag-blue-color{
+  color: white !important;
+}
 /* Moving bar */
 
 @-webkit-keyframes movingbar {
