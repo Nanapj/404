@@ -19,21 +19,21 @@
             </div>
             <button type="submit" class="btn btn-primary btn-info btn-lg btn-block" ng-click="vm.login()" ng-disabled='form.$invalid'>Log in</button>
             <div class="row col-md-12">
-                <div kendo-dialog="dialog" 
-                     k-visible ="vm.dialogVisible"
+                <div kendo-dialog="dialog"
+                     k-visible="vm.dialogVisible"
                      k-title="'Something wrong'"
                      k-on-open="vm.dialogVisible = true"
-                     k-on-close="vm.dialogVisible = false" 
+                     k-on-close="vm.dialogVisible = false"
                      k-width="450"
-                     k-actions="actions" 
+                     k-actions="actions"
                      k-modal="false">
                     <p>Tài khoản không đúng thông tin hoặc đã bị khóa</p>
                 </div>
             </div>
             @*<div class="text-center m-t m-b"><a ui-sref="access.forgotpwd">Forgot password?</a></div>*@
             <div class="line line-dashed"></div>
-            @*<p class="text-center"><small>Do not have an account?</small></p>
-        <a ui-sref="account.register" class="btn btn-lg btn-default btn-block">Create an account</a>*@
+            <p class="text-center"><small>Username: admin@gmail.com, Password: 123456</small></p>
+        @*<a ui-sref="account.register" class="btn btn-lg btn-default btn-block">Create an account</a>*@
 
         </form>
     </div>

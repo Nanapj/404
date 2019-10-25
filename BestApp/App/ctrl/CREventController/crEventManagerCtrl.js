@@ -27,6 +27,63 @@ angular.module('app')
                 vm.tagFilterList.splice(index,1);
             }
         };
+        $scope.tagGridOptions = {
+            dataSource: {
+                type:'odata-v4',
+                transport: {
+                    read: {
+                        url: function () {
+                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/Products";
+                        }
+                    },
+                    update: {
+                        url: function (dataItem) {
+                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/Products(" + dataItem.ProductID + ")";
+                        }
+                    },
+                    batch: {
+                        url: function () {
+                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/$batch";
+                        }
+                    },
+                    create: {
+                        url: function (dataItem) {
+                            delete dataItem.ProductID;
+                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/Products";
+                        }
+                    },
+                    destroy: {
+                        url: function (dataItem) {
+                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/Products(" + dataItem.ProductID + ")";
+                        }
+                    }
+                },
+                batch: true,
+                pageSize: 10,      
+                schema: {
+                    model: {
+                        id: "ProductID",
+                        fields: {
+                            ProductID: { editable: false, nullable: true },
+                            ProductName: { validation: { required: true } },
+                            UnitPrice: { type: "number", validation: { required: true, min: 1} },
+                            Discontinued: { type: "boolean" },
+                            UnitsInStock: { type: "number", validation: { min: 0, required: true } }
+                        }
+                    }
+                }
+            },
+            sortable: true,
+            pageable: true,
+            height: 468,
+            columns: [
+                { field: "ProductName", title: "Id", format: "{0:c}", width: "120px" },
+                { field: "UnitPrice", title: "Thời gian", format: "{0:c}", width: "120px" },
+                { field: "UnitsInStock", title:"Đã gọi", width: "120px" },
+                { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
+            ],
+            editable: "inline"
+        };
         $(".editButton").kendoButton({
             icon: "edit"
         });
@@ -97,7 +154,7 @@ angular.module('app')
                     title: "Địa chỉ",
                     width: "80px"
                 },
-                { command: [{ text: "Chi tiết", click: showDetails },{text: "Sửa", click: showDetails }], title: " ", width: "200px" }
+                { command: [{ text: "Chi tiết", click: showDetails },{text: "Sửa", click: showEditDetails }], title: " Tùy chỉnh ", width: "200px" }
             ]
         };
         var wnd = $("#details")
@@ -106,10 +163,116 @@ angular.module('app')
                             modal: true,
                             visible: false,
                             resizable: false,
-                            width: 300
+                            width: 600
                         }).data("kendoWindow");
-
+        var editwnd = $("#editdetails")
+                .kendoWindow({
+                    title: "Chỉnh sửa chi tiết",
+                    modal: true,
+                    visible: false,
+                    resizable: true,
+                    width: 600
+                }).data("kendoWindow");
         var detailsTemplate = kendo.template($("#template").html());
+        var editGrid = $("#gridEditDetails").kendoGrid({
+            dataSource: {
+                type:'odata-v4',
+                transport: {
+                    read: {
+                        url: function () {
+                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/Products";
+                        }
+                    },
+                    update: {
+                        url: function (dataItem) {
+                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/Products(" + dataItem.ProductID + ")";
+                        }
+                    },
+                    batch: {
+                        url: function () {
+                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/$batch";
+                        }
+                    },
+                    create: {
+                        url: function (dataItem) {
+                            delete dataItem.ProductID;
+                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/Products";
+                        }
+                    },
+                    destroy: {
+                        url: function (dataItem) {
+                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/Products(" + dataItem.ProductID + ")";
+                        }
+                    }
+                },
+                batch: true,
+                pageSize: 10,      
+                schema: {
+                    model: {
+                        id: "ProductID",
+                        fields: {
+                            ProductID: { editable: false, nullable: true },
+                            ProductName: { validation: { required: true } },
+                            UnitPrice: { type: "number", validation: { required: true, min: 1} },
+                            Discontinued: { type: "boolean" },
+                            UnitsInStock: { type: "number", validation: { min: 0, required: true } }
+                        }
+                    }
+                }
+            },
+            sortable: true,
+            pageable: true,
+            height: 468,
+            columns: [
+                { field: "ProductName", title: "Id", format: "{0:c}", width: "120px" },
+                { field: "UnitPrice", title: "Thời gian", format: "{0:c}", width: "120px" },
+                { field: "UnitsInStock", title:"Đã gọi", width: "120px" },
+                { command: ["edit"], title: "&nbsp;", width: "250px" }
+            ],
+            editable: "inline"
+          }).data("kendoGrid");
+        var detailsGrid = $("#gridDetails").kendoGrid({
+            dataSource: {
+                type:'odata-v4',
+                transport: {
+                    read: {
+                        url: function () {
+                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/Products";
+                        }
+                    }
+                },
+                batch: true,
+                pageSize: 10,      
+                schema: {
+                    model: {
+                        id: "ProductID",
+                        fields: {
+                            ProductID: { editable: false, nullable: true },
+                            ProductName: { validation: { required: true } },
+                            UnitPrice: { type: "number", validation: { required: true, min: 1} },
+                            Discontinued: { type: "boolean" },
+                            UnitsInStock: { type: "number", validation: { min: 0, required: true } }
+                        }
+                    }
+                }
+            },
+            sortable: true,
+            pageable: true,
+            height: 468,
+            width: 600,
+            columns: [
+                { field: "ProductName", title: "Id", format: "{0:c}", width: "120px" },
+                { field: "UnitPrice", title: "Thời gian", format: "{0:c}", width: "120px" },
+                { field: "UnitsInStock", title:"Đã gọi", width: "120px" },
+            ]
+          }).data("kendoGrid");
+        function showEditDetails(e) {
+            e.preventDefault();
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            // editwnd.content(editDetailsTemplate(dataItem));
+            editGrid.resize();
+            editwnd.center().open();
+        }
         function onDataBound(e) {
             this.expandRow(this.tbody.find("tr.k-master-row").first());
         }
@@ -117,7 +280,7 @@ angular.module('app')
             e.preventDefault();
 
             var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-            wnd.content(detailsTemplate(dataItem));
+            detailsGrid.resize();
             wnd.center().open();
         }
         function onChange(e) {

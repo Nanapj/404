@@ -1,7 +1,79 @@
-﻿<div class="col">
+﻿<head>
+    <style>
+        .red {
+            background-color: red;
+        }
+
+        .none {
+            background-color: none;
+        }
+
+        button.active {
+            background-color: red;
+        }
+    </style>
+</head>
+<div class="col">
     <div class="bg-light lter b-b wrapper-md" ng-controller="crReminderManagerCtrl as vm">
-        <h1>Quản lý phiếu hẹn</h1>
-
-
+        <h4>Quản lý phiếu hẹn</h4>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading font-bold">Filter</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" style="padding-left: 15px;">
+                                    <h5>Ngày tạo</h5>
+                                    <div kendo-date-range-picker
+                                         k-ng-model="vm.startDate, vm.endDate"
+                                         k-on-change="onDateRangeChange()"
+                                         k-options="{format: 'dd/MM/yyyy'}"
+                                         style="width: 100%;" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" style="padding-left: 15px;">
+                                    <h5>Phòng ban</h5>
+                                    <select kendo-multi-select
+                                            k-options="vm.reminderDepartmentSelectOptions"
+                                            k-ng-model="vm.reminderDepartmentSelectedIds"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5>Danh sách tag phiếu hẹn</h5>
+                                    <div id="reminderListoftag" title="listoftag">
+                                        <button id="button{{item.Id}}"
+                                                ng-repeat="item in vm.reminderTagsList"
+                                                class="btn m-b-xs w-xs btn-default"
+                                                ng-click="reminderTagItemClicked(item,this,$index)">
+                                            {{item.Name}}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="reminderStaffgrid"
+                     kendo-grid
+                     k-options="reminderMainGridOptions"
+                     k-selectable="true"
+                     k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
+            </div>
+            <div id="reminderDetails">
+                <div id="reminderGridDetails"></div>
+            </div>
+            <div id="reminderEditdetails">
+                <div id="reminderGridEditDetails"></div>
+            </div>
+        </div>
     </div>
 </div>

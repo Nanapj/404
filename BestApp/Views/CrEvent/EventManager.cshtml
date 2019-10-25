@@ -43,7 +43,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <h5>Danh sách tags</h5>
+                                    <h5>Danh sách tag sự kiện</h5>
                                     <div id="listoftag" title="listoftag" >
                                          <button 
                                             id="button{{item.Id}}"
@@ -66,7 +66,10 @@
                      k-selectable="true"
                      k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
             </div>
-            <div id="details"></div>
+            <div id="details">
+                <div id="gridDetails"></div>
+            </div>
+
             <script type="text/x-kendo-template" id="template">
                 <div id="details-container">
                     <h2>#= FullName # #= FullName #</h2>
@@ -77,6 +80,9 @@
                     </dl>
                 </div>
             </script>
+            <div id="editdetails">
+                <div id="gridEditDetails"></div>
+            </div>
         </div>
     </div>
  </div>
