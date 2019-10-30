@@ -25,9 +25,9 @@ namespace BestApp.Areas.Api.Controllers
         }
         [HttpGet]
         [EnableQuery]
-        public async Task<IQueryable<DepartmentViewModel>> Get()
+        public async Task<IQueryable<DepartmentViewModel>> Get(SearchDepartmentViewModel model)
         {
-            return await _departmentService.GetAllDepartmentsAsync();
+            return await _departmentService.GetAllDepartmentsAsync(model);
         }
         [HttpPost]
         public async Task<IHttpActionResult> Post(DepartmentViewModel model)

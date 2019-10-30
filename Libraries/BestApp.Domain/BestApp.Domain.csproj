@@ -50,6 +50,7 @@
     <Compile Include="ProductTypeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReminderNoteViewModel.cs" />
+    <Compile Include="SearchDepartmentViewModel.cs" />
     <Compile Include="StaffViewModel.cs" />
     <Compile Include="TagViewModel.cs" />
   </ItemGroup>

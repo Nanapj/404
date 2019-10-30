@@ -21,5 +21,8 @@ namespace BestApp.Domain
         public string District { get; set; }
         public string Ward { get; set; }
         public string City { get; set; }
+        public DateTime CreatDate { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public bool Delete { get; set; }
     }
 }

@@ -22,12 +22,12 @@ namespace BestApp.Services
         {
             //IQueryable<Department> GetAllStaffs();
             Department Insert(DepartmentViewModel model);
-            Task<IQueryable<DepartmentViewModel>> GetAllDepartmentsAsync();
+            Task<IQueryable<DepartmentViewModel>> GetAllDepartmentsAsync(SearchDepartmentViewModel model);
             Task<Department> InsertAsync(DepartmentViewModel model);
             IQueryable<Department> GetAllDepartments();
             Task<DepartmentViewModel> UpdateAsync(DepartmentViewModel model);
             bool Delete(Guid Id);
-            
+
             //Task<DepartmentViewModel> UpdateAsync(DepartmentViewModel model);
         }
         private readonly IRepositoryAsync<Department> _repository;
@@ -39,7 +39,7 @@ namespace BestApp.Services
             _repository = repository;
             db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
-            
+
         }
         public IQueryable<Department> GetAllDepartments()
         {
@@ -61,23 +61,23 @@ namespace BestApp.Services
                 data.Delete = false;
                 data.LastModifiedDate = DateTime.Now;
                 //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
-                    
-                
+
+
                 base.Insert(data);
                 return data;
             }
-            
+
         }
         public bool Update(DepartmentViewModel model)
         {
             var data = Find(model.ID);
-            if(data != null)
+            if (data != null)
             {
                 data.Name = model.Name;
                 data.LastModifiedDate = DateTime.Now;
             }
             return true;
-           
+
         }
         public async Task<DepartmentViewModel> UpdateAsync(DepartmentViewModel model)
         {
@@ -94,7 +94,7 @@ namespace BestApp.Services
         public bool Delete(Guid Id)
         {
             var result = Find(Id);
-            if(result != null)
+            if (result != null)
             {
                 if (result.Tags.Any())
                 {
@@ -106,17 +106,18 @@ namespace BestApp.Services
                     result.LastModifiedDate = DateTime.Now;
                     return true;
                 }
-                
+
             }
             else
             {
                 throw new Exception("Không tìm thấy phòng ban");
             }
         }
-       
-        public Task<IQueryable<DepartmentViewModel>> GetAllDepartmentsAsync()
+
+        public Task<IQueryable<DepartmentViewModel>> GetAllDepartmentsAsync(SearchDepartmentViewModel model)
         {
-            return Task.Run(() => GetAllDepartments().Select(x => new DepartmentViewModel()
+            return Task.Run(() => GetAllDepartments().Where(x=> (model.ID == null || x.Id == model.ID))
+            .Select(x => new DepartmentViewModel()
             {
                 ID = x.Id,
                 Name = x.Name,
