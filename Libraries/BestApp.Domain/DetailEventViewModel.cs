@@ -11,6 +11,10 @@ namespace BestApp.Domain
         public Guid? ID { get; set; }
         public string Serial { get; set; }
         public string Note { get; set; }
-        public EventViewModel Event { get; set; }
+        public Guid EventID { get; set; }
+        public string EventCode { get; set; }
+        public DateTime CreatDate { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public bool Delete { get; set; }
     }
 }

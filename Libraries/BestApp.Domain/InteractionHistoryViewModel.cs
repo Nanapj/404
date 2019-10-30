@@ -13,6 +13,10 @@ namespace BestApp.Domain
         public string Note { get; set; }
         public Guid? EmployeeCall { get; set; }
         public Guid? EmployeeID { get; set; }
-        public EventViewModel Event { get; set; }
+        public Guid EventID { get; set; }
+        public string EventCode { get; set; }
+        public DateTime CreatDate { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public bool Delete { get; set; }
     }
 }

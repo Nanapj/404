@@ -241,15 +241,22 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Api\Controllers\CatsController.cs" />
+    <Compile Include="Areas\Api\Controllers\CustomersController.cs" />
     <Compile Include="Areas\Api\Controllers\DepartmentsController.cs" />
+    <Compile Include="Areas\Api\Controllers\DetailEventsController.cs" />
+    <Compile Include="Areas\Api\Controllers\EventsController.cs" />
+    <Compile Include="Areas\Api\Controllers\InteractionHistorysController.cs" />
+    <Compile Include="Areas\Api\Controllers\ReminderNotesController.cs" />
     <Compile Include="Areas\Api\Controllers\StaffsController.cs" />
     <Compile Include="Areas\Api\Controllers\TagsController.cs" />
+    <Compile Include="Areas\Api\EventsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CatController.cs" />
     <Compile Include="Controllers\CrEventController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\JsonController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
     <Compile Include="Global.asax.cs">
@@ -302,9 +309,15 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Api\Models\" />
+    <Folder Include="Areas\Api\Views\Customers\" />
     <Folder Include="Areas\Api\Views\Department\" />
+    <Folder Include="Areas\Api\Views\DetailEvents\" />
+    <Folder Include="Areas\Api\Views\Events\" />
+    <Folder Include="Areas\Api\Views\InteractionHistorys\" />
+    <Folder Include="Areas\Api\Views\ReminderNotes\" />
     <Folder Include="Areas\Api\Views\Shared\" />
     <Folder Include="Areas\Api\Views\Tags\" />
+    <Folder Include="Views\Json\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Api\Views\web.config" />

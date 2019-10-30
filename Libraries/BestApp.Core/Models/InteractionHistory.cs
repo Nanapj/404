@@ -13,5 +13,8 @@ namespace BestApp.Core.Models
         public Guid? EmployeeCall { get; set; }
         public Guid? EmployeeID { get; set; }
         public virtual Event Event { get; set; }
+        public DateTime CreatDate { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public bool Delete { get; set; }
     }
 }

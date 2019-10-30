@@ -16,7 +16,12 @@ using Unity.AspNet.Mvc;
 using Unity.Injection;
 using Unity.Lifetime;
 using static BestApp.Services.CatService;
+using static BestApp.Services.CustomerService;
 using static BestApp.Services.DepartmentService;
+using static BestApp.Services.DetailEventService;
+using static BestApp.Services.EventService;
+using static BestApp.Services.InteractionHistoryService;
+using static BestApp.Services.ReminderNoteService;
 using static BestApp.Services.StaffService;
 using static BestApp.Services.TagService;
 
@@ -46,6 +51,11 @@ namespace BestApp
             .RegisterType<IStaffService, StaffService>()
             .RegisterType<IDepartmentService, DepartmentService>()
             .RegisterType<ITagService, TagService>()
+            .RegisterType<ICustomerService, CustomerService>()
+            .RegisterType<IEventService, EventService>()
+            .RegisterType<IDetailEventService, DetailEventService>()
+            .RegisterType<IReminderNoteService, ReminderNoteService>()
+            .RegisterType<IInteractionHistoryService, InteractionHistoryService>()
 
             .RegisterType<UserManager<ApplicationUser>>(new HierarchicalLifetimeManager())
             .RegisterType<AccountController>(new InjectionConstructor())

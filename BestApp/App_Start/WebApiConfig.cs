@@ -22,6 +22,11 @@ namespace BestApp
             builder.EntitySet<StaffViewModel>("Staffs");
             builder.EntitySet<DepartmentViewModel>("Departments");
             builder.EntitySet<TagViewModel>("Tags");
+            builder.EntitySet<CustomerViewModel>("Customers");
+            builder.EntitySet<EventViewModel>("Events");
+            builder.EntitySet<ReminderNoteViewModel>("ReminderNotes");
+            builder.EntitySet<DetailEventViewModel>("DetailEvents");
+            builder.EntitySet<InteractionHistoryViewModel>("InteractionHistorys");
 
             // Web API routes
             config.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
