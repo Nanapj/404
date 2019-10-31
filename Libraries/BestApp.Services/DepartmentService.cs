@@ -22,7 +22,7 @@ namespace BestApp.Services
         {
             //IQueryable<Department> GetAllStaffs();
             Department Insert(DepartmentViewModel model);
-            Task<IQueryable<DepartmentViewModel>> GetAllDepartmentsAsync(SearchDepartmentViewModel model);
+            Task<IQueryable<DepartmentViewModel>> GetAllDepartmentsAsync();
             Task<Department> InsertAsync(DepartmentViewModel model);
             IQueryable<Department> GetAllDepartments();
             Task<DepartmentViewModel> UpdateAsync(DepartmentViewModel model);
@@ -114,9 +114,9 @@ namespace BestApp.Services
             }
         }
 
-        public Task<IQueryable<DepartmentViewModel>> GetAllDepartmentsAsync(SearchDepartmentViewModel model)
+        public Task<IQueryable<DepartmentViewModel>> GetAllDepartmentsAsync()
         {
-            return Task.Run(() => GetAllDepartments().Where(x=> (model.ID == null || x.Id == model.ID))
+            return Task.Run(() => GetAllDepartments()
             .Select(x => new DepartmentViewModel()
             {
                 ID = x.Id,
