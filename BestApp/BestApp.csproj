@@ -34,6 +34,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -249,7 +250,6 @@
     <Compile Include="Areas\Api\Controllers\ReminderNotesController.cs" />
     <Compile Include="Areas\Api\Controllers\StaffsController.cs" />
     <Compile Include="Areas\Api\Controllers\TagsController.cs" />
-    <Compile Include="Areas\Api\EventsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CatController.cs" />
     <Compile Include="Controllers\CrEventController.cs" />
