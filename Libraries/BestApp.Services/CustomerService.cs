@@ -22,7 +22,7 @@ namespace BestApp.Services
             Customer Insert(CustomerViewModel model);
             Task<Customer> InsertAsync(CustomerViewModel model);
             Task<CustomerViewModel> UpdateAsync(CustomerViewModel model);
-            Task<IQueryable<CustomerViewModel>> GetAllCustomersAsync();
+            Task<IQueryable<CustomerViewModel>> GetAllCustomersAsync(SearchViewModel model);
             IQueryable<Customer> GetAllCustomers();
             bool Delete(Guid Id);
         }
@@ -42,9 +42,10 @@ namespace BestApp.Services
         {
             return _repository.Queryable();
         }
-        public Task<IQueryable<CustomerViewModel>> GetAllCustomersAsync()
+        public Task<IQueryable<CustomerViewModel>> GetAllCustomersAsync(SearchViewModel model)
         {
-            return Task.Run(() => GetAllCustomers().Where(x=> x.Delete == false)
+            return Task.Run(() => GetAllCustomers()
+            .Where(x=> x.Delete == false && ((x.PhoneNumber.Contains(model.PhoneNumber))))
             .Select(x => new CustomerViewModel()
             {
                 ID = x.Id,
@@ -60,7 +61,7 @@ namespace BestApp.Services
         }
         public Customer Insert(CustomerViewModel model)
         {
-            var find = Queryable().Where(x => x.PhoneNumber == model.PhoneNumber && x.Delete == true).FirstOrDefault();
+            var find = Queryable().Where(x => x.PhoneNumber == model.PhoneNumber && x.Delete == false).FirstOrDefault();
             if (find != null)
             {
                 throw new Exception("Khách hàng đã tồn tại");

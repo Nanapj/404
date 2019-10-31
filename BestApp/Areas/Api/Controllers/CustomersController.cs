@@ -24,9 +24,9 @@ namespace BestApp.Areas.Api.Controllers
         }
         [HttpGet]
         [EnableQuery]
-        public async Task<IQueryable<CustomerViewModel>> Get()
+        public async Task<IQueryable<CustomerViewModel>> Get([FromUri] SearchViewModel model)
         {
-            return await _customerService.GetAllCustomersAsync();
+            return await _customerService.GetAllCustomersAsync(model);
         }
         [HttpPost]
         public async Task<IHttpActionResult> Post(CustomerViewModel model)

@@ -26,6 +26,7 @@ namespace BestApp.Domain
         public List<ReminderNoteViewModel> ReminderNotes { get; set; } = new List<ReminderNoteViewModel>();
         public DateTime CreatDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
+        public string UserName { get; set; }
         public bool Delete { get; set; }
     }
 }
