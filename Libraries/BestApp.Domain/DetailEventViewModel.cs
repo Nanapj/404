@@ -16,5 +16,8 @@ namespace BestApp.Domain
         public DateTime CreatDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public bool Delete { get; set; }
+        public string ProductCode { get; set; }
+        public string ProductName { get; set; }
+        public Guid ProductID { get; set; }
     }
 }

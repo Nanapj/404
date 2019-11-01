@@ -27,15 +27,18 @@ namespace BestApp.Services
             bool Delete(Guid Id);
         }
         private readonly EventService _eventService;
+        private readonly ProductTypeService _productTypeService;
         private readonly IRepositoryAsync<DetailEvent> _repository;
         private readonly IRepository<ApplicationUser> _userRepository;
         protected readonly DataContext db;
         protected UserManager<ApplicationUser> userManager;
         public DetailEventService(IRepositoryAsync<DetailEvent> repository,
              EventService eventService,
-             CustomerService customerService) : base(repository)
+             CustomerService customerService,
+             ProductTypeService productTypeService) : base(repository)
         {
             _eventService = eventService;
+            _productTypeService = productTypeService;
             _repository = repository;
             db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
@@ -55,7 +58,8 @@ namespace BestApp.Services
                 EventCode = x.Event.Code,
                 EventID = x.Event.Id,
                 CreatDate = x.CreatDate,
-
+                ProductCode = x.ProductType.Code,
+                ProductName = x.ProductType.Name,
             }));
         }
         public DetailEvent Insert(DetailEventViewModel model)
@@ -67,6 +71,7 @@ namespace BestApp.Services
             data.CreatDate = DateTime.Now;
             data.Delete = false;
             data.LastModifiedDate = DateTime.Now;
+            data.ProductType = _productTypeService.Find(model.ProductID);
             //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
             base.Insert(data);
             return data;

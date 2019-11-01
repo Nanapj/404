@@ -21,6 +21,7 @@ using static BestApp.Services.DepartmentService;
 using static BestApp.Services.DetailEventService;
 using static BestApp.Services.EventService;
 using static BestApp.Services.InteractionHistoryService;
+using static BestApp.Services.ProductTypeService;
 using static BestApp.Services.ReminderNoteService;
 using static BestApp.Services.StaffService;
 using static BestApp.Services.TagService;
@@ -54,6 +55,7 @@ namespace BestApp
             .RegisterType<ICustomerService, CustomerService>()
             .RegisterType<IEventService, EventService>()
             .RegisterType<IDetailEventService, DetailEventService>()
+            .RegisterType<IProductTypeService, ProductTypeService>()
             .RegisterType<IReminderNoteService, ReminderNoteService>()
             .RegisterType<IInteractionHistoryService, InteractionHistoryService>()
 
