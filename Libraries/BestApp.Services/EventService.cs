@@ -29,7 +29,7 @@ namespace BestApp.Services
         private readonly TagService _tagService;
         private readonly CustomerService _customerService;
         private readonly IRepositoryAsync<Event> _repository;
-        private readonly IRepository<ApplicationUser> _userRepository;
+        //private readonly IRepository<ApplicationUser> _userRepository;
         protected readonly DataContext db;
         protected UserManager<ApplicationUser> userManager;
         public EventService(IRepositoryAsync<Event> repository,
@@ -37,7 +37,7 @@ namespace BestApp.Services
              CustomerService customerService) : base(repository)
         {
             _tagService = tagService;
-            _customerService = customerService;var 
+            _customerService = customerService;        
             _repository = repository;
            db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
