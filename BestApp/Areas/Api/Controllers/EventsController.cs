@@ -24,9 +24,9 @@ namespace BestApp.Areas.Api.Controllers
         }
         [HttpGet]
         [EnableQuery]
-        public async Task<IQueryable<EventViewModel>> Get()
+        public async Task<IQueryable<EventViewModel>> Get([FromUri] SearchViewModel model)
         {
-            return await _eventService.GetAllEventsAsync();
+            return await _eventService.GetAllEventsAsync(model);
         }
         [HttpPost]
         public async Task<IHttpActionResult> Post(EventViewModel model)

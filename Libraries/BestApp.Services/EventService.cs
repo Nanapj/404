@@ -8,9 +8,11 @@ using Service;
 using Service.Pattern;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using static BestApp.Services.EventService;
 
 namespace BestApp.Services
@@ -22,14 +24,14 @@ namespace BestApp.Services
             Event Insert(EventViewModel model);
             Task<Event> InsertAsync(EventViewModel model);
             Task<EventViewModel> UpdateAsync(EventViewModel model);
-            Task<IQueryable<EventViewModel>> GetAllEventsAsync();
+            Task<IQueryable<EventViewModel>> GetAllEventsAsync(SearchViewModel model);
             IQueryable<Event> GetAllEvents();
             bool Delete(Guid Id);
         }
         private readonly TagService _tagService;
         private readonly CustomerService _customerService;
         private readonly IRepositoryAsync<Event> _repository;
-        //private readonly IRepository<ApplicationUser> _userRepository;
+        private readonly IRepository<ApplicationUser> _userRepository;
         protected readonly DataContext db;
         protected UserManager<ApplicationUser> userManager;
         public EventService(IRepositoryAsync<Event> repository,
@@ -37,7 +39,7 @@ namespace BestApp.Services
              CustomerService customerService) : base(repository)
         {
             _tagService = tagService;
-            _customerService = customerService;        
+            _customerService = customerService;
             _repository = repository;
            db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
@@ -47,9 +49,15 @@ namespace BestApp.Services
         {
             return _repository.Queryable();
         }
-        public Task<IQueryable<EventViewModel>> GetAllEventsAsync()
+        public Task<IQueryable<EventViewModel>> GetAllEventsAsync(SearchViewModel model)
         {
-            return Task.Run(() => GetAllEvents().Select(x => new EventViewModel()
+            return Task.Run(() => GetAllEvents()
+            .Where(x => x.Delete == false
+            && ((!(model.ID == null)) || x.Id == model.ID)
+            && ((!(model.Code == null)) || x.Code == model.Code)
+            && (!(model.From == null) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
+            && (!(model.To == null) || (DbFunctions.TruncateTime(x.CreatDate) <= DbFunctions.TruncateTime(model.To))))
+            .Select(x => new EventViewModel()
             {
                 ID = x.Id,
                 Code = x.Code,
@@ -60,6 +68,7 @@ namespace BestApp.Services
                 PhoneNumber = x.Customer.PhoneNumber,
                 TypeEvent = x.TypeEvent,
                 Status = x.Status,
+                UserName = x.UserAccount.UserName,
                 Tags = x.Tags.Select(t => new TagViewModel()
                 {
                     ID = t.Id,
@@ -97,7 +106,8 @@ namespace BestApp.Services
                 data.Status = model.Status;
                 data.EmployeeID = model.CustomerID;
                 data.TypeEvent = model.TypeEvent;
-                if(model.DetailEvents != null)
+                data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
+                if (model.DetailEvents != null)
                 {
                     foreach (var item in model.DetailEvents)
                     {
