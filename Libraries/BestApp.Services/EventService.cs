@@ -30,16 +30,19 @@ namespace BestApp.Services
         }
         private readonly TagService _tagService;
         private readonly CustomerService _customerService;
+        private readonly ProductTypeService _productTypeService;
         private readonly IRepositoryAsync<Event> _repository;
         private readonly IRepository<ApplicationUser> _userRepository;
         protected readonly DataContext db;
         protected UserManager<ApplicationUser> userManager;
         public EventService(IRepositoryAsync<Event> repository,
              TagService tagService,
-             CustomerService customerService) : base(repository)
+             CustomerService customerService,
+             ProductTypeService productTypeService) : base(repository)
         {
             _tagService = tagService;
             _customerService = customerService;
+            _productTypeService = productTypeService;
             _repository = repository;
            db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
@@ -106,28 +109,39 @@ namespace BestApp.Services
                 data.Status = model.Status;
                 data.EmployeeID = model.CustomerID;
                 data.TypeEvent = model.TypeEvent;
-                data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
+                
+                //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
                 if (model.DetailEvents != null)
                 {
+                    data.DetailEvents = new List<DetailEvent>();
                     foreach (var item in model.DetailEvents)
                     {
                         data.DetailEvents.Add(new DetailEvent()
                         {
                             Serial = item.Serial,
-                            Note = item.Note
+                            Note = item.Note,
+                            ProductType = _productTypeService.Find(item.ProductID),
+                            CreatDate = DateTime.Now,
+                            LastModifiedDate = DateTime.Now,
+                            Delete = false
                         });
                     }
                 }
-                foreach(var item in model.Tags)
+                if (model.Tags != null)
                 {
-                    var t = _tagService.Find(item.ID);
-                    if (t != null)
+                    data.Tags = new List<Tag>();
+                    foreach (var item in model.Tags)
                     {
-                        data.Tags.Add(t);
+                        var t = _tagService.Find(item.ID);
+                        if (t != null)
+                        {
+                            data.Tags.Add(t);
+                        }
                     }
                 }
                 if(model.ReminderNotes != null)
                 {
+                    data.ReminderNotes = new List<ReminderNote>();
                     foreach(var item in model.ReminderNotes)
                     {
                         data.ReminderNotes.Add(new ReminderNote()
@@ -139,8 +153,10 @@ namespace BestApp.Services
                         });
                     }
                 }
+                
                 if(model.InteractionHistorys != null)
                 {
+                    data.InteractionHistorys = new List<InteractionHistory>();
                     foreach (var item in model.InteractionHistorys)
                     {
                         data.InteractionHistorys.Add(new InteractionHistory()
@@ -148,7 +164,10 @@ namespace BestApp.Services
                             Type = item.Type,
                             Note = item.Note,
                             EmployeeCall = item.EmployeeCall,
-                            EmployeeID = item.EmployeeID
+                            EmployeeID = item.EmployeeID,
+                            CreatDate = DateTime.Now,
+                            LastModifiedDate = DateTime.Now,
+                            Delete = false
                         });
                     }
                 }

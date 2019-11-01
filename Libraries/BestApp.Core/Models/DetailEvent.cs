@@ -11,5 +11,6 @@ namespace BestApp.Core.Models
         public string Serial { get; set; }
         public string Note { get; set; }
         public virtual Event Event { get; set; }
+        public virtual ProductType ProductType { get; set; }
     }
 }

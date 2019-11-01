@@ -26,7 +26,6 @@ namespace BestApp.Services
             IQueryable<Customer> GetAllCustomers();
             bool Delete(Guid Id);
         }
-        private readonly CustomerService _customerService;
         private readonly IRepositoryAsync<Customer> _repository;
         private readonly IRepository<ApplicationUser> _userRepository;
         protected readonly DataContext db;

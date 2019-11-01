@@ -27,6 +27,7 @@ namespace BestApp
             builder.EntitySet<DetailEventViewModel>("DetailEvents");
             builder.EntitySet<InteractionHistoryViewModel>("InteractionHistorys");
             builder.EntitySet<EventViewModel>("Events");
+            builder.EntitySet<ProductTypeViewModel>("ProductTypes");
 
             // Web API routes
             config.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
