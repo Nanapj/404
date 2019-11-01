@@ -3,7 +3,9 @@
 angular.module('app')
     .controller('DepartmentEditCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', 'blockUI', function ($scope, $state, $stateParams, $http, toaster, blockUI){
         var _url = "/odata/Departments";
+        var _tagUrl = "/odata/Tags";
         var vm = this;
+        vm.departmentId = $stateParams.Id.replace(/['"]+/g, '');
         vm.access_token = localStorage.getItem('access_token');
         vm.model = {};
         var editBlock = blockUI.instances.get('EditBlockUI');
