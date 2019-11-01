@@ -36,12 +36,10 @@ namespace BestApp.Services
         protected UserManager<ApplicationUser> userManager;
         public EventService(IRepositoryAsync<Event> repository,
              TagService tagService,
-             CustomerService customerService,
-             IRepository<ApplicationUser> userRepository) : base(repository)
+             CustomerService customerService) : base(repository)
         {
             _tagService = tagService;
             _customerService = customerService;
-            _userRepository = userRepository;
             _repository = repository;
            db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
@@ -55,10 +53,10 @@ namespace BestApp.Services
         {
             return Task.Run(() => GetAllEvents()
             .Where(x => x.Delete == false
-            && (model.ID == null || x.Id == model.ID)
-            && (model.Code == null || x.Code == model.Code)
-            && ((model.From == null) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
-            && ((model.To == null) || (DbFunctions.TruncateTime(x.CreatDate) <= DbFunctions.TruncateTime(model.To))))
+            && ((!(model.ID == null)) || x.Id == model.ID)
+            && ((!(model.Code == null)) || x.Code == model.Code)
+            && (!(model.From == null) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
+            && (!(model.To == null) || (DbFunctions.TruncateTime(x.CreatDate) <= DbFunctions.TruncateTime(model.To))))
             .Select(x => new EventViewModel()
             {
                 ID = x.Id,
