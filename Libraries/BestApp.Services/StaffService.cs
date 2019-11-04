@@ -161,7 +161,9 @@ namespace BestApp.Services
         
         public Task<IQueryable<StaffViewModel>> GetAllStaffsAsync()
         {
-            return Task.Run(() => GetAllStaffs().Select(x => new StaffViewModel() {
+            return Task.Run(() => GetAllStaffs()
+            .Where(x => x.Delete == false)
+            .Select(x => new StaffViewModel() {
                 ID = x.Id,
                 FullName = x.FullName,
                 Email = x.Email,

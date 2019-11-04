@@ -50,7 +50,9 @@ namespace BestApp.Services
         }
         public Task<IQueryable<ReminderNoteViewModel>> GetAllReminderNotesAsync()
         {
-            return Task.Run(() => GetAllReminderNotes().Select(x => new ReminderNoteViewModel()
+            return Task.Run(() => GetAllReminderNotes()
+            .Where(x => x.Delete == false)
+            .Select(x => new ReminderNoteViewModel()
             {
                 ID = x.Id,
                 Note = x.Note,

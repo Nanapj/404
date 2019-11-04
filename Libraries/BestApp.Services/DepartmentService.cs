@@ -117,6 +117,7 @@ namespace BestApp.Services
         public Task<IQueryable<DepartmentViewModel>> GetAllDepartmentsAsync()
         {
             return Task.Run(() => GetAllDepartments()
+            .Where(x => x.Delete == false)
             .Select(x => new DepartmentViewModel()
             {
                 ID = x.Id,
