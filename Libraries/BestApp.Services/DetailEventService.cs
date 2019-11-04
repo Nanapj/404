@@ -50,7 +50,9 @@ namespace BestApp.Services
         }
         public Task<IQueryable<DetailEventViewModel>> GetAllDetailEventsAsync()
         {
-            return Task.Run(() => GetAllDetailEvents().Select(x => new DetailEventViewModel()
+            return Task.Run(() => GetAllDetailEvents()
+            .Where(x => x.Delete == false)
+            .Select(x => new DetailEventViewModel()
             {
                 ID = x.Id,
                 Serial = x.Serial,

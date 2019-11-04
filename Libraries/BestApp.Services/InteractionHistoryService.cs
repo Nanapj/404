@@ -47,7 +47,9 @@ namespace BestApp.Services
         }
         public Task<IQueryable<InteractionHistoryViewModel>> GetAllInteractionHistorysAsync()
         {
-            return Task.Run(() => GetAllInteractionHistorys().Select(x => new InteractionHistoryViewModel()
+            return Task.Run(() => GetAllInteractionHistorys()
+            .Where(x => x.Delete == false)
+            .Select(x => new InteractionHistoryViewModel()
             {
                 ID = x.Id,
                 EventCode = x.Event.Code,
