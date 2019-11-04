@@ -2,16 +2,23 @@
 angular.module('app')
     .controller('crEventCreationCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', function ($scope, $state, $stateParams, $http, toaster){
         var vm = this; 
+        var _cusURL = "/odata/Customers";
+        vm.access_token = localStorage.getItem('access_token');
+        vm.secActived = false;
+        vm.citySearch = "";
+        vm.selectedCity = "";
         $scope.actions = [
             { text: 'Ok', action: onResetOk },
             { text: 'Cancel', primary: true, action: onResetCancel }
         ];
+        $scope.cityOption = {
+            change: onCityDropChange()
+        }
         vm.cityData = {
-            type: "odata-v4",
-            serverFiltering: true,
+            dataType: 'jsonp',
             transport: {
                 read: {
-                    url: "https://demos.telerik.com/kendo-ui/service-v4/odata/Products",
+                    url: "../../App/locationdata/tinh_tp.json",
                 }
             }
         };
@@ -34,11 +41,10 @@ angular.module('app')
         };
         vm.departmentSelectedIds = [ 4, 7 ];
         vm.districtData = {
-            type: "odata-v4",
-            serverFiltering: true,
+            dataType: 'jsonp',
             transport: {
                 read: {
-                    url: "https://demos.telerik.com/kendo-ui/service-v4/odata/Products",
+                    url: "../../App/locationdata/quan_huyen.json",
                 }
             }
         };
@@ -53,11 +59,40 @@ angular.module('app')
         }
         vm.message = '';   
         vm.noteEvent = '';
+
+        vm.searchPhoneNum = function() {
+            $http({
+                method: 'GET',
+                url: _cusURL+"?$filter=PhoneNumber eq '" + vm.searchingNumber + "'",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                },
+              }).then(function successCallback(response) {
+                  if(response.data.value.length > 0) { 
+                     vm.secActived = true;
+                     vm.tabDisable = false;
+                     vm.systemCustomer = response.data.value[0];
+                  } else 
+                  {
+                    toaster.pop('warning', "Rỗng", "Không tìm thấy thông tin khách hàng");
+                    vm.secActived = true;
+                    vm.tabDisable = false; 
+                  }
+                
+                }, function errorCallback(response) {
+                  console.log(response);
+            });
+        }
+
         function onResetOk(e) {
             location.reload();    
         }
         function onResetCancel(e) {
             
+        }
+        function onCityDropChange(e) {
+            alert(vm.selectedCity);
         }
         vm.pitechCutomer = {
             'FullName': 'Nguyễn Văn A',
@@ -122,21 +157,13 @@ angular.module('app')
             }
         };
         vm.selectedIds = [ 4, 7 ];
-        vm.systemCustomer = {
-            'FullName': 'Nguyễn Văn A',
-            'Address' : 'Số 1 Lê Duẩn',
-            'City' : 'Hồ Chí Minh',
-            'District' : 'Quận 3',
-            'Ward' : '7',
-            'Birthday' : '01/01/1909'
-        }
+        vm.systemCustomer = {}
         vm.tabDisable = true;
         vm.wardData = {
-            type: "odata-v4",
-            serverFiltering: true,
+            dataType: 'jsonp',
             transport: {
                 read: {
-                    url: "https://demos.telerik.com/kendo-ui/service-v4/odata/Products",
+                    url: "../../App/locationdata/xa_phuong.json",
                 }
             }
         };       

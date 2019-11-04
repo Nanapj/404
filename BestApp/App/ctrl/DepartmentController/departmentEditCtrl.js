@@ -91,7 +91,9 @@ angular.module('app')
                               }).then(function successCallback(response) {
                                     if(response.status == 201) {
                                         toaster.pop('success', "Thành công", "Đã tạo tag cho phòng ban");
-                                        return true;
+                                        $('#departmentTagGrid').data('kendoGrid').dataSource.read();
+                                        $('#departmentTagGrid').data('kendoGrid').refresh();
+                                        return _tagUrl;
                                     }
                                 }, function errorCallback(response) {
                                   console.log(response);
@@ -100,7 +102,24 @@ angular.module('app')
                     },
                     destroy: {
                         url: function (dataItem) {
-                            return _tagUrl+"(" + dataItem.ID + ")";
+                            $http({
+                                method: 'DELETE',
+                                url: _tagUrl+"("+dataItem.ID+")",
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                                },
+                                data: JSON.stringify(dataItem)
+                              }).then(function successCallback(response) {
+                                    if(response.status == 200) {
+                                        toaster.pop('success', "Xóa", "Đã xóa thông tin tag");
+                                        $('#departmentTagGrid').data('kendoGrid').dataSource.read();
+                                        $('#departmentTagGrid').data('kendoGrid').refresh();
+                                        return _tagUrl;
+                                    }
+                                }, function errorCallback(response) {
+                                  console.log(response);
+                            });
                         }
                     }
                 },
