@@ -46,7 +46,9 @@ namespace BestApp.Services
         }
         public Task<IQueryable<TagViewModel>> GetAllTagsAsync()
         {
-            return Task.Run(() => GetAllTags().Select(x => new TagViewModel()
+            return Task.Run(() => GetAllTags()
+            .Where(x => x.Delete == false)
+            .Select(x => new TagViewModel()
             {
                 ID = x.Id,
                 NameTag = x.NameTag,
