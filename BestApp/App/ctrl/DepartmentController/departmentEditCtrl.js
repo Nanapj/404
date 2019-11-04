@@ -3,7 +3,16 @@
 angular.module('app')
     .controller('DepartmentEditCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', 'blockUI', function ($scope, $state, $stateParams, $http, toaster, blockUI){
         var _url = "/odata/Departments";
+        var _tagUrl = "/odata/Tags";
+        function CreateGuid() {  
+            function _p8(s) {  
+               var p = (Math.random().toString(16)+"000000000").substr(2,8);  
+               return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;  
+            }  
+            return _p8() + _p8(true) + _p8(true) + _p8();  
+         }  
         var vm = this;
+        vm.departmentId = $stateParams.Id.replace(/['"]+/g, '');
         vm.access_token = localStorage.getItem('access_token');
         vm.model = {};
         var editBlock = blockUI.instances.get('EditBlockUI');
@@ -57,42 +66,54 @@ angular.module('app')
                 transport: {
                     read: {
                         url: function () {
-                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/Products";
+                            return _tagUrl+"?$filter=DepartmentID eq "+ vm.departmentId ;
                         }
                     },
                     update: {
                         url: function (dataItem) {
-                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/Products(" + dataItem.ProductID + ")";
-                        }
-                    },
-                    batch: {
-                        url: function () {
-                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/$batch";
+                            return _tagUrl+"(" + dataItem.ID + ")";
                         }
                     },
                     create: {
-                        url: function (dataItem) {
-                            delete dataItem.ProductID;
-                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/Products";
+                        url: function (dataItem) {                   
+                            // delete dataItem;
+                            dataItem.ID = CreateGuid();
+                            delete dataItem.ID;
+                            dataItem.DepartmentID = vm.departmentId;
+                            $http({
+                                method: 'POST',
+                                url: _tagUrl,
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                                },
+                                data: JSON.stringify(dataItem)
+                              }).then(function successCallback(response) {
+                                    if(response.status == 201) {
+                                        toaster.pop('success', "Thành công", "Đã tạo tag cho phòng ban");
+                                        return true;
+                                    }
+                                }, function errorCallback(response) {
+                                  console.log(response);
+                            });
                         }
                     },
                     destroy: {
                         url: function (dataItem) {
-                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/Products(" + dataItem.ProductID + ")";
+                            return _tagUrl+"(" + dataItem.ID + ")";
                         }
                     }
                 },
-                batch: true,
                 pageSize: 10,      
                 schema: {
                     model: {
-                        id: "ProductID",
+                        id: "ID",
                         fields: {
-                            ProductID: { editable: false, nullable: true },
-                            ProductName: { validation: { required: true } },
-                            UnitPrice: { type: "number", validation: { required: true, min: 1} },
-                            Discontinued: { type: "boolean" },
-                            UnitsInStock: { type: "number", validation: { min: 0, required: true } }
+                            ID: { editable: false, nullable: true },
+                            NameTag: { validation: { required: false } },
+                            CodeTag: { type: "string" },
+                            CreateDate: { type:"datetime" , editable: false },
+                            DepartmentID: {type: "string"}
                         }
                     }
                 }
@@ -101,7 +122,9 @@ angular.module('app')
             pageable: true,
             height: 468,
             columns: [
-                { field: "ProductName", title: "Tên tag", format: "{0:c}", width: "120px" },
+                { field: "NameTag", title: "Tên tag" , width: "120px" },
+                { field: "CodeTag", title: "Mã tag", width: "120px" },
+                { field: "CreateDate", title: "Ngày tạo", width: "120px" },
                 { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
             ],
             editable: "inline"

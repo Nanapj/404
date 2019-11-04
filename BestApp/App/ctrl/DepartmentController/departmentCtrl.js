@@ -40,17 +40,16 @@ angular.module('app')
                         //   swal("Poof! Your imaginary file has been deleted!", {
                         //     icon: "success",
                         //   });
-                        // $http({
-                        //     method: 'DELETE',
-                        //     url: _url+'(' + vm.selectedStaff.Id +')',
-                        //     headers: {
-                        //         'Content-Type': 'application/json',
-                        //         'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
-                        //     },
-                        // }).then(function successCallback(response) {
-                        //     toaster.pop('success', "Thành công", "Đã xóa thông tin nhân viên và vô hiệu hóa tài khoản");
-                        // });
-                        toaster.pop('info', "Thành công", "Đã xóa thông tin phòng ban"); 
+                        $http({
+                            method: 'DELETE',
+                            url: _url+'(' + vm.selectedDepartment.ID +')',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                            },
+                        }).then(function successCallback(response) {
+                            toaster.pop('success', "Thành công", "Đã xóa thông tin phòng ban");
+                        });
                   
                   } else {
                   
