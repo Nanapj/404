@@ -3,6 +3,9 @@ angular.module('app')
     .controller('crEventCreationCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', function ($scope, $state, $stateParams, $http, toaster){
         var vm = this; 
         var _cusURL = "/odata/Customers";
+        var _cityURL = "/odata/Cities";
+        var _districtURL = "/odata/Districts";
+        var _wardURL = "/odata/Wards";
         vm.access_token = localStorage.getItem('access_token');
         vm.secActived = false;
         vm.citySearch = "";
@@ -25,11 +28,15 @@ angular.module('app')
         $scope.onWardChanged = function() {
             console.log(vm.selectedWard);
         }
+        function initialCtrl() {
+        }
+        initialCtrl();
         vm.cityData = {
-            dataType: 'jsonp',
+            type: "odata-v4",
+            serverFiltering: true,
             transport: {
                 read: {
-                    url: "../../App/locationdata/tinh_tp.json",
+                    url: _cityURL,
                 }
             }
         };     
@@ -52,10 +59,11 @@ angular.module('app')
         };
         vm.departmentSelectedIds = [ 4, 7 ];
         vm.districtData = {
-            dataType: 'jsonp',
+            type: "odata-v4",
+            serverFiltering: true,
             transport: {
                 read: {
-                    url: "../../App/locationdata/quan_huyen.json",
+                    url: _districtURL,
                 }
             }
         };
@@ -171,10 +179,11 @@ angular.module('app')
         vm.systemCustomer = {}
         vm.tabDisable = true;
         vm.wardData = {
-            dataType: 'jsonp',
+            type: "odata-v4",
+            serverFiltering: true,
             transport: {
                 read: {
-                    url: "../../App/locationdata/xa_phuong.json",
+                    url: _wardURL,
                 }
             }
         };       

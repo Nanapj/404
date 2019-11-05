@@ -77,7 +77,10 @@ angular.module('app')
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
                     },
-                }).then(function(response){
+                }).error(function(response) {
+                    toaster.pop('error', "Thất bại", response.error.innererror.message);
+                })
+                .then(function(response){
                     if(response.status == 201) {
                         toaster.pop('success', "Thành công", "Đã tạo thông tin nhân viên");
                         $state.go('app.staff.index');
