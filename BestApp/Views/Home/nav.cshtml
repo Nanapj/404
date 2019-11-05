@@ -43,19 +43,19 @@
     </li>
     <li ng-class="{active:$state.includes('app.department')}">
         @*<a class="auto">
-            <span class="pull-right text-muted">
-                <i class="fa fa-fw fa-angle-right text"></i>
-                <i class="fa fa-fw fa-angle-down text-active"></i>
-            </span>
-            <i class="fa fa-institution icon text-light"></i>
-            <span class="font-bold">Phòng ban</span>
-        </a>
-        <ul class="nav nav-sub dk"></ul>*@
-        <li ui-sref-active="active">
-            <a ui-sref="app.department.index">
-                <i class="fa fa-institution icon text-light"></i><span class="font-bold">Phòng ban</span>
+                <span class="pull-right text-muted">
+                    <i class="fa fa-fw fa-angle-right text"></i>
+                    <i class="fa fa-fw fa-angle-down text-active"></i>
+                </span>
+                <i class="fa fa-institution icon text-light"></i>
+                <span class="font-bold">Phòng ban</span>
             </a>
-        </li>
+            <ul class="nav nav-sub dk"></ul>*@
+    <li ui-sref-active="active">
+        <a ui-sref="app.department.index">
+            <i class="fa fa-institution icon text-light"></i><span class="font-bold">Phòng ban</span>
+        </a>
+    </li>
     </li>
     <li ng-class="{active:$state.includes('app.staff')}">
         @*<a class="auto">
@@ -86,6 +86,12 @@
     <li ui-sref-active="active">
         <a ui-sref="app.customer.index">
             <i class="fa fa-group icon text-light"></i> <span class="font-bold">Khách hàng</span>
+        </a>
+    </li>
+    <li ng-class="{active:$state.includes('app.producttype')}">
+    <li ui-sref-active="active">
+        <a ui-sref="app.producttype.index">
+            <i class="fa fa-suitcase icon text-light"></i> <span class="font-bold">Loại sản phẩm</span>
         </a>
     </li>
     </li>

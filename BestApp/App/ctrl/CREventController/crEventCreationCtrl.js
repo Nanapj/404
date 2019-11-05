@@ -7,12 +7,23 @@ angular.module('app')
         vm.secActived = false;
         vm.citySearch = "";
         vm.selectedCity = "";
+        vm.selectedDistrict = "";
+        vm.selectedWard = "";
         $scope.actions = [
             { text: 'Ok', action: onResetOk },
             { text: 'Cancel', primary: true, action: onResetCancel }
         ];
-        $scope.cityOption = {
-            change: onCityDropChange()
+        // $scope.cityOption = {
+        //     change: onCityDropChange()
+        // }
+        $scope.onCityChanged = function () {
+            console.log(vm.selectedCity);
+        }
+        $scope.onDistrictChanged = function() {
+            console.log(vm.selectedDistrict);
+        }
+        $scope.onWardChanged = function() {
+            console.log(vm.selectedWard);
         }
         vm.cityData = {
             dataType: 'jsonp',
@@ -21,7 +32,7 @@ angular.module('app')
                     url: "../../App/locationdata/tinh_tp.json",
                 }
             }
-        };
+        };     
         vm.dateOfBirth = {};
         vm.departmentSelectOptions = {
             placeholder: "Bộ phận...",
@@ -91,9 +102,9 @@ angular.module('app')
         function onResetCancel(e) {
             
         }
-        function onCityDropChange(e) {
-            alert(vm.selectedCity);
-        }
+        // function onCityDropChange(e) {
+        //     alert(vm.selectedCity);
+        // }
         vm.pitechCutomer = {
             'FullName': 'Nguyễn Văn A',
             'Address' : 'Số 1 Lê Duẩn',
