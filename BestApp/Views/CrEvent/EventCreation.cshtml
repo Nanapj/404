@@ -1,6 +1,6 @@
 ﻿
 <div class="wrapper-md" ng-controller="crEventCreationCtrl as vm">
-    <tabset class="tab-container" ng-init="steps={percent:40, step1:true, step2:false}">
+    <tabset class="tab-container" ng-init="steps={percent:40, step1:!vm.secActived, step2:vm.secActived}">
         <tab heading="Bước 1" active="steps.step1" disabled="!vm.tabDisable" select="steps.percent=40">
             <div class="row">
                 <div class="col-sm-3">
@@ -11,7 +11,7 @@
                                 <div class="input-group">
                                     <input type="text" name="masked" ng-change="phoneNumChange()" ui-mask="999 999 9999" ng-model="vm.searchingNumber" placeholder="___ ___ ____" class="form-control m-b" required>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-md btn-default" ng-disabled="vm.tabDisable" type="button" ng-click="steps.step2=true">Tiếp tục</button>
+                                        <button class="btn btn-md btn-default" ng-disabled="vm.tabDisable" type="submit" ng-click="vm.searchPhoneNum()">Tiếp tục</button>
                                     </span>
                                 </div>
                             </form>
@@ -29,7 +29,7 @@
                             <form role="form">
                                 <div class="form-group">
                                     <label>Tên khách hàng</label>
-                                    <input type="text" class="form-control" placeholder="Tên khách hàng" ng-model="vm.systemCustomer.FullName">
+                                    <input type="text" class="form-control" placeholder="Tên khách hàng" ng-model="vm.systemCustomer.Name">
                                 </div>
                                 <div class="form-group">
                                     <label>Địa chỉ</label>
@@ -38,19 +38,22 @@
                                 <div class="row ">
                                     <div class="col-md-6 btn-group m-b-md col-sm-12">
                                         <label>Thành phố / Tỉnh</label>
-                                        <select kendo-drop-down-list
-                                                k-data-text-field="'ProductName'"
-                                                k-data-value-field="'ProductID'"
+                                        <select 
+                                                kendo-drop-down-list
+                                                k-ng-model="vm.selectedCity"
+                                                k-options="cityOption"
+                                                k-data-text-field="'name'"
+                                                k-data-value-field="'code'"
                                                 k-data-source="vm.cityData"
                                                 k-option-label="' Thành phố... '"
                                                 k-filter="'contains'"
-                                                style="width: 100%"></select>
+                                                style="width: 100%"></select>                             
                                     </div>
                                     <div class="col-md-6 btn-group m-b-md col-sm-12">
                                         <label>Quận / Huyện</label>
                                         <select kendo-drop-down-list
-                                                k-data-text-field="'ProductName'"
-                                                k-data-value-field="'ProductID'"
+                                                k-data-text-field="'name'"
+                                                k-data-value-field="'code'"
                                                 k-data-source="vm.districtData"
                                                 k-option-label="' Quận / Huyện... '"
                                                 k-filter="'contains'"
@@ -60,9 +63,10 @@
                                 <div class="row">
                                     <div class="col-md-6 btn-group m-b-md col-sm-12">
                                         <label>Phường / Xã</label>
-                                        <select kendo-drop-down-list
-                                                k-data-text-field="'ProductName'"
-                                                k-data-value-field="'ProductID'"
+                                        <select
+                                                kendo-drop-down-list
+                                                k-data-text-field="'name'"
+                                                k-data-value-field="'code'"
                                                 k-data-source="vm.wardData"
                                                 k-option-label="' Phường / Xã... '"
                                                 k-filter="'contains'"
