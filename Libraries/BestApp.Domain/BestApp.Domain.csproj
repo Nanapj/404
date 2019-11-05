@@ -41,10 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CityViewModel.cs" />
     <Compile Include="CustomerTagViewModel.cs" />
     <Compile Include="CustomerViewModel.cs" />
     <Compile Include="DepartmentViewModel.cs" />
     <Compile Include="DetailEventViewModel.cs" />
+    <Compile Include="DistrictViewModel.cs" />
     <Compile Include="EventViewModel.cs" />
     <Compile Include="InteractionHistoryViewModel.cs" />
     <Compile Include="ProductTypeViewModel.cs" />
@@ -53,6 +55,7 @@
     <Compile Include="SearchViewModel.cs" />
     <Compile Include="StaffViewModel.cs" />
     <Compile Include="TagViewModel.cs" />
+    <Compile Include="WardViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BestApp.Core\BestApp.Core.csproj">

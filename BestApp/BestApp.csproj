@@ -242,15 +242,18 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Api\Controllers\CatsController.cs" />
+    <Compile Include="Areas\Api\Controllers\CitysController.cs" />
     <Compile Include="Areas\Api\Controllers\CustomersController.cs" />
     <Compile Include="Areas\Api\Controllers\DepartmentsController.cs" />
     <Compile Include="Areas\Api\Controllers\DetailEventsController.cs" />
+    <Compile Include="Areas\Api\Controllers\DistrictsController.cs" />
     <Compile Include="Areas\Api\Controllers\EventsController.cs" />
     <Compile Include="Areas\Api\Controllers\InteractionHistorysController.cs" />
     <Compile Include="Areas\Api\Controllers\ProductTypesController.cs" />
     <Compile Include="Areas\Api\Controllers\ReminderNotesController.cs" />
     <Compile Include="Areas\Api\Controllers\StaffsController.cs" />
     <Compile Include="Areas\Api\Controllers\TagsController.cs" />
+    <Compile Include="Areas\Api\Controllers\WardsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CatController.cs" />
     <Compile Include="Controllers\CrEventController.cs" />
@@ -310,15 +313,18 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Api\Models\" />
+    <Folder Include="Areas\Api\Views\Citys\" />
     <Folder Include="Areas\Api\Views\Customers\" />
     <Folder Include="Areas\Api\Views\Department\" />
     <Folder Include="Areas\Api\Views\DetailEvents\" />
+    <Folder Include="Areas\Api\Views\Districts\" />
     <Folder Include="Areas\Api\Views\Events\" />
     <Folder Include="Areas\Api\Views\InteractionHistorys\" />
     <Folder Include="Areas\Api\Views\ProductType\" />
     <Folder Include="Areas\Api\Views\ReminderNotes\" />
     <Folder Include="Areas\Api\Views\Shared\" />
     <Folder Include="Areas\Api\Views\Tags\" />
+    <Folder Include="Areas\Api\Views\Wards\" />
     <Folder Include="Views\Json\" />
   </ItemGroup>
   <ItemGroup>
