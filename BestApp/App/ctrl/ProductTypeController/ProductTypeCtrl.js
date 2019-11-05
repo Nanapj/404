@@ -1,12 +1,11 @@
 'use strict';
-
 angular.module('app')
-    .controller('StaffCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', function ($scope, $state, $stateParams, $http, toaster){
-        var _url = "/odata/Staffs";
+    .controller('ProductTypeCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', function ($scope, $state, $stateParams, $http, toaster){
+        var _url = "/odata/ProductTypes";
         var vm = this;
         vm.access_token = localStorage.getItem('access_token');
         vm.model = {};
-        vm.selectedStaff = {};
+        vm.selectedProductType = {};
         vm.model.HasAccount = false;
         vm.toolbarTemplate = toolbarTemplate;
         vm.create = create;
@@ -14,19 +13,19 @@ angular.module('app')
         vm.destroy = destroy;
         vm.dialogVisible = false;
         function create(){
-            $state.go('app.staff.create');
+            $state.go('app.producttype.create');
             vm.editMode = false;
         }
 
         function edit(){
-            $state.go('app.staff.edit', {
-                ID: vm.selectedStaff.ID
+            $state.go('app.producttype.edit', {
+                Id: vm.selectedProductType.Id
             });
         }
 
         function destroy(){
             vm.dialogVisible = true;
-            if(vm.selectedStaff.ID != undefined && vm.selectedStaff.ID != null) {
+            if(vm.selectedProductType.Id != undefined && vm.selectedProductType.Id != null) {
                 swal({
                    title: "Xác nhận xóa?",
                    text: "Bạn có chắc xóa, nếu xóa thì thông tin tài khoản sẽ bị vô hiệu hóa",
@@ -39,18 +38,17 @@ angular.module('app')
                          //   swal("Poof! Your imaginary file has been deleted!", {
                          //     icon: "success",
                          //   });
-                         $http({
-                             method: 'DELETE',
-                             url: _url+'(' + vm.selectedStaff.ID +')',
-                             headers: {
-                                 'Content-Type': 'application/json',
-                                 'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
-                             },
-                         }).then(function successCallback(response) {
-                            $('#staffgrid').data('kendoGrid').dataSource.read();
-                            $('#staffgrid').data('kendoGrid').refresh();
-                             toaster.pop('success', "Thành công", "Đã xóa thông tin nhân viên và vô hiệu hóa tài khoản");
-                         });
+                         // $http({
+                         //     method: 'DELETE',
+                         //     url: _url+'(' + vm.selectedProductType.Id +')',
+                         //     headers: {
+                         //         'Content-Type': 'application/json',
+                         //         'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                         //     },
+                         // }).then(function successCallback(response) {
+                         //     toaster.pop('success', "Thành công", "Đã xóa thông tin nhân viên và vô hiệu hóa tài khoản");
+                         // });
+                         toaster.pop('info', "Thành công", "Đã xóa thông tin nhân viên"); 
                    
                    } else {
                    
@@ -65,9 +63,8 @@ angular.module('app')
         }
 
         vm.createSubmit = function () {
-            if((vm.model.FullName != "" && vm.model.FullName != null) 
-            && (vm.model.Phone != null && vm.model.Phone != "")
-            && (vm.model.Email != null && vm.model.Email != "")
+            if((vm.model.Name != "" && vm.model.Name != null) 
+            && (vm.model.Code != null && vm.model.Code != "")
             ) {
                 $http({
                     url: _url,
@@ -109,28 +106,14 @@ angular.module('app')
             change: onChange,
             columns: [
                 {
-                    field:"ID",
-                    hidden:true
-                },
-                {
-                    field: "FullName",
-                    title: "Họ tên",
+                    field: "Name",
+                    title: "Tên loại sản phẩm",
                     width: "50px"
                 },
                 {
-                    field: "Phone",
-                    title: "Số điện thoại",
+                    field: "Code",
+                    title: "Mã sản phẩm",
                     width: "50px"
-                },
-                {
-                    field: "Email",
-                    title: "Email",
-                    width: "50px"
-                },
-                {
-                    field: "Address",
-                    title: "Địa chỉ",
-                    width: "80px"
                 }
             ]
         };
@@ -138,8 +121,9 @@ angular.module('app')
             this.expandRow(this.tbody.find("tr.k-master-row").first());
         }
         function onChange(e) {
-            var grid = $('#staffgrid').data('kendoGrid');
+            var grid = $('#producttypegrid').data('kendoGrid');
             var selectedItem = grid.dataItem(grid.select());
-            vm.selectedStaff = selectedItem;
+            vm.selectedProductType = selectedItem;
         }
-}]);
+    }
+]);

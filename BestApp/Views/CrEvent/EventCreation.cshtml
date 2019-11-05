@@ -39,24 +39,29 @@
                                     <div class="col-md-6 btn-group m-b-md col-sm-12">
                                         <label>Thành phố / Tỉnh</label>
                                         <select 
+                                                id="citydropdown"
                                                 kendo-drop-down-list
                                                 k-ng-model="vm.selectedCity"
-                                                k-options="cityOption"
                                                 k-data-text-field="'name'"
                                                 k-data-value-field="'code'"
                                                 k-data-source="vm.cityData"
                                                 k-option-label="' Thành phố... '"
                                                 k-filter="'contains'"
+                                                k-on-change="onCityChanged()"
                                                 style="width: 100%"></select>                             
                                     </div>
                                     <div class="col-md-6 btn-group m-b-md col-sm-12">
                                         <label>Quận / Huyện</label>
-                                        <select kendo-drop-down-list
+                                        <select 
+                                                id="districtdropdown"
+                                                kendo-drop-down-list
                                                 k-data-text-field="'name'"
                                                 k-data-value-field="'code'"
                                                 k-data-source="vm.districtData"
                                                 k-option-label="' Quận / Huyện... '"
                                                 k-filter="'contains'"
+                                                k-ng-model="vm.selectedDistrict"
+                                                k-on-change ="onDistrictChanged()"
                                                 style="width: 100%"></select>
                                     </div>
                                 </div>
@@ -64,19 +69,24 @@
                                     <div class="col-md-6 btn-group m-b-md col-sm-12">
                                         <label>Phường / Xã</label>
                                         <select
+                                                id="warddropdown"
                                                 kendo-drop-down-list
                                                 k-data-text-field="'name'"
                                                 k-data-value-field="'code'"
                                                 k-data-source="vm.wardData"
                                                 k-option-label="' Phường / Xã... '"
+                                                k-ng-model="vm.selectedWard"
+                                                k-on-changed="onWardChanged()"
                                                 k-filter="'contains'"
                                                 style="width: 100%"></select>
                                     </div>
                                     <div class="col-md-6 btn-group m-b-md col-sm-12">
                                         <label>Ngày sinh</label>
-                                        <input kendo-date-picker
+                                        <input 
+                                               kendo-date-picker
                                                k-options="{format: 'dd/MM/yyyy'}"
-                                               style="width: 100%;" />
+                                               style="width: 100%;" 
+                                         />
                                     </div>
                                 </div>
                                 <div class="row col-md-12">

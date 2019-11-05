@@ -1,8 +1,6 @@
 'use strict';
-
-
 angular.module('app')
-    .controller('EditStaffCtrl', ['$scope','$state', '$stateParams', '$http', 'toaster', 'blockUI', function ($scope, $state, $stateParams, $http, toaster,blockUI){
+    .controller('ProductTypeEditCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', function ($scope, $state, $stateParams, $http, toaster){
         var _url = "/odata/Staffs";
         var vm = this;
         vm.access_token = localStorage.getItem('access_token');
@@ -12,7 +10,7 @@ angular.module('app')
         $scope.initStaffEdit = function() {
             $http({
                 method: 'GET',
-                url: _url+'?$filter=ID eq ' + $stateParams.ID.replace(/['"]+/g, ''),
+                url: _url+'?$filter=Id eq ' + $stateParams.Id.replace(/['"]+/g, ''),
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
@@ -34,7 +32,7 @@ angular.module('app')
         vm.editSubmit = function() {
             editBlock.start();
             $http({
-                url: _url+'('+ $stateParams.ID.replace(/['"]+/g, '') +')',
+                url: _url+'('+ $stateParams.Id.replace(/['"]+/g, '') +')',
                 method: 'PUT',
                 data: JSON.stringify(vm.model),
                 headers: {
@@ -50,4 +48,5 @@ angular.module('app')
                 }
             });
         }
-}]);
+    }
+]);

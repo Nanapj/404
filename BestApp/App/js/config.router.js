@@ -83,7 +83,7 @@ angular.module('app')
                         templateUrl: '/staff/create'
                     })
                     .state('app.staff.edit', {
-                        url: '/edit/:Id',
+                        url: '/edit/:ID',
                         templateUrl: '/staff/edit',
                         resolve: {
                             deps: ['$ocLazyLoad', function ($ocLazyLoad) {
@@ -151,7 +151,7 @@ angular.module('app')
                         templateUrl: '/department/Create'
                     })
                     .state('app.department.edit', {
-                        url: '/edit/:Id',
+                        url: '/edit/:ID',
                         templateUrl:'/department/Edit',
                         resolve: {
                             deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -171,6 +171,33 @@ angular.module('app')
                     .state('app.customer.index', {
                         url:'/index',
                         templateUrl: '/customer/Index'
+                    })
+
+                    .state('app.producttype', {
+                        url:'/producttype',
+                        template: '<div ui-view class="fade-in-down"></div>',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/ProductTypeController/ProductTypeCtrl.js');
+                            }]
+                        }
+                    })
+                    .state('app.producttype.create', {
+                        url: '/create',
+                        templateUrl: '/producttype/create'
+                    })
+                    .state('app.producttype.index', {
+                        url:'/index',
+                        templateUrl:'/producttype/Index'
+                    })
+                    .state('app.producttype.edit', {
+                        url: '/edit/:ID',
+                        templateUrl: '/producttype/edit',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/ProductTypeController/ProductTypeEditCtrl.js'); // Resolve promise and load before view 
+                            }]
+                        }
                     })
                     .state('account', {
                         url: '/account',
