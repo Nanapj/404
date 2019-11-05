@@ -56,9 +56,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CatService.cs" />
+    <Compile Include="CityService.cs" />
     <Compile Include="CustomerService.cs" />
     <Compile Include="DepartmentService.cs" />
     <Compile Include="DetailEventService.cs" />
+    <Compile Include="DistrictService.cs" />
     <Compile Include="EventService.cs" />
     <Compile Include="InteractionHistoryService.cs" />
     <Compile Include="IService.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="Service.cs" />
     <Compile Include="StaffService.cs" />
     <Compile Include="TagService.cs" />
+    <Compile Include="WardService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BestApp.Core\BestApp.Core.csproj">

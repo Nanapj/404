@@ -1,4 +1,5 @@
-﻿using Repository.Repositories;
+﻿using BestApp.Core.Models;
+using Repository.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,14 @@ namespace Service.Pattern
     public abstract class Service<TEntity> : IService<TEntity> where TEntity : class
     {
         private readonly IRepositoryAsync<TEntity> _repository;
+        private IRepositoryAsync<City> repository;
 
         protected Service(IRepositoryAsync<TEntity> repository) { _repository = repository; }
+
+        protected Service(IRepositoryAsync<City> repository)
+        {
+            this.repository = repository;
+        }
 
         public virtual TEntity Find(params object[] keyValues) { return _repository.Find(keyValues); }
 
