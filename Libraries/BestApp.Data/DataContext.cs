@@ -32,6 +32,9 @@ namespace Repository.Pattern
         public DbSet<InteractionHistory> InteractionHistorys { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<ReminderNote> ReminderNotes { get; set; }
+        public DbSet<City> Citys { get; set; }
+        public DbSet<Ward> Wards { get; set; }
+        public DbSet<District> Districts { get; set; }
 
         public override int SaveChanges()
         {
