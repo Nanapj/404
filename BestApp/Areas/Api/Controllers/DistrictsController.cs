@@ -41,7 +41,15 @@ namespace BestApp.Areas.Api.Controllers
             {
                 var stf = await _districtService.InsertAsync(model);
                 _unitOfWorkAsync.Commit();
-                return Created(model);
+                var resultObject = new DistrictViewModel()
+                {
+                    name = model.name,
+                    slug = model.slug,
+                    type = model.type,
+                    name_with_type = model.name_with_type,
+                    code = model.code,
+                };
+                return Created(resultObject);
             }
             catch (Exception ex)
             {

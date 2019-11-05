@@ -11,12 +11,12 @@ using static BestApp.Services.CityService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class CitysController : ODataController
+    public class CitiesController : ODataController
     {
         private readonly ICityService _cityService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
 
-        public CitysController(ICityService cityService, IUnitOfWorkAsync unitOfWorkAsync)
+        public CitiesController(ICityService cityService, IUnitOfWorkAsync unitOfWorkAsync)
         {
             _cityService = cityService;
             _unitOfWorkAsync = unitOfWorkAsync;

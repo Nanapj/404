@@ -8,7 +8,6 @@ namespace BestApp.Domain
 {
     public class WardViewModel
     {
-        public Guid Id { get; set; }
         public string name { get; set; }
         public string slug { get; set; }
         public string name_with_type { get; set; }
@@ -16,5 +15,10 @@ namespace BestApp.Domain
         public string path_with_type { get; set; }
         public string code { get; set; }
         public string parent_code { get; set; }
+        public DateTime CreatDate { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public string UserName { get; set; }
+        public bool Delete { get; set; }
+        public Guid? ID { get; set; }
     }
 }

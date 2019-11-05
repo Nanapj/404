@@ -8,7 +8,11 @@ namespace BestApp.Domain
 {
     public class DistrictViewModel
     {
-        public Guid Id { get; set; }
+        public DateTime CreatDate { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public string UserName { get; set; }
+        public bool Delete { get; set; }
+        public Guid? ID { get; set; }
         public string name { get; set; }
         public string slug { get; set; }
         public string type { get; set; }

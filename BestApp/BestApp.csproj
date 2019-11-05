@@ -242,7 +242,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Api\Controllers\CatsController.cs" />
-    <Compile Include="Areas\Api\Controllers\CitysController.cs" />
+    <Compile Include="Areas\Api\Controllers\CitiesController.cs" />
     <Compile Include="Areas\Api\Controllers\CustomersController.cs" />
     <Compile Include="Areas\Api\Controllers\DepartmentsController.cs" />
     <Compile Include="Areas\Api\Controllers\DetailEventsController.cs" />

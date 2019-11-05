@@ -62,6 +62,9 @@ namespace BestApp.Services
             data.path_with_type = model.path_with_type;
             data.name_with_type = model.name_with_type;
             data.code = model.code;
+            data.CreatDate = DateTime.Now;
+            data.Delete = false;
+            data.LastModifiedDate = DateTime.Now;
             base.Insert(data);
             return data;
 

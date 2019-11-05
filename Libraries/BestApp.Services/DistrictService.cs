@@ -55,6 +55,7 @@ namespace BestApp.Services
         }
         public District Insert(DistrictViewModel model)
         {
+            
             var data = new District();
             data.name = model.name;
             data.slug = model.slug;
@@ -64,6 +65,9 @@ namespace BestApp.Services
             data.path = model.path;
             data.path_with_type = model.path_with_type;
             data.parent_code = model.parent_code;
+            data.CreatDate = DateTime.Now;
+            data.Delete = false;
+            data.LastModifiedDate = DateTime.Now;
             base.Insert(data);
             return data;
 

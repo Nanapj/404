@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace BestApp.Core.Models
 {
-    public class District
+    public class District : Entity
     {
-        public Guid Id { get; set; }
         public string name { get; set; }
         public string slug { get; set; }
         public string type { get; set; }

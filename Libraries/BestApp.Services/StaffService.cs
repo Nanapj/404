@@ -42,31 +42,40 @@ namespace BestApp.Services
 
         public Staff Insert(StaffViewModel model)
         {
-            var data = new Staff()
+            var check = Queryable().Where(x=> x.Email == model.Email).FirstOrDefault();
+            if(check != null)
             {
-                FullName = model.FullName,
-                Address = model.Address,
-                Email = model.Email,
-                CreatDate = DateTime.Now,
-                HasAccount = model.HasAccount,
-                LastModifiedDate = DateTime.Now,
-                Phone = model.Phone
-            };
-
-            // Nếu muốn tạo tài khoản
-            if (data.HasAccount)
-            {            
-                var user = new ApplicationUser();
-                user.Email = model.Email;
-                user.UserName = model.Email;
-                string userPWD = model.Password;
-
-                var result = userManager.Create(user, userPWD);
+                throw new Exception("Nhân viên đã tồn tại");
             }
+            else
+            {
+                var data = new Staff()
+                {
+                    FullName = model.FullName,
+                    Address = model.Address,
+                    Email = model.Email,
+                    CreatDate = DateTime.Now,
+                    HasAccount = model.HasAccount,
+                    LastModifiedDate = DateTime.Now,
+                    Phone = model.Phone
+                };
 
-            base.Insert(data);
+                // Nếu muốn tạo tài khoản
+                if (data.HasAccount)
+                {
+                    var user = new ApplicationUser();
+                    user.Email = model.Email;
+                    user.UserName = model.Email;
+                    string userPWD = model.Password;
 
-            return data;
+                    var result = userManager.Create(user, userPWD);
+                }
+
+                base.Insert(data);
+
+                return data;
+            }
+            
         }
         
         public void Update(StaffViewModel model)

@@ -43,6 +43,7 @@ namespace BestApp.Services
             return Task.Run(() => GetAllCitys()
             .Select(x => new CityViewModel()
             {
+                ID = x.Id,
                 name = x.name,
                 slug = x.slug,
                 type = x.type,
@@ -58,6 +59,9 @@ namespace BestApp.Services
             data.type = model.type;
             data.name_with_type = model.name_with_type;
             data.code = model.code;
+            data.CreatDate = DateTime.Now;
+            data.Delete = false;
+            data.LastModifiedDate = DateTime.Now;
             base.Insert(data);
             return data;
            

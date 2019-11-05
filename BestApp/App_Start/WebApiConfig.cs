@@ -29,7 +29,7 @@ namespace BestApp
             builder.EntitySet<EventViewModel>("Events");
             builder.EntitySet<ProductTypeViewModel>("ProductTypes");
             builder.EntitySet<WardViewModel>("Wards");
-            builder.EntitySet<CityViewModel>("Citys");
+            builder.EntitySet<CityViewModel>("Cities");
             builder.EntitySet<DistrictViewModel>("Districts");
 
             // Web API routes
