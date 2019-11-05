@@ -45,7 +45,7 @@ namespace BestApp.Services
             var check = Queryable().Where(x=> x.Email == model.Email).FirstOrDefault();
             if(check != null)
             {
-                throw new Exception("Nhân viên đã tồn tại");
+                throw new Exception("Đã tồn tại nhân viên");
             }
             else
             {

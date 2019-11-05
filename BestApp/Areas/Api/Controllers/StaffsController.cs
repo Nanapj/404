@@ -49,6 +49,7 @@ namespace BestApp.Areas.Api.Controllers
             {
                 _unitOfWorkAsync.Rollback();
                 throw ex;
+                
             }
         }
     
