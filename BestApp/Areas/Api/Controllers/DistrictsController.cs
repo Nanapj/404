@@ -53,7 +53,7 @@ namespace BestApp.Areas.Api.Controllers
             }
             catch (Exception ex)
             {
-                _unitOfWorkAsync.Rollback();
+                
                 throw ex;
             }
         }
