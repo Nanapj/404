@@ -45,6 +45,7 @@ namespace BestApp.Services
             {
                 name = x.name,
                 slug = x.slug,
+                type = x.type,
                 path = x.path,
                 path_with_type = x.path_with_type,
                 parent_code = x.parent_code,
@@ -59,6 +60,7 @@ namespace BestApp.Services
             data.slug = model.slug;
             data.parent_code = model.parent_code;
             data.path = model.path;
+            data.type = model.type;
             data.path_with_type = model.path_with_type;
             data.name_with_type = model.name_with_type;
             data.code = model.code;

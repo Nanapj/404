@@ -20,5 +20,6 @@ namespace BestApp.Domain
         public string UserName { get; set; }
         public bool Delete { get; set; }
         public Guid? ID { get; set; }
+        public string type { get; set; }
     }
 }
