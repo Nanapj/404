@@ -43,6 +43,7 @@ namespace BestApp.Services
             return Task.Run(() => GetAllDistricts()
             .Select(x => new DistrictViewModel()
             {
+                ID = x.Id,
                 name = x.name,
                 slug = x.slug,
                 type = x.type,

@@ -42,7 +42,7 @@
                                                 id="citydropdown"
                                                 kendo-drop-down-list
                                                 k-ng-model="vm.selectedCity"
-                                                k-data-text-field="'name'"
+                                                k-data-text-field="'name_with_type'"
                                                 k-data-value-field="'code'"
                                                 k-data-source="vm.cityData"
                                                 k-option-label="' Thành phố... '"
@@ -55,7 +55,8 @@
                                         <select 
                                                 id="districtdropdown"
                                                 kendo-drop-down-list
-                                                k-data-text-field="'name'"
+                                                ng-disabled="districtDis === 1"
+                                                k-data-text-field="'name_with_type'"
                                                 k-data-value-field="'code'"
                                                 k-data-source="vm.districtData"
                                                 k-option-label="' Quận / Huyện... '"
@@ -71,12 +72,13 @@
                                         <select
                                                 id="warddropdown"
                                                 kendo-drop-down-list
-                                                k-data-text-field="'name'"
+                                                ng-disabled="wardDis === 1"
+                                                k-data-text-field="'name_with_type'"
                                                 k-data-value-field="'code'"
                                                 k-data-source="vm.wardData"
                                                 k-option-label="' Phường / Xã... '"
                                                 k-ng-model="vm.selectedWard"
-                                                k-on-changed="onWardChanged()"
+                                                k-on-change="onWardChanged()"
                                                 k-filter="'contains'"
                                                 style="width: 100%"></select>
                                     </div>
@@ -85,13 +87,16 @@
                                         <input 
                                                kendo-date-picker
                                                k-options="{format: 'dd/MM/yyyy'}"
+                                               value="{{vm.selectedDate}}"
+                                               k-ng-model="vm.selectedDate"
+                                               k-on-change="onSelectedDate()"
                                                style="width: 100%;" 
                                          />
                                     </div>
                                 </div>
                                 <div class="row col-md-12">
                                     <div class="form-group" style="padding-top: 10px;">
-                                        <button class="btn btn-success btn-default" ng-click="vm.createClicked">Tạo mới / Chỉnh sửa</button>
+                                        <button class="btn btn-success btn-default" ng-click="vm.createClicked()">Tạo mới / Chỉnh sửa</button>
                                     </div>
                                 </div>
                             </form>
