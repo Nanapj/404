@@ -3464,10 +3464,10 @@ fieldset[disabled] .i-checks input + i:before {
   color: #f2f2f2;
 }
 
-.bg-info .nav > li > a:hover,
-.bg-info .nav > li > a:focus {
-  background-color: #17b2e2;
-}
+    .bg-info .nav > li > a:hover,
+    .bg-info .nav > li > a:focus {
+        background-color: #5090fa;
+    }
 
 .bg-info .nav .open > a {
   background-color: #16aad8;

@@ -12,6 +12,11 @@ angular.module('app')
         vm.edit = edit;
         vm.destroy = destroy;
         vm.dialogVisible = false;
+        function initialCity() {
+            array.forEach(element => {
+                
+            });
+        }
         function create(){
             $state.go('app.producttype.create');
             vm.editMode = false;
@@ -19,13 +24,13 @@ angular.module('app')
 
         function edit(){
             $state.go('app.producttype.edit', {
-                Id: vm.selectedProductType.Id
+                ID: vm.selectedProductType.ID
             });
         }
 
         function destroy(){
             vm.dialogVisible = true;
-            if(vm.selectedProductType.Id != undefined && vm.selectedProductType.Id != null) {
+            if(vm.selectedProductType.ID != undefined && vm.selectedProductType.ID != null) {
                 swal({
                    title: "Xác nhận xóa?",
                    text: "Bạn có chắc xóa, nếu xóa thì thông tin tài khoản sẽ bị vô hiệu hóa",

@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -106,6 +107,7 @@ namespace Repository.Pattern
         public virtual void Rollback()
         {
             Transaction.Rollback();
+            _context.Dispose();
         }
     }
 }
