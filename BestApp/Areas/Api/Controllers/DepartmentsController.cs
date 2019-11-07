@@ -41,7 +41,13 @@ namespace BestApp.Areas.Api.Controllers
             {
                 var stf = await _departmentService.InsertAsync(model);
                 _unitOfWorkAsync.Commit();
-                return Created(model);
+                var resultObject = new DepartmentViewModel()
+                {
+                    ID = stf.Id,
+                    Name = stf.Name,
+                   
+                };
+                return Created(resultObject);
             }
             catch (Exception ex)
             {

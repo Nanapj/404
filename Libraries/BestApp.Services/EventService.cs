@@ -95,89 +95,92 @@ namespace BestApp.Services
         }
         public Event Insert(EventViewModel model)
         {
-            var find = Queryable().Where(x => x.Code == model.Code).FirstOrDefault();
-            if (find != null)
+            var data = new Event();
+            Random generator = new Random();
+            var r = generator.Next(0, 999999).ToString("D6");
+            var CodeEvent = "CR" + DateTime.Now.ToString("yyyy") + DateTime.Now.ToString("MM") + r;
+            var find = Queryable().Where(x => x.Code == CodeEvent).Any();
+            do
             {
-                throw new Exception("Số phiếu đã tồn tại");
-            }
-            else
+                r = generator.Next(0, 999999).ToString("D6");
+                CodeEvent = "CR" + DateTime.Now.ToString("yyyy") + DateTime.Now.ToString("MM") + r;
+                find = Queryable().Where(x => x.Code == CodeEvent).Any();
+            } while (find == true);
+           
+            data.Code = CodeEvent;
+            data.Customer = _customerService.Find(model.CustomerID);
+            data.Status = model.Status;
+            data.EmployeeID = model.CustomerID;
+            data.TypeEvent = model.TypeEvent;
+                
+            //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
+            if (model.DetailEvents != null)
             {
-                var data = new Event();
-                 
-                data.Code = model.Code;
-                data.Customer = _customerService.Find(model.CustomerID);
-                data.Status = model.Status;
-                data.EmployeeID = model.CustomerID;
-                data.TypeEvent = model.TypeEvent;
-                
-                //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
-                if (model.DetailEvents != null)
+                data.DetailEvents = new List<DetailEvent>();
+                foreach (var item in model.DetailEvents)
                 {
-                    data.DetailEvents = new List<DetailEvent>();
-                    foreach (var item in model.DetailEvents)
+                    data.DetailEvents.Add(new DetailEvent()
                     {
-                        data.DetailEvents.Add(new DetailEvent()
-                        {
-                            Serial = item.Serial,
-                            Note = item.Note,
-                            ProductType = _productTypeService.Find(item.ProductID),
-                            CreatDate = DateTime.Now,
-                            LastModifiedDate = DateTime.Now,
-                            Delete = false
-                        });
-                    }
+                        Serial = item.Serial,
+                        Note = item.Note,
+                        ProductType = _productTypeService.Find(item.ProductID),
+                        CreatDate = DateTime.Now,
+                        LastModifiedDate = DateTime.Now,
+                        Delete = false
+                    });
                 }
-                if (model.Tags != null)
-                {
-                    data.Tags = new List<Tag>();
-                    foreach (var item in model.Tags)
-                    {
-                        var t = _tagService.Find(item.ID);
-                        if (t != null)
-                        {
-                            data.Tags.Add(t);
-                        }
-                    }
-                }
-                if(model.ReminderNotes != null)
-                {
-                    data.ReminderNotes = new List<ReminderNote>();
-                    foreach(var item in model.ReminderNotes)
-                    {
-                        data.ReminderNotes.Add(new ReminderNote()
-                        {
-                            ReminderDate = item.ReminderDate,
-                            CreatDate = DateTime.Now,
-                            LastModifiedDate = DateTime.Now,
-                            Note = item.Note,
-                        });
-                    }
-                }
-                
-                if(model.InteractionHistorys != null)
-                {
-                    data.InteractionHistorys = new List<InteractionHistory>();
-                    foreach (var item in model.InteractionHistorys)
-                    {
-                        data.InteractionHistorys.Add(new InteractionHistory()
-                        {
-                            Type = item.Type,
-                            Note = item.Note,
-                            EmployeeCall = item.EmployeeCall,
-                            EmployeeID = item.EmployeeID,
-                            CreatDate = DateTime.Now,
-                            LastModifiedDate = DateTime.Now,
-                            Delete = false
-                        });
-                    }
-                }
-                data.CreatDate = DateTime.Now;
-                data.Delete = false; 
-                data.LastModifiedDate = DateTime.Now;
-                //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
-                base.Insert(data);
-                return data;
             }
+            if (model.Tags != null)
+            {
+                data.Tags = new List<Tag>();
+                foreach (var item in model.Tags)
+                {
+                    var t = _tagService.Find(item.ID);
+                    if (t != null)
+                    {
+                        data.Tags.Add(t);
+                    }
+                }
+            }
+            if(model.ReminderNotes != null)
+            {
+                data.ReminderNotes = new List<ReminderNote>();
+                foreach(var item in model.ReminderNotes)
+                {
+                    data.ReminderNotes.Add(new ReminderNote()
+                    {
+                        ReminderDate = item.ReminderDate,
+                        CreatDate = DateTime.Now,
+                        LastModifiedDate = DateTime.Now,
+                        Note = item.Note,
+                    });
+                }
+            }
+                
+            if(model.InteractionHistorys != null)
+            {
+                data.InteractionHistorys = new List<InteractionHistory>();
+                foreach (var item in model.InteractionHistorys)
+                {
+                    data.InteractionHistorys.Add(new InteractionHistory()
+                    {
+                        Type = item.Type,
+                        Note = item.Note,
+                        EmployeeCall = item.EmployeeCall,
+                        EmployeeID = item.EmployeeID,
+                        CreatDate = DateTime.Now,
+                        LastModifiedDate = DateTime.Now,
+                        Delete = false
+                    });
+                }
+            }
+            data.CreatDate = DateTime.Now;
+            data.Delete = false; 
+            data.LastModifiedDate = DateTime.Now;
+            //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
+            base.Insert(data);
+            return data;
+            
 
         }
         public async Task<Event> InsertAsync(EventViewModel model)

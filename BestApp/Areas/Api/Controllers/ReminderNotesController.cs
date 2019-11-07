@@ -40,7 +40,13 @@ namespace BestApp.Areas.Api.Controllers
             {
                 var stf = await _reminderNoteService.InsertAsync(model);
                 _unitOfWorkAsync.Commit();
-                return Created(model);
+                var resultObject = new ReminderNoteViewModel()
+                {
+                    Note = stf.Note,
+                    ReminderDate = stf.ReminderDate,
+                    ID = stf.Id,
+                };
+                return Created(resultObject);
             }
             catch (Exception ex)
             {

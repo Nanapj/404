@@ -40,7 +40,20 @@ namespace BestApp.Areas.Api.Controllers
             {
                 var stf = await _customerService.InsertAsync(model);
                 _unitOfWorkAsync.Commit();
-                return Created(model);
+                var resultObject = new CustomerViewModel()
+                {
+                   ID = stf.Id,
+                   Name = stf.Name,
+                   PhoneNumber = stf.PhoneNumber,
+                   Birthday = stf.Birthday,
+                   Address = stf.Address,
+                   Ward = stf.Ward,
+                   District = stf.District,
+                   City = stf.City,
+                   Note = stf.Note
+                   
+                };
+                return Created(resultObject);
             }
             catch (Exception ex)
             {

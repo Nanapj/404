@@ -40,7 +40,13 @@ namespace BestApp.Areas.Api.Controllers
             {
                 var stf = await _tagService.InsertAsync(model);
                 _unitOfWorkAsync.Commit();
-                return Created(model);
+                var resultObject = new TagViewModel()
+                {
+                    NameTag = stf.NameTag,
+                    CodeTag = stf.CodeTag,
+                    ID = stf.Id,
+                };
+                return Created(resultObject);
             }
             catch (Exception ex)
             {

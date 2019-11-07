@@ -40,7 +40,15 @@ namespace BestApp.Areas.Api.Controllers
             {
                 var stf = await _interactionHistoryService.InsertAsync(model);
                 _unitOfWorkAsync.Commit();
-                return Created(model);
+                var resultObject = new InteractionHistoryViewModel()
+                {
+                    Type = stf.Type,
+                    Note = stf.Note,
+                    EventCode = stf.Event.Code,
+                    CreatDate = stf.CreatDate,
+                    ID = stf.Id,
+                };
+                return Created(resultObject);
             }
             catch (Exception ex)
             {

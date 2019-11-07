@@ -43,7 +43,13 @@ namespace BestApp.Areas.Api.Controllers
             {
                 var stf = await _staffService.InsertAsync(model);
                 _unitOfWorkAsync.Commit();
-                return Created(model);
+                var resultObject = new StaffViewModel()
+                {
+                    FullName = stf.FullName,
+                    Email = stf.Email,
+                    ID = stf.Id,
+                };
+                return Created(resultObject);
             }
             catch (Exception ex)
             {

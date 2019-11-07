@@ -40,7 +40,17 @@ namespace BestApp.Areas.Api.Controllers
             {
                 var stf = await _eventService.InsertAsync(model);
                 _unitOfWorkAsync.Commit();
-                return Created(stf);
+                var resultObject = new EventViewModel()
+                {
+                   
+                    TypeEvent = stf.TypeEvent,
+                    Status = stf.Status,
+                    CustomerID = stf.Customer.Id,
+                    CustomerName = stf.Customer.Name,
+                    ID = stf.Id,
+                };
+                return Created(resultObject);
+               
             }
             catch (Exception ex)
             {
