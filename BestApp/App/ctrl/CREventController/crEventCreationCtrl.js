@@ -191,16 +191,19 @@ angular.module('app')
         vm.searchPhoneNum = function() {
             $http({
                 method: 'GET',
-                url: _cusURL+"?$filter=PhoneNumber eq '" + vm.searchingNumber + "'",
+                url: _cusURL+"?$filter=trim(PhoneNumber) eq '" + vm.searchingNumber + "'",
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
                 },
               }).then(function successCallback(response) {
                   if(response.data.value.length > 0) { 
-                     vm.secActived = true;
-                     vm.tabDisable = false;
-                     vm.systemCustomer = response.data.value[0];
+                    vm.secActived = true;
+                    vm.tabDisable = false;
+                    vm.systemCustomer = response.data.value[0];
+                    console.log(vm.systemCustomer.District);
+                    console.log(vm.systemCustomer.City);
+                    console.log(vm.systemCustomer.Ward);
                   } else 
                   {
                     toaster.pop('warning', "Rỗng", "Không tìm thấy thông tin khách hàng");

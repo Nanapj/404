@@ -44,8 +44,7 @@ namespace BestApp.Services
         public Task<IQueryable<CustomerViewModel>> GetAllCustomersAsync(SearchViewModel model)
         {
             return Task.Run(() => GetAllCustomers()
-            .Where(x=> x.Delete == false
-           && (x.PhoneNumber.Equals(model.PhoneNumber)))
+            .Where(x=> x.Delete == false)
             .Select(x => new CustomerViewModel()
             {
                 ID = x.Id,
