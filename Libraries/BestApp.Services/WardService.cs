@@ -43,6 +43,7 @@ namespace BestApp.Services
             return Task.Run(() => GetAllWards()
             .Select(x => new WardViewModel()
             {
+                ID = x.Id,
                 name = x.name,
                 slug = x.slug,
                 type = x.type,

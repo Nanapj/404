@@ -44,8 +44,7 @@ namespace BestApp.Services
         public Task<IQueryable<CustomerViewModel>> GetAllCustomersAsync(SearchViewModel model)
         {
             return Task.Run(() => GetAllCustomers()
-            .Where(x=> x.Delete == false
-           && (x.PhoneNumber.Equals(model.PhoneNumber)))
+            .Where(x=> x.Delete == false)
             .Select(x => new CustomerViewModel()
             {
                 ID = x.Id,
@@ -58,10 +57,10 @@ namespace BestApp.Services
                 Note = x.Note,
                 City = x.City,
             }));
-        }
+        } 
         public Customer Insert(CustomerViewModel model)
         {
-            var find = Queryable().Where(x => x.PhoneNumber == model.PhoneNumber && x.Delete == false).FirstOrDefault();
+            var find = Queryable().Where(x => x.PhoneNumber.Trim() == model.PhoneNumber.Trim() && x.Delete == false).FirstOrDefault();
             if (find != null)
             {
                 throw new Exception("Khách hàng đã tồn tại");
@@ -69,7 +68,7 @@ namespace BestApp.Services
             else
             {
                 var data = new Customer();
-
+                var BirthdayString = model.Birthday;
                 data.Name = model.Name;
                 data.PhoneNumber = model.PhoneNumber;
                 data.Address = model.Address;
@@ -77,7 +76,7 @@ namespace BestApp.Services
                 data.Ward = model.Ward;
                 data.City = model.City;
                 data.Note = model.Note;
-                data.Birthday = model.Birthday;
+                data.Birthday = (DateTime)model.Birthday;
                 data.CreatDate = DateTime.Now;
                 data.Delete = false;
                 data.LastModifiedDate = DateTime.Now;
