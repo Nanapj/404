@@ -42,7 +42,7 @@ namespace BestApp.Areas.Api.Controllers
                 _unitOfWorkAsync.Commit();
                 var resultObject = new EventViewModel()
                 {
-                   
+                    Code = stf.Code,
                     TypeEvent = stf.TypeEvent,
                     Status = stf.Status,
                     CustomerID = stf.Customer.Id,
