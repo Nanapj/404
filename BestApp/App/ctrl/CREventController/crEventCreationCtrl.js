@@ -15,8 +15,13 @@ angular.module('app')
         vm.selectedWard = "";
         vm.street="";
         vm.selectedDate = new Date();
+        vm.cityCode ="";
+        vm.districtCode = "";
+        vm.selectedEventData ="";
+        vm.selectedPurposeData = "";
         $scope.districtDis = 1;
         $scope.wardDis = 1;
+        $scope.purDis = 1;
         $scope.actions = [
             { text: 'Ok', action: onResetOk },
             { text: 'Cancel', primary: true, action: onResetCancel }
@@ -53,6 +58,10 @@ angular.module('app')
             } else {
                 if(vm.systemCustomer.ID == undefined || vm.systemCustomer.ID == "") {
                     vm.systemCustomer.ID = generateUUID();
+                    if(vm.systemCustomer.Birthday == undefined || vm.systemCustomer.Birthday == ""){
+                        var time = moment(vm.selectedDate);
+                        vm.systemCustomer.Birthday = time.utc().format();
+                    }
                     $http({
                         url: _cusURL,
                         method: 'POST',
@@ -83,6 +92,13 @@ angular.module('app')
                     })
                     .then(function(response){
                         if(response.status == 201) {
+                            console.log(response.ID);
+                            
+                            toaster.pop('success', "Thành công", "Đã cập nhật thông tin khách hàng");
+                        }
+                        if(response.status == 204) {
+                            console.log(response.ID);
+                            
                             toaster.pop('success', "Thành công", "Đã cập nhật thông tin khách hàng");
                         }
                     });
@@ -92,6 +108,7 @@ angular.module('app')
             console.log(vm.systemCustomer);
         }
         $scope.onCityChanged = function () {   
+            debugger;
             $scope.districtDis = 1;   
             $scope.wardDis = 1;
             console.log(vm.selectedCity);
@@ -114,23 +131,48 @@ angular.module('app')
             console.log(time.utc().format());
         }
         $scope.onDistrictChanged = function() {
+            debugger;
             console.log(vm.selectedDistrict);
             $scope.wardDis = 1;
+            if(vm.selectedDistrict !== " Quận / Huyện... ") {
+                vm.systemCustomer.District = vm.selectedDistrict.name_with_type;
+                var filterWardVal = vm.selectedDistrict.code != undefined ? vm.selectedDistrict.code : "";
+                var ward = $("#warddropdown").data("kendoDropDownList");
+                ward.dataSource.transport.options.read.url = _wardURL+"?$filter=parent_code eq '" + filterWardVal + "'&$orderby=name";
+                ward.dataSource.read().then(function(){
+                    }
+                );
+                ward.value("");
+                $scope.wardDis = 0;
+            } else {
+                vm.systemCustomer.District = undefined;
+                vm.systemCustomer.Ward = undefined;
+            }   
             
-            vm.systemCustomer.District = vm.selectedDistrict.name_with_type;
-            var filterWardVal = vm.selectedDistrict.code != undefined ? vm.selectedDistrict.code : "";
-            var ward = $("#warddropdown").data("kendoDropDownList");
-            ward.dataSource.transport.options.read.url = _wardURL+"?$filter=parent_code eq '" + filterWardVal + "'&$orderby=name";
-            ward.dataSource.read().then(function(){
-                }
-            );
-            ward.value("");
-            $scope.wardDis = 0;
         }
         $scope.onWardChanged = function() {
             console.log(vm.selectedWard);
-            vm.systemCustomer.Ward = vm.selectedWard.name_with_type;
-            
+            if(vm.selectedDistrict !== " Phường / Xã... ") {
+                vm.systemCustomer.Ward = vm.selectedWard.name_with_type;
+            } else {
+                vm.systemCustomer.Ward = undefined;
+            }   
+        }
+        $scope.onEventSelChanged = function() {
+            $scope.purDis = 1;
+            var purposedropdown = $("#purposedropdown").data("kendoDropDownList");
+            purposedropdown.dataSource.filter({
+                field: 'parent_id',
+                operator: 'eq',
+                value: vm.selectedEventData.id
+            });
+            purposedropdown.listView.setDSFilter(purposedropdown.dataSource.filter());
+            purposedropdown.value(1);
+            purposedropdown.dataSource.read();
+            console.log(vm.selectedEventData);
+        }
+        $scope.onPurSelChanged = function() {
+            console.log(vm.selectedPurposeData);
         }
         function initialCtrl() {
             $("#districtdropdown").kendoDropDownList({
@@ -177,11 +219,11 @@ angular.module('app')
             }
         };
         vm.eventData = { 
-            type: "odata-v4",
+            type: "jsonp",
             serverFiltering: true,
             transport: {
                 read: {
-                    url: "https://demos.telerik.com/kendo-ui/service-v4/odata/Products",
+                    url: "../../App/localdata/EventType.json",
                 }
             }
         }
@@ -201,9 +243,90 @@ angular.module('app')
                     vm.secActived = true;
                     vm.tabDisable = false;
                     vm.systemCustomer = response.data.value[0];
-                    console.log(vm.systemCustomer.District);
-                    console.log(vm.systemCustomer.City);
-                    console.log(vm.systemCustomer.Ward);
+                    //Check the customer view model
+                    // console.log(vm.systemCustomer.District);
+                    // console.log(vm.systemCustomer.City);
+                    // console.log(vm.systemCustomer.Ward);
+                    if(vm.systemCustomer.Birthday !== undefined && vm.systemCustomer.Birthday !== "") {
+                        vm.selectedDate = vm.systemCustomer.Birthday;
+                    }
+                    var city = $('#citydropdown').data("kendoDropDownList");
+                    var district = $('#districtdropdown').data("kendoDropDownList");
+
+                    if(vm.systemCustomer.City !== undefined && vm.systemCustomer.City !== "") {          
+                        $http({
+                            method: 'GET',
+                            url: _cityURL+"?$filter=trim(name_with_type) eq '" + vm.systemCustomer.City + "'",
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                            },
+                          }).then(function successCallback(response) {
+                              if(response.data.value.length > 0) {   
+                                vm.cityCode = response.data.value[0].code;
+                                console.log('Citicode '+ vm.cityCode);
+                                district.dataSource.transport.options.read.url = _districtURL+"?$filter=parent_code eq '" + vm.cityCode + "'&$orderby=name";
+                                city.select(function(dataItem) {
+                                    return dataItem.name_with_type === vm.systemCustomer.City;
+                                });
+                                //After get the city continue to the district
+                                if(vm.systemCustomer.District !== undefined && vm.systemCustomer.District !== "") {            
+                                    $http({
+                                        method: 'GET',
+                                        url: _districtURL+"?$filter=trim(name_with_type) eq '" + vm.systemCustomer.District + "'",
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                                        },
+                                      }).then(function successCallback(response) {
+                                          if(response.data.value.length > 0) {   
+                                            //Check the filter city by this code
+                                            // console.log('got the city by filter');
+                                            vm.districtCode = response.data.value[0].code;
+                                            district.dataSource.read().then(function() {
+                                                $scope.districtDis = 0;
+                                            });
+                                            district.select(function(dataItem) {
+                                                $scope.districtDis = 0;                 
+                                                return dataItem.name_with_type === vm.systemCustomer.District;
+                                            });
+                                            var ward = $('#warddropdown').data("kendoDropDownList");
+                                            //Check the code of district is loaded
+                                            //console.log('Districtcode: ' + vm.districtCode);
+                                            ward.dataSource.transport.options.read.url = _wardURL+"?$filter=parent_code eq '" +  vm.districtCode + "'&$orderby=name";
+                                            ward.dataSource.read().then(function(){
+                                                    //Check if there is ward data load on the server
+                                                    //console.log('reloaded the ward data');
+                                                    if(vm.systemCustomer.Ward !== undefined && vm.systemCustomer.Ward !== "") {     
+                                                        ward.select(function(dataItem) {
+                                                            $scope.wardDis = 0;
+                                                            return dataItem.name_with_type === vm.systemCustomer.Ward;
+                                                        });
+                                                    }
+                                                }
+                                            );
+                                           
+                                          } else 
+                                          {
+                                            //If no found, show here
+                                            //console.log('no found');
+                                          }
+                                        
+                                        }, function errorCallback(response) {
+                                          console.log(response);
+                                    });             
+                                }
+                              } else 
+                              {
+                               console.log('no found');
+                              }
+                            
+                            }, function errorCallback(response) {
+                              console.log(response);
+                        });        
+                    }
+                  
+                   
                   } else 
                   {
                     toaster.pop('warning', "Rỗng", "Không tìm thấy thông tin khách hàng");
@@ -235,11 +358,11 @@ angular.module('app')
             'Birthday' : '01/01/1909'
         };
         vm.purposeData = {
-            type: "odata-v4",
+            type: "jsonp",
             serverFiltering: true,
             transport: {
                 read: {
-                    url: "https://demos.telerik.com/kendo-ui/service-v4/odata/Products",
+                    url: "../../App/localdata/purpose.json",
                 }
             }
         }

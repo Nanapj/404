@@ -149,23 +149,33 @@
                             <div class="row">
                                 <div class="col-md-6 k-content">
                                     <label>Sự kiện</label>
-                                    <select kendo-drop-down-list
-                                            k-data-text-field="'ProductName'"
-                                            k-data-value-field="'ProductID'"
+                                    <select 
+                                            id="eventtypedropdown"
+                                            kendo-drop-down-list             
+                                            k-data-text-field="'name'"
+                                            k-data-value-field="'id'"
                                             k-data-source="vm.eventData"
                                             k-option-label="' Sự kiện... '"
-                                            k-filter="'contains'"
+                                            k-ng-model="vm.selectedEventData"
+                                            k-on-change="onEventSelChanged()"
+                                            k-filter="'contains'"                              
                                             style="width: 100%"></select>
                                 </div>
                                 <div class="col-md-6 k-content">
                                     <label>Mục đích</label>
-                                    <select kendo-drop-down-list
-                                            k-data-text-field="'ProductName'"
-                                            k-data-value-field="'ProductID'"
+                                    <select 
+                                            id="purposedropdown"
+                                            kendo-drop-down-list
+                                            @*ng-disabled="purDis === 1"*@
+                                            k-data-text-field="'name'"
+                                            k-data-value-field="'id'"
                                             k-data-source="vm.purposeData"
+                                            k-ng-model="vm.selectedPurposeData"
+                                            k-on-change="onPurSelChanged()"
                                             k-option-label="' Mục đích... '"
                                             k-filter="'contains'"
-                                            style="width: 100%"></select>
+                                            style="width: 100%">
+                                    </select>
                                 </div>
                             </div>
                         </div>

@@ -50,8 +50,9 @@ namespace BestApp.Areas.Api.Controllers
                    Ward = stf.Ward,
                    District = stf.District,
                    City = stf.City,
-                   Note = stf.Note
-                   
+                   Note = stf.Note,
+                   CreatDate = DateTime.Now,
+                   LastModifiedDate = DateTime.Now
                 };
                 return Created(resultObject);
             }
