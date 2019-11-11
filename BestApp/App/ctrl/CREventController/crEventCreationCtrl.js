@@ -6,7 +6,8 @@ angular.module('app')
         var _cityURL = "/odata/Cities";
         var _districtURL = "/odata/Districts";
         var _wardURL = "/odata/Wards";
-        vm.createClicked = createClicked;
+        var _pitechCusURL = "http://api.test.haveyougotpi.com/project404.aspx/GetCustomerInfoByPhone";
+        vm.creUpdCusClicked = creUpdCusClicked;
         vm.access_token = localStorage.getItem('access_token');
         vm.secActived = false;
         vm.citySearch = "";
@@ -19,9 +20,14 @@ angular.module('app')
         vm.districtCode = "";
         vm.selectedEventData ="";
         vm.selectedPurposeData = "";
+        vm.eventCR = {}
         $scope.districtDis = 1;
         $scope.wardDis = 1;
+        $scope.eventTypeDis = 1;
         $scope.purDis = 1;
+        $scope.tab2Invisible = true;
+        $scope.tab1Inisible = true;
+        $scope.pitechInfoInvi = true;
         $scope.actions = [
             { text: 'Ok', action: onResetOk },
             { text: 'Cancel', primary: true, action: onResetCancel }
@@ -47,12 +53,12 @@ angular.module('app')
             vm.systemCustomer.Ward = undefined;
             var filterDisVal = vm.selectedCity.code != undefined ? vm.selectedCity.code : "";
             var district = $("#districtdropdown").data("kendoDropDownList");
-            district.dataSource.transport.options.read.url = _districtURL+"?$filter=parent_code eq '" + filterDisVal + "'&$orderby=name";
+            district.dataSource.transport.options.read.url = _districtURL+"?$filter=parent_code eq '" + filterDisVal + "'&$orderby=name&$top=100";
             district.dataSource.read().then(function() {
                 $scope.districtDis = 0;
             });
         }
-        function createClicked() {
+        function creUpdCusClicked() {
             if(vm.systemCustomer.Name == undefined || vm.systemCustomer.Name =="") {
                 toaster.pop('warning', "Rỗng", "Vui lòng điền tên khách hàng");
             } else {
@@ -76,6 +82,7 @@ angular.module('app')
                     .then(function(response){
                         if(response.status == 201) {
                             toaster.pop('success', "Thành công", "Đã tạo thông tin khách hàng");
+                            $scope.eventTypeDis = "false";
                         }
                     });
                 } else {
@@ -91,27 +98,20 @@ angular.module('app')
                         toaster.pop('error', "Thất bại", response.error.innererror.message);
                     })
                     .then(function(response){
-                        if(response.status == 201) {
-                            console.log(response.ID);
-                            
+                        if(response.status == 201) {       
                             toaster.pop('success', "Thành công", "Đã cập nhật thông tin khách hàng");
                         }
-                        if(response.status == 204) {
-                            console.log(response.ID);
+                        else if(response.status == 204) {
                             
                             toaster.pop('success', "Thành công", "Đã cập nhật thông tin khách hàng");
                         }
                     });
                 }
             }
-            
-            console.log(vm.systemCustomer);
         }
         $scope.onCityChanged = function () {   
-            debugger;
             $scope.districtDis = 1;   
             $scope.wardDis = 1;
-            console.log(vm.selectedCity);
             if(vm.selectedCity !== " Thành phố... ") {
                 vm.systemCustomer.City = vm.selectedCity.name_with_type;
                 refreshDistrict();
@@ -125,20 +125,16 @@ angular.module('app')
             }   
         }
         $scope.onSelectedDate = function() {
-            console.log(vm.selectedDate);
             var time = moment(vm.selectedDate);
             vm.systemCustomer.Birthday = time.utc().format();
-            console.log(time.utc().format());
         }
         $scope.onDistrictChanged = function() {
-            debugger;
-            console.log(vm.selectedDistrict);
             $scope.wardDis = 1;
             if(vm.selectedDistrict !== " Quận / Huyện... ") {
                 vm.systemCustomer.District = vm.selectedDistrict.name_with_type;
                 var filterWardVal = vm.selectedDistrict.code != undefined ? vm.selectedDistrict.code : "";
                 var ward = $("#warddropdown").data("kendoDropDownList");
-                ward.dataSource.transport.options.read.url = _wardURL+"?$filter=parent_code eq '" + filterWardVal + "'&$orderby=name";
+                ward.dataSource.transport.options.read.url = _wardURL+"?$filter=parent_code eq '" + filterWardVal + "'&$orderby=name&$top=100";
                 ward.dataSource.read().then(function(){
                     }
                 );
@@ -151,7 +147,6 @@ angular.module('app')
             
         }
         $scope.onWardChanged = function() {
-            console.log(vm.selectedWard);
             if(vm.selectedDistrict !== " Phường / Xã... ") {
                 vm.systemCustomer.Ward = vm.selectedWard.name_with_type;
             } else {
@@ -160,19 +155,25 @@ angular.module('app')
         }
         $scope.onEventSelChanged = function() {
             $scope.purDis = 1;
-            var purposedropdown = $("#purposedropdown").data("kendoDropDownList");
-            purposedropdown.dataSource.filter({
-                field: 'parent_id',
-                operator: 'eq',
-                value: vm.selectedEventData.id
-            });
-            purposedropdown.listView.setDSFilter(purposedropdown.dataSource.filter());
-            purposedropdown.value(1);
-            purposedropdown.dataSource.read();
-            console.log(vm.selectedEventData);
+            
+            vm.onPurSelChanged = undefined;
+            if(vm.selectedEventData !== " Mục đích... ") {
+                var tabStrip = $("#eventTabstrip").kendoTabStrip().data("kendoTabStrip");
+                $("#purposedropdown").data("kendoDropDownList").dataSource.read().then(function() {
+                    $($("#purposedropdown").data("kendoDropDownList").dataItems()).each(function (item) {
+                        if(this.parent_id !== vm.selectedEventData.id) {
+                            $("#purposedropdown").data("kendoDropDownList").dataSource.remove(this);
+                        }
+                    });    
+                });
+                $scope.purDis = 0;
+            }
+            
         }
         $scope.onPurSelChanged = function() {
-            console.log(vm.selectedPurposeData);
+            // tabStrip.disable(tabStrip.tabGroup.children().eq(0));
+            $scope.tab1Inisible = false;
+            $scope.tab2Invisible = false;
         }
         function initialCtrl() {
             $("#districtdropdown").kendoDropDownList({
@@ -242,6 +243,7 @@ angular.module('app')
                   if(response.data.value.length > 0) { 
                     vm.secActived = true;
                     vm.tabDisable = false;
+                    $scope.eventTypeDis = 0;
                     vm.systemCustomer = response.data.value[0];
                     //Check the customer view model
                     // console.log(vm.systemCustomer.District);
@@ -264,8 +266,7 @@ angular.module('app')
                           }).then(function successCallback(response) {
                               if(response.data.value.length > 0) {   
                                 vm.cityCode = response.data.value[0].code;
-                                console.log('Citicode '+ vm.cityCode);
-                                district.dataSource.transport.options.read.url = _districtURL+"?$filter=parent_code eq '" + vm.cityCode + "'&$orderby=name";
+                                district.dataSource.transport.options.read.url = _districtURL+"?$filter=parent_code eq '" + vm.cityCode + "'&$orderby=name&$top=100";
                                 city.select(function(dataItem) {
                                     return dataItem.name_with_type === vm.systemCustomer.City;
                                 });
@@ -293,7 +294,7 @@ angular.module('app')
                                             var ward = $('#warddropdown').data("kendoDropDownList");
                                             //Check the code of district is loaded
                                             //console.log('Districtcode: ' + vm.districtCode);
-                                            ward.dataSource.transport.options.read.url = _wardURL+"?$filter=parent_code eq '" +  vm.districtCode + "'&$orderby=name";
+                                            ward.dataSource.transport.options.read.url = _wardURL+"?$filter=parent_code eq '" +  vm.districtCode + "'&$orderby=name&$top=100";
                                             ward.dataSource.read().then(function(){
                                                     //Check if there is ward data load on the server
                                                     //console.log('reloaded the ward data');
@@ -329,7 +330,7 @@ angular.module('app')
                    
                   } else 
                   {
-                    toaster.pop('warning', "Rỗng", "Không tìm thấy thông tin khách hàng");
+                    toaster.pop('info', "Mới", "Thông tin khách hàng chưa có");
                     vm.secActived = true;
                     vm.tabDisable = false; 
                     vm.systemCustomer.PhoneNumber = vm.searchingNumber;
@@ -337,6 +338,30 @@ angular.module('app')
                 
                 }, function errorCallback(response) {
                   console.log(response);
+            });
+            $http({
+                url: _pitechCusURL,
+                method: 'POST',
+                data: JSON.stringify({
+                    "sessionId":"501b30b8-bc46-b1b6-46ba-68c2eb5f688c",
+                    "phoneNumber": vm.searchingNumber
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }).error(function(response) {
+                toaster.pop('error', "Thất bại", response.error.innererror.message);
+            })
+            .then(function(response){
+                console.log("Success");
+                console.log(response.data.d);
+                console.log(response.data.d.Info);
+                if(response.data.d.Info === "Lấy thông tin thành công") {
+                    vm.pitechCutomer = response.data.d.Item;
+                    $scope.pitechInfoInvi = false;
+                } else {
+                    $scope.pitechInfoInvi = true;
+                }
             });
         }
 
@@ -349,14 +374,7 @@ angular.module('app')
         // function onCityDropChange(e) {
         //     alert(vm.selectedCity);
         // }
-        vm.pitechCutomer = {
-            'FullName': 'Nguyễn Văn A',
-            'Address' : 'Số 1 Lê Duẩn',
-            'City' : 'Hồ Chí Minh',
-            'District' : 'Quận 3',
-            'Ward' : '7',
-            'Birthday' : '01/01/1909'
-        };
+        vm.pitechCutomer = {};
         vm.purposeData = {
             type: "jsonp",
             serverFiltering: true,

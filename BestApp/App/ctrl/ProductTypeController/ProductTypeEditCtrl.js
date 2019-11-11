@@ -1,16 +1,14 @@
 'use strict';
 angular.module('app')
     .controller('ProductTypeEditCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', function ($scope, $state, $stateParams, $http, toaster){
-        var _url = "/odata/Staffs";
+        var _url = "/odata/ProductTypes";
         var vm = this;
         vm.access_token = localStorage.getItem('access_token');
         vm.model = {};
-        vm.model.HasAccount = false;
-        var editBlock = blockUI.instances.get('EditBlockUI');
-        $scope.initStaffEdit = function() {
+        $scope.initProductType = function() {
             $http({
                 method: 'GET',
-                url: _url+'?$filter=Id eq ' + $stateParams.Id.replace(/['"]+/g, ''),
+                url: _url+'?$filter=Id eq ' + $stateParams.ID.replace(/['"]+/g, ''),
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
@@ -28,11 +26,10 @@ angular.module('app')
                   console.log(response);
             });
         }
-        $scope.initStaffEdit();
+        $scope.initProductType();
         vm.editSubmit = function() {
-            editBlock.start();
             $http({
-                url: _url+'('+ $stateParams.Id.replace(/['"]+/g, '') +')',
+                url: _url+'('+ $stateParams.ID.replace(/['"]+/g, '') +')',
                 method: 'PUT',
                 data: JSON.stringify(vm.model),
                 headers: {
@@ -41,7 +38,6 @@ angular.module('app')
                 },
             }).then(function(response){
                 if(response.status == 204) {
-                    editBlock.stop();
                     toaster.pop('success', "Thành công", "Đã cập nhật xong");
                 } else {
                     toaster.pop('error', "Lỗi", "Có lỗi trong quá trình cập nhật");

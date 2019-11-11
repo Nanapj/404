@@ -33,6 +33,7 @@ namespace BestApp
             builder.EntitySet<DistrictViewModel>("Districts");
 
             // Web API routes
+            config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             config.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
         }
     }

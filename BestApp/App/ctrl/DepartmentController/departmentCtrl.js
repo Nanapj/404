@@ -22,7 +22,7 @@ angular.module('app')
 
         function edit(){
             $state.go('app.department.edit', {
-                Id: vm.selectedDepartment.ID
+                ID: vm.selectedDepartment.ID
             });
         }
 
