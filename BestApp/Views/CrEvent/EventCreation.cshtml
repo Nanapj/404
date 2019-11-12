@@ -205,18 +205,32 @@
                                                 <label>Sản phẩm</label>
                                                 <div class="form-group">
                                                     <select kendo-drop-down-list
-                                                            k-data-text-field="'ProductName'"
-                                                            k-data-value-field="'ProductID'"
-                                                            k-data-source="vm.productData"
+                                                            k-data-text-field="'Name'"
+                                                            k-data-value-field="'ID'"
+                                                            k-data-source="vm.eventProductTypeData"
                                                             k-option-label="' Sản phẩm... '"
                                                             k-filter="'contains'"
-                                                            style="width: 100%"></select>
+                                                            style="width: 100%"
+                                                            k-ng-model="vm.eventProductTypeSelectedData"
+                                                            k-on-change="onEventProductTypeSelChanged()"
+                                                    >        
+                                                    </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-3 serial-dropdown">
                                                 <div class="form-group">
                                                     <label>Serial</label>
-                                                    <input style="height:17px; width:93%" type="text" class="form-control" placeholder="Serial" />
+                                                    <select 
+                                                            kendo-drop-down-list
+                                                            id="serialDropdown"
+                                                            k-data-text-field="'device_serial'"
+                                                            k-data-value-field="'device_serial'"
+                                                            k-option-label="' Serial... '"
+                                                            k-data-source="vm.serialData"
+                                                            k-filter="'contains'"
+                                                            style="width: 100%"
+                                                            k-ng-model="vm.serialSelectedData"
+                                                            k-on-change="onSerialSelChanged()"></select>
                                                 </div>
                                             </div>
                                         </div>

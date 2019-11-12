@@ -6,7 +6,9 @@ angular.module('app')
         var _cityURL = "/odata/Cities";
         var _districtURL = "/odata/Districts";
         var _wardURL = "/odata/Wards";
+        var _productTypeOdata = "/odata/ProductTypes";
         var _pitechCusURL = "http://api.test.haveyougotpi.com/project404.aspx/GetCustomerInfoByPhone";
+        var _pitechDevURL = "http://api.test.haveyougotpi.com/project404.aspx/GetDeviceListByPhoneNumber";
         vm.creUpdCusClicked = creUpdCusClicked;
         vm.access_token = localStorage.getItem('access_token');
         vm.secActived = false;
@@ -20,7 +22,13 @@ angular.module('app')
         vm.districtCode = "";
         vm.selectedEventData ="";
         vm.selectedPurposeData = "";
+        vm.eventProductTypeSelectedData = "";
         vm.eventCR = {}
+        vm.tooltipsVisible = false;
+        vm.serialSelectedData = "";
+        vm.serialData = {
+            data: []
+        };
         $scope.districtDis = 1;
         $scope.wardDis = 1;
         $scope.eventTypeDis = 1;
@@ -170,10 +178,19 @@ angular.module('app')
             }
             
         }
+        $('#serialDropdown').click(function() {
+            alert( "Handler for .click() called." );
+        });
+        $scope.onSerialSelChanged = function () {
+            console.log("Changed")
+        }
         $scope.onPurSelChanged = function() {
             // tabStrip.disable(tabStrip.tabGroup.children().eq(0));
             $scope.tab1Inisible = false;
             $scope.tab2Invisible = false;
+        }
+        $scope.onEventProductTypeSelChanged = function() {
+            console.log(vm.eventProductTypeSelectedData);
         }
         function initialCtrl() {
             $("#districtdropdown").kendoDropDownList({
@@ -350,7 +367,7 @@ angular.module('app')
                     'Content-Type': 'application/json'
                 },
             }).error(function(response) {
-                toaster.pop('error', "Thất bại", response.error.innererror.message);
+                toaster.pop('error', "Thất bại", response.error);
             })
             .then(function(response){
                 console.log("Success");
@@ -358,6 +375,87 @@ angular.module('app')
                 console.log(response.data.d.Info);
                 if(response.data.d.Info === "Lấy thông tin thành công") {
                     vm.pitechCutomer = response.data.d.Item;
+                    $http({
+                        url: _pitechCusURL,
+                        method: 'POST',
+                        data: JSON.stringify({
+                            "sessionId":"501b30b8-bc46-b1b6-46ba-68c2eb5f688c",
+                            "phoneNumber": vm.searchingNumber
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                    }).error(function(response) {
+                        toaster.pop('error', "Thất bại", response.error);
+                    })
+                    .then(function(response){
+                        console.log("Success");
+                        console.log(response.data.d);
+                        console.log(response.data.d.Info);
+                        if(response.data.d.Info === "Lấy thông tin thành công") {
+                            vm.pitechCutomer = response.data.d.Item;
+                            $http({
+                                url: _pitechDevURL,
+                                method: 'POST',
+                                data: JSON.stringify({
+                                    "sessionId":"501b30b8-bc46-b1b6-46ba-68c2eb5f688c",
+                                    "phoneNumber": vm.searchingNumber
+                                }),
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                            }).error(function(response) {
+                                toaster.pop('error', "Thất bại", response.error);
+                            })
+                            .then(function(response){
+                                if(response.data.d.Info === "Lấy thông tin thành công") {
+                                    console.log(response.data.d.Item);
+                                    vm.serialData = {
+                                        data: response.data.d.Item
+                                    };
+                                    $('body').kendoTooltip({
+                                        filter: 'li.k-item',
+                                        position: 'right',
+                                        show: function(e){
+                                            console.log(this.content[0].childNodes[0].data);
+                                            console.log(this.content[0].childNodes[0].data);
+                                            if(this.content[0].childNodes[0].childNodes.length > 0) { 
+                                                this.content.parent().css("visibility", "visible");
+                                            }    
+                                        },
+                                        hide:function(e){
+                                            this.content.parent().css("visibility", "hidden");
+                                        },
+                                        content: function(e){
+                                          var item = $('#serialDropdown').data("kendoDropDownList").dataItem($(e.target));
+                                          console.log(item.device_serial);
+                                          if(item.device_serial == '' || item.device_serial == undefined) {
+                                              var result = "NO";
+                                              return result;
+                                          } else {
+                                            var result = '<h4>Mã thiết bị: '+item.device_serial+'</h4>'+'<h5>Tên thiết bị: '+item.device_name+'</h5>';
+                                            if(item.owner_yesno === true) {
+                                                result +='<h5>Là chủ sở hữu</h5>';
+                                            } else {
+                                                result +='<h5>Không phải chủ sở hữu</h5>';
+                                            }
+                                            return result;
+                                          }
+                                         
+                                        },
+                                        width: 150,
+                                        height: 150
+                                      });
+                                    console.log(vm.serialData);
+                                } else {
+                                    console.log("Không có thông tin")
+                                }
+                            });
+                            $scope.pitechInfoInvi = false;
+                        } else {
+                            $scope.pitechInfoInvi = true;
+                        }
+                    });
                     $scope.pitechInfoInvi = false;
                 } else {
                     $scope.pitechInfoInvi = true;
@@ -390,6 +488,15 @@ angular.module('app')
             transport: {
                 read: {
                     url: "https://demos.telerik.com/kendo-ui/service-v4/odata/Products",
+                }
+            }
+        }
+        vm.eventProductTypeData = {
+            type: "odata-v4",
+            serverFiltering: true,
+            transport: {
+                read: {
+                    url: _productTypeOdata,
                 }
             }
         }

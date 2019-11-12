@@ -2,6 +2,7 @@
 using BestApp.Domain;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
+using Microsoft.OData.Edm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,10 +32,11 @@ namespace BestApp
             builder.EntitySet<WardViewModel>("Wards");
             builder.EntitySet<CityViewModel>("Cities");
             builder.EntitySet<DistrictViewModel>("Districts");
-
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
+            IEdmModel model = builder.GetEdmModel();
             // Web API routes
             config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-            config.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
+            config.MapODataServiceRoute("odata", "odata", model);
         }
     }
 }
