@@ -1,14 +1,17 @@
 'use strict';
 angular.module('app')
-    .controller('crEventCreationCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', function ($scope, $state, $stateParams, $http, toaster){
+    .controller('crEventCreationCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', '$anchorScroll', function ($scope, $state, $stateParams, $http, toaster, $anchorScroll){
         var vm = this; 
+        var _deparmentURL = "/odata/Departments";
         var _cusURL = "/odata/Customers";
         var _cityURL = "/odata/Cities";
         var _districtURL = "/odata/Districts";
         var _wardURL = "/odata/Wards";
+        var _tagURL = "/odata/Tags";
         var _productTypeOdata = "/odata/ProductTypes";
         var _pitechCusURL = "http://api.test.haveyougotpi.com/project404.aspx/GetCustomerInfoByPhone";
         var _pitechDevURL = "http://api.test.haveyougotpi.com/project404.aspx/GetDeviceListByPhoneNumber";
+        var _pitechDeviceDetailsURL = "http://api.test.haveyougotpi.com/project404.aspx/GetDeviceInfoBySerialNo";
         vm.creUpdCusClicked = creUpdCusClicked;
         vm.access_token = localStorage.getItem('access_token');
         vm.secActived = false;
@@ -23,7 +26,13 @@ angular.module('app')
         vm.selectedEventData ="";
         vm.selectedPurposeData = "";
         vm.eventProductTypeSelectedData = "";
-        vm.eventCR = {}
+        vm.eventCR = {
+
+            DetailEvents: []
+
+        }
+        vm.crDepartmentListTag = [];
+        vm.eventCRDetails = {}
         vm.tooltipsVisible = false;
         vm.serialSelectedData = "";
         vm.serialData = {
@@ -40,6 +49,13 @@ angular.module('app')
             { text: 'Ok', action: onResetOk },
             { text: 'Cancel', primary: true, action: onResetCancel }
         ];
+        // $scope.gotoDiv = function(x) {
+        //     if ($location.hash() !== newHash) {
+        //       $location.hash(x);
+        //     } else {
+        //       $anchorScroll();
+        //     }
+        // };
         //genegrate GUID()
         function generateUUID() { 
             var d = new Date().getTime();
@@ -136,6 +152,9 @@ angular.module('app')
             var time = moment(vm.selectedDate);
             vm.systemCustomer.Birthday = time.utc().format();
         }
+        $scope.onDateSoldChanged = function () {
+            console.log(vm.eventCR.DateSold)
+        }
         $scope.onDistrictChanged = function() {
             $scope.wardDis = 1;
             if(vm.selectedDistrict !== " Quận / Huyện... ") {
@@ -182,7 +201,29 @@ angular.module('app')
             alert( "Handler for .click() called." );
         });
         $scope.onSerialSelChanged = function () {
-            console.log("Changed")
+            console.log(vm.serialSelectedData.device_serial);
+            $http({
+                url: _pitechDeviceDetailsURL,
+                method: 'POST',
+                data: JSON.stringify({
+                    "sessionId":"501b30b8-bc46-b1b6-46ba-68c2eb5f688c",
+                    "phoneNumber": vm.searchingNumber,
+                    "serial":vm.serialSelectedData.device_serial,
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }).error(function(response) {
+                toaster.pop('error', "Thất bại", response.error);
+            })
+            .then(function(response){
+               if(response.data.d.Success === true) {
+                    console.log(response.data.d.Item);
+                    vm.eventCRDetails.AgencySold = response.data.d.Item.agency_sold;
+                    vm.eventCRDetails.DateSold = response.data.d.Item.date_sold;
+                    vm.eventCRDetails.AssociateName = response.data.d.Item.associate_name;
+               }
+            });
         }
         $scope.onPurSelChanged = function() {
             // tabStrip.disable(tabStrip.tabGroup.children().eq(0));
@@ -190,7 +231,25 @@ angular.module('app')
             $scope.tab2Invisible = false;
         }
         $scope.onEventProductTypeSelChanged = function() {
-            console.log(vm.eventProductTypeSelectedData);
+            if(vm.eventProductTypeSelectedData.Name == "FOX") {
+                $("#serialDropdown").data("kendoDropDownList").dataSource.read().then(function() {
+                    $($("#serialDropdown").data("kendoDropDownList").dataItems()).each(function (item) {
+                        var deviceSerial = this.device_serial.substring(0,2);
+                        if(deviceSerial !== "AT") {
+                            $("#serialDropdown").data("kendoDropDownList").dataSource.remove(this);
+                        }
+                    });    
+                });
+            } else if(vm.eventProductTypeSelectedData.Name == "RHINO") {
+                $("#serialDropdown").data("kendoDropDownList").dataSource.read().then(function() {
+                    $($("#serialDropdown").data("kendoDropDownList").dataItems()).each(function (item) {
+                        var deviceSerial = this.device_serial.substring(0,2);
+                        if(deviceSerial !== "RD") {
+                            $("#serialDropdown").data("kendoDropDownList").dataSource.remove(this);
+                        }
+                    });    
+                });
+            }
         }
         function initialCtrl() {
             $("#districtdropdown").kendoDropDownList({
@@ -211,23 +270,67 @@ angular.module('app')
             }
         };     
         vm.dateOfBirth = {};
+        kendo.init("#listOfCrTag");
         vm.departmentSelectOptions = {
             placeholder: "Bộ phận...",
-            dataTextField: "ProductName",
-            dataValueField: "ProductID",
+            dataTextField: "Name",
+            dataValueField: "ID",
+            change: onCrDepartmentChanged,
+            deselect: onCrDepartmentDeselect,
+            select: onCrDepartmentSelect,
             valuePrimitive: true,
             autoBind: false,
             dataSource: {
-                type: "odata",
+                type: "odata-v4",
                 serverFiltering: true,
                 transport: {
                     read: {
-                        url: "https://demos.telerik.com/kendo-ui/service/Northwind.svc/Products",
+                        url: _deparmentURL,
                     }
                 }
             }
         };
-        vm.departmentSelectedIds = [ 4, 7 ];
+        vm.departmentSelectedIds = [ ];
+        function onCrDepartmentChanged() {
+            var multiselect = $("#crDepartmentMulDrop").data("kendoMultiSelect");
+            console.log(multiselect.value());
+            console.log(multiselect.value().length);
+            console.log(multiselect.value()[multiselect.value().length - 1]);
+            console.log(vm.departmentSelectedIds);
+        }
+        function onCrDepartmentSelect(e) {
+            console.log("Selected");
+            var dataItem = e.dataItem;
+            console.log(dataItem);
+            $http({
+                method: 'GET',
+                url: _tagURL+"?$filter=DepartmentID eq " + dataItem.ID ,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                },
+              }).then(function successCallback(response) {
+                  if(response.data.value.length > 0) { 
+                    var listItem = response.data.value;
+                    vm.crDepartmentListTag.push({
+                        deparment: dataItem,
+                        tagList: listItem
+                    });
+                    console.log("This is the department list");
+                    console.log(vm.crDepartmentListTag);
+                    console.log(response.data.value[0]);
+                  } else {
+                      toaster.pop('info', "Rỗng","Phòng ban chưa có tag");
+                  }
+                }, function errorCallback(response) {
+                  console.log(response);
+            });
+            
+        }
+        function onCrDepartmentDeselect(e) {
+            console.log("Deselected");
+            console.log(this.value());
+        }
         vm.districtData = {
             type: "odata-v4",
             transport: {
@@ -370,10 +473,10 @@ angular.module('app')
                 toaster.pop('error', "Thất bại", response.error);
             })
             .then(function(response){
-                console.log("Success");
-                console.log(response.data.d);
-                console.log(response.data.d.Info);
-                if(response.data.d.Info === "Lấy thông tin thành công") {
+                // console.log("Success");
+                // console.log(response.data.d);
+                // console.log(response.data.d.Info);
+                if(response.data.d.Success === true) {
                     vm.pitechCutomer = response.data.d.Item;
                     $http({
                         url: _pitechCusURL,
@@ -389,10 +492,10 @@ angular.module('app')
                         toaster.pop('error', "Thất bại", response.error);
                     })
                     .then(function(response){
-                        console.log("Success");
-                        console.log(response.data.d);
-                        console.log(response.data.d.Info);
-                        if(response.data.d.Info === "Lấy thông tin thành công") {
+                        // console.log("Success");
+                        // console.log(response.data.d);
+                        // console.log(response.data.d.Info);
+                        if(response.data.d.Success === true) {
                             vm.pitechCutomer = response.data.d.Item;
                             $http({
                                 url: _pitechDevURL,
@@ -408,8 +511,8 @@ angular.module('app')
                                 toaster.pop('error', "Thất bại", response.error);
                             })
                             .then(function(response){
-                                if(response.data.d.Info === "Lấy thông tin thành công") {
-                                    console.log(response.data.d.Item);
+                                if(response.data.d.Success === true) {
+                                    // console.log(response.data.d.Item);
                                     vm.serialData = {
                                         data: response.data.d.Item
                                     };
@@ -417,8 +520,8 @@ angular.module('app')
                                         filter: 'li.k-item',
                                         position: 'right',
                                         show: function(e){
-                                            console.log(this.content[0].childNodes[0].data);
-                                            console.log(this.content[0].childNodes[0].data);
+                                            // console.log(this.content[0].childNodes[0].data);
+                                            // console.log(this.content[0].childNodes[0].data);
                                             if(this.content[0].childNodes[0].childNodes.length > 0) { 
                                                 this.content.parent().css("visibility", "visible");
                                             }    
@@ -428,7 +531,7 @@ angular.module('app')
                                         },
                                         content: function(e){
                                           var item = $('#serialDropdown').data("kendoDropDownList").dataItem($(e.target));
-                                          console.log(item.device_serial);
+                                        //   console.log(item.device_serial);
                                           if(item.device_serial == '' || item.device_serial == undefined) {
                                               var result = "NO";
                                               return result;
