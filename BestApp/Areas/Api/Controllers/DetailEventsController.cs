@@ -46,6 +46,9 @@ namespace BestApp.Areas.Api.Controllers
                     EventCode = stf.Event.Code,
                     Note = stf.Note,
                     ID = stf.Id,
+                    DateSold = stf.DateSold,
+                    AgencySold = stf.AgencySold,
+                    AssociateName = stf.AssociateName
                 };
                 return Created(resultObject);
             }

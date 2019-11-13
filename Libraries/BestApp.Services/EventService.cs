@@ -54,17 +54,30 @@ namespace BestApp.Services
         }
         public Task<IQueryable<EventViewModel>> GetAllEventsAsync(SearchViewModel model)
         {
+            if (model.To != null)
+            {
+                model.To = model.To.Value.AddDays(1);
+            }
+            if (model.Code != null)
+            {
+                var findId = Queryable().Where(x => x.Code == model.Code).Select(x => x.Id).FirstOrDefault();
+                if (findId != null)
+                {
+                    model.ID = findId;
+                }
+
+            }
             return Task.Run(() => GetAllEvents()
             .Where(x => x.Delete == false
-            && ((!(model.ID == null)) || x.Id == model.ID)
-            && ((!(model.Code == null)) || x.Code == model.Code)
-            && (!(model.From == null) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
-            && (!(model.To == null) || (DbFunctions.TruncateTime(x.CreatDate) <= DbFunctions.TruncateTime(model.To))))
-            .Select(x => new EventViewModel()
+            && ((!model.ID.HasValue) || x.Id == model.ID)
+            && ((!(model.Code == "")) || (model.Code == x.Code))
+            && ((!model.From.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
+            && ((!model.To.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) <= DbFunctions.TruncateTime(model.To))))
+            .Select(x => new EventViewModel
             {
+                CreatDate = x.CreatDate,
                 ID = x.Id,
                 Code = x.Code,
-                CreatDate = x.CreatDate,
                 CustomerID = x.Customer.Id,
                 CustomerName = x.Customer.Name,
                 Address = x.Customer.Address,
@@ -72,19 +85,19 @@ namespace BestApp.Services
                 TypeEvent = x.TypeEvent,
                 Status = x.Status,
                 UserName = x.UserAccount.UserName,
-                Tags = x.Tags.Select(t => new TagViewModel()
+                Tags = x.Tags.Select(t => new TagViewModel
                 {
                     ID = t.Id,
                     NameTag = t.NameTag,
                     CodeTag = t.CodeTag,
                 }).ToList(),
-                DetailEvents = x.DetailEvents.Select(t=> new DetailEventViewModel()
+                DetailEvents = x.DetailEvents.Select(t=> new DetailEventViewModel
                 {
                     ID = t.Id,
                     Serial = t.Serial,
                     Note = t.Note
                 }).ToList(),
-                InteractionHistorys = x.InteractionHistorys.Select(t=> new InteractionHistoryViewModel()
+                InteractionHistorys = x.InteractionHistorys.Select(t=> new InteractionHistoryViewModel
                 {
                     Type = t.Type,
                     Note = t.Note,

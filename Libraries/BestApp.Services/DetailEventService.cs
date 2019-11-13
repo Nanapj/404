@@ -62,6 +62,9 @@ namespace BestApp.Services
                 CreatDate = x.CreatDate,
                 ProductCode = x.ProductType.Code,
                 ProductName = x.ProductType.Name,
+                DateSold = x.DateSold,
+                AgencySold = x.AgencySold,
+                AssociateName = x.AssociateName
             }));
         }
         public DetailEvent Insert(DetailEventViewModel model)
@@ -74,6 +77,9 @@ namespace BestApp.Services
             data.Delete = false;
             data.LastModifiedDate = DateTime.Now;
             data.ProductType = _productTypeService.Find(model.ProductID);
+            data.DateSold = model.DateSold;
+            data.AgencySold = model.AgencySold;
+            data.AssociateName = model.AssociateName;
             //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
             base.Insert(data);
             return data;

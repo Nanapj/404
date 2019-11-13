@@ -19,5 +19,8 @@ namespace BestApp.Domain
         public string ProductCode { get; set; }
         public string ProductName { get; set; }
         public Guid ProductID { get; set; }
+        public string AgencySold { get; set; }
+        public DateTime DateSold { get; set; }
+        public string AssociateName { get; set; }
     }
 }

@@ -12,5 +12,8 @@ namespace BestApp.Core.Models
         public string Note { get; set; }
         public virtual Event Event { get; set; }
         public virtual ProductType ProductType { get; set; }
+        public string AgencySold { get; set; }
+        public DateTime DateSold { get; set; }
+        public string AssociateName { get; set; }
     }
 }
