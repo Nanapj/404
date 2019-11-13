@@ -12,7 +12,7 @@ angular.module('app')
             return _p8() + _p8(true) + _p8(true) + _p8();  
          }  
         var vm = this;
-        vm.departmentId = $stateParams.Id.replace(/['"]+/g, '');
+        vm.departmentId = $stateParams.ID.replace(/['"]+/g, '');
         vm.access_token = localStorage.getItem('access_token');
         vm.model = {};
         var editBlock = blockUI.instances.get('EditBlockUI');
@@ -22,7 +22,7 @@ angular.module('app')
         $scope.initDepartmentEdit = function() {
             $http({
                 method: 'GET',
-                url: _url+'?$filter=Id eq ' + $stateParams.Id.replace(/['"]+/g, ''),
+                url: _url+'?$filter=Id eq ' + $stateParams.ID.replace(/['"]+/g, ''),
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
@@ -131,7 +131,6 @@ angular.module('app')
                             ID: { editable: false, nullable: true },
                             NameTag: { validation: { required: false } },
                             CodeTag: { type: "string" },
-                            CreateDate: { type:"datetime" , editable: false },
                             DepartmentID: {type: "string"}
                         }
                     }
@@ -143,7 +142,6 @@ angular.module('app')
             columns: [
                 { field: "NameTag", title: "Tên tag" , width: "120px" },
                 { field: "CodeTag", title: "Mã tag", width: "120px" },
-                { field: "CreateDate", title: "Ngày tạo", width: "120px" },
                 { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
             ],
             editable: "inline"

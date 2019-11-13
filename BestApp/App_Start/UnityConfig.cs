@@ -64,7 +64,6 @@ namespace BestApp
             .RegisterType<IDistrictService, DistrictService>()
             .RegisterType<IWardService, WardService>()
             .RegisterType<ICityService, CityService>()
-
             .RegisterType<UserManager<ApplicationUser>>(new HierarchicalLifetimeManager())
             .RegisterType<AccountController>(new InjectionConstructor())
             .RegisterType<ManageController>(new InjectionConstructor());

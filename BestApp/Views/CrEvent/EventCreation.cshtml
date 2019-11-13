@@ -96,7 +96,7 @@
                                 </div>
                                 <div class="row col-md-12">
                                     <div class="form-group" style="padding-top: 10px;">
-                                        <button class="btn btn-success btn-default" ng-click="vm.createClicked()">Tạo mới / Chỉnh sửa</button>
+                                        <button class="btn btn-success btn-default" ng-click="vm.creUpdCusClicked()">Tạo mới / Chỉnh sửa</button>
                                     </div>
                                 </div>
                             </form>
@@ -104,41 +104,42 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default" id="pitechInfo" ng-hide="pitechInfoInvi">
                         <div class="panel-heading font-bold">THÔNG TIN KHÁCH HÀNG PITECH</div>
                         <div class="panel-body">
                             <form role="form">
                                 <div class="form-group">
                                     <label><b>Tên khách hàng</b></label>
-                                    <p class="form-control-static">{{vm.pitechCutomer.FullName}}</p>
+                                    <p class="form-control-static">{{vm.pitechCutomer.customer_fullname}}</p>
                                 </div>
                                 <div class="form-group">
                                     <label><b>Địa chỉ</b></label>
                                     <p class="form-control-static">
-                                        {{vm.pitechCutomer.Address}}
+                                        {{vm.pitechCutomer.customer_address}}
                                     </p>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label><b>Thành phố / Tỉnh</b></label>
-                                        <p class="form-control-static">  {{vm.pitechCutomer.City}}</p>
+                                        <p class="form-control-static">  {{vm.pitechCutomer.customer_province}}</p>
                                     </div>
                                     <div class="col-md-6">
                                         <label><b>Quận / Huyện</b></label>
-                                        <p class="form-control-static">  {{vm.pitechCutomer.District}}</p>
+                                        <p class="form-control-static">  {{vm.pitechCutomer.customer_district}}</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label><b>Phường / Xã</b></label>
-                                    <p class="form-control-static">  {{vm.pitechCutomer.Ward}}</p>
+                                    <p class="form-control-static">  {{vm.pitechCutomer.customer_ward}}</p>
                                 </div>
                                 <div class="form-group">
                                     <label><b>Ngày sinh</b></label>
-                                    <p class="form-control-static">  {{vm.pitechCutomer.Birthday}}</p>
+                                    <p class="form-control-static">  {{vm.pitechCutomer.customer_birthday}}</p>
                                 </div>
                             </form>
                         </div>
                     </div>
+                    <p class="text-muted" ng-hide="!pitechInfoInvi">Pitech hiện chưa có thông tin khách hàng này</p>
                 </div>
             </div>
             <div class="row">
@@ -149,23 +150,34 @@
                             <div class="row">
                                 <div class="col-md-6 k-content">
                                     <label>Sự kiện</label>
-                                    <select kendo-drop-down-list
-                                            k-data-text-field="'ProductName'"
-                                            k-data-value-field="'ProductID'"
+                                    <select 
+                                            id="eventtypedropdown"
+                                            kendo-drop-down-list            
+                                            ng-disabled="eventTypeDis === 1"
+                                            k-data-text-field="'name'"
+                                            k-data-value-field="'id'"
                                             k-data-source="vm.eventData"
                                             k-option-label="' Sự kiện... '"
-                                            k-filter="'contains'"
+                                            k-ng-model="vm.selectedEventData"
+                                            k-on-change="onEventSelChanged()"
+                                            k-filter="'contains'"                              
                                             style="width: 100%"></select>
                                 </div>
                                 <div class="col-md-6 k-content">
                                     <label>Mục đích</label>
-                                    <select kendo-drop-down-list
-                                            k-data-text-field="'ProductName'"
-                                            k-data-value-field="'ProductID'"
+                                    <select 
+                                            id="purposedropdown"
+                                            kendo-drop-down-list
+                                            ng-disabled="purDis === 1"
+                                            k-data-text-field="'name'"
+                                            k-data-value-field="'id'"
                                             k-data-source="vm.purposeData"
+                                            k-ng-model="vm.selectedPurposeData"
+                                            k-on-change="onPurSelChanged()"
                                             k-option-label="' Mục đích... '"
                                             k-filter="'contains'"
-                                            style="width: 100%"></select>
+                                            style="width: 100%">
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -177,30 +189,48 @@
                     <div class="panel panel-default">
                         <div class="panel-heading font-bold">THÔNG TIN PHIẾU</div>
                         <div class="panel-body">
-                            <div kendo-tab-strip k-content-urls="[ null, null]" style="background-color: #edf1f2; border-color: white">
+                            <div id="eventTabstrip"
+                                 kendo-tab-strip
+                                 k-content-urls="[ null, null]" style="background-color: #edf1f2; border-color: white">
                                 <!-- tab list -->
                                 <ul>
                                     <li class="k-state-active">Sự kiện</li>
                                     <li>Phiếu hẹn</li>
                                 </ul>
 
-                                <div class="row">
+                                <div class="row" id="firstTabContent" ng-hide="tab1Inisible">
                                     <div class="row col-md-12">
                                         <div class="form-group">
                                             <div class="col-md-3">
                                                 <label>Sản phẩm</label>
-                                                <select kendo-drop-down-list
-                                                        k-data-text-field="'ProductName'"
-                                                        k-data-value-field="'ProductID'"
-                                                        k-data-source="vm.productData"
-                                                        k-option-label="' Sản phẩm... '"
-                                                        k-filter="'contains'"
-                                                        style="width: 100%"></select>
+                                                <div class="form-group">
+                                                    <select kendo-drop-down-list
+                                                            k-data-text-field="'Name'"
+                                                            k-data-value-field="'ID'"
+                                                            k-data-source="vm.eventProductTypeData"
+                                                            k-option-label="' Sản phẩm... '"
+                                                            k-filter="'contains'"
+                                                            style="width: 100%"
+                                                            k-ng-model="vm.eventProductTypeSelectedData"
+                                                            k-on-change="onEventProductTypeSelChanged()"
+                                                    >        
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-3 serial-dropdown">
                                                 <div class="form-group">
                                                     <label>Serial</label>
-                                                    <input style="height:17px; width:93%" type="text" class="form-control" placeholder="Serial" />
+                                                    <select 
+                                                            kendo-drop-down-list
+                                                            id="serialDropdown"
+                                                            k-data-text-field="'device_serial'"
+                                                            k-data-value-field="'device_serial'"
+                                                            k-option-label="' Serial... '"
+                                                            k-data-source="vm.serialData"
+                                                            k-filter="'contains'"
+                                                            style="width: 100%"
+                                                            k-ng-model="vm.serialSelectedData"
+                                                            k-on-change="onSerialSelChanged()"></select>
                                                 </div>
                                             </div>
                                         </div>
@@ -208,7 +238,7 @@
                                     <div class="row col-md-12">
                                         <div class="col-md-3">
                                             <label>Đại lý</label>
-                                            <input style="height:17px; width:93%" type="text" class="form-control" placeholder="Serial" />
+                                            <input style="height:17px; width:93%" type="text" class="form-control" placeholder="Đại lý" />
                                         </div>
                                         <div class="col-md-3">
                                             <label>Nhân viên bán hàng</label>
@@ -256,7 +286,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row" id="seconTabContent" ng-hide="tab2Invisible" >
                                     <div class="row col-md-12">
                                         <div class="form-group">
                                             <div class="col-md-3">

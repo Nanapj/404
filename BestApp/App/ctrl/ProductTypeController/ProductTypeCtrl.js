@@ -6,7 +6,6 @@ angular.module('app')
         vm.access_token = localStorage.getItem('access_token');
         vm.model = {};
         vm.selectedProductType = {};
-        vm.model.HasAccount = false;
         vm.toolbarTemplate = toolbarTemplate;
         vm.create = create;
         vm.edit = edit;
@@ -43,17 +42,18 @@ angular.module('app')
                          //   swal("Poof! Your imaginary file has been deleted!", {
                          //     icon: "success",
                          //   });
-                         // $http({
-                         //     method: 'DELETE',
-                         //     url: _url+'(' + vm.selectedProductType.Id +')',
-                         //     headers: {
-                         //         'Content-Type': 'application/json',
-                         //         'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
-                         //     },
-                         // }).then(function successCallback(response) {
-                         //     toaster.pop('success', "Thành công", "Đã xóa thông tin nhân viên và vô hiệu hóa tài khoản");
-                         // });
-                         toaster.pop('info', "Thành công", "Đã xóa thông tin nhân viên"); 
+                         $http({
+                             method: 'DELETE',
+                             url: _url+'(' + vm.selectedProductType.ID +')',
+                             headers: {
+                                 'Content-Type': 'application/json',
+                                 'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                             },
+                         }).then(function successCallback(response) {
+                            $('#producttypegrid').data('kendoGrid').dataSource.read();
+                            $('#producttypegrid').data('kendoGrid').refresh();
+                             toaster.pop('success', "Thành công", "Đã xóa thông tin loại sản phẩm");
+                         });
                    
                    } else {
                    
@@ -81,8 +81,8 @@ angular.module('app')
                     },
                 }).then(function(response){
                     if(response.status == 201) {
-                        toaster.pop('success', "Thành công", "Đã tạo thông tin nhân viên");
-                        $state.go('app.staff.index');
+                        toaster.pop('success', "Thành công", "Đã tạo thông tin loại sản phẩm");
+                        $state.go('app.producttype.index');
                     }
                 });
             } else if(vm.model.FullName == "" || vm.model.FullName == null) {

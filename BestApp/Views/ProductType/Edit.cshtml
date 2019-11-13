@@ -6,34 +6,17 @@
     <toaster-container></toaster-container>
     <div class="row">
         <div class="col-md-6">
-            <div class="panel panel-default">
+            <div class="panel panel-default" block-ui="EditProductTypeBlockUI">
                 <div class="panel-heading font-bold">Edit form</div>
-                <div class="panel-body" block-ui="EditBlockUI">
+                <div class="panel-body" >
                     <form role="form">
                         <div class="form-group">
-                            <label>Fullname</label>
-                            <input type="text" class="form-control" ng-model="vm.model.FullName">
+                            <label>Tên loại sản phẩm</label>
+                            <input type="text" class="form-control" ng-model="vm.model.Name">
                         </div>
                         <div class="form-group">
-                            <label>Phone</label>
-                            <input type="text" class="form-control" ng-model="vm.model.Phone">
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="text" class="form-control" ng-model="vm.model.Email">
-                        </div>
-                        <div class="form-group">
-                            <label>Address</label>
-                            <input type="text" class="form-control" ng-model="vm.model.Address">
-                        </div>
-                        <div class="checkbox">
-                            <label class="i-checks">
-                                <input type="checkbox" ng-model="vm.model.HasAccount"><i></i> Active this account with password
-                            </label>
-                        </div>
-                        <div class="form-group" ng-show="vm.model.HasAccount">
-                            <label>Password</label>
-                            <input type="password" class="form-control" ng-model="vm.model.Password">
+                            <label>Mã sản phẩm</label>
+                            <input type="text" class="form-control" ng-model="vm.model.Code">
                         </div>
                         <button type="submit" class="btn btn-success" ng-click="vm.editSubmit()">Cập nhật</button>
                     </form>
