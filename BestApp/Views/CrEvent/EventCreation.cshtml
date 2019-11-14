@@ -238,23 +238,40 @@
                                     <div class="row col-md-12">
                                         <div class="col-md-3">
                                             <label>Đại lý</label>
-                                            <input style="height:17px; width:93%" type="text" class="form-control" placeholder="Đại lý" />
+                                            <input 
+                                                   style="height:17px; 
+                                                   width:93%" 
+                                                   type="text" 
+                                                   class="form-control" 
+                                                   placeholder="Đại lý" 
+                                                   ng-model="vm.eventCRDetails.AgencySold"
+                                             />
                                         </div>
                                         <div class="col-md-3">
                                             <label>Nhân viên bán hàng</label>
-                                            <input style="height:17px; width:93%" type="text" class="form-control" placeholder="Nhân viên bán hàng" />
+                                            <input 
+                                                   style="height:17px; 
+                                                   width:93%" 
+                                                   type="text" 
+                                                   class="form-control" 
+                                                   placeholder="Nhân viên bán hàng" 
+                                                   ng-model="vm.eventCRDetails.AssociateName"
+                                             />
                                         </div>
                                         <div class="col-md-3">
                                             <label>Ngày mua</label>
                                             <input kendo-date-picker
                                                    k-options="{format: 'dd/MM/yyyy'}"
-                                                   style="width: 100%;" />
+                                                   style="width: 100%;" 
+                                                   k-ng-model="vm.eventCRDetails.DateSold"
+                                                   k-on-change="onDateSoldChanged()"
+                                                   />
                                         </div>
                                     </div>
                                     <div class="row col-md-12">
                                         <div class="form-group" style="padding: 15px;">
                                             <label>Nội dung</label>
-                                            <ng-quill-editor ng-model="vm.message" modules="{toolbar: false}"></ng-quill-editor>
+                                            <ng-quill-editor ng-model="vm.eventCR.Note" modules="{toolbar: false}"></ng-quill-editor>
                                         </div>
                                     </div>
                                     <div class="row col-md-12">
@@ -267,10 +284,22 @@
                                                 <select kendo-multi-select k-options="vm.departmentSelectOptions" k-ng-model="vm.departmentSelectedIds"></select>
                                             </div>
                                         </div>
-                                        <div class="row col-md-12">
-                                            <div class="form-group" style="padding: 15px;">
-                                                <h4>Tag</h4>
-                                                <select kendo-multi-select k-options="vm.selectOptions" k-ng-model="vm.selectedIds"></select>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div id="listOfCrTag" title="listOfCrTag">
+                                                    <div class="row" ng-repeat="item in vm.crDepartmentListTag">
+                                                        <div class="form-group" style="padding: 15px;">
+                                                            <label>{{item.deparment.Name}}</label>
+                                                            <div class="row" style="padding:15px;">
+                                                                <button id="button{{child.Id}}"
+                                                                        ng-repeat="child in item.tagList"
+                                                                        class="btn m-b-xs w-xs btn-default">
+                                                                    {{child.NameTag}}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row col-md-12">
@@ -327,9 +356,12 @@
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label>Phòng ban</label>
-                                                    <select kendo-multi-select k-options="vm.departmentSelectOptions" k-ng-model="vm.departmentSelectedIds"></select>
+                                                    <select kendo-multi-select
+                                                            id="crDepartmentMulDrop"
+                                                            k-options="vm.departmentSelectOptions"
+                                                            k-ng-model="vm.departmentSelectedIds"></select>
                                                 </div>
-                                            </div>
+                                            </div>                                    
                                             <div class="row col-md-12">
                                                 <div class="form-group" style="padding: 15px;">
                                                     <h4>Tag</h4>
