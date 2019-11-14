@@ -135,6 +135,9 @@ namespace BestApp.Services
                     data.DetailEvents.Add(new DetailEvent()
                     {
                         Serial = item.Serial,
+                        AgencySold = item.AgencySold,
+                        DateSold = item.DateSold,
+                        AssociateName = item.AssociateName,
                         Note = item.Note,
                         ProductType = _productTypeService.Find(item.ProductID),
                         CreatDate = DateTime.Now,
