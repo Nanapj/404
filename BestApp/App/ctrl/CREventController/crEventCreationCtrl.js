@@ -2,7 +2,8 @@
 angular.module('app')
     .controller('crEventCreationCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', '$anchorScroll', function ($scope, $state, $stateParams, $http, toaster, $anchorScroll){
         var vm = this; 
-        var _deparmentURL = "/odata/Departments";
+        var _eventURL = "/odata/Events";
+        var _departmentURL = "/odata/Departments";
         var _cusURL = "/odata/Customers";
         var _cityURL = "/odata/Cities";
         var _districtURL = "/odata/Districts";
@@ -26,12 +27,12 @@ angular.module('app')
         vm.selectedEventData ="";
         vm.selectedPurposeData = "";
         vm.eventProductTypeSelectedData = "";
+        vm.reminderEvent = {};
         vm.eventCR = {
-
             DetailEvents: []
-
         }
         vm.crDepartmentListTag = [];
+        vm.crtagSelectected = [];
         vm.eventCRDetails = {}
         vm.tooltipsVisible = false;
         vm.serialSelectedData = "";
@@ -57,6 +58,24 @@ angular.module('app')
         //     }
         // };
         //genegrate GUID()
+        $scope.crTagItemClicked = function(item,_this,index) {
+            var idButtonClicked = "#crbutton"+item.ID;
+            if($(idButtonClicked).css("background-color") !== 'rgb(66, 133, 244)'){
+                $(idButtonClicked).css({
+                    "background-color" : "#4285F4"
+                });
+                $(idButtonClicked).addClass("tag-blue-color");     
+                vm.crtagSelectected.push(item);
+               
+            } else {
+                $(idButtonClicked).css({
+                    "background-color":"white"      
+                });
+                $(idButtonClicked).removeClass("tag-blue-color");   
+                vm.crtagSelectected.splice(index,1);
+            }
+            console.log(vm.crtagSelectected);
+        };
         function generateUUID() { 
             var d = new Date().getTime();
             var d2 = (performance && performance.now && (performance.now()*1000)) || 0;
@@ -285,7 +304,7 @@ angular.module('app')
                 serverFiltering: true,
                 transport: {
                     read: {
-                        url: _deparmentURL,
+                        url: _departmentURL,
                     }
                 }
             }
@@ -313,7 +332,7 @@ angular.module('app')
                   if(response.data.value.length > 0) { 
                     var listItem = response.data.value;
                     vm.crDepartmentListTag.push({
-                        deparment: dataItem,
+                        department: dataItem,
                         tagList: listItem
                     });
                     console.log("This is the department list");
@@ -328,6 +347,26 @@ angular.module('app')
             
         }
         function onCrDepartmentDeselect(e) {
+            var data = e.dataItem;
+            var isHaveInList = vm.crDepartmentListTag.find(element => function() {
+                element.department === data;
+            })
+            if(isHaveInList !== undefined && isHaveInList.tagList.length >0) {
+                isHaveInList.tagList.forEach(function(element, index, object) {              
+                    vm.crtagSelectected.forEach(function(child, _index, _object) {
+                        if (child === element) {
+                            _object.splice(_index, 1);
+                        }
+                    });
+                });
+                vm.crDepartmentListTag.forEach(function(element,index,object) {
+                    if(element.department === data) {
+                        object.splice(index,1);
+                    }
+                });
+            }
+            console.log(vm.crtagSelectected);
+            console.log(isHaveInList);
             console.log("Deselected");
             console.log(this.value());
         }
@@ -651,6 +690,47 @@ angular.module('app')
                 }
             }
         };       
+        $scope.crCusCreate = function() {
+            console.log("Button Clicked");
+            var time = moment(vm.eventCRDetails.DateSold);
+            var json = JSON.stringify( vm.crtagSelectected, function( key, value ) {
+                if( key === "$$hashKey" ) {
+                    return undefined;
+                }
+            
+                return value;
+            });
+            vm.crtagSelectected = JSON.parse(json);
+            console.log(vm.crtagSelectected);
+            vm.eventCR.CustomerID = vm.systemCustomer.ID;
+            vm.eventCRDetails.DateSold = time.utc().format();
+            vm.eventCR.DetailEvents.push(vm.eventCRDetails);
+            vm.eventCR.Tags = vm.crtagSelectected;
+            vm.eventCR.Serial = vm.serialSelectedData.ID;
+            console.log(vm.systemCustomer);
+            console.log(vm.eventProductTypeSelectedData);
+            console.log(vm.serialSelectedData);
+            console.log(vm.eventCRDetails);
+            console.log(vm.crtagSelectected);
+            console.log(vm.eventCR);
+           
+            $http({
+                url: _eventURL,
+                method: 'POST',
+                data: JSON.stringify(vm.eventCR),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                },
+            }).error(function(response) {
+                toaster.pop('error', "Thất bại", response.error.innererror.message);
+            })
+            .then(function(response){
+                if(response.status == 201) {
+                    toaster.pop('success', "Thành công", "Đã tạo phiếu thành công");
+                }
+            });
+        }
         $scope.initialEventCreationCtrl = function() {  
         }
         $scope.initialEventCreationCtrl();
