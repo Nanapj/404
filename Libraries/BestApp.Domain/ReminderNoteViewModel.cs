@@ -15,6 +15,7 @@ namespace BestApp.Domain
         public DateTime CreatDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public bool Delete { get; set; }
+        public string Serial { get; set; }
     }
 }
  

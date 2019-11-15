@@ -45,6 +45,7 @@ namespace BestApp.Areas.Api.Controllers
                     Note = stf.Note,
                     ReminderDate = stf.ReminderDate,
                     ID = stf.Id,
+                    Serial = stf.Serial
                 };
                 return Created(resultObject);
             }

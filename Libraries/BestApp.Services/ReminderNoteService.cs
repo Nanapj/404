@@ -58,7 +58,8 @@ namespace BestApp.Services
                 Note = x.Note,
                 ReminderDate = x.ReminderDate,
                 CreatDate = x.CreatDate,
-                EventID = x.Event.Id
+                EventID = x.Event.Id,
+                Serial = x.Serial
             }));
         }
         public ReminderNote Insert(ReminderNoteViewModel model)
@@ -69,6 +70,7 @@ namespace BestApp.Services
             data.Event = _eventService.Find(model.EventID);
             data.UserAccount = employee;
             data.ReminderDate = model.ReminderDate;
+            data.Serial = model.Serial;
             data.CreatDate = DateTime.Now;
             data.Delete = false;
             data.LastModifiedDate = DateTime.Now;

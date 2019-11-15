@@ -166,6 +166,7 @@ namespace BestApp.Services
                     data.ReminderNotes.Add(new ReminderNote()
                     {
                         ReminderDate = item.ReminderDate,
+                        Serial = item.Serial,
                         CreatDate = DateTime.Now,
                         LastModifiedDate = DateTime.Now,
                         Note = item.Note,

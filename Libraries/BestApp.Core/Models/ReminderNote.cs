@@ -11,5 +11,6 @@ namespace BestApp.Core.Models
         public DateTime ReminderDate { get; set; }
         public virtual Event Event { get; set; }
         public string Note { get; set; }
+        public string Serial { get; set; }
     }
 }
