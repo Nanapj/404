@@ -281,7 +281,11 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Bộ phận</label>
-                                                <select kendo-multi-select k-options="vm.departmentSelectOptions" k-ng-model="vm.departmentSelectedIds"></select>
+                                                <select 
+                                                        id="crDepartmentMulDrop"
+                                                        kendo-multi-select k-options="vm.departmentSelectOptions" 
+                                                        k-ng-model="vm.departmentSelectedIds">
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -323,17 +327,29 @@
                                             <div class="col-md-3">
                                                 <label>Sản phẩm</label>
                                                 <select kendo-drop-down-list
-                                                        k-data-text-field="'ProductName'"
-                                                        k-data-value-field="'ProductID'"
-                                                        k-data-source="vm.productData"
+                                                        k-data-text-field="'Name'"
+                                                        k-data-value-field="'ID'"
+                                                        k-data-source="vm.reminderProductData"
                                                         k-option-label="' Sản phẩm... '"
                                                         k-filter="'contains'"
-                                                        style="width: 100%"></select>
+                                                        style="width: 100%"
+                                                        k-ng-model="vm.reminderProductTypeSelectedData"
+                                                        k-on-change="onReminderProductTypeSelChanged()"
+                                                        ></select>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label>Serial</label>
-                                                    <input style="height:17px; width:93%" type="text" class="form-control" placeholder="Serial" />
+                                                    <select kendo-drop-down-list
+                                                            id="serialReminderDropdown"
+                                                            k-data-text-field="'device_serial'"
+                                                            k-data-value-field="'device_serial'"
+                                                            k-option-label="' Serial... '"
+                                                            k-data-source="vm.reminderSerialData"
+                                                            k-filter="'contains'"
+                                                            style="width: 100%"
+                                                            k-ng-model="vm.reminderSerialSelectedData"
+                                                            k-on-change="onReminderSerialSelChanged()"></select>
                                                 </div>
                                             </div>
                                         </div>
@@ -342,13 +358,16 @@
                                                 <label>Lịch hẹn</label>
                                                 <input kendo-date-picker
                                                        k-options="{format: 'dd/MM/yyyy'}"
-                                                       style="width: 100%;" />
+                                                       style="width: 100%;"
+                                                       k-ng-model="vm.reminderCRDetails.ReminderDate"
+                                                       k-on-change="reminderOnSelectedDate()"
+                                                />
                                             </div>
                                         </div>
                                         <div class="row col-md-12">
                                             <div class="form-group" style="padding: 15px;">
                                                 <label>Lời nhắc</label>
-                                                <ng-quill-editor ng-model="vm.reminderNote" modules="{toolbar: false}"></ng-quill-editor>
+                                                <ng-quill-editor ng-model="vm.reminderCR.Note" modules="{toolbar: false}"></ng-quill-editor>
                                             </div>
                                         </div>
                                         <div class="row col-md-12">
@@ -359,26 +378,39 @@
                                                 <div class="form-group">
                                                     <label>Phòng ban</label>
                                                     <select kendo-multi-select
-                                                            id="crDepartmentMulDrop"
-                                                            k-options="vm.departmentSelectOptions"
-                                                            k-ng-model="vm.departmentSelectedIds"></select>
+                                                            id="reminderDepartmentMulDrop"
+                                                            k-options="vm.reminderDepartmentSelectOptions"
+                                                            k-ng-model="vm.reminderDepartmentSelectedIds"></select>
                                                 </div>
                                             </div>                                    
-                                            <div class="row col-md-12">
-                                                <div class="form-group" style="padding: 15px;">
-                                                    <h4>Tag</h4>
-                                                    <select kendo-multi-select k-options="vm.selectOptions" k-ng-model="vm.selectedIds"></select>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div id="listOfRemindTag" title="Danh sách tag theo phòng ban">
+                                                        <div class="row" ng-repeat="item in vm.reminderDepartmentListTag">
+                                                            <div class="form-group" style="padding: 15px;">
+                                                                <label>{{item.department.Name}}</label>
+                                                                <div class="row" style="padding:15px;">
+                                                                    <button id="rebutton{{child.ID}}"
+                                                                            ng-repeat="child in item.tagList"
+                                                                            class="btn m-b-xs w-xs btn-default"
+                                                                            ng-click="ReminderTagItemClicked(child,this,$index)">
+                                                                        {{child.NameTag}}
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row col-md-12">
                                                 <div class="form-group" style="padding: 15px;">
                                                     <h4>Ghi chú</h4>
-                                                    <ng-quill-editor ng-model="vm.reminderEvent.Note" modules="{toolbar: false}"></ng-quill-editor>
+                                                    <ng-quill-editor ng-model="vm.reminderCRDetails.Note" modules="{toolbar: false}"></ng-quill-editor>
                                                 </div>
                                             </div>
                                             <div class="row col-md-12">
                                                 <div class="form-group" style="padding: 15px;">
-                                                    <button class="btn btn-success btn-default">Tạo phiếu hẹn</button>
+                                                    <button class="btn btn-success btn-default" ng-click="reminderCreate()">Tạo phiếu hẹn</button>
                                                 </div>
                                             </div>
                                         </div>

@@ -22,23 +22,35 @@ angular.module('app')
         vm.selectedWard = "";
         vm.street="";
         vm.selectedDate = new Date();
+        vm.reminderSelectedDate = new Date();
         vm.cityCode ="";
         vm.districtCode = "";
         vm.selectedEventData ="";
         vm.selectedPurposeData = "";
         vm.eventProductTypeSelectedData = "";
+        vm.reminderProductTypeSelectedData = "";
         vm.reminderEvent = {};
         vm.eventCR = {
             DetailEvents: []
         }
-        vm.crDepartmentListTag = [];
+        vm.reminderCR = {
+            ReminderNotes: []
+        }
+        vm.crDepartmentListTag = [];     
+        vm.reminderDepartmentListTag = [];
         vm.crtagSelectected = [];
-        vm.eventCRDetails = {}
+        vm.reminderTagSelected = [];
+        vm.eventCRDetails = {};
+        vm.reminderCRDetails = {};
         vm.tooltipsVisible = false;
         vm.serialSelectedData = "";
+        vm.reminderSerialSelectedData = "";
         vm.serialData = {
             data: []
         };
+        vm.reminderSerialData = {
+            data: []
+        }
         $scope.districtDis = 1;
         $scope.wardDis = 1;
         $scope.eventTypeDis = 1;
@@ -75,6 +87,24 @@ angular.module('app')
                 vm.crtagSelectected.splice(index,1);
             }
             console.log(vm.crtagSelectected);
+        };
+        $scope.ReminderTagItemClicked = function(item,_this,index) {
+            var idButtonClicked = "#rebutton"+item.ID;
+            if($(idButtonClicked).css("background-color") !== 'rgb(66, 133, 244)'){
+                $(idButtonClicked).css({
+                    "background-color" : "#4285F4"
+                });
+                $(idButtonClicked).addClass("tag-blue-color");     
+                vm.reminderTagSelected.push(item);
+               
+            } else {
+                $(idButtonClicked).css({
+                    "background-color":"white"      
+                });
+                $(idButtonClicked).removeClass("tag-blue-color");   
+                vm.reminderTagSelected.splice(index,1);
+            }
+            console.log(vm.reminderTagSelected);
         };
         function generateUUID() { 
             var d = new Date().getTime();
@@ -171,6 +201,10 @@ angular.module('app')
             var time = moment(vm.selectedDate);
             vm.systemCustomer.Birthday = time.utc().format();
         }
+        $scope.reminderOnSelectedDate = function() {
+            var time = moment(vm.reminderSelectedDate);
+            vm.reminderCRDetails.ReminderDate = time.utc().format();
+        }
         $scope.onDateSoldChanged = function () {
             console.log(vm.eventCR.DateSold)
         }
@@ -247,8 +281,31 @@ angular.module('app')
         $scope.onPurSelChanged = function() {
             // tabStrip.disable(tabStrip.tabGroup.children().eq(0));
             $scope.tab1Inisible = false;
-            $scope.tab2Invisible = false;
         }
+        $scope.onReminderSerialSelChanged = function () {
+            console.log(vm.reminderSerialSelectedData.device_serial);
+            // $http({
+            //     url: _pitechDeviceDetailsURL,
+            //     method: 'POST',
+            //     data: JSON.stringify({
+            //         "sessionId":"501b30b8-bc46-b1b6-46ba-68c2eb5f688c",
+            //         "phoneNumber": vm.searchingNumber,
+            //         "serial":vm.reminderSerialSelectedData.device_serial,
+            //     }),
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            // }).error(function(response) {
+            //     toaster.pop('error', "Thất bại", response.error);
+            // })
+            // .then(function(response){
+            //    if(response.data.d.Success === true) {
+            //         console.log(response.data.d.Item);
+            //    }
+            // });
+        }
+
+
         $scope.onEventProductTypeSelChanged = function() {
             if(vm.eventProductTypeSelectedData.Name == "FOX") {
                 $("#serialDropdown").data("kendoDropDownList").dataSource.read().then(function() {
@@ -265,6 +322,27 @@ angular.module('app')
                         var deviceSerial = this.device_serial.substring(0,2);
                         if(deviceSerial !== "RD") {
                             $("#serialDropdown").data("kendoDropDownList").dataSource.remove(this);
+                        }
+                    });    
+                });
+            }
+        }
+        $scope.onReminderProductTypeSelChanged = function() {
+            if(vm.reminderProductTypeSelectedData.Name == "FOX") {
+                $("#serialReminderDropdown").data("kendoDropDownList").dataSource.read().then(function() {
+                    $($("#serialReminderDropdown").data("kendoDropDownList").dataItems()).each(function (item) {
+                        var deviceSerial = this.device_serial.substring(0,2);
+                        if(deviceSerial !== "AT") {
+                            $("#serialReminderDropdown").data("kendoDropDownList").dataSource.remove(this);
+                        }
+                    });    
+                });
+            } else if(vm.reminderProductTypeSelectedData.Name == "RHINO") {
+                $("#serialReminderDropdown").data("kendoDropDownList").dataSource.read().then(function() {
+                    $($("#serialReminderDropdown").data("kendoDropDownList").dataItems()).each(function (item) {
+                        var deviceSerial = this.device_serial.substring(0,2);
+                        if(deviceSerial !== "RD") {
+                            $("#serialReminderDropdown").data("kendoDropDownList").dataSource.remove(this);
                         }
                     });    
                 });
@@ -290,6 +368,7 @@ angular.module('app')
         };     
         vm.dateOfBirth = {};
         kendo.init("#listOfCrTag");
+        kendo.init("#listOfRemindTag");
         vm.departmentSelectOptions = {
             placeholder: "Bộ phận...",
             dataTextField: "Name",
@@ -309,13 +388,41 @@ angular.module('app')
                 }
             }
         };
+        vm.reminderDepartmentSelectOptions = {
+            placeholder: "Bộ phận...",
+            dataTextField: "Name",
+            dataValueField: "ID",
+            change: onReminderDepartmentChanged,
+            deselect: onReminderDepartmentDeselect,
+            select: onReminderDepartmentSelect,
+            valuePrimitive: true,
+            autoBind: false,
+            dataSource: {
+                type: "odata-v4",
+                serverFiltering: true,
+                transport: {
+                    read: {
+                        url: _departmentURL,
+                    }
+                }
+            }
+        };
         vm.departmentSelectedIds = [ ];
+        vm.reminderDepartmentSelectedIds = [];
+
         function onCrDepartmentChanged() {
             var multiselect = $("#crDepartmentMulDrop").data("kendoMultiSelect");
             console.log(multiselect.value());
             console.log(multiselect.value().length);
             console.log(multiselect.value()[multiselect.value().length - 1]);
             console.log(vm.departmentSelectedIds);
+        }
+        function onReminderDepartmentChanged() {
+            var multiselect = $("#reminderDepartmentMulDrop").data("kendoMultiSelect");
+            console.log(multiselect.value());
+            console.log(multiselect.value().length);
+            console.log(multiselect.value()[multiselect.value().length - 1]);
+            console.log(vm.reminderDepartmentSelectedIds);
         }
         function onCrDepartmentSelect(e) {
             console.log("Selected");
@@ -346,6 +453,35 @@ angular.module('app')
             });
             
         }
+        function onReminderDepartmentSelect(e) {
+            console.log("Selected");
+            var dataItem = e.dataItem;
+            console.log(dataItem);
+            $http({
+                method: 'GET',
+                url: _tagURL+"?$filter=DepartmentID eq " + dataItem.ID ,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                },
+              }).then(function successCallback(response) {
+                  if(response.data.value.length > 0) { 
+                    var listItem = response.data.value;
+                    vm.reminderDepartmentListTag.push({
+                        department: dataItem,
+                        tagList: listItem
+                    });
+                    console.log("This is the department list");
+                    console.log(vm.reminderDepartmentListTag);
+                    console.log(response.data.value[0]);
+                  } else {
+                      toaster.pop('info', "Rỗng","Phòng ban chưa có tag");
+                  }
+                }, function errorCallback(response) {
+                  console.log(response);
+            });
+            
+        }
         function onCrDepartmentDeselect(e) {
             var data = e.dataItem;
             var isHaveInList = vm.crDepartmentListTag.find(element => function() {
@@ -366,6 +502,30 @@ angular.module('app')
                 });
             }
             console.log(vm.crtagSelectected);
+            console.log(isHaveInList);
+            console.log("Deselected");
+            console.log(this.value());
+        }
+        function onReminderDepartmentDeselect(e) {
+            var data = e.dataItem;
+            var isHaveInList = vm.reminderDepartmentListTag.find(element => function() {
+                element.department === data;
+            })
+            if(isHaveInList !== undefined && isHaveInList.tagList.length >0) {
+                isHaveInList.tagList.forEach(function(element, index, object) {              
+                    vm.reminderTagSelected.forEach(function(child, _index, _object) {
+                        if (child === element) {
+                            _object.splice(_index, 1);
+                        }
+                    });
+                });
+                vm.reminderDepartmentListTag.forEach(function(element,index,object) {
+                    if(element.department === data) {
+                        object.splice(index,1);
+                    }
+                });
+            }
+            console.log(vm.reminderTagSelected);
             console.log(isHaveInList);
             console.log("Deselected");
             console.log(this.value());
@@ -555,35 +715,59 @@ angular.module('app')
                                     vm.serialData = {
                                         data: response.data.d.Item
                                     };
+                                    vm.reminderSerialData = {
+                                        data: response.data.d.Item
+                                    };
                                     $('body').kendoTooltip({
                                         filter: 'li.k-item',
                                         position: 'right',
                                         show: function(e){
                                             // console.log(this.content[0].childNodes[0].data);
                                             // console.log(this.content[0].childNodes[0].data);
-                                            if(this.content[0].childNodes[0].childNodes.length > 0) { 
-                                                this.content.parent().css("visibility", "visible");
-                                            }    
+                                            if(this.content[0].childNodes.length > 0 ) {
+                                                if(this.content[0].childNodes[0].childNodes.length > 0) { 
+                                                    this.content.parent().css("visibility", "visible");
+                                                }    
+                                            }  
                                         },
                                         hide:function(e){
                                             this.content.parent().css("visibility", "hidden");
                                         },
                                         content: function(e){
                                           var item = $('#serialDropdown').data("kendoDropDownList").dataItem($(e.target));
-                                        //   console.log(item.device_serial);
-                                          if(item.device_serial == '' || item.device_serial == undefined) {
-                                              var result = "NO";
-                                              return result;
-                                          } else {
-                                            var result = '<h4>Mã thiết bị: '+item.device_serial+'</h4>'+'<h5>Tên thiết bị: '+item.device_name+'</h5>';
-                                            if(item.owner_yesno === true) {
-                                                result +='<h5>Là chủ sở hữu</h5>';
-                                            } else {
-                                                result +='<h5>Không phải chủ sở hữu</h5>';
+                                          var item2 = $('#serialReminderDropdown').data("kendoDropDownList").dataItem($(e.target));
+                                          if(item.device_serial !== '') {
+                                            console.log(item);
+                                            //   console.log(item.device_serial);
+                                              if(item.device_serial == '' || item.device_serial == undefined) {
+                                                  var result = "NO";
+                                                  return result;
+                                              } else {
+                                                var result = '<h4>Mã thiết bị: '+item.device_serial+'</h4>'+'<h5>Tên thiết bị: '+item.device_name+'</h5>';
+                                                if(item.owner_yesno === true) {
+                                                    result +='<h5>Là chủ sở hữu</h5>';
+                                                } else {
+                                                    result +='<h5>Không phải chủ sở hữu</h5>';
+                                                }
+                                                return result;
                                             }
-                                            return result;
                                           }
-                                         
+                                          if(item2.device_serial !== '') {
+                                            console.log(item2);
+                                            //   console.log(item.device_serial);
+                                              if(item2.device_serial == '' || item2.device_serial == undefined) {
+                                                  var result = "NO";
+                                                  return result;
+                                              } else {
+                                                var result = '<h4>Mã thiết bị: '+item2.device_serial+'</h4>'+'<h5>Tên thiết bị: '+item2.device_name+'</h5>';
+                                                if(item2.owner_yesno === true) {
+                                                    result +='<h5>Là chủ sở hữu</h5>';
+                                                } else {
+                                                    result +='<h5>Không phải chủ sở hữu</h5>';
+                                                }
+                                                return result;
+                                            }
+                                          }
                                         },
                                         width: 150,
                                         height: 150
@@ -624,12 +808,12 @@ angular.module('app')
                 }
             }
         }
-        vm.productData = {
+        vm.reminderProductData = {
             type: "odata-v4",
             serverFiltering: true,
             transport: {
                 read: {
-                    url: "https://demos.telerik.com/kendo-ui/service-v4/odata/Products",
+                    url: _productTypeOdata,
                 }
             }
         }
@@ -696,8 +880,7 @@ angular.module('app')
             var json = JSON.stringify( vm.crtagSelectected, function( key, value ) {
                 if( key === "$$hashKey" ) {
                     return undefined;
-                }
-            
+                }   
                 return value;
             });
             vm.crtagSelectected = JSON.parse(json);
@@ -706,14 +889,20 @@ angular.module('app')
             vm.eventCRDetails.DateSold = time.utc().format();
             vm.eventCR.DetailEvents.push(vm.eventCRDetails);
             vm.eventCR.Tags = vm.crtagSelectected;
-            vm.eventCR.Serial = vm.serialSelectedData.ID;
-            console.log(vm.systemCustomer);
-            console.log(vm.eventProductTypeSelectedData);
-            console.log(vm.serialSelectedData);
-            console.log(vm.eventCRDetails);
-            console.log(vm.crtagSelectected);
-            console.log(vm.eventCR);
-           
+            vm.eventCRDetails.Serial = vm.serialSelectedData.device_serial;
+            if(vm.eventCR.CustomerID == undefined || vm.eventCR.CustomerID === "") {
+                toaster.pop('error', "Thiếu thông tin", "Thiếu thông tin khách hàng");
+            } else if(vm.eventCR.DetailEvents.length < 1) {
+                toaster.pop('error', "Thiếu thông tin", "Vui lòng chọn ít nhất");
+            } else if(vm.eventCR.Tags.length < 1) {
+                toaster.pop('error', "Thiếu thông tin", "Vui lòng chọn ít nhất một tag phòng ban");
+            }
+            // console.log(vm.systemCustomer);
+            // console.log(vm.eventProductTypeSelectedData);
+            // console.log(vm.serialSelectedData);
+            // console.log(vm.eventCRDetails);
+            // console.log(vm.crtagSelectected);
+            // console.log(vm.eventCR);
             $http({
                 url: _eventURL,
                 method: 'POST',
@@ -727,7 +916,49 @@ angular.module('app')
             })
             .then(function(response){
                 if(response.status == 201) {
-                    toaster.pop('success', "Thành công", "Đã tạo phiếu thành công");
+                    $scope.tab2Invisible = false;
+                    toaster.pop('success', "Thành công", "Đã tạo phiếu thành công");                 
+                }
+            });
+        }
+        $scope.reminderCreate = function () {
+            console.log("Create reminder pressed");
+
+            var time = moment(vm.reminderCRDetails.ReminderDate);
+            var json = JSON.stringify( vm.reminderTagSelected, function( key, value ) {
+                if( key === "$$hashKey" ) {
+                    return undefined;
+                }
+            
+                return value;
+            });
+            vm.reminderTagSelected = JSON.parse(json);
+            console.log(vm.reminderTagSelected);
+            vm.reminderCR.CustomerID = vm.systemCustomer.ID;
+            vm.reminderCRDetails.ReminderDate = time.utc().format();
+            vm.reminderCR.ReminderNotes.push(vm.reminderCRDetails);
+            vm.reminderCR.Tags = vm.reminderTagSelected;
+            vm.reminderCRDetails.Serial = vm.reminderSerialSelectedData.device_serial;
+            console.log(vm.systemCustomer);
+            console.log(vm.reminderProductTypeSelectedData);
+            console.log(vm.reminderSerialSelectedData);
+            console.log(vm.reminderCRDetails);
+            console.log(vm.reminderTagSelected);
+            console.log(vm.reminderCR);
+            $http({
+                url: _eventURL,
+                method: 'POST',
+                data: JSON.stringify(vm.reminderCR),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                },
+            }).error(function(response) {
+                toaster.pop('error', "Thất bại", response.error.innererror.message);
+            })
+            .then(function(response){
+                if(response.status == 201) {
+                    toaster.pop('success', "Thành công", "Đã tạo lịch hẹn thành công");
                 }
             });
         }
