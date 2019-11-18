@@ -236,7 +236,6 @@ angular.module('app')
         $scope.onEventSelChanged = function() {
             $scope.purDis = 1;
             
-            vm.onPurSelChanged = undefined;
             if(vm.selectedEventData !== " Mục đích... ") {
                 var tabStrip = $("#eventTabstrip").kendoTabStrip().data("kendoTabStrip");
                 $("#purposedropdown").data("kendoDropDownList").dataSource.read().then(function() {
@@ -676,7 +675,7 @@ angular.module('app')
                 // console.log(response.data.d);
                 // console.log(response.data.d.Info);
                 if(response.data.d.Success === true) {
-                    vm.pitechCutomer = response.data.d.Item;
+                    vm.pitechCustomer = response.data.d.Item;
                     $http({
                         url: _pitechCusURL,
                         method: 'POST',
@@ -695,7 +694,7 @@ angular.module('app')
                         // console.log(response.data.d);
                         // console.log(response.data.d.Info);
                         if(response.data.d.Success === true) {
-                            vm.pitechCutomer = response.data.d.Item;
+                            vm.pitechCustomer = response.data.d.Item;
                             $http({
                                 url: _pitechDevURL,
                                 method: 'POST',
@@ -772,7 +771,7 @@ angular.module('app')
                                         width: 150,
                                         height: 150
                                       });
-                                    console.log(vm.serialData);
+                                    // console.log(vm.serialData);
                                 } else {
                                     console.log("Không có thông tin")
                                 }
@@ -798,7 +797,7 @@ angular.module('app')
         // function onCityDropChange(e) {
         //     alert(vm.selectedCity);
         // }
-        vm.pitechCutomer = {};
+        vm.pitechCustomer = {};
         vm.purposeData = {
             type: "jsonp",
             serverFiltering: true,
@@ -917,6 +916,10 @@ angular.module('app')
             .then(function(response){
                 if(response.status == 201) {
                     $scope.tab2Invisible = false;
+                    $scope.tab1Inisible = true;
+                    var tabstrip = $("#eventTabstrip").data("kendoTabStrip");
+                    var myTab = tabstrip.tabGroup.children("li").eq(1);
+                    tabstrip.select(myTab);
                     toaster.pop('success', "Thành công", "Đã tạo phiếu thành công");                 
                 }
             });
@@ -932,6 +935,7 @@ angular.module('app')
             
                 return value;
             });
+            
             vm.reminderTagSelected = JSON.parse(json);
             console.log(vm.reminderTagSelected);
             vm.reminderCR.CustomerID = vm.systemCustomer.ID;
@@ -959,8 +963,75 @@ angular.module('app')
             .then(function(response){
                 if(response.status == 201) {
                     toaster.pop('success', "Thành công", "Đã tạo lịch hẹn thành công");
+                    location.reload();    
                 }
             });
+        }
+        $scope.transferInfo = function() {
+            vm.systemCustomer.Name = vm.pitechCustomer.customer_fullname;
+            vm.systemCustomer.Address = vm.pitechCustomer.customer_address;
+            //Transfer the city from pitech information
+            if(vm.pitechCustomer.customer_province !== undefined && vm.pitechCustomer.customer_province !== "") {
+                var City = $('#citydropdown').data('kendoDropDownList');
+                City.select(function (dataItem) {
+                    return dataItem.name === vm.pitechCustomer.customer_province;
+                });
+                var itemSelected = City.dataItem();
+                vm.systemCustomer.City = City.text();
+                vm.cityCode = itemSelected.code;
+                var district = $('#districtdropdown').data("kendoDropDownList");
+                district.dataSource.transport.options.read.url = _districtURL+"?$filter=parent_code eq '" + vm.cityCode + "'&$orderby=name&$top=100";
+    
+                //Transfer the district from pitech information
+                vm.systemCustomer.District = vm.pitechCustomer.customer_district;
+                if(vm.systemCustomer.District !== undefined && vm.systemCustomer.District !== "") {            
+                    $http({
+                        method: 'GET',
+                        url: _districtURL+"?$filter=trim(name_with_type) eq '" + vm.systemCustomer.District + "'",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                        },
+                      }).then(function successCallback(response) {
+                          if(response.data.value.length > 0) {   
+                            //Check the filter city by this code
+                            // console.log('got the city by filter');
+                            vm.districtCode = response.data.value[0].code;
+                            district.dataSource.read().then(function() {
+                                $scope.districtDis = 0;
+                            });
+                            district.select(function(dataItem) {
+                                $scope.districtDis = 0;                 
+                                return dataItem.name_with_type === vm.systemCustomer.District;
+                            });
+                            vm.systemCustomer.Ward = vm.pitechCustomer.customer_ward;
+                            var ward = $('#warddropdown').data("kendoDropDownList");
+                            //Check the code of district is loaded
+                            //console.log('Districtcode: ' + vm.districtCode);
+                            ward.dataSource.transport.options.read.url = _wardURL+"?$filter=parent_code eq '" +  vm.districtCode + "'&$orderby=name&$top=100";
+                            ward.dataSource.read().then(function(){
+                                    //Check if there is ward data load on the server
+                                    //console.log('reloaded the ward data');
+                                    if(vm.systemCustomer.Ward !== undefined && vm.systemCustomer.Ward !== "") {     
+                                        ward.select(function(dataItem) {
+                                            $scope.wardDis = 0;
+                                            return dataItem.name_with_type === vm.systemCustomer.Ward;
+                                        });
+                                    }
+                                }
+                            );
+                           
+                          } else 
+                          {
+                            //If no found, show here
+                            //console.log('no found');
+                          }
+                        
+                        }, function errorCallback(response) {
+                          console.log(response);
+                    });             
+                }
+            }
         }
         $scope.initialEventCreationCtrl = function() {  
         }
