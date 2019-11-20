@@ -94,9 +94,21 @@
                                          />
                                     </div>
                                 </div>
-                                <div class="row col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group" style="padding-top: 10px;">
                                         <button class="btn btn-success btn-default" ng-click="vm.creUpdCusClicked()">Tạo mới / Chỉnh sửa</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-info btn-default" title="Lịch sử tương tác với khách hàng">
+                                        <i class="fa fa-file"></i>
+                                        Lịch sử
+                                    </button>
+                                    <div class="demo-section k-content">
+                                        <button class="k-button" ng-click="win1.open()">Open Calendar</button>
+                                    </div>
+                                    <div kendo-window="win1" k-title="'Calendar'" k-on-open="win1visible = true" k-on-close="win1visible = false">
+                                        <div kendo-calendar></div>
                                     </div>
                                 </div>
                             </form>
@@ -110,31 +122,48 @@
                             <form role="form">
                                 <div class="form-group">
                                     <label><b>Tên khách hàng</b></label>
-                                    <p class="form-control-static">{{vm.pitechCutomer.customer_fullname}}</p>
+                                    <p class="form-control-static">{{vm.pitechCustomer.customer_fullname}}</p>
                                 </div>
                                 <div class="form-group">
                                     <label><b>Địa chỉ</b></label>
                                     <p class="form-control-static">
-                                        {{vm.pitechCutomer.customer_address}}
+                                        {{vm.pitechCustomer.customer_address}}
                                     </p>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label><b>Thành phố / Tỉnh</b></label>
-                                        <p class="form-control-static">  {{vm.pitechCutomer.customer_province}}</p>
+                                        <p class="form-control-static">  {{vm.pitechCustomer.customer_province}}</p>
                                     </div>
                                     <div class="col-md-6">
                                         <label><b>Quận / Huyện</b></label>
-                                        <p class="form-control-static">  {{vm.pitechCutomer.customer_district}}</p>
+                                        <p class="form-control-static">  {{vm.pitechCustomer.customer_district}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label><b>Phường / Xã</b></label>
+                                        <p class="form-control-static">  {{vm.pitechCustomer.customer_ward}}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label><b>Ngày sinh</b></label>
+                                        <p class="form-control-static">  {{vm.pitechCustomer.customer_birthday}}</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label><b>Phường / Xã</b></label>
-                                    <p class="form-control-static">  {{vm.pitechCutomer.customer_ward}}</p>
+                                    <div class="form-group">
+                                        <label><b>Tùy chọn</b></label>
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label><b>Ngày sinh</b></label>
-                                    <p class="form-control-static">  {{vm.pitechCutomer.customer_birthday}}</p>
+                                    <button class="btn btn-success btn-default" title="Lấy thông tin từ Pitech" ng-click="transferInfo()">
+                                        <i class="fa fa-mail-reply-all"></i>
+                                        Transfer
+                                    </button>                        
+                                    <button class="btn btn-info btn-default" title="Gửi yêu cầu thay đổi thông tin cho Pitech">
+                                        <i class="fa fa-comments-o"></i>
+                                        Gửi yêu cầu
+                                    </button>
                                 </div>
                             </form>
                         </div>
