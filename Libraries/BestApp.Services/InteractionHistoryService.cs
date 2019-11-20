@@ -24,9 +24,11 @@ namespace BestApp.Services
             Task<InteractionHistoryViewModel> UpdateAsync(InteractionHistoryViewModel model);
             Task<IQueryable<InteractionHistoryViewModel>> GetAllInteractionHistorysAsync();
             IQueryable<InteractionHistory> GetAllInteractionHistorys();
+            IEnumerable<InteractionHistoryGroupViewModel> GetInteractionHistoryByCustomer(SearchViewModel model);
             bool Delete(Guid Id);
         }
         private readonly EventService _eventService;
+        private readonly CustomerService _customerService;
         private readonly IRepositoryAsync<InteractionHistory> _repository;
         private readonly IRepository<ApplicationUser> _userRepository;
         protected readonly DataContext db;
@@ -36,6 +38,7 @@ namespace BestApp.Services
              CustomerService customerService) : base(repository)
         {
             _eventService = eventService;
+            _customerService = customerService;
             _repository = repository;
             db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
@@ -57,6 +60,51 @@ namespace BestApp.Services
                 CreatDate = x.CreatDate,
                 Note = x.Note
             }));
+        }
+      
+        public IEnumerable<InteractionHistoryGroupViewModel> GetInteractionHistoryByCustomer(SearchViewModel model)
+        {
+            var findCus = _customerService.Queryable().Where(x => x.PhoneNumber == model.PhoneNumber && x.Delete == false).FirstOrDefault();
+            if(findCus != null)
+            {
+                var result = new List<InteractionHistoryGroupViewModel>();
+                var result1 = new InteractionHistoryGroupViewModel();
+                //result1.CustomerName = findCus.Name;
+                //result1.CustomerPhone = findCus.PhoneNumber;
+                var listEvent = _eventService.Queryable().Where(x => x.Customer.Id == findCus.Id).ToList();
+                if(listEvent != null)
+                {
+                    foreach(var item in listEvent)
+                    {
+                        var history = Queryable().Where(x => x.Event.Id == item.Id).ToList();
+                        if(history != null)
+                        {
+                            foreach(var itemHistory in history)
+                            {
+                                var Object1 = new InteractionHistoryViewModel();
+                                Object1.ID = itemHistory.Id;
+                                Object1.CreatDate = itemHistory.CreatDate;
+                                Object1.EmployeeCall = itemHistory.EmployeeCall;
+                                Object1.EmployeeID = itemHistory.EmployeeID;
+                                Object1.EventCode = item.Code;
+                                result1.HistoryList.Add(Object1);
+                            }
+                        }
+                        
+                    }
+                    result.Add(result1);
+                }
+                else
+                {
+                    throw new Exception("Không tìm thấy lịch sử tương tác");
+                }
+                
+                return result;
+            }
+            else
+            {
+                throw new Exception("Không tìm thấy khách hàng");
+            }
         }
         public InteractionHistory Insert(InteractionHistoryViewModel model)
         {

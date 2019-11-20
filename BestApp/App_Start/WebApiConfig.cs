@@ -27,6 +27,10 @@ namespace BestApp
             builder.EntitySet<ReminderNoteViewModel>("ReminderNotes");
             builder.EntitySet<DetailEventViewModel>("DetailEvents");
             builder.EntitySet<InteractionHistoryViewModel>("InteractionHistorys");
+            builder.EntityType<InteractionHistoryViewModel>()
+                .Collection
+                .Function("GetInteractionHistoryByCustomer")
+                .Returns<InteractionHistoryGroupViewModel>();
             builder.EntitySet<EventViewModel>("Events");
             builder.EntitySet<ProductTypeViewModel>("ProductTypes");
             builder.EntitySet<WardViewModel>("Wards");

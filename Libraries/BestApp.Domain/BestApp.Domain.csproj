@@ -48,6 +48,7 @@
     <Compile Include="DetailEventViewModel.cs" />
     <Compile Include="DistrictViewModel.cs" />
     <Compile Include="EventViewModel.cs" />
+    <Compile Include="InteractionHistoryGroupViewModel.cs" />
     <Compile Include="InteractionHistoryViewModel.cs" />
     <Compile Include="ProductTypeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

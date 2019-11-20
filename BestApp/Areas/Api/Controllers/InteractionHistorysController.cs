@@ -1,4 +1,5 @@
 ﻿using BestApp.Domain;
+using BestApp.Models;
 using Microsoft.AspNet.OData;
 using Repository.UnitOfWork;
 using System;
@@ -27,6 +28,11 @@ namespace BestApp.Areas.Api.Controllers
         public async Task<IQueryable<InteractionHistoryViewModel>> Get()
         {
             return await _interactionHistoryService.GetAllInteractionHistorysAsync();
+        }
+
+        public IEnumerable<InteractionHistoryGroupViewModel> GetInteractionHistoryByCustomer([FromUri]SearchViewModel model)
+        {
+            return _interactionHistoryService.GetInteractionHistoryByCustomer(model);
         }
         [HttpPost]
         public async Task<IHttpActionResult> Post(InteractionHistoryViewModel model)
@@ -82,5 +88,6 @@ namespace BestApp.Areas.Api.Controllers
             return StatusCode(HttpStatusCode.OK);
 
         }
+       
     }
 }
