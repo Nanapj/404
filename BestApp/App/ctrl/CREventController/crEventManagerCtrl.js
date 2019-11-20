@@ -3,8 +3,9 @@ angular.module('app')
     .controller('crEventManagerCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', function ($scope, $state, $stateParams, $http, toaster){
         var vm = this; 
         var _url = "/odata/Staffs";
+        var _crEventURL = "/odata/Events";
         vm.handleDateRange = handleDateRange;
-        vm.selectedStaff = {};
+        vm.selectedEvent = {};
         vm.tagsList = [
             { "Name" : "Tag A" , "Id" : "1"},
             { "Name" : "Tag B" , "Id" : "2"},
@@ -122,7 +123,7 @@ angular.module('app')
             dataSource: {
                 type: "odata-v4",
                 transport: {
-                    read: _url
+                    read: _crEventURL
                 },
                 pageSize: 50,
                 serverPaging: true,
@@ -135,24 +136,27 @@ angular.module('app')
             change: onChange,
             columns: [
                 {
-                    field: "FullName",
-                    title: "Họ tên",
+                    field: "Code",
+                    title: "Mã Phiếu",
                     width: "50px"
                 },
                 {
-                    field: "Phone",
+                    field: "CustomerName",
+                    title: "Tên khách hàng",
+                    width: "50px"
+                },
+                {
+                    field: "PhoneNumber",
                     title: "Số điện thoại",
-                    width: "50px"
-                },
-                {
-                    field: "Email",
-                    title: "Email",
                     width: "50px"
                 },
                 {
                     field: "Address",
                     title: "Địa chỉ",
                     width: "80px"
+                },
+                {
+
                 },
                 { command: [{ text: "Chi tiết", click: showDetails },{text: "Sửa", click: showEditDetails }], title: " Tùy chỉnh ", width: "200px" }
             ]
@@ -284,9 +288,9 @@ angular.module('app')
             wnd.center().open();
         }
         function onChange(e) {
-            var grid = $('#staffgrid').data('kendoGrid');
+            var grid = $('#eventGrid').data('kendoGrid');
             var selectedItem = grid.dataItem(grid.select());
-            vm.selectedStaff = selectedItem;
+            vm.selectedEvent = selectedItem;
         }
     }
 ]);
