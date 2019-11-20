@@ -29,6 +29,8 @@ namespace BestApp.Services
             bool Delete(Guid Id);
         }
         private readonly TagService _tagService;
+        private readonly EventTypeService _eventTypeService;
+        private readonly EventPurposeService _eventPurposeService;
         private readonly CustomerService _customerService;
         private readonly ProductTypeService _productTypeService;
         private readonly IRepositoryAsync<Event> _repository;
@@ -37,11 +39,15 @@ namespace BestApp.Services
         protected UserManager<ApplicationUser> userManager;
         public EventService(IRepositoryAsync<Event> repository,
              TagService tagService,
+             EventTypeService eventTypeService,
+             EventPurposeService eventPurposeService,
              CustomerService customerService,
              ProductTypeService productTypeService) : base(repository)
         {
             _tagService = tagService;
             _customerService = customerService;
+            _eventTypeService = eventTypeService;
+            _eventPurposeService = eventPurposeService;
             _productTypeService = productTypeService;
             _repository = repository;
            db = new DataContext();
@@ -82,7 +88,8 @@ namespace BestApp.Services
                 CustomerName = x.Customer.Name,
                 Address = x.Customer.Address,
                 PhoneNumber = x.Customer.PhoneNumber,
-                TypeEvent = x.TypeEvent,
+                EventTypeName = _eventTypeService.Find(x.EventTypeId).Name,
+                EventPurposeName = _eventPurposeService.Find(x.EventPurposeId).Name,
                 Status = x.Status,
                 UserName = x.UserAccount.UserName,
                 Note = x.Note,
@@ -125,7 +132,8 @@ namespace BestApp.Services
             data.Customer = _customerService.Find(model.CustomerID);
             data.Status = model.Status;
             data.EmployeeID = model.CustomerID;
-            data.TypeEvent = model.TypeEvent;
+            data.EventPurposeId = model.EventPurposeID;
+            data.EventTypeId = model.EventTypeID;
             data.Note = model.Note;
                 
             //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
@@ -211,7 +219,8 @@ namespace BestApp.Services
             var data = Find(model.ID);
             if (data != null)
             {
-                data.TypeEvent = model.TypeEvent;
+                data.EventTypeId = model.EventTypeID;
+                data.EventPurposeId = model.EventPurposeID;
                 data.Note = model.Note;
                 data.Status = model.Status;
                 data.LastModifiedDate = DateTime.Now;

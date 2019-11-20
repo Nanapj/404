@@ -47,6 +47,8 @@
     <Compile Include="DepartmentViewModel.cs" />
     <Compile Include="DetailEventViewModel.cs" />
     <Compile Include="DistrictViewModel.cs" />
+    <Compile Include="EventPurposeViewModel.cs" />
+    <Compile Include="EventTypeViewModel.cs" />
     <Compile Include="EventViewModel.cs" />
     <Compile Include="InteractionHistoryGroupViewModel.cs" />
     <Compile Include="InteractionHistoryViewModel.cs" />

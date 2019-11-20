@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace BestApp.Domain
 {
-    public class ProductTypeViewModel
+    public class EventPurposeViewModel
     {
         public Guid? ID { get; set; }
         public string Name { get; set; }
-        public string Code { get; set; }
-        public List<DetailEventViewModel> DetailEvents { get; set; } = new List<DetailEventViewModel>();
+        public Guid? EventTypeID { get; set; }
+        public string EventTypeName { get; set; }
     }
 }

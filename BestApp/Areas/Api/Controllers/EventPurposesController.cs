@@ -8,29 +8,28 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using static BestApp.Services.EventService;
+using static BestApp.Services.EventPurposeService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class EventsController : ODataController
+    public class EventPurposesController : ODataController
     {
-        private readonly IEventService _eventService;
+        private readonly IEventPurposeService _eventPurposeService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
-        // GET: Api/Tags
-        public EventsController(IEventService eventService, IUnitOfWorkAsync unitOfWorkAsync)
+        // GET: Api/Department
+        public EventPurposesController(IEventPurposeService eventPurposeService, IUnitOfWorkAsync unitOfWorkAsync)
         {
-            _eventService = eventService;
+            _eventPurposeService = eventPurposeService;
             _unitOfWorkAsync = unitOfWorkAsync;
         }
         [HttpGet]
         [EnableQuery]
-        public async Task<IQueryable<EventViewModel>> Get([FromUri] SearchViewModel model)
+        public async Task<IQueryable<EventPurposeViewModel>> Get()
         {
-            var result = await _eventService.GetAllEventsAsync(model);
-            return result;
+            return await _eventPurposeService.GetAllEventPurposesAsync();
         }
         [HttpPost]
-        public async Task<IHttpActionResult> Post(EventViewModel model)
+        public async Task<IHttpActionResult> Post(EventPurposeViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -39,27 +38,23 @@ namespace BestApp.Areas.Api.Controllers
 
             try
             {
-                var stf = await _eventService.InsertAsync(model);
+                var stf = await _eventPurposeService.InsertAsync(model);
                 _unitOfWorkAsync.Commit();
-                var resultObject = new EventViewModel()
+                var resultObject = new EventPurposeViewModel()
                 {
-                    Code = stf.Code,
-                    Status = stf.Status,
-                    CustomerID = stf.Customer.Id,
-                    CustomerName = stf.Customer.Name,
-                    Note = stf.Note,
                     ID = stf.Id,
+                    Name = stf.Name,
+
                 };
                 return Created(resultObject);
-               
             }
             catch (Exception ex)
             {
-               
+
                 throw ex;
             }
         }
-        public async Task<IHttpActionResult> Put(Guid key, EventViewModel model)
+        public async Task<IHttpActionResult> Put(Guid key, EventPurposeViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -67,7 +62,7 @@ namespace BestApp.Areas.Api.Controllers
             }
             try
             {
-                await _eventService.UpdateAsync(model);
+                await _eventPurposeService.UpdateAsync(model);
                 _unitOfWorkAsync.Commit();
                 return Updated(model);
             }
@@ -80,7 +75,7 @@ namespace BestApp.Areas.Api.Controllers
 
         public IHttpActionResult Delete(Guid key)
         {
-            _eventService.Delete(key);
+            _eventPurposeService.Delete(key);
             _unitOfWorkAsync.Commit();
             return StatusCode(HttpStatusCode.OK);
 

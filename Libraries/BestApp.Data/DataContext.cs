@@ -35,6 +35,8 @@ namespace Repository.Pattern
         public DbSet<City> Citys { get; set; }
         public DbSet<Ward> Wards { get; set; }
         public DbSet<District> Districts { get; set; }
+        public DbSet<EventPurpose> EventPurposes { get; set; }
+        public DbSet<EventType> EventTypes { get; set; }
 
         public override int SaveChanges()
         {

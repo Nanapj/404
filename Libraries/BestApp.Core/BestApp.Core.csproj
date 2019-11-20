@@ -68,6 +68,8 @@
     <Compile Include="Models\District.cs" />
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\EventPurpose.cs" />
+    <Compile Include="Models\EventType.cs" />
     <Compile Include="Models\InteractionHistory.cs" />
     <Compile Include="Models\ProductType.cs" />
     <Compile Include="Models\ReminderNote.cs" />

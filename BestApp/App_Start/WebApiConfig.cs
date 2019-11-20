@@ -30,12 +30,14 @@ namespace BestApp
             builder.EntityType<InteractionHistoryViewModel>()
                 .Collection
                 .Function("GetInteractionHistoryByCustomer")
-                .Returns<InteractionHistoryGroupViewModel>();
+                .ReturnsCollectionFromEntitySet<InteractionHistoryGroupViewModel>("InteractionHistory");
             builder.EntitySet<EventViewModel>("Events");
             builder.EntitySet<ProductTypeViewModel>("ProductTypes");
             builder.EntitySet<WardViewModel>("Wards");
             builder.EntitySet<CityViewModel>("Cities");
             builder.EntitySet<DistrictViewModel>("Districts");
+            builder.EntitySet<EventPurposeViewModel>("EventPurposes");
+            builder.EntitySet<EventTypeViewModel>("EventTypes");
             config.Formatters.Remove(config.Formatters.XmlFormatter);
             IEdmModel model = builder.GetEdmModel();
             // Web API routes

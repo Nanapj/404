@@ -61,7 +61,9 @@
     <Compile Include="DepartmentService.cs" />
     <Compile Include="DetailEventService.cs" />
     <Compile Include="DistrictService.cs" />
+    <Compile Include="EventPurposeService.cs" />
     <Compile Include="EventService.cs" />
+    <Compile Include="EventTypeService.cs" />
     <Compile Include="InteractionHistoryService.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="ProductTypeService.cs" />

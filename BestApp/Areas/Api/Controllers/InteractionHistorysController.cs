@@ -29,10 +29,12 @@ namespace BestApp.Areas.Api.Controllers
         {
             return await _interactionHistoryService.GetAllInteractionHistorysAsync();
         }
+        [HttpGet]
         [EnableQuery]
         public IEnumerable<InteractionHistoryGroupViewModel> GetInteractionHistoryByCustomer([FromUri]SearchViewModel model)
         {
-            return _interactionHistoryService.GetInteractionHistoryByCustomer(model);
+            var result = _interactionHistoryService.GetInteractionHistoryByCustomer(model);
+            return result;
         }
         [HttpPost]
         public async Task<IHttpActionResult> Post(InteractionHistoryViewModel model)

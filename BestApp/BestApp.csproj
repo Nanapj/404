@@ -247,7 +247,9 @@
     <Compile Include="Areas\Api\Controllers\DepartmentsController.cs" />
     <Compile Include="Areas\Api\Controllers\DetailEventsController.cs" />
     <Compile Include="Areas\Api\Controllers\DistrictsController.cs" />
+    <Compile Include="Areas\Api\Controllers\EventPurposesController.cs" />
     <Compile Include="Areas\Api\Controllers\EventsController.cs" />
+    <Compile Include="Areas\Api\Controllers\EventTypesController.cs" />
     <Compile Include="Areas\Api\Controllers\InteractionHistorysController.cs" />
     <Compile Include="Areas\Api\Controllers\ProductTypesController.cs" />
     <Compile Include="Areas\Api\Controllers\ReminderNotesController.cs" />
@@ -320,7 +322,9 @@
     <Folder Include="Areas\Api\Views\Department\" />
     <Folder Include="Areas\Api\Views\DetailEvents\" />
     <Folder Include="Areas\Api\Views\Districts\" />
+    <Folder Include="Areas\Api\Views\EventPurposes\" />
     <Folder Include="Areas\Api\Views\Events\" />
+    <Folder Include="Areas\Api\Views\EventTypes\" />
     <Folder Include="Areas\Api\Views\InteractionHistorys\" />
     <Folder Include="Areas\Api\Views\ProductType\" />
     <Folder Include="Areas\Api\Views\ReminderNotes\" />

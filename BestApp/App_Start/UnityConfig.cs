@@ -21,7 +21,9 @@ using static BestApp.Services.CustomerService;
 using static BestApp.Services.DepartmentService;
 using static BestApp.Services.DetailEventService;
 using static BestApp.Services.DistrictService;
+using static BestApp.Services.EventPurposeService;
 using static BestApp.Services.EventService;
+using static BestApp.Services.EventTypeService;
 using static BestApp.Services.InteractionHistoryService;
 using static BestApp.Services.ProductTypeService;
 using static BestApp.Services.ReminderNoteService;
@@ -64,6 +66,8 @@ namespace BestApp
             .RegisterType<IDistrictService, DistrictService>()
             .RegisterType<IWardService, WardService>()
             .RegisterType<ICityService, CityService>()
+            .RegisterType<IEventTypeService, EventTypeService>()
+            .RegisterType<IEventPurposeService, EventPurposeService>()
             .RegisterType<UserManager<ApplicationUser>>(new HierarchicalLifetimeManager())
             .RegisterType<AccountController>(new InjectionConstructor())
             .RegisterType<ManageController>(new InjectionConstructor());

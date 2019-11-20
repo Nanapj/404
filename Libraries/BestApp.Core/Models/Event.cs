@@ -10,7 +10,8 @@ namespace BestApp.Core.Models
     public class Event:Entity
     {
         public string Code { get; set; }
-        public string TypeEvent { get; set; }
+        public Guid EventTypeId { get; set; }
+        public Guid EventPurposeId { get; set; }
         public StatusEvent Status { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
         public List<DetailEvent> DetailEvents { get; set; }

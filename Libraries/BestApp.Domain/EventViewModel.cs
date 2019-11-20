@@ -10,6 +10,8 @@ namespace BestApp.Domain
     public class EventViewModel
     {
         public Guid? ID { get; set; }
+        public Guid EventTypeID { get; set; }
+        public Guid EventPurposeID { get; set; }
         public string Code { get; set; }
         public Guid? CustomerID { get; set; }
         public string CustomerName { get; set; }
@@ -18,7 +20,8 @@ namespace BestApp.Domain
         public DateTime Birthday { get; set; }
         public string Type { get; set; }
         public string Note { get; set; }
-        public string TypeEvent { get; set; }
+        public string EventTypeName { get; set; }
+        public string EventPurposeName { get; set; }
         public StatusEvent Status { get; set; }
         public List<TagViewModel> Tags { get; set; } = new List<TagViewModel>();
         public List<DetailEventViewModel> DetailEvents { get; set; } = new List<DetailEventViewModel>();
