@@ -85,6 +85,7 @@ namespace BestApp.Services
                 TypeEvent = x.TypeEvent,
                 Status = x.Status,
                 UserName = x.UserAccount.UserName,
+                Note = x.Note,
                 Tags = x.Tags.Select(t => new TagViewModel
                 {
                     ID = t.Id,
@@ -125,6 +126,7 @@ namespace BestApp.Services
             data.Status = model.Status;
             data.EmployeeID = model.CustomerID;
             data.TypeEvent = model.TypeEvent;
+            data.Note = model.Note;
                 
             //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
             if (model.DetailEvents != null)
@@ -210,6 +212,7 @@ namespace BestApp.Services
             if (data != null)
             {
                 data.TypeEvent = model.TypeEvent;
+                data.Note = model.Note;
                 data.Status = model.Status;
                 data.LastModifiedDate = DateTime.Now;
             }

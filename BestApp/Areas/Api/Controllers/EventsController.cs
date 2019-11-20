@@ -48,6 +48,7 @@ namespace BestApp.Areas.Api.Controllers
                     Status = stf.Status,
                     CustomerID = stf.Customer.Id,
                     CustomerName = stf.Customer.Name,
+                    Note = stf.Note,
                     ID = stf.Id,
                 };
                 return Created(resultObject);

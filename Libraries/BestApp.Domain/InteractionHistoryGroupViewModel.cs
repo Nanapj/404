@@ -10,6 +10,7 @@ namespace BestApp.Domain
     {
         //public string CustomerName { get; set; }
         //public string CustomerPhone { get; set; }
+        public Guid? Id { get; set; }
         public List<InteractionHistoryViewModel> HistoryList { get; set; } = new List<InteractionHistoryViewModel>();
     }
 }

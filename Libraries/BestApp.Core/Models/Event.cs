@@ -18,6 +18,7 @@ namespace BestApp.Core.Models
         public List<ReminderNote> ReminderNotes { get; set; }
         public virtual Customer Customer { get; set; }
         public Guid? EmployeeID { get; set; }
+        public string Note { get; set; }
     }
 }
   

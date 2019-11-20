@@ -29,7 +29,7 @@ namespace BestApp.Areas.Api.Controllers
         {
             return await _interactionHistoryService.GetAllInteractionHistorysAsync();
         }
-
+        [EnableQuery]
         public IEnumerable<InteractionHistoryGroupViewModel> GetInteractionHistoryByCustomer([FromUri]SearchViewModel model)
         {
             return _interactionHistoryService.GetInteractionHistoryByCustomer(model);
