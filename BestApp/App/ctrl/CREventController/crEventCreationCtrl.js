@@ -77,6 +77,14 @@ angular.module('app')
         //     }
         // };
         //genegrate GUID()
+        function compareDate(str1){
+            // str1 format should be dd/mm/yyyy. Separator can be anything e.g. / or -. It wont effect
+            var dt1   = parseInt(str1.substring(0,2));
+            var mon1  = parseInt(str1.substring(3,5));
+            var yr1   = parseInt(str1.substring(6,10));
+            var date1 = new Date(yr1, mon1-1, dt1);
+            return date1;
+            }
         $scope.crTagItemClicked = function(item,_this,index) {
             var idButtonClicked = "#crbutton"+item.ID;
             if($(idButtonClicked).css("background-color") !== 'rgb(66, 133, 244)'){
@@ -282,7 +290,7 @@ angular.module('app')
                if(response.data.d.Success === true) {
                     console.log(response.data.d.Item);
                     vm.eventCRDetails.AgencySold = response.data.d.Item.agency_sold;
-                    vm.eventCRDetails.DateSold = response.data.d.Item.date_sold;
+                    vm.eventCRDetails.DateSold = moment(compareDate(response.data.d.Item.date_sold)).format("DD/MM/YYYY");
                     vm.eventCRDetails.AssociateName = response.data.d.Item.associate_name;
                }
             });
@@ -600,10 +608,13 @@ angular.module('app')
                                 'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
                             },
                           }).then(function successCallback(response) {
-                              var scheduler = $("#historyScheduler").data("kendoScheduler");
-                              scheduler.dataSource.transport.options.read.url = _interactURL+"GetInteractionHistoryByCustomer?PhoneNumber="+vm.searchingNumber;
-                              scheduler.dataSource.read();
-                              scheduler.refresh();
+                            //   var scheduler = $("#historyScheduler").data("kendoScheduler");
+                            //   scheduler.dataSource.transport.options.read.url = _interactURL+"GetInteractionHistoryByCustomer?PhoneNumber="+vm.searchingNumber;
+                            //   scheduler.dataSource.read();
+                            //   scheduler.refresh();
+                              var historyGrid = $("#historyGrid").data("kendoGrid");
+                              historyGrid.dataSource.transport.options.read.url = _interactURL+"GetInteractionHistoryByCustomer?PhoneNumber="+vm.searchingNumber;
+                              historyGrid.dataSource.read();
                               if(response.data.value.length > 0) {   
                                 vm.cityCode = response.data.value[0].code;
                                 district.dataSource.transport.options.read.url = _districtURL+"?$filter=parent_code eq '" + vm.cityCode + "'&$orderby=name&$top=100";
@@ -889,7 +900,8 @@ angular.module('app')
         };       
         $scope.crCusCreate = function() {
             console.log("Button Clicked");
-            var time = moment(vm.eventCRDetails.DateSold);
+            var time = moment(compareDate(vm.eventCRDetails.DateSold)).format('YYYY-MM-DDTHH:mm:ss');
+            time+='Z';
             var json = JSON.stringify( vm.crtagSelectected, function( key, value ) {
                 if( key === "$$hashKey" ) {
                     return undefined;
@@ -899,7 +911,7 @@ angular.module('app')
             vm.crtagSelectected = JSON.parse(json);
             console.log(vm.crtagSelectected);
             vm.eventCR.CustomerID = vm.systemCustomer.ID;
-            vm.eventCRDetails.DateSold = time.utc().format();
+            vm.eventCRDetails.DateSold = time;
             vm.eventCR.DetailEvents.push(vm.eventCRDetails);
             vm.eventCR.Tags = vm.crtagSelectected;
             vm.eventCRDetails.Serial = vm.serialSelectedData.device_serial;
@@ -1062,7 +1074,7 @@ angular.module('app')
         $scope.windowOptions = {
             title : 'Lịch sử tương tác',
             width : 800,
-            height : 500,
+            height : 300,
             visible : false,
             actions: [
                 "Pin",
@@ -1147,6 +1159,59 @@ angular.module('app')
                 }
             }
         };
+        $scope.historyGridOptions = {
+            dataSource: {
+                type: "odata-v4",
+                transport: {
+                    read: _interactURL+"GetInteractionHistoryByCustomer?PhoneNumber="+vm.searchingNumber
+                },
+                pageSize: 50,
+                serverPaging: true,
+                serverSorting: true
+            },
+            sortable: true,
+            pageable: true,
+            height: 300,
+            columns: [
+                {
+                    field: "ID",
+                    title: "ID",
+                    width: "50px",
+                    hidden: true
+                },
+                {
+                    field: "Type",
+                    title: "Hình thức tương tác",
+                },
+                {
+                    field:"EventCode",
+                    title:"Mã phiếu"
+                },
+                {
+                    field:"CreatDate",
+                    title:"Ngày tạo",
+                    type:"datetime",
+                    template: "#= kendo.toString(kendo.parseDate(CreatDate, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"
+                }, 
+                {
+                    field: "Note",
+                    title: "Ghi chú"
+                }
+            ]
+        }
+        $scope.contentChanged = function (editor, html, text) {
+            vm.eventCR.Note = text;
+           console.log(vm.eventCR.Note);
+        };
+        $scope.CREventDetailscontentChanged = function(editor, html, text) {
+            vm.eventCRDetails.Note = text;
+        }
+        $scope.reminderContentChanged = function(editor, html, text) {
+            vm.reminderCR.Note = text;
+        }
+        $scope.reminderCRDetailContentChanged =  function(editor, html, text) {
+            vm.reminderCRDetails.Note = text;
+        }
         function onHistoryClose() {
 
         }
