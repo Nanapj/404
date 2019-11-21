@@ -9,7 +9,9 @@ angular.module('app')
         var _districtURL = "/odata/Districts";
         var _wardURL = "/odata/Wards";
         var _tagURL = "/odata/Tags";
+        var _eventTypeURL = "/odata/EventTypes";
         var _productTypeOdata = "/odata/ProductTypes";
+        var _interactURL = "/odata/InteractionHistorys/";
         var _pitechCusURL = "http://api.test.haveyougotpi.com/project404.aspx/GetCustomerInfoByPhone";
         var _pitechDevURL = "http://api.test.haveyougotpi.com/project404.aspx/GetDeviceListByPhoneNumber";
         var _pitechDeviceDetailsURL = "http://api.test.haveyougotpi.com/project404.aspx/GetDeviceInfoBySerialNo";
@@ -31,16 +33,20 @@ angular.module('app')
         vm.reminderProductTypeSelectedData = "";
         vm.reminderEvent = {};
         vm.eventCR = {
-            DetailEvents: []
+            DetailEvents: [],
+            InteractionHistorys: [],
         }
         vm.reminderCR = {
-            ReminderNotes: []
+            ReminderNotes: [],
+            InteractionHistorys: [],
         }
         vm.crDepartmentListTag = [];     
         vm.reminderDepartmentListTag = [];
         vm.crtagSelectected = [];
         vm.reminderTagSelected = [];
         vm.eventCRDetails = {};
+        vm.interactionHistoryObj = {};
+        vm.reminderInteractHistory = {};
         vm.reminderCRDetails = {};
         vm.tooltipsVisible = false;
         vm.serialSelectedData = "";
@@ -51,6 +57,7 @@ angular.module('app')
         vm.reminderSerialData = {
             data: []
         }
+        
         $scope.districtDis = 1;
         $scope.wardDis = 1;
         $scope.eventTypeDis = 1;
@@ -235,17 +242,20 @@ angular.module('app')
         }
         $scope.onEventSelChanged = function() {
             $scope.purDis = 1;
-            
+            console.log(vm.selectedEventData);
             if(vm.selectedEventData !== " Mục đích... ") {
                 var tabStrip = $("#eventTabstrip").kendoTabStrip().data("kendoTabStrip");
-                $("#purposedropdown").data("kendoDropDownList").dataSource.read().then(function() {
-                    $($("#purposedropdown").data("kendoDropDownList").dataItems()).each(function (item) {
-                        if(this.parent_id !== vm.selectedEventData.id) {
-                            $("#purposedropdown").data("kendoDropDownList").dataSource.remove(this);
-                        }
-                    });    
-                });
+                // $("#purposedropdown").data("kendoDropDownList").dataSource.read().then(function() {
+                //     $($("#purposedropdown").data("kendoDropDownList").dataItems()).each(function (item) {
+                //         if(this.parent_id !== vm.selectedEventData.id) {
+                //             $("#purposedropdown").data("kendoDropDownList").dataSource.remove(this);
+                //         }
+                //     });    
+                // });
+                vm.purposeData = vm.selectedEventData.EventPurposes;
                 $scope.purDis = 0;
+            } else {
+                $scope.purDis = 1;
             }
             
         }
@@ -278,8 +288,13 @@ angular.module('app')
             });
         }
         $scope.onPurSelChanged = function() {
+            console.log(vm.selectedPurposeData);
             // tabStrip.disable(tabStrip.tabGroup.children().eq(0));
-            $scope.tab1Inisible = false;
+            if(vm.selectedPurposeData !== " Mục đích... ") {
+                $scope.tab1Inisible = false;
+            }  else {
+                $scope.tab1Inisible = true;
+            }
         }
         $scope.onReminderSerialSelChanged = function () {
             console.log(vm.reminderSerialSelectedData.device_serial);
@@ -353,6 +368,9 @@ angular.module('app')
             });
             $("#warddropdown").kendoDropDownList({
                 autoBind: false
+            });
+            $("#historyScheduler").kendoScheduler({
+                autoBind:false
             });
         }
         initialCtrl();
@@ -538,11 +556,11 @@ angular.module('app')
             }
         };
         vm.eventData = { 
-            type: "jsonp",
+            type: "odata-v4",
             serverFiltering: true,
             transport: {
                 read: {
-                    url: "../../App/localdata/EventType.json",
+                    url: _eventTypeURL+"?$expand=EventPurposes",
                 }
             }
         }
@@ -582,6 +600,10 @@ angular.module('app')
                                 'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
                             },
                           }).then(function successCallback(response) {
+                              var scheduler = $("#historyScheduler").data("kendoScheduler");
+                              scheduler.dataSource.transport.options.read.url = _interactURL+"GetInteractionHistoryByCustomer?PhoneNumber="+vm.searchingNumber;
+                              scheduler.dataSource.read();
+                              scheduler.refresh();
                               if(response.data.value.length > 0) {   
                                 vm.cityCode = response.data.value[0].code;
                                 district.dataSource.transport.options.read.url = _districtURL+"?$filter=parent_code eq '" + vm.cityCode + "'&$orderby=name&$top=100";
@@ -798,15 +820,7 @@ angular.module('app')
         //     alert(vm.selectedCity);
         // }
         vm.pitechCustomer = {};
-        vm.purposeData = {
-            type: "jsonp",
-            serverFiltering: true,
-            transport: {
-                read: {
-                    url: "../../App/localdata/purpose.json",
-                }
-            }
-        }
+        vm.purposeData = [];
         vm.reminderProductData = {
             type: "odata-v4",
             serverFiltering: true,
@@ -889,6 +903,8 @@ angular.module('app')
             vm.eventCR.DetailEvents.push(vm.eventCRDetails);
             vm.eventCR.Tags = vm.crtagSelectected;
             vm.eventCRDetails.Serial = vm.serialSelectedData.device_serial;
+            vm.eventCR.EventTypeID = vm.selectedEventData.ID;
+            vm.eventCR.EventPurposeID = vm.selectedPurposeData.ID;
             if(vm.eventCR.CustomerID == undefined || vm.eventCR.CustomerID === "") {
                 toaster.pop('error', "Thiếu thông tin", "Thiếu thông tin khách hàng");
             } else if(vm.eventCR.DetailEvents.length < 1) {
@@ -896,6 +912,9 @@ angular.module('app')
             } else if(vm.eventCR.Tags.length < 1) {
                 toaster.pop('error', "Thiếu thông tin", "Vui lòng chọn ít nhất một tag phòng ban");
             }
+            vm.interactionHistoryObj.Type ="Gọi điện";
+            vm.interactionHistoryObj.Note = vm.eventCRDetails.Note;
+            vm.eventCR.InteractionHistorys.push(vm.interactionHistoryObj);
             // console.log(vm.systemCustomer);
             // console.log(vm.eventProductTypeSelectedData);
             // console.log(vm.serialSelectedData);
@@ -935,7 +954,9 @@ angular.module('app')
             
                 return value;
             });
-            
+            vm.reminderInteractHistory.Type ="Gọi điện";
+            vm.reminderInteractHistory.Note = "CR tạo sự kiện tương tác khách hàng";
+            vm.reminderCR.InteractionHistorys.push(vm.interactionHistoryObj);
             vm.reminderTagSelected = JSON.parse(json);
             console.log(vm.reminderTagSelected);
             vm.reminderCR.CustomerID = vm.systemCustomer.ID;
@@ -943,12 +964,17 @@ angular.module('app')
             vm.reminderCR.ReminderNotes.push(vm.reminderCRDetails);
             vm.reminderCR.Tags = vm.reminderTagSelected;
             vm.reminderCRDetails.Serial = vm.reminderSerialSelectedData.device_serial;
+            vm.reminderCR.EventTypeID = vm.selectedEventData.ID;
+            vm.reminderCR.EventPurposeID = vm.selectedPurposeData.ID;
             console.log(vm.systemCustomer);
             console.log(vm.reminderProductTypeSelectedData);
             console.log(vm.reminderSerialSelectedData);
             console.log(vm.reminderCRDetails);
             console.log(vm.reminderTagSelected);
             console.log(vm.reminderCR);
+            vm.interactionHistoryObj.Type ="Gọi điện";
+            vm.interactionHistoryObj.Note = vm.reminderCRDetails.Note;
+            vm.eventCR.InteractionHistorys.push(vm.interactionHistoryObj);
             $http({
                 url: _eventURL,
                 method: 'POST',
@@ -1032,6 +1058,97 @@ angular.module('app')
                     });             
                 }
             }
+        }
+        $scope.windowOptions = {
+            title : 'Lịch sử tương tác',
+            width : 800,
+            height : 500,
+            visible : false,
+            actions: [
+                "Pin",
+                "Minimize",
+                "Maximize",
+                "Close"
+            ],
+            position: { top: 400 , left: "56%" },
+            close: onHistoryClose,
+            modal: false,
+        }
+        // $scope.schedulerOptions = {
+        //     date: new Date(),
+        //     startTime: new Date(),
+        //     height: 600,
+        //     views: [
+        //         "agenda"
+        //     ],
+        //     timezone: "Etc/UTC",
+        //     dataSource: {
+        //         batch: false,
+        //         autoBind: false,
+        //         editable: false,
+        //         transport: {
+        //             read: {
+        //                 url: _interactURL+"GetInteractionHistoryByCustomer?PhoneNumber="+vm.searchingNumber,
+        //                 dataType: "odata-v4"
+        //             },
+        //             parameterMap: function(options, operation) {
+        //                 if (operation !== "read" && options.models) {
+        //                     return {models: kendo.stringify(options.models)};
+        //                 }
+        //             }
+        //         },
+        //         schema: {
+        //             model: {
+        //                 ID: "ID",
+        //                 fields: {
+        //                     id: { from: "ID", type: "string" },
+        //                     title: { from: "EventCode", type: "string" },
+        //                     start: { type: "date", from: "CreatDate" },
+        //                     end: { type: "date", from: "CreatDate" },
+        //                 }
+        //             }
+        //         },
+        //         // filter: {
+        //         //     logic: "or",
+        //         //     filters: [
+        //         //         { field: "ownerId", operator: "eq", value: 1 },
+        //         //         { field: "ownerId", operator: "eq", value: 2 }
+        //         //     ]
+        //         // }
+        //     }
+        // }
+
+        $scope.schedulerOptions = {
+            date: new Date(),
+            startTime: new Date("2019/01/01"),
+            height: 600,
+            views: [
+                "agenda"
+            ],
+            timezone: "Etc/UTC",
+            dataSource: {
+                batch: false,
+                transport: {
+                    read: {
+                        url: _interactURL+"GetInteractionHistoryByCustomer?PhoneNumber="+vm.searchingNumber,
+                        dataType: "odata-v4"
+                    }
+                },
+                schema: {
+                    model: {
+                        id: "ID",
+                        fields: {
+                            taskId: { from: "ID", type: "string" },
+                            title: { from: "EventCode", defaultValue: "No title"},
+                            start: { type: "date", from: "CreatDate" },
+                            end: { type: "date", from: "CreatDate" }
+                        }
+                    }
+                }
+            }
+        };
+        function onHistoryClose() {
+
         }
         $scope.initialEventCreationCtrl = function() {  
         }

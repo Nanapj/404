@@ -99,18 +99,31 @@
                                         <button class="btn btn-success btn-default" ng-click="vm.creUpdCusClicked()">Tạo mới / Chỉnh sửa</button>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <button class="btn btn-info btn-default" title="Lịch sử tương tác với khách hàng">
+                                <div class="col-md-6" style="padding-top: 10px;">
+                                    <button class="btn btn-info btn-default" title="Lịch sử tương tác với khách hàng" ng-click="win1.open()">
                                         <i class="fa fa-file"></i>
                                         Lịch sử
                                     </button>
-                                    <div class="demo-section k-content">
-                                        <button class="k-button" ng-click="win1.open()">Open Calendar</button>
+                                    <div kendo-window="win1"
+                                         id="historyWindow"
+                                         k-options="windowOptions"
+                                         k-on-open="win1visible = true"
+                                         k-on-close="win1visible = false">
+                                        <div kendo-scheduler
+                                             id="historyScheduler"
+                                             k-options="schedulerOptions">
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div id="historyGrid"
+                                                 kendo-grid
+                                                 k-options="historyGridOptions"
+                                                 k-selectable="true"
+                                                 k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'
+                                             ></div>
+                                        </div>
                                     </div>
-                                    <div kendo-window="win1" k-title="'Calendar'" k-on-open="win1visible = true" k-on-close="win1visible = false">
-                                        <div kendo-calendar></div>
                                     </div>
-                                </div>
                             </form>
                         </div>
                     </div>
@@ -183,8 +196,8 @@
                                             id="eventtypedropdown"
                                             kendo-drop-down-list            
                                             ng-disabled="eventTypeDis === 1"
-                                            k-data-text-field="'name'"
-                                            k-data-value-field="'id'"
+                                            k-data-text-field="'Name'"
+                                            k-data-value-field="'ID'"
                                             k-data-source="vm.eventData"
                                             k-option-label="' Sự kiện... '"
                                             k-ng-model="vm.selectedEventData"
@@ -198,8 +211,8 @@
                                             id="purposedropdown"
                                             kendo-drop-down-list
                                             ng-disabled="purDis === 1"
-                                            k-data-text-field="'name'"
-                                            k-data-value-field="'id'"
+                                            k-data-text-field="'Name'"
+                                            k-data-value-field="'ID'"
                                             k-data-source="vm.purposeData"
                                             k-ng-model="vm.selectedPurposeData"
                                             k-on-change="onPurSelChanged()"
