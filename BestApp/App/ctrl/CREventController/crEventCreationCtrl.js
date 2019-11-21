@@ -11,6 +11,7 @@ angular.module('app')
         var _tagURL = "/odata/Tags";
         var _eventTypeURL = "/odata/EventTypes";
         var _productTypeOdata = "/odata/ProductTypes";
+        var _interactURL = "/odata/InteractionHistorys/";
         var _pitechCusURL = "http://api.test.haveyougotpi.com/project404.aspx/GetCustomerInfoByPhone";
         var _pitechDevURL = "http://api.test.haveyougotpi.com/project404.aspx/GetDeviceListByPhoneNumber";
         var _pitechDeviceDetailsURL = "http://api.test.haveyougotpi.com/project404.aspx/GetDeviceInfoBySerialNo";
@@ -241,7 +242,7 @@ angular.module('app')
         }
         $scope.onEventSelChanged = function() {
             $scope.purDis = 1;
-            
+            console.log(vm.selectedEventData);
             if(vm.selectedEventData !== " Mục đích... ") {
                 var tabStrip = $("#eventTabstrip").kendoTabStrip().data("kendoTabStrip");
                 // $("#purposedropdown").data("kendoDropDownList").dataSource.read().then(function() {
@@ -287,6 +288,7 @@ angular.module('app')
             });
         }
         $scope.onPurSelChanged = function() {
+            console.log(vm.selectedPurposeData);
             // tabStrip.disable(tabStrip.tabGroup.children().eq(0));
             if(vm.selectedPurposeData !== " Mục đích... ") {
                 $scope.tab1Inisible = false;
@@ -366,6 +368,9 @@ angular.module('app')
             });
             $("#warddropdown").kendoDropDownList({
                 autoBind: false
+            });
+            $("#historyScheduler").kendoScheduler({
+                autoBind:false
             });
         }
         initialCtrl();
@@ -595,6 +600,10 @@ angular.module('app')
                                 'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
                             },
                           }).then(function successCallback(response) {
+                              var scheduler = $("#historyScheduler").data("kendoScheduler");
+                              scheduler.dataSource.transport.options.read.url = _interactURL+"GetInteractionHistoryByCustomer?PhoneNumber="+vm.searchingNumber;
+                              scheduler.dataSource.read();
+                              scheduler.refresh();
                               if(response.data.value.length > 0) {   
                                 vm.cityCode = response.data.value[0].code;
                                 district.dataSource.transport.options.read.url = _districtURL+"?$filter=parent_code eq '" + vm.cityCode + "'&$orderby=name&$top=100";
@@ -894,6 +903,8 @@ angular.module('app')
             vm.eventCR.DetailEvents.push(vm.eventCRDetails);
             vm.eventCR.Tags = vm.crtagSelectected;
             vm.eventCRDetails.Serial = vm.serialSelectedData.device_serial;
+            vm.eventCR.EventTypeID = vm.selectedEventData.ID;
+            vm.eventCR.EventPurposeID = vm.selectedPurposeData.ID;
             if(vm.eventCR.CustomerID == undefined || vm.eventCR.CustomerID === "") {
                 toaster.pop('error', "Thiếu thông tin", "Thiếu thông tin khách hàng");
             } else if(vm.eventCR.DetailEvents.length < 1) {
@@ -902,7 +913,7 @@ angular.module('app')
                 toaster.pop('error', "Thiếu thông tin", "Vui lòng chọn ít nhất một tag phòng ban");
             }
             vm.interactionHistoryObj.Type ="Gọi điện";
-            vm.interactionHistoryObj.Note = "CR tạo sự kiện tương tác khách hàng";
+            vm.interactionHistoryObj.Note = vm.eventCRDetails.Note;
             vm.eventCR.InteractionHistorys.push(vm.interactionHistoryObj);
             // console.log(vm.systemCustomer);
             // console.log(vm.eventProductTypeSelectedData);
@@ -953,6 +964,8 @@ angular.module('app')
             vm.reminderCR.ReminderNotes.push(vm.reminderCRDetails);
             vm.reminderCR.Tags = vm.reminderTagSelected;
             vm.reminderCRDetails.Serial = vm.reminderSerialSelectedData.device_serial;
+            vm.reminderCR.EventTypeID = vm.selectedEventData.ID;
+            vm.reminderCR.EventPurposeID = vm.selectedPurposeData.ID;
             console.log(vm.systemCustomer);
             console.log(vm.reminderProductTypeSelectedData);
             console.log(vm.reminderSerialSelectedData);
@@ -960,7 +973,7 @@ angular.module('app')
             console.log(vm.reminderTagSelected);
             console.log(vm.reminderCR);
             vm.interactionHistoryObj.Type ="Gọi điện";
-            vm.interactionHistoryObj.Note = "CR tạo sự kiện tương tác khách hàng";
+            vm.interactionHistoryObj.Note = vm.reminderCRDetails.Note;
             vm.eventCR.InteractionHistorys.push(vm.interactionHistoryObj);
             $http({
                 url: _eventURL,
@@ -1061,78 +1074,79 @@ angular.module('app')
             close: onHistoryClose,
             modal: false,
         }
+        // $scope.schedulerOptions = {
+        //     date: new Date(),
+        //     startTime: new Date(),
+        //     height: 600,
+        //     views: [
+        //         "agenda"
+        //     ],
+        //     timezone: "Etc/UTC",
+        //     dataSource: {
+        //         batch: false,
+        //         autoBind: false,
+        //         editable: false,
+        //         transport: {
+        //             read: {
+        //                 url: _interactURL+"GetInteractionHistoryByCustomer?PhoneNumber="+vm.searchingNumber,
+        //                 dataType: "odata-v4"
+        //             },
+        //             parameterMap: function(options, operation) {
+        //                 if (operation !== "read" && options.models) {
+        //                     return {models: kendo.stringify(options.models)};
+        //                 }
+        //             }
+        //         },
+        //         schema: {
+        //             model: {
+        //                 ID: "ID",
+        //                 fields: {
+        //                     id: { from: "ID", type: "string" },
+        //                     title: { from: "EventCode", type: "string" },
+        //                     start: { type: "date", from: "CreatDate" },
+        //                     end: { type: "date", from: "CreatDate" },
+        //                 }
+        //             }
+        //         },
+        //         // filter: {
+        //         //     logic: "or",
+        //         //     filters: [
+        //         //         { field: "ownerId", operator: "eq", value: 1 },
+        //         //         { field: "ownerId", operator: "eq", value: 2 }
+        //         //     ]
+        //         // }
+        //     }
+        // }
+
         $scope.schedulerOptions = {
-            date: new Date("2013/6/13"),
-        startTime: new Date("2013/6/13 07:00 AM"),
-        height: 600,
-        views: [
-            "agenda"
-        ],
-        timezone: "Etc/UTC",
-        dataSource: {
-            batch: true,
-            transport: {
-                read: {
-                    url: "https://demos.telerik.com/kendo-ui/service/tasks",
-                    dataType: "jsonp"
+            date: new Date(),
+            startTime: new Date("2019/01/01"),
+            height: 600,
+            views: [
+                "agenda"
+            ],
+            timezone: "Etc/UTC",
+            dataSource: {
+                batch: false,
+                transport: {
+                    read: {
+                        url: _interactURL+"GetInteractionHistoryByCustomer?PhoneNumber="+vm.searchingNumber,
+                        dataType: "odata-v4"
+                    }
                 },
-                update: {
-                    url: "https://demos.telerik.com/kendo-ui/service/tasks/update",
-                    dataType: "jsonp"
-                },
-                create: {
-                    url: "https://demos.telerik.com/kendo-ui/service/tasks/create",
-                    dataType: "jsonp"
-                },
-                destroy: {
-                    url: "https://demos.telerik.com/kendo-ui/service/tasks/destroy",
-                    dataType: "jsonp"
-                },
-                parameterMap: function(options, operation) {
-                    if (operation !== "read" && options.models) {
-                        return {models: kendo.stringify(options.models)};
+                schema: {
+                    model: {
+                        id: "ID",
+                        fields: {
+                            taskId: { from: "ID", type: "string" },
+                            title: { from: "EventCode", defaultValue: "No title"},
+                            start: { type: "date", from: "CreatDate" },
+                            end: { type: "date", from: "CreatDate" }
+                        }
                     }
                 }
-            },
-            schema: {
-                model: {
-                    id: "taskId",
-                    fields: {
-                        taskId: { from: "TaskID", type: "number" },
-                        title: { from: "Title", defaultValue: "No title", validation: { required: true } },
-                        start: { type: "date", from: "Start" },
-                        end: { type: "date", from: "End" },
-                        startTimezone: { from: "StartTimezone" },
-                        endTimezone: { from: "EndTimezone" },
-                        description: { from: "Description" },
-                        recurrenceId: { from: "RecurrenceID" },
-                        recurrenceRule: { from: "RecurrenceRule" },
-                        recurrenceException: { from: "RecurrenceException" },
-                        ownerId: { from: "OwnerID", defaultValue: 1 },
-                        isAllDay: { type: "boolean", from: "IsAllDay" }
-                    }
-                }
-            },
-            filter: {
-                logic: "or",
-                filters: [
-                    { field: "ownerId", operator: "eq", value: 1 },
-                    { field: "ownerId", operator: "eq", value: 2 }
-                ]
             }
-        },
-        resources: [
-            {
-                field: "ownerId",
-                title: "Owner",
-                dataSource: [
-                    { text: "Alex", value: 1, color: "#f8a398" },
-                    { text: "Bob", value: 2, color: "#51a0ed" },
-                    { text: "Charlie", value: 3, color: "#56ca85" }
-                ]
-            }
-        ]
-        }
+        };
         function onHistoryClose() {
 
         }

@@ -31,7 +31,7 @@ namespace BestApp.Areas.Api.Controllers
         }
         [HttpGet]
         [EnableQuery]
-        public IEnumerable<InteractionHistoryGroupViewModel> GetInteractionHistoryByCustomer([FromUri]SearchViewModel model)
+        public IEnumerable<InteractionHistoryViewModel> GetInteractionHistoryByCustomer([FromUri]SearchViewModel model)
         {
             var result = _interactionHistoryService.GetInteractionHistoryByCustomer(model);
             return result;

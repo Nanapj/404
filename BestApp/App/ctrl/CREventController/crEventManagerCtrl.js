@@ -156,7 +156,7 @@ angular.module('app')
                     width: "80px"
                 },
                 {
-
+                    field: ""
                 },
                 { command: [{ text: "Chi tiết", click: showDetails },{text: "Sửa", click: showEditDetails }], title: " Tùy chỉnh ", width: "200px" }
             ]

@@ -109,9 +109,20 @@
                                          k-options="windowOptions"
                                          k-on-open="win1visible = true"
                                          k-on-close="win1visible = false">
-                                        <div kendo-scheduler 
-                                             k-options="schedulerOptions"></div>
+                                        <div kendo-scheduler
+                                             id="historyScheduler"
+                                             k-options="schedulerOptions">
+
                                         </div>
+                                        <div class="col-md-12">
+                                            <div id="historyGrid"
+                                                 kendo-grid
+                                                 k-options="historyGridOptions"
+                                                 k-selectable="true"
+                                                 k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'
+                                             ></div>
+                                        </div>
+                                    </div>
                                     </div>
                             </form>
                         </div>

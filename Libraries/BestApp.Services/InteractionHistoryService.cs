@@ -24,7 +24,7 @@ namespace BestApp.Services
             Task<InteractionHistoryViewModel> UpdateAsync(InteractionHistoryViewModel model);
             Task<IQueryable<InteractionHistoryViewModel>> GetAllInteractionHistorysAsync();
             IQueryable<InteractionHistory> GetAllInteractionHistorys();
-            IEnumerable<InteractionHistoryGroupViewModel> GetInteractionHistoryByCustomer(SearchViewModel model);
+            IEnumerable<InteractionHistoryViewModel> GetInteractionHistoryByCustomer(SearchViewModel model);
             bool Delete(Guid Id);
         }
         private readonly EventService _eventService;
@@ -62,13 +62,12 @@ namespace BestApp.Services
             }));
         }
       
-        public IEnumerable<InteractionHistoryGroupViewModel> GetInteractionHistoryByCustomer(SearchViewModel model)
+        public IEnumerable<InteractionHistoryViewModel> GetInteractionHistoryByCustomer(SearchViewModel model)
         {
             var findCus = _customerService.Queryable().Where(x => x.PhoneNumber == model.PhoneNumber && x.Delete == false).FirstOrDefault();
             if(findCus != null)
             {
-                var result = new List<InteractionHistoryGroupViewModel>();
-                var result1 = new InteractionHistoryGroupViewModel();
+                var result = new List<InteractionHistoryViewModel>();
                 //result1.CustomerName = findCus.Name;
                 //result1.CustomerPhone = findCus.PhoneNumber;
                 var listEvent = _eventService.Queryable().Where(x => x.Customer.Id == findCus.Id).ToList();
@@ -82,17 +81,18 @@ namespace BestApp.Services
                             foreach(var itemHistory in history)
                             {
                                 var Object1 = new InteractionHistoryViewModel();
+                                Object1.Type = itemHistory.Type;
                                 Object1.ID = itemHistory.Id;
-                                Object1.CreatDate = itemHistory.CreatDate;
+                                Object1.CreatDate = itemHistory.CreatDate.ToLocalTime();
                                 Object1.EmployeeCall = itemHistory.EmployeeCall;
                                 Object1.EmployeeID = itemHistory.EmployeeID;
                                 Object1.EventCode = item.Code;
-                                result1.HistoryList.Add(Object1);
+                                result.Add(Object1);
                             }
                         }
                         
                     }
-                    result.Add(result1);
+                   
                 }
                 else
                 {
