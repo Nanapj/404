@@ -23,7 +23,7 @@ namespace BestApp.Services
             Task<EventPurpose> InsertAsync(EventPurposeViewModel model);
             Task<EventPurposeViewModel> UpdateAsync(EventPurposeViewModel model);
             Task<IQueryable<EventPurposeViewModel>> GetAllEventPurposesAsync();
-            IQueryable<EventPurpose> GetAllEventPurposes();
+            IQueryable<EventPurposeViewModel> GetAllEventPurposes();
             bool Delete(Guid Id);
         }
         private readonly EventTypeService _eventTypeService;
@@ -41,21 +41,20 @@ namespace BestApp.Services
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
         }
-        public IQueryable<EventPurpose> GetAllEventPurposes()
+        public IQueryable<EventPurposeViewModel> GetAllEventPurposes()
         {
-            return _repository.Queryable();
-        }
-        public Task<IQueryable<EventPurposeViewModel>> GetAllEventPurposesAsync()
-        {
-            return Task.Run(() => GetAllEventPurposes()
-            .Where(x => x.Delete == false)
+            return _repository.Queryable().Where(x => x.Delete == false)
             .Select(x => new EventPurposeViewModel()
             {
                 ID = x.Id,
                 Name = x.Name,
                 EventTypeID = x.EventType.Id,
                 EventTypeName = x.EventType.Name
-            }));
+            });
+        }
+        public Task<IQueryable<EventPurposeViewModel>> GetAllEventPurposesAsync()
+        {
+            return Task.Run(() => GetAllEventPurposes());
         }
         public EventPurpose Insert(EventPurposeViewModel model)
         {

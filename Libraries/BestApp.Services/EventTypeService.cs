@@ -22,7 +22,7 @@ namespace BestApp.Services
             EventType Insert(EventTypeViewModel model);
             Task<IQueryable<EventTypeViewModel>> GetAllEventTypesAsync();
             Task<EventType> InsertAsync(EventTypeViewModel model);
-            IQueryable<EventType> GetAllEventTypes();
+            IQueryable<EventTypeViewModel> GetAllEventTypes();
             Task<EventTypeViewModel> UpdateAsync(EventTypeViewModel model);
             bool Delete(Guid Id);
         }
@@ -37,14 +37,9 @@ namespace BestApp.Services
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
         }
-        public IQueryable<EventType> GetAllEventTypes()
+        public IQueryable<EventTypeViewModel> GetAllEventTypes()
         {
-            return _repository.Queryable();
-        }
-        public Task<IQueryable<EventTypeViewModel>> GetAllEventTypesAsync()
-        {
-            return Task.Run(() => GetAllEventTypes()
-            .Where(x => x.Delete == false)
+            return _repository.Queryable().Where(x => x.Delete == false)
             .Select(x => new EventTypeViewModel()
             {
                 ID = x.Id,
@@ -55,7 +50,11 @@ namespace BestApp.Services
                     Name = t.Name,
                 }).ToList()
 
-            }));
+            });
+        }
+        public Task<IQueryable<EventTypeViewModel>> GetAllEventTypesAsync()
+        {
+            return Task.Run(() => GetAllEventTypes());
         }
         public EventType Insert(EventTypeViewModel model)
         {

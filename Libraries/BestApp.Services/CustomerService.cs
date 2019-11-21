@@ -23,7 +23,7 @@ namespace BestApp.Services
             Task<Customer> InsertAsync(CustomerViewModel model);
             Task<CustomerViewModel> UpdateAsync(CustomerViewModel model);
             Task<IQueryable<CustomerViewModel>> GetAllCustomersAsync(SearchViewModel model);
-            IQueryable<Customer> GetAllCustomers();
+            IQueryable<CustomerViewModel> GetAllCustomers();
             bool Delete(Guid Id);
         }
         private readonly IRepositoryAsync<Customer> _repository;
@@ -37,26 +37,25 @@ namespace BestApp.Services
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
         }
-        public IQueryable<Customer> GetAllCustomers()
+        public IQueryable<CustomerViewModel> GetAllCustomers()
         {
-            return _repository.Queryable();
-        }
-        public Task<IQueryable<CustomerViewModel>> GetAllCustomersAsync(SearchViewModel model)
-        {
-            return Task.Run(() => GetAllCustomers()
-            .Where(x=> x.Delete == false)
+            return _repository.Queryable().Where(x => x.Delete == false)
             .Select(x => new CustomerViewModel()
             {
                 ID = x.Id,
                 Name = x.Name,
-                PhoneNumber = x.PhoneNumber ,
+                PhoneNumber = x.PhoneNumber,
                 Address = x.Address,
                 District = x.District,
                 Ward = x.Ward,
                 Birthday = x.Birthday,
                 Note = x.Note,
                 City = x.City,
-            }));
+            });
+        }
+        public Task<IQueryable<CustomerViewModel>> GetAllCustomersAsync(SearchViewModel model)
+        {
+            return Task.Run(() => GetAllCustomers());
         } 
         public Customer Insert(CustomerViewModel model)
         {

@@ -23,7 +23,7 @@ namespace BestApp.Services
             Task<Tag> InsertAsync(TagViewModel model);
             Task<TagViewModel> UpdateAsync(TagViewModel model);
             Task<IQueryable<TagViewModel>> GetAllTagsAsync();
-            IQueryable<Tag> GetAllTags();
+            IQueryable<TagViewModel> GetAllTags();
             bool Delete(Guid Id);
         }
         private readonly DepartmentService _departmentService;
@@ -40,14 +40,9 @@ namespace BestApp.Services
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
         }
-        public IQueryable<Tag> GetAllTags()
+        public IQueryable<TagViewModel> GetAllTags()
         {
-            return _repository.Queryable();
-        }
-        public Task<IQueryable<TagViewModel>> GetAllTagsAsync()
-        {
-            return Task.Run(() => GetAllTags()
-            .Where(x => x.Delete == false)
+            return _repository.Queryable().Where(x => x.Delete == false)
             .Select(x => new TagViewModel()
             {
                 ID = x.Id,
@@ -56,8 +51,12 @@ namespace BestApp.Services
                 Status = x.Status,
                 DepartmentName = x.Departments.Name,
                 DepartmentID = x.Departments.Id
-                
-            }));
+
+            });
+        }
+        public Task<IQueryable<TagViewModel>> GetAllTagsAsync()
+        {
+            return Task.Run(() => GetAllTags());
         }
         public Tag Insert(TagViewModel model)
         {
