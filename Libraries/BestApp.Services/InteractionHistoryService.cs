@@ -23,7 +23,7 @@ namespace BestApp.Services
             Task<InteractionHistory> InsertAsync(InteractionHistoryViewModel model);
             Task<InteractionHistoryViewModel> UpdateAsync(InteractionHistoryViewModel model);
             Task<IQueryable<InteractionHistoryViewModel>> GetAllInteractionHistorysAsync();
-            IQueryable<InteractionHistory> GetAllInteractionHistorys();
+            IQueryable<InteractionHistoryViewModel> GetAllInteractionHistorys();
             IEnumerable<InteractionHistoryViewModel> GetInteractionHistoryByCustomer(SearchViewModel model);
             bool Delete(Guid Id);
         }
@@ -44,14 +44,9 @@ namespace BestApp.Services
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
         }
-        public IQueryable<InteractionHistory> GetAllInteractionHistorys()
+        public IQueryable<InteractionHistoryViewModel> GetAllInteractionHistorys()
         {
-            return _repository.Queryable();
-        }
-        public Task<IQueryable<InteractionHistoryViewModel>> GetAllInteractionHistorysAsync()
-        {
-            return Task.Run(() => GetAllInteractionHistorys()
-            .Where(x => x.Delete == false)
+            return _repository.Queryable().Where(x => x.Delete == false)
             .Select(x => new InteractionHistoryViewModel()
             {
                 ID = x.Id,
@@ -59,7 +54,11 @@ namespace BestApp.Services
                 EventID = x.Event.Id,
                 CreatDate = x.CreatDate,
                 Note = x.Note
-            }));
+            });
+        }
+        public Task<IQueryable<InteractionHistoryViewModel>> GetAllInteractionHistorysAsync()
+        {
+            return Task.Run(() => GetAllInteractionHistorys());
         }
       
         public IEnumerable<InteractionHistoryViewModel> GetInteractionHistoryByCustomer(SearchViewModel model)

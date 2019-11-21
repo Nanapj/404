@@ -23,7 +23,7 @@ namespace BestApp.Services
             Task<ProductType> InsertAsync(ProductTypeViewModel model);
             Task<ProductTypeViewModel> UpdateAsync(ProductTypeViewModel model);
             Task<IQueryable<ProductTypeViewModel>> GetAllProductTypesAsync(SearchViewModel model);
-            IQueryable<ProductType> GetAllProductTypes();
+            IQueryable<ProductTypeViewModel> GetAllProductTypes();
             bool Delete(Guid Id);
         }
         private readonly IRepositoryAsync<ProductType> _repository;
@@ -37,21 +37,20 @@ namespace BestApp.Services
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
         }
-        public IQueryable<ProductType> GetAllProductTypes()
+        public IQueryable<ProductTypeViewModel> GetAllProductTypes()
         {
-            return _repository.Queryable();
-        }
-        public Task<IQueryable<ProductTypeViewModel>> GetAllProductTypesAsync(SearchViewModel model)
-        {
-            return Task.Run(() => GetAllProductTypes()
-            .Where(x => x.Delete == false)
+            return _repository.Queryable().Where(x => x.Delete == false)
             .Select(x => new ProductTypeViewModel()
             {
                 ID = x.Id,
                 Name = x.Name,
                 Code = x.Code
 
-             }));
+            });
+        }
+        public Task<IQueryable<ProductTypeViewModel>> GetAllProductTypesAsync(SearchViewModel model)
+        {
+            return Task.Run(() => GetAllProductTypes());
         }
         public ProductType Insert(ProductTypeViewModel model)
         {

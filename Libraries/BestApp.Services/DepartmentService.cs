@@ -24,7 +24,7 @@ namespace BestApp.Services
             Department Insert(DepartmentViewModel model);
             Task<IQueryable<DepartmentViewModel>> GetAllDepartmentsAsync();
             Task<Department> InsertAsync(DepartmentViewModel model);
-            IQueryable<Department> GetAllDepartments();
+            IQueryable<DepartmentViewModel> GetAllDepartments();
             Task<DepartmentViewModel> UpdateAsync(DepartmentViewModel model);
             bool Delete(Guid Id);
 
@@ -41,9 +41,24 @@ namespace BestApp.Services
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
         }
-        public IQueryable<Department> GetAllDepartments()
+        public IQueryable<DepartmentViewModel> GetAllDepartments()
         {
-            return _repository.Queryable();
+            return _repository.Queryable().Where(x => x.Delete == false)
+            .Select(x => new DepartmentViewModel()
+            {
+                ID = x.Id,
+                Name = x.Name,
+                Tags = x.Tags.Where(t => t.Status == Core.Enum.StatusTag.New).Select(t => new TagViewModel()
+                {
+                    NameTag = t.NameTag,
+                    CodeTag = t.CodeTag,
+
+                }).ToList()
+            });
+        }
+        public Task<IQueryable<DepartmentViewModel>> GetAllDepartmentsAsync()
+        {
+            return Task.Run(() => GetAllDepartments());
         }
         public Department Insert(DepartmentViewModel model)
         {
@@ -114,22 +129,7 @@ namespace BestApp.Services
             }
         }
 
-        public Task<IQueryable<DepartmentViewModel>> GetAllDepartmentsAsync()
-        {
-            return Task.Run(() => GetAllDepartments()
-            .Where(x => x.Delete == false)
-            .Select(x => new DepartmentViewModel()
-            {
-                ID = x.Id,
-                Name = x.Name,
-                Tags = x.Tags.Where(t=> t.Status == Core.Enum.StatusTag.New).Select(t => new TagViewModel()
-                {
-                    NameTag = t.NameTag,
-                    CodeTag = t.CodeTag,
-                    
-               }).ToList()
-            }));
-        }
+        
         public async Task<Department> InsertAsync(DepartmentViewModel model)
         {
             return await Task.Run(() => Insert(model));

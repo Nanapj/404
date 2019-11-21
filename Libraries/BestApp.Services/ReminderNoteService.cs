@@ -24,7 +24,7 @@ namespace BestApp.Services
             Task<ReminderNote> InsertAsync(ReminderNoteViewModel model);
             Task<ReminderNoteViewModel> UpdateAsync(ReminderNoteViewModel model);
             Task<IQueryable<ReminderNoteViewModel>> GetAllReminderNotesAsync();
-            IQueryable<ReminderNote> GetAllReminderNotes();
+            IQueryable<ReminderNoteViewModel> GetAllReminderNotes();
             bool Delete(Guid Id);
         }
         private readonly ReminderNoteService _reminderNoteService;
@@ -44,14 +44,9 @@ namespace BestApp.Services
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
         }
-        public IQueryable<ReminderNote> GetAllReminderNotes()
+        public IQueryable<ReminderNoteViewModel> GetAllReminderNotes()
         {
-            return _repository.Queryable();
-        }
-        public Task<IQueryable<ReminderNoteViewModel>> GetAllReminderNotesAsync()
-        {
-            return Task.Run(() => GetAllReminderNotes()
-            .Where(x => x.Delete == false)
+            return _repository.Queryable().Where(x => x.Delete == false)
             .Select(x => new ReminderNoteViewModel()
             {
                 ID = x.Id,
@@ -60,7 +55,11 @@ namespace BestApp.Services
                 CreatDate = x.CreatDate,
                 EventID = x.Event.Id,
                 Serial = x.Serial
-            }));
+            });
+        }
+        public Task<IQueryable<ReminderNoteViewModel>> GetAllReminderNotesAsync()
+        {
+            return Task.Run(() => GetAllReminderNotes());
         }
         public ReminderNote Insert(ReminderNoteViewModel model)
         {

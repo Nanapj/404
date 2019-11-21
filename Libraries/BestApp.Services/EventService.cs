@@ -56,10 +56,10 @@ namespace BestApp.Services
         }
         public IQueryable<EventViewModel> GetAllEvents(SearchViewModel model)
         {
-            if (model.To != null)
-            {
-                model.To = model.To.Value.AddDays(1);
-            }
+            //if (model.To != null)
+            //{
+            //    model.To = model.To.Value.AddDays(1);
+            //}
             if (model.Code != null)
             {
                 var findId = Queryable().Where(x => x.Code == model.Code).Select(x => x.Id).FirstOrDefault();
@@ -98,12 +98,14 @@ namespace BestApp.Services
                 {
                     ID = t.Id,
                     Serial = t.Serial,
+                    CreatDate = t.CreatDate,
                     Note = t.Note
                 }).ToList(),
                 InteractionHistorys = x.InteractionHistorys.Select(t => new InteractionHistoryViewModel
                 {
                     Type = t.Type,
                     Note = t.Note,
+                    CreatDate = t.CreatDate,
                     EmployeeCall = t.EmployeeCall,
                     EmployeeID = t.EmployeeID
                 }).ToList()
@@ -115,14 +117,17 @@ namespace BestApp.Services
                 item.EventTypeName = _eventTypeService.Queryable()
                     .Where(t => t.Delete == false && t.Id == item.EventTypeID).FirstOrDefault().Name;
             }
+            //if(model.To != null || model.From != null)
+            //{
+            //    result = result.Where(x => ((!model.From.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
+            //    && ((!model.To.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) <= DbFunctions.TruncateTime(model.To)))).ToList();
+            //}
+            
             return result.AsQueryable();
         }
         public Task<IQueryable<EventViewModel>> GetAllEventsAsync(SearchViewModel model)
         {
-            if (model.To != null)
-            {
-                model.To = model.To.Value.AddDays(1);
-            }
+            
             return Task.Run(() => GetAllEvents(model));
             
         }

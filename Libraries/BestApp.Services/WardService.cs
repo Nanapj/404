@@ -22,7 +22,7 @@ namespace BestApp.Services
             Ward Insert(WardViewModel model);
             Task<Ward> InsertAsync(WardViewModel model);
             Task<IQueryable<WardViewModel>> GetAllWardsAsync();
-            IQueryable<Ward> GetAllWards();
+            IQueryable<WardViewModel> GetAllWards();
         }
         private readonly IRepositoryAsync<Ward> _repository;
         private readonly IRepository<ApplicationUser> _userRepository;
@@ -34,14 +34,9 @@ namespace BestApp.Services
             db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
         }
-        public IQueryable<Ward> GetAllWards()
+        public IQueryable<WardViewModel> GetAllWards()
         {
-            return _repository.Queryable();
-        }
-        public Task<IQueryable<WardViewModel>> GetAllWardsAsync()
-        {
-            return Task.Run(() => GetAllWards()
-            .Select(x => new WardViewModel()
+            return _repository.Queryable().Select(x => new WardViewModel()
             {
                 ID = x.Id,
                 name = x.name,
@@ -52,7 +47,11 @@ namespace BestApp.Services
                 parent_code = x.parent_code,
                 name_with_type = x.name_with_type,
                 code = x.code,
-            }));
+            });
+        }
+        public Task<IQueryable<WardViewModel>> GetAllWardsAsync()
+        {
+            return Task.Run(() => GetAllWards());
         }
         public Ward Insert(WardViewModel model)
         {

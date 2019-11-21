@@ -23,7 +23,7 @@ namespace BestApp.Services
             Task<DetailEvent> InsertAsync(DetailEventViewModel model);
             Task<DetailEventViewModel> UpdateAsync(DetailEventViewModel model);
             Task<IQueryable<DetailEventViewModel>> GetAllDetailEventsAsync();
-            IQueryable<DetailEvent> GetAllDetailEvents();
+            IQueryable<DetailEventViewModel> GetAllDetailEvents();
             bool Delete(Guid Id);
         }
         private readonly EventService _eventService;
@@ -44,14 +44,9 @@ namespace BestApp.Services
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
         }
-        public IQueryable<DetailEvent> GetAllDetailEvents()
+        public IQueryable<DetailEventViewModel> GetAllDetailEvents()
         {
-            return _repository.Queryable();
-        }
-        public Task<IQueryable<DetailEventViewModel>> GetAllDetailEventsAsync()
-        {
-            return Task.Run(() => GetAllDetailEvents()
-            .Where(x => x.Delete == false)
+            return _repository.Queryable().Where(x => x.Delete == false)
             .Select(x => new DetailEventViewModel()
             {
                 ID = x.Id,
@@ -65,7 +60,11 @@ namespace BestApp.Services
                 DateSold = x.DateSold,
                 AgencySold = x.AgencySold,
                 AssociateName = x.AssociateName
-            }));
+            });
+        }
+        public Task<IQueryable<DetailEventViewModel>> GetAllDetailEventsAsync()
+        {
+            return Task.Run(() => GetAllDetailEvents());
         }
         public DetailEvent Insert(DetailEventViewModel model)
         {
