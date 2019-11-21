@@ -25,7 +25,7 @@ namespace BestApp.Services
             Task<Event> InsertAsync(EventViewModel model);
             Task<EventViewModel> UpdateAsync(EventViewModel model);
             Task<IQueryable<EventViewModel>> GetAllEventsAsync(SearchViewModel model);
-            IQueryable<Event> GetAllEvents();
+            IQueryable<EventViewModel> GetAllEvents(SearchViewModel model);
             bool Delete(Guid Id);
         }
         private readonly TagService _tagService;
@@ -54,11 +54,7 @@ namespace BestApp.Services
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
         }
-        public IQueryable<Event> GetAllEvents()
-        {
-            return _repository.Queryable();
-        }
-        public Task<IQueryable<EventViewModel>> GetAllEventsAsync(SearchViewModel model)
+        public IQueryable<EventViewModel> GetAllEvents(SearchViewModel model)
         {
             if (model.To != null)
             {
@@ -73,8 +69,7 @@ namespace BestApp.Services
                 }
 
             }
-            return Task.Run(() => GetAllEvents()
-            .Where(x => x.Delete == false
+            var result = _repository.Queryable().Where(x => x.Delete == false
             && ((!model.ID.HasValue) || x.Id == model.ID)
             && ((!(model.Code == "")) || (model.Code == x.Code))
             && ((!model.From.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
@@ -99,20 +94,37 @@ namespace BestApp.Services
                     NameTag = t.NameTag,
                     CodeTag = t.CodeTag,
                 }).ToList(),
-                DetailEvents = x.DetailEvents.Select(t=> new DetailEventViewModel
+                DetailEvents = x.DetailEvents.Select(t => new DetailEventViewModel
                 {
                     ID = t.Id,
                     Serial = t.Serial,
                     Note = t.Note
                 }).ToList(),
-                InteractionHistorys = x.InteractionHistorys.Select(t=> new InteractionHistoryViewModel
+                InteractionHistorys = x.InteractionHistorys.Select(t => new InteractionHistoryViewModel
                 {
                     Type = t.Type,
                     Note = t.Note,
                     EmployeeCall = t.EmployeeCall,
                     EmployeeID = t.EmployeeID
                 }).ToList()
-             }));
+            }).ToList();
+            foreach(var item in result)
+            {
+               item.EventPurposeName = _eventPurposeService.Queryable()
+                    .Where(t => t.Delete == false && t.Id == item.EventPurposeID).FirstOrDefault().Name;
+                item.EventTypeName = _eventTypeService.Queryable()
+                    .Where(t => t.Delete == false && t.Id == item.EventTypeID).FirstOrDefault().Name;
+            }
+            return result.AsQueryable();
+        }
+        public Task<IQueryable<EventViewModel>> GetAllEventsAsync(SearchViewModel model)
+        {
+            if (model.To != null)
+            {
+                model.To = model.To.Value.AddDays(1);
+            }
+            return Task.Run(() => GetAllEvents(model));
+            
         }
         public Event Insert(EventViewModel model)
         {
