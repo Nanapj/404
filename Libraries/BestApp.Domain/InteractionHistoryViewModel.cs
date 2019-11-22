@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BestApp.Core.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,5 +19,14 @@ namespace BestApp.Domain
         public DateTime CreatDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public bool Delete { get; set; }
+        public string Serial { get; set; }
+        public string ProductName { get; set; }
+        public string ProductCode { get; set; }
+        public string EventType { get; set; }
+        public string EventPurpose { get; set; }
+        public string EventNote { get; set; }
+        public string DetailEventNote { get; set; }
+        public StatusEvent Status { get; set; }
+
     }
 }

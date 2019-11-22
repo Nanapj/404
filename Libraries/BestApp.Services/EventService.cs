@@ -99,6 +99,8 @@ namespace BestApp.Services
                     ID = t.Id,
                     Serial = t.Serial,
                     CreatDate = t.CreatDate,
+                    ProductCode = t.ProductType.Code,
+                    ProductName = t.ProductType.Name,
                     Note = t.Note
                 }).ToList(),
                 InteractionHistorys = x.InteractionHistorys.Select(t => new InteractionHistoryViewModel

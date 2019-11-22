@@ -9,9 +9,11 @@ using Service.Pattern;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data;
 using System.Text;
 using System.Threading.Tasks;
 using static BestApp.Services.InteractionHistoryService;
+using System.Data.Entity;
 
 namespace BestApp.Services
 {
@@ -29,16 +31,22 @@ namespace BestApp.Services
         }
         private readonly EventService _eventService;
         private readonly CustomerService _customerService;
+        private readonly EventTypeService _eventTypeService;
+        private readonly EventPurposeService _eventPurposeService;
         private readonly IRepositoryAsync<InteractionHistory> _repository;
         private readonly IRepository<ApplicationUser> _userRepository;
         protected readonly DataContext db;
         protected UserManager<ApplicationUser> userManager;
         public InteractionHistoryService(IRepositoryAsync<InteractionHistory> repository,
              EventService eventService,
+              EventTypeService eventTypeService,
+             EventPurposeService eventPurposeService,
              CustomerService customerService) : base(repository)
         {
             _eventService = eventService;
             _customerService = customerService;
+            _eventTypeService = eventTypeService;
+            _eventPurposeService = eventPurposeService;
             _repository = repository;
             db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
@@ -69,7 +77,7 @@ namespace BestApp.Services
                 var result = new List<InteractionHistoryViewModel>();
                 //result1.CustomerName = findCus.Name;
                 //result1.CustomerPhone = findCus.PhoneNumber;
-                var listEvent = _eventService.Queryable().Where(x => x.Customer.Id == findCus.Id).ToList();
+                var listEvent = _eventService.Queryable().Include(x => x.DetailEvents).Where(x => x.Customer.Id == findCus.Id).ToList();
                 if(listEvent != null)
                 {
                     foreach(var item in listEvent)
@@ -87,12 +95,28 @@ namespace BestApp.Services
                                 Object1.EmployeeCall = itemHistory.EmployeeCall;
                                 Object1.EmployeeID = itemHistory.EmployeeID;
                                 Object1.EventCode = item.Code;
+                                Object1.Status = item.Status;
+                                Object1.EventNote = item.Note;
+                                Object1.Note = itemHistory.Note;
+                                Object1.EventPurpose = _eventPurposeService.Queryable()
+                                                    .Where(t => t.Delete == false && t.Id == item.EventPurposeId).FirstOrDefault().Name;
+                                Object1.EventType = _eventTypeService.Queryable()
+                                                    .Where(t => t.Delete == false && t.Id == item.EventTypeId).FirstOrDefault().Name;
+                                 if(item.DetailEvents != null)
+                                {
+                                    Object1.Serial = item.DetailEvents.FirstOrDefault().Serial;
+                                    Object1.DetailEventNote = item.DetailEvents.FirstOrDefault().Note;
+                                   
+                                }
                                 result.Add(Object1);
                             }
                         }
                         
                     }
-                   
+                   foreach(var item in result.ToList())
+                    {
+                        
+                    }
                 }
                 else
                 {
