@@ -1189,6 +1189,26 @@ angular.module('app')
                     title:"Mã phiếu"
                 },
                 {
+                    field: "EventNote",
+                    title: "Ghi chú sự kiện"
+                },
+                {
+                    field:"EventPurpose",
+                    title:"Mục đích"
+                },
+                {
+                    title:"Loại phiếu",
+                    field:"EventType"
+                }, 
+                {
+                    field: "DetailEventNote",
+                    title: "Ghi chú chi tiết"
+                },
+                {
+                    field: "Serial",
+                    title: "Serial"
+                },
+                {
                     field:"CreatDate",
                     title:"Ngày tạo",
                     type:"datetime",
