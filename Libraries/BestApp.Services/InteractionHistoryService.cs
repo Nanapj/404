@@ -90,7 +90,8 @@ namespace BestApp.Services
                                 var Object1 = new InteractionHistoryViewModel();
                                 Object1.Type = itemHistory.Type;
                                 Object1.ID = itemHistory.Id;
-                                Object1.CreatDate = itemHistory.CreatDate.ToLocalTime();
+                                Object1.Note = item.Note;
+                                Object1.CreatDate = itemHistory.CreatDate;
                                 Object1.EmployeeCall = itemHistory.EmployeeCall;
                                 Object1.EmployeeID = itemHistory.EmployeeID;
                                 Object1.EventCode = item.Code;

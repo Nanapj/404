@@ -95,7 +95,8 @@ angular.module('app')
                 { field: "Code", title:"Mã sự kiện", width: "110px" },
                 { field: "CreatDate",  
                   format: "{0:yyyy-MM-dd hh:mm:ss tt}",
-                  parseFormats: ["dd/MM/yyyy h:mm:ss"], title:"Ngày tạo phiếu" },
+                  parseFormats: ["dd/MM/yyyy h:mm:ss"], 
+                title:"Ngày tạo phiếu" },
                 { field: "TypeEvent", title: "Loại sự kiện", width: "190px" }
                 ]
             };

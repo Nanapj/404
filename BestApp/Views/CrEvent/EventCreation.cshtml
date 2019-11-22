@@ -109,11 +109,11 @@
                                          k-options="windowOptions"
                                          k-on-open="win1visible = true"
                                          k-on-close="win1visible = false">
-                                        <div kendo-scheduler
+                                        @*<div kendo-scheduler
                                              id="historyScheduler"
                                              k-options="schedulerOptions">
 
-                                        </div>
+                                        </div>*@
                                         <div class="col-md-12">
                                             <div id="historyGrid"
                                                  kendo-grid
@@ -313,7 +313,8 @@
                                     <div class="row col-md-12">
                                         <div class="form-group" style="padding: 15px;">
                                             <label>Nội dung</label>
-                                            <ng-quill-editor ng-model="vm.eventCR.Note" modules="{toolbar: false}"></ng-quill-editor>
+                                            <ng-quill-editor on-content-changed="contentChanged(editor, html, text)"
+                                                             ng-model="vm.eventCR.Note" modules="{toolbar: false}"></ng-quill-editor>
                                         </div>
                                     </div>
                                     <div class="row col-md-12">
@@ -353,7 +354,8 @@
                                         <div class="row col-md-12">
                                             <div class="form-group" style="padding: 15px;">
                                                 <h4>Ghi chú</h4>
-                                                <ng-quill-editor ng-model="vm.eventCRDetails.Note" modules="{toolbar: false}"></ng-quill-editor>
+                                                <ng-quill-editor on-content-changed="CREventDetailscontentChanged(editor, html, text)"
+                                                                 ng-model="vm.eventCRDetails.Note" modules="{toolbar: false}"></ng-quill-editor>
                                             </div>
                                         </div>
                                         <div class="row col-md-12">
@@ -409,7 +411,8 @@
                                         <div class="row col-md-12">
                                             <div class="form-group" style="padding: 15px;">
                                                 <label>Lời nhắc</label>
-                                                <ng-quill-editor ng-model="vm.reminderCR.Note" modules="{toolbar: false}"></ng-quill-editor>
+                                                <ng-quill-editor on-content-changed="reminderContentChanged(editor, html, text)"
+                                                                 ng-model="vm.reminderCR.Note" modules="{toolbar: false}"></ng-quill-editor>
                                             </div>
                                         </div>
                                         <div class="row col-md-12">
@@ -447,7 +450,8 @@
                                             <div class="row col-md-12">
                                                 <div class="form-group" style="padding: 15px;">
                                                     <h4>Ghi chú</h4>
-                                                    <ng-quill-editor ng-model="vm.reminderCRDetails.Note" modules="{toolbar: false}"></ng-quill-editor>
+                                                    <ng-quill-editor on-content-changed="reminderCRDetailContentChanged(editor, html, text)"
+                                                                     ng-model="vm.reminderCRDetails.Note" modules="{toolbar: false}"></ng-quill-editor>
                                                 </div>
                                             </div>
                                             <div class="row col-md-12">
