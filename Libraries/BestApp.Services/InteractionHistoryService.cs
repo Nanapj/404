@@ -77,8 +77,8 @@ namespace BestApp.Services
                 var result = new List<InteractionHistoryViewModel>();
                 //result1.CustomerName = findCus.Name;
                 //result1.CustomerPhone = findCus.PhoneNumber;
-                var listEvent = _eventService.Queryable().Include(x => x.DetailEvents).Where(x => x.Customer.Id == findCus.Id).ToList();
-                if(listEvent != null)
+                var listEvent = _eventService.Queryable().Include(x => x.DetailEvents).Include(x => x.InteractionHistorys).Include(x => x.ReminderNotes).Where(x => x.Customer.Id == findCus.Id).ToList();
+                if(listEvent.Count > 0)
                 {
                     foreach(var item in listEvent)
                     {
@@ -102,7 +102,7 @@ namespace BestApp.Services
                                                     .Where(t => t.Delete == false && t.Id == item.EventPurposeId).FirstOrDefault().Name;
                                 Object1.EventType = _eventTypeService.Queryable()
                                                     .Where(t => t.Delete == false && t.Id == item.EventTypeId).FirstOrDefault().Name;
-                                 if(item.DetailEvents != null)
+                                 if(item.DetailEvents.Count > 0)
                                 {
                                     Object1.Serial = item.DetailEvents.FirstOrDefault().Serial;
                                     Object1.DetailEventNote = item.DetailEvents.FirstOrDefault().Note;

@@ -105,6 +105,7 @@ namespace BestApp.Services
                 }).ToList(),
                 InteractionHistorys = x.InteractionHistorys.Select(t => new InteractionHistoryViewModel
                 {
+                    ID = t.Id,
                     Type = t.Type,
                     Note = t.Note,
                     CreatDate = t.CreatDate,

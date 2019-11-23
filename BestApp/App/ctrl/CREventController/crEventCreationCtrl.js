@@ -915,6 +915,7 @@ angular.module('app')
             vm.eventCR.DetailEvents.push(vm.eventCRDetails);
             vm.eventCR.Tags = vm.crtagSelectected;
             vm.eventCRDetails.Serial = vm.serialSelectedData.device_serial;
+            vm.eventCRDetails.ProductID = vm.eventProductTypeSelectedData.ID;
             vm.eventCR.EventTypeID = vm.selectedEventData.ID;
             vm.eventCR.EventPurposeID = vm.selectedPurposeData.ID;
             if(vm.eventCR.CustomerID == undefined || vm.eventCR.CustomerID === "") {
@@ -1186,6 +1187,26 @@ angular.module('app')
                 {
                     field:"EventCode",
                     title:"Mã phiếu"
+                },
+                {
+                    field: "EventNote",
+                    title: "Ghi chú sự kiện"
+                },
+                {
+                    field:"EventPurpose",
+                    title:"Mục đích"
+                },
+                {
+                    title:"Loại phiếu",
+                    field:"EventType"
+                }, 
+                {
+                    field: "DetailEventNote",
+                    title: "Ghi chú chi tiết"
+                },
+                {
+                    field: "Serial",
+                    title: "Serial"
                 },
                 {
                     field:"CreatDate",
