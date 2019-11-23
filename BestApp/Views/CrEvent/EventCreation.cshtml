@@ -338,7 +338,7 @@
                                                         <div class="form-group" style="padding: 15px;">
                                                             <label>{{item.department.Name}}</label>
                                                             <div class="row" style="padding:15px;">
-                                                                <button id="crbutton{{child.ID}}"
+                                                                <button id="crbutton{{child.ID}}a"
                                                                         ng-repeat="child in item.tagList"
                                                                         class="btn m-b-xs w-xs btn-default"
                                                                         ng-click="crTagItemClicked(child,this,$index)"
@@ -365,35 +365,36 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" id="seconTabContent" ng-hide="tab2Invisible" >
+                                <div class="row" id="seconTabContent" ng-hide="false" >
                                     <div class="row col-md-12">
                                         <div class="form-group">
                                             <div class="col-md-3">
                                                 <label>Sản phẩm</label>
-                                                <select kendo-drop-down-list
-                                                        k-data-text-field="'Name'"
-                                                        k-data-value-field="'ID'"
-                                                        k-data-source="vm.reminderProductData"
-                                                        k-option-label="' Sản phẩm... '"
-                                                        k-filter="'contains'"
-                                                        style="width: 100%"
-                                                        k-ng-model="vm.reminderProductTypeSelectedData"
-                                                        k-on-change="onReminderProductTypeSelChanged()"
-                                                        ></select>
+                                                <div class="form-group">
+                                                    <select kendo-drop-down-list
+                                                            k-data-text-field="'Name'"
+                                                            k-data-value-field="'ID'"
+                                                            k-data-source="vm.eventProductTypeData"
+                                                            k-option-label="' Sản phẩm... '"
+                                                            k-filter="'contains'"
+                                                            style="width: 100%"
+                                                            k-ng-model="vm.eventProductTypeSelectedData"
+                                                            k-on-change="onEventProductTypeSelChanged()"></select>
+                                                </div>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-3 serial-dropdown">
                                                 <div class="form-group">
                                                     <label>Serial</label>
                                                     <select kendo-drop-down-list
-                                                            id="serialReminderDropdown"
+                                                            id="serialDropdown"
                                                             k-data-text-field="'device_serial'"
                                                             k-data-value-field="'device_serial'"
                                                             k-option-label="' Serial... '"
-                                                            k-data-source="vm.reminderSerialData"
+                                                            k-data-source="vm.serialData"
                                                             k-filter="'contains'"
                                                             style="width: 100%"
-                                                            k-ng-model="vm.reminderSerialSelectedData"
-                                                            k-on-change="onReminderSerialSelChanged()"></select>
+                                                            k-ng-model="vm.serialSelectedData"
+                                                            k-on-change="onSerialSelChanged()"></select>
                                                 </div>
                                             </div>
                                         </div>
@@ -404,8 +405,7 @@
                                                        k-options="{format: 'dd/MM/yyyy'}"
                                                        style="width: 100%;"
                                                        k-ng-model="vm.reminderCRDetails.ReminderDate"
-                                                       k-on-change="reminderOnSelectedDate()"
-                                                />
+                                                       k-on-change="reminderOnSelectedDate()" />
                                             </div>
                                         </div>
                                         <div class="row col-md-12">
@@ -421,24 +421,23 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label>Phòng ban</label>
-                                                    <select kendo-multi-select
-                                                            id="reminderDepartmentMulDrop"
-                                                            k-options="vm.reminderDepartmentSelectOptions"
-                                                            k-ng-model="vm.reminderDepartmentSelectedIds"></select>
+                                                    <label>Bộ phận</label>
+                                                    <select id="crDepartmentMulDropa"
+                                                            kendo-multi-select k-options="vm.departmentSelectOptions"
+                                                            k-ng-model="vm.departmentSelectedIds"></select>
                                                 </div>
-                                            </div>                                    
+                                            </div>
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <div id="listOfRemindTag" title="Danh sách tag theo phòng ban">
-                                                        <div class="row" ng-repeat="item in vm.reminderDepartmentListTag">
+                                                    <div id="listOfCrTag" title="Danh sách tag theo phòng ban">
+                                                        <div class="row" ng-repeat="item in vm.crDepartmentListTag">
                                                             <div class="form-group" style="padding: 15px;">
                                                                 <label>{{item.department.Name}}</label>
                                                                 <div class="row" style="padding:15px;">
-                                                                    <button id="rebutton{{child.ID}}"
+                                                                    <button id="crbutton{{child.ID}}"
                                                                             ng-repeat="child in item.tagList"
                                                                             class="btn m-b-xs w-xs btn-default"
-                                                                            ng-click="ReminderTagItemClicked(child,this,$index)">
+                                                                            ng-click="crTagItemClickeda(child,this,$index)">
                                                                         {{child.NameTag}}
                                                                     </button>
                                                                 </div>
