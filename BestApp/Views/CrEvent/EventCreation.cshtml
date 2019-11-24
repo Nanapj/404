@@ -365,7 +365,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" id="seconTabContent" ng-hide="false" >
+                                <div class="row" id="seconTabContent" ng-hide="tab2Invisible">
                                     <div class="row col-md-12">
                                         <div class="form-group">
                                             <div class="col-md-3">
@@ -401,8 +401,8 @@
                                         <div class="row col-md-12">
                                             <div class="col-md-3">
                                                 <label>Lịch hẹn</label>
-                                                <input kendo-date-picker
-                                                       k-options="{format: 'dd/MM/yyyy'}"
+                                                <input kendo-date-time-picker
+                                                       k-options="{format: 'dd/MM/yyyy HH:mm tt'}"
                                                        style="width: 100%;"
                                                        k-ng-model="vm.reminderCRDetails.ReminderDate"
                                                        k-on-change="reminderOnSelectedDate()" />
@@ -429,7 +429,7 @@
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <div id="listOfCrTag" title="Danh sách tag theo phòng ban">
+                                                    <div id="listOfCrTaga" title="Danh sách tag theo phòng ban">
                                                         <div class="row" ng-repeat="item in vm.crDepartmentListTag">
                                                             <div class="form-group" style="padding: 15px;">
                                                                 <label>{{item.department.Name}}</label>
