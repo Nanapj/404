@@ -343,6 +343,8 @@ angular.module('app')
             console.log(vm.selectedPurposeData);
             // tabStrip.disable(tabStrip.tabGroup.children().eq(0));
             if(vm.selectedPurposeData !== " Mục đích... ") {
+                var tabStrip = $("#eventTabstrip").kendoTabStrip().data("kendoTabStrip");
+                tabStrip.disable(tabStrip.tabGroup.children().eq(1));
                 $scope.tab1Inisible = false;
             }  else {
                 $scope.tab1Inisible = true;
@@ -962,7 +964,9 @@ angular.module('app')
                 if (willCreate) { 
                     $scope.tab2Invisible = false;
                     $scope.tab1Inisible = true;
+                    
                     var tabstrip = $("#eventTabstrip").data("kendoTabStrip");
+                    tabstrip.disable(tabstrip.tabGroup.children().eq(0));
                     var myTab = tabstrip.tabGroup.children("li").eq(1);
                     tabstrip.select(myTab);
                 } else {
@@ -1029,14 +1033,9 @@ angular.module('app')
                 return value;
             });
             vm.crtagSelectected = JSON.parse(json);
-            console.log(vm.crtagSelectected);
-           
             vm.eventCRDetails.DateSold = time;
             vm.eventCR.DetailEvents.push(vm.eventCRDetails);
             vm.eventCR.Tags = vm.crtagSelectected;
-            if(vm.eventCR.Tags.length < 1) {
-                toaster.pop('error', "Thiếu thông tin", "Vui lòng chọn ít nhất một tag phòng ban");
-            }
             vm.eventCRDetails.Serial = vm.serialSelectedData.device_serial;
             vm.eventCRDetails.ProductID = vm.eventProductTypeSelectedData.ID;
             vm.eventCR.EventTypeID = vm.selectedEventData.ID;
@@ -1229,16 +1228,19 @@ angular.module('app')
                 serverPaging: true,
                 serverSorting: true
             },
+            toolbar:  [
+                {
+                    name: "Edit Columns",
+                    template:
+                        '&nbsp;&nbsp;&nbsp;<div class="k-button btn btn-default btn-xs" style="float: left" kendo-menu k-data-source="menuDataSource" k-on-select="onSelect(kendoEvent)" k-on-open="onOpen(kendoEvent)"></div>'
+                }
+            ],
             sortable: true,
             pageable: true,
+            groupable: true,
+            columnMenu: true,
             height: 300,
             columns: [
-                {
-                    field: "ID",
-                    title: "ID",
-                    width: "50px",
-                    hidden: true
-                },
                 {
                     field: "Type",
                     title: "Hình thức tương tác",
@@ -1271,14 +1273,45 @@ angular.module('app')
                     field:"CreatDate",
                     title:"Ngày tạo",
                     type:"datetime",
-                    template: "#= kendo.toString(kendo.parseDate(CreatDate, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"
+                    template: "#= kendo.toString(kendo.parseDate(CreatDate, 'yyyy-MM-dd'), 'dd/MM/yyyy') #",
+                    groupHeaderTemplate:  "#= kendo.toString(kendo.parseDate(value , 'yyyy-MM-dd'), 'dd/MM/yyyy') #"
                 }, 
                 {
                     field: "Note",
                     title: "Ghi chú"
                 }
             ]
-        }
+        };
+        $scope.menuDataSource = [
+            {
+                text: "Ẩn/hiện cột",
+                items: [
+                {
+                    encoded: false,
+                    text: '<label><input type="checkbox" class="check" checked="checked" data-field="Type" />Hình thức tương tác</label>'
+                },
+                {
+                    encoded: false,
+                    text: '<label><input type="checkbox" class="check" checked="checked" data-field="EventType" />Mục đích</label>'
+                }
+            ]
+        
+        }]; 
+        $scope.onSelect = function (e) {
+            // don't show/hide for menu button
+            // if ($(e.item).parent().filter("div").length) return;
+            var input = $(e.item).find("input.check");
+            var field = $(input).data("field");
+            if ($(input).is(":checked")) {
+                $scope.histoGrid.showColumn(field);
+            } else {
+                $scope.histoGrid.hideColumn(field);
+            }
+        };
+       
+       setTimeout(function(){
+          $('div[kendo-grid="histoGrid"] .k-menu').data('kendoMenu').setOptions({dataSource: $scope.menuDataSource});
+       },4000);
         $scope.contentChanged = function (editor, html, text) {
             vm.eventCR.Note = text;
            console.log(vm.eventCR.Note);
