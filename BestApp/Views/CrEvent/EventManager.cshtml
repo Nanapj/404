@@ -25,6 +25,7 @@
                                 <div class="form-group" style="padding-left: 15px;">
                                     <h5>Ngày tạo</h5>
                                     <div kendo-date-range-picker
+                                         id="dateRangeFilter"
                                          k-ng-model="vm.startDate, vm.endDate"
                                          k-on-change="onDateRangeChange()"
                                          k-options="{format: 'dd/MM/yyyy'}"
@@ -37,6 +38,7 @@
                                 <div class="form-group" style="padding-left: 15px;">
                                     <h5>Phòng ban</h5>
                                     <select kendo-multi-select
+                                            id="departMulDrop"
                                             k-options="vm.departmentSelectOptions"
                                             k-ng-model="vm.departmentSelectedIds"></select>
                                 </div>

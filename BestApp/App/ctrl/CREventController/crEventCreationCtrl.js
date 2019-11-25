@@ -798,60 +798,60 @@ angular.module('app')
                                     vm.reminderSerialData = {
                                         data: response.data.d.Item
                                     };
-                                    $('body').kendoTooltip({
-                                        filter: 'li.k-item',
-                                        position: 'right',
-                                        show: function(e){
-                                            // console.log(this.content[0].childNodes[0].data);
-                                            // console.log(this.content[0].childNodes[0].data);
-                                            if(this.content[0].childNodes.length > 0 ) {
-                                                if(this.content[0].childNodes[0].childNodes.length > 0) { 
-                                                    this.content.parent().css("visibility", "visible");
-                                                }    
-                                            }  
-                                        },
-                                        hide:function(e){
-                                            this.content.parent().css("visibility", "hidden");
-                                        },
-                                        content: function(e){
-                                          var item = $('#serialDropdown').data("kendoDropDownList").dataItem($(e.target));
-                                        //   var item2 = $('#serialReminderDropdown').data("kendoDropDownList").dataItem($(e.target));
-                                          if(item.device_serial !== '') {
-                                            console.log(item);
-                                            //   console.log(item.device_serial);
-                                              if(item.device_serial == '' || item.device_serial == undefined) {
-                                                  var result = "NO";
-                                                  return result;
-                                              } else {
-                                                var result = '<h4>Mã thiết bị: '+item.device_serial+'</h4>'+'<h5>Tên thiết bị: '+item.device_name+'</h5>';
-                                                if(item.owner_yesno === true) {
-                                                    result +='<h5>Là chủ sở hữu</h5>';
-                                                } else {
-                                                    result +='<h5>Không phải chủ sở hữu</h5>';
-                                                }
-                                                return result;
-                                            }
-                                          }
-                                        //   if(item2.device_serial !== '') {
-                                        //     console.log(item2);
-                                        //     //   console.log(item.device_serial);
-                                        //       if(item2.device_serial == '' || item2.device_serial == undefined) {
-                                        //           var result = "NO";
-                                        //           return result;
-                                        //       } else {
-                                        //         var result = '<h4>Mã thiết bị: '+item2.device_serial+'</h4>'+'<h5>Tên thiết bị: '+item2.device_name+'</h5>';
-                                        //         if(item2.owner_yesno === true) {
-                                        //             result +='<h5>Là chủ sở hữu</h5>';
-                                        //         } else {
-                                        //             result +='<h5>Không phải chủ sở hữu</h5>';
-                                        //         }
-                                        //         return result;
-                                        //     }
-                                        //   }
-                                        },
-                                        width: 150,
-                                        height: 150
-                                      });
+                                    // $('body').kendoTooltip({
+                                    //     filter: 'li.k-item',
+                                    //     position: 'right',
+                                    //     show: function(e){
+                                    //         // console.log(this.content[0].childNodes[0].data);
+                                    //         // console.log(this.content[0].childNodes[0].data);
+                                    //         if(this.content[0].childNodes.length > 0 ) {
+                                    //             if(this.content[0].childNodes[0].childNodes.length > 0) { 
+                                    //                 this.content.parent().css("visibility", "visible");
+                                    //             }    
+                                    //         }  
+                                    //     },
+                                    //     hide:function(e){
+                                    //         this.content.parent().css("visibility", "hidden");
+                                    //     },
+                                    //     content: function(e){
+                                    //       var item = $('#serialDropdown').data("kendoDropDownList").dataItem($(e.target));
+                                    //     //   var item2 = $('#serialReminderDropdown').data("kendoDropDownList").dataItem($(e.target));
+                                    //       if(item.device_serial !== '') {
+                                    //         console.log(item);
+                                    //         //   console.log(item.device_serial);
+                                    //           if(item.device_serial == '' || item.device_serial == undefined) {
+                                    //               var result = "NO";
+                                    //               return result;
+                                    //           } else {
+                                    //             var result = '<h4>Mã thiết bị: '+item.device_serial+'</h4>'+'<h5>Tên thiết bị: '+item.device_name+'</h5>';
+                                    //             if(item.owner_yesno === true) {
+                                    //                 result +='<h5>Là chủ sở hữu</h5>';
+                                    //             } else {
+                                    //                 result +='<h5>Không phải chủ sở hữu</h5>';
+                                    //             }
+                                    //             return result;
+                                    //         }
+                                    //       }
+                                    //     //   if(item2.device_serial !== '') {
+                                    //     //     console.log(item2);
+                                    //     //     //   console.log(item.device_serial);
+                                    //     //       if(item2.device_serial == '' || item2.device_serial == undefined) {
+                                    //     //           var result = "NO";
+                                    //     //           return result;
+                                    //     //       } else {
+                                    //     //         var result = '<h4>Mã thiết bị: '+item2.device_serial+'</h4>'+'<h5>Tên thiết bị: '+item2.device_name+'</h5>';
+                                    //     //         if(item2.owner_yesno === true) {
+                                    //     //             result +='<h5>Là chủ sở hữu</h5>';
+                                    //     //         } else {
+                                    //     //             result +='<h5>Không phải chủ sở hữu</h5>';
+                                    //     //         }
+                                    //     //         return result;
+                                    //     //     }
+                                    //     //   }
+                                    //     },
+                                    //     width: 150,
+                                    //     height: 150
+                                    //   });
                                     // console.log(vm.serialData);
                                 } else {
                                     console.log("Không có thông tin")
@@ -1132,8 +1132,8 @@ angular.module('app')
         }
         $scope.windowOptions = {
             title : 'Lịch sử tương tác',
-            width : 800,
-            height : 300,
+            width : "70%",
+            height : 600,
             visible : false,
             actions: [
                 "Pin",
@@ -1141,53 +1141,10 @@ angular.module('app')
                 "Maximize",
                 "Close"
             ],
-            position: { top: 400 , left: "56%" },
+            position: { top: "25%" , left: "20%" },
             close: onHistoryClose,
             modal: false,
         }
-        // $scope.schedulerOptions = {
-        //     date: new Date(),
-        //     startTime: new Date(),
-        //     height: 600,
-        //     views: [
-        //         "agenda"
-        //     ],
-        //     timezone: "Etc/UTC",
-        //     dataSource: {
-        //         batch: false,
-        //         autoBind: false,
-        //         editable: false,
-        //         transport: {
-        //             read: {
-        //                 url: _interactURL+"GetInteractionHistoryByCustomer?PhoneNumber="+vm.searchingNumber,
-        //                 dataType: "odata-v4"
-        //             },
-        //             parameterMap: function(options, operation) {
-        //                 if (operation !== "read" && options.models) {
-        //                     return {models: kendo.stringify(options.models)};
-        //                 }
-        //             }
-        //         },
-        //         schema: {
-        //             model: {
-        //                 ID: "ID",
-        //                 fields: {
-        //                     id: { from: "ID", type: "string" },
-        //                     title: { from: "EventCode", type: "string" },
-        //                     start: { type: "date", from: "CreatDate" },
-        //                     end: { type: "date", from: "CreatDate" },
-        //                 }
-        //             }
-        //         },
-        //         // filter: {
-        //         //     logic: "or",
-        //         //     filters: [
-        //         //         { field: "ownerId", operator: "eq", value: 1 },
-        //         //         { field: "ownerId", operator: "eq", value: 2 }
-        //         //     ]
-        //         // }
-        //     }
-        // }
 
         $scope.schedulerOptions = {
             date: new Date(),
@@ -1228,18 +1185,11 @@ angular.module('app')
                 serverPaging: true,
                 serverSorting: true
             },
-            toolbar:  [
-                {
-                    name: "Edit Columns",
-                    template:
-                        '&nbsp;&nbsp;&nbsp;<div class="k-button btn btn-default btn-xs" style="float: left" kendo-menu k-data-source="menuDataSource" k-on-select="onSelect(kendoEvent)" k-on-open="onOpen(kendoEvent)"></div>'
-                }
-            ],
             sortable: true,
             pageable: true,
             groupable: true,
             columnMenu: true,
-            height: 300,
+            height: 500,
             columns: [
                 {
                     field: "Type",
@@ -1282,36 +1232,7 @@ angular.module('app')
                 }
             ]
         };
-        $scope.menuDataSource = [
-            {
-                text: "Ẩn/hiện cột",
-                items: [
-                {
-                    encoded: false,
-                    text: '<label><input type="checkbox" class="check" checked="checked" data-field="Type" />Hình thức tương tác</label>'
-                },
-                {
-                    encoded: false,
-                    text: '<label><input type="checkbox" class="check" checked="checked" data-field="EventType" />Mục đích</label>'
-                }
-            ]
-        
-        }]; 
-        $scope.onSelect = function (e) {
-            // don't show/hide for menu button
-            // if ($(e.item).parent().filter("div").length) return;
-            var input = $(e.item).find("input.check");
-            var field = $(input).data("field");
-            if ($(input).is(":checked")) {
-                $scope.histoGrid.showColumn(field);
-            } else {
-                $scope.histoGrid.hideColumn(field);
-            }
-        };
-       
-       setTimeout(function(){
-          $('div[kendo-grid="histoGrid"] .k-menu').data('kendoMenu').setOptions({dataSource: $scope.menuDataSource});
-       },4000);
+
         $scope.contentChanged = function (editor, html, text) {
             vm.eventCR.Note = text;
            console.log(vm.eventCR.Note);
