@@ -103,6 +103,15 @@ namespace BestApp.Services
                     ProductName = t.ProductType.Name,
                     Note = t.Note
                 }).ToList(),
+                ReminderNotes = x.ReminderNotes.Select(t => new ReminderNoteViewModel
+                {
+                    Note = t.Note,
+                    CreatDate = t.CreatDate,
+                    Serial = t.Serial,
+                    ID =t.Id,
+                    ReminderDate = t.ReminderDate
+
+                }).ToList(),
                 InteractionHistorys = x.InteractionHistorys.Select(t => new InteractionHistoryViewModel
                 {
                     ID = t.Id,
