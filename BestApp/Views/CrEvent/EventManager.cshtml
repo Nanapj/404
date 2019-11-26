@@ -45,13 +45,22 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <h5>Danh sách tag sự kiện</h5>
-                                    <div id="listoftag" title="listoftag" >
-                                         <button 
-                                            id="button{{item.Id}}"
-                                            ng-repeat="item in vm.tagsList" 
-                                            class="btn m-b-xs w-xs btn-default" 
-                                            ng-click="tagItemClicked(item,this,$index)" >{{item.Name}}</button>
+                                    <div class="form-group">
+                                        <div id="listOfCrTaga" title="Danh sách tag sự kiện">
+                                            <div class="row" ng-repeat="item in vm.crDepartmentListTag">
+                                                <div class="form-group" style="padding: 15px;">
+                                                    <label>{{item.department.Name}}</label>
+                                                    <div class="row" style="padding:15px;">
+                                                        <button id="filter{{child.ID}}"
+                                                                ng-repeat="child in item.tagList"
+                                                                class="btn m-b-xs w-xs btn-default"
+                                                                ng-click="filterTagClicked(child,this,$index)">
+                                                            {{child.NameTag}}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +78,35 @@
                      k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
             </div>
             <div id="details">
-                <div id="gridDetails"></div>
+               
+                <div id="windowTabstrip">
+                    <ul>
+                        <li class="k-state-active">
+                            Chi tiết phiếu
+                        </li>
+                        <li>
+                            Lịch sử tương tác
+                        </li>
+                        <li>
+                           Tags
+                        </li>
+                        <li>
+                            Lịch hẹn phiếu
+                        </li>
+                    </ul>
+                    <div>
+                        <div id="gridDetails"></div>
+                    </div>
+                    <div>
+                        <h1>Hello world 2</h1>
+                    </div>
+                    <div>
+                        <h1>Hello world 3</h1>
+                    </div>
+                    <div>
+                        <h1>Hello world 4</h1>
+                    </div>
+                </div>
             </div>
 
             <script type="text/x-kendo-template" id="template">
