@@ -7,7 +7,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading font-bold">TẠO SỰ KIỆN</div>
                         <div class="panel-body">
-                            <form class="m-b-md" ng-submit="!vm.tabDisable ? (steps.step2=true) : (steps.step2=false)" >
+                            <form class="m-b-md" ng-submit="!vm.tabDisable ? (steps.step2=true) : (steps.step2=false)">
                                 <div class="input-group">
                                     <input type="text" name="masked" ng-change="phoneNumChange()" ui-mask="999 999 9999" ng-model="vm.searchingNumber" placeholder="___ ___ ____" class="form-control m-b" required>
                                     <span class="input-group-btn">
@@ -38,8 +38,7 @@
                                 <div class="row ">
                                     <div class="col-md-6 btn-group m-b-md col-sm-12">
                                         <label>Thành phố / Tỉnh</label>
-                                        <select 
-                                                id="citydropdown"
+                                        <select id="citydropdown"
                                                 kendo-drop-down-list
                                                 k-ng-model="vm.selectedCity"
                                                 k-data-text-field="'name_with_type'"
@@ -48,12 +47,11 @@
                                                 k-option-label="' Thành phố... '"
                                                 k-filter="'contains'"
                                                 k-on-change="onCityChanged()"
-                                                style="width: 100%"></select>                             
+                                                style="width: 100%"></select>
                                     </div>
                                     <div class="col-md-6 btn-group m-b-md col-sm-12">
                                         <label>Quận / Huyện</label>
-                                        <select 
-                                                id="districtdropdown"
+                                        <select id="districtdropdown"
                                                 kendo-drop-down-list
                                                 ng-disabled="districtDis === 1"
                                                 k-data-text-field="'name_with_type'"
@@ -62,15 +60,14 @@
                                                 k-option-label="' Quận / Huyện... '"
                                                 k-filter="'contains'"
                                                 k-ng-model="vm.selectedDistrict"
-                                                k-on-change ="onDistrictChanged()"
+                                                k-on-change="onDistrictChanged()"
                                                 style="width: 100%"></select>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 btn-group m-b-md col-sm-12">
                                         <label>Phường / Xã</label>
-                                        <select
-                                                id="warddropdown"
+                                        <select id="warddropdown"
                                                 kendo-drop-down-list
                                                 ng-disabled="wardDis === 1"
                                                 k-data-text-field="'name_with_type'"
@@ -84,14 +81,12 @@
                                     </div>
                                     <div class="col-md-6 btn-group m-b-md col-sm-12">
                                         <label>Ngày sinh</label>
-                                        <input 
-                                               kendo-date-picker
+                                        <input kendo-date-picker
                                                k-options="{format: 'dd/MM/yyyy'}"
                                                value="{{vm.selectedDate}}"
                                                k-ng-model="vm.selectedDate"
                                                k-on-change="onSelectedDate()"
-                                               style="width: 100%;" 
-                                         />
+                                               style="width: 100%;" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -104,26 +99,8 @@
                                         <i class="fa fa-file"></i>
                                         Lịch sử
                                     </button>
-                                    <div kendo-window="win1"
-                                         id="historyWindow"
-                                         k-options="windowOptions"
-                                         k-on-open="win1visible = true"
-                                         k-on-close="win1visible = false">
-                                        @*<div kendo-scheduler
-                                             id="historyScheduler"
-                                             k-options="schedulerOptions">
 
-                                        </div>*@
-                                        <div class="col-md-12">
-                                            <div id="historyGrid"
-                                                 kendo-grid
-                                                 k-options="historyGridOptions"
-                                                 k-selectable="true"
-                                                 k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'
-                                             ></div>
-                                        </div>
-                                    </div>
-                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -172,7 +149,7 @@
                                     <button class="btn btn-success btn-default" title="Lấy thông tin từ Pitech" ng-click="transferInfo()">
                                         <i class="fa fa-mail-reply-all"></i>
                                         Transfer
-                                    </button>                        
+                                    </button>
                                     <button class="btn btn-info btn-default" title="Gửi yêu cầu thay đổi thông tin cho Pitech">
                                         <i class="fa fa-comments-o"></i>
                                         Gửi yêu cầu
@@ -192,9 +169,8 @@
                             <div class="row">
                                 <div class="col-md-6 k-content">
                                     <label>Sự kiện</label>
-                                    <select 
-                                            id="eventtypedropdown"
-                                            kendo-drop-down-list            
+                                    <select id="eventtypedropdown"
+                                            kendo-drop-down-list
                                             ng-disabled="eventTypeDis === 1"
                                             k-data-text-field="'Name'"
                                             k-data-value-field="'ID'"
@@ -202,13 +178,12 @@
                                             k-option-label="' Sự kiện... '"
                                             k-ng-model="vm.selectedEventData"
                                             k-on-change="onEventSelChanged()"
-                                            k-filter="'contains'"                              
+                                            k-filter="'contains'"
                                             style="width: 100%"></select>
                                 </div>
                                 <div class="col-md-6 k-content">
                                     <label>Mục đích</label>
-                                    <select 
-                                            id="purposedropdown"
+                                    <select id="purposedropdown"
                                             kendo-drop-down-list
                                             ng-disabled="purDis === 1"
                                             k-data-text-field="'Name'"
@@ -218,8 +193,7 @@
                                             k-on-change="onPurSelChanged()"
                                             k-option-label="' Mục đích... '"
                                             k-filter="'contains'"
-                                            style="width: 100%">
-                                    </select>
+                                            style="width: 100%"></select>
                                 </div>
                             </div>
                         </div>
@@ -254,16 +228,13 @@
                                                             k-filter="'contains'"
                                                             style="width: 100%"
                                                             k-ng-model="vm.eventProductTypeSelectedData"
-                                                            k-on-change="onEventProductTypeSelChanged()"
-                                                    >        
-                                                    </select>
+                                                            k-on-change="onEventProductTypeSelChanged()"></select>
                                                 </div>
                                             </div>
                                             <div class="col-md-3 serial-dropdown">
                                                 <div class="form-group">
                                                     <label>Serial</label>
-                                                    <select 
-                                                            kendo-drop-down-list
+                                                    <select kendo-drop-down-list
                                                             id="serialDropdown"
                                                             k-data-text-field="'device_serial'"
                                                             k-data-value-field="'device_serial'"
@@ -280,34 +251,29 @@
                                     <div class="row col-md-12">
                                         <div class="col-md-3">
                                             <label>Đại lý</label>
-                                            <input 
-                                                   style="height:17px; 
-                                                   width:93%" 
-                                                   type="text" 
-                                                   class="form-control" 
-                                                   placeholder="Đại lý" 
-                                                   ng-model="vm.eventCRDetails.AgencySold"
-                                             />
+                                            <input style="height:17px;
+                                                   width:93%"
+                                                   type="text"
+                                                   class="form-control"
+                                                   placeholder="Đại lý"
+                                                   ng-model="vm.eventCRDetails.AgencySold" />
                                         </div>
                                         <div class="col-md-3">
                                             <label>Nhân viên bán hàng</label>
-                                            <input 
-                                                   style="height:17px; 
-                                                   width:93%" 
-                                                   type="text" 
-                                                   class="form-control" 
-                                                   placeholder="Nhân viên bán hàng" 
-                                                   ng-model="vm.eventCRDetails.AssociateName"
-                                             />
+                                            <input style="height:17px;
+                                                   width:93%"
+                                                   type="text"
+                                                   class="form-control"
+                                                   placeholder="Nhân viên bán hàng"
+                                                   ng-model="vm.eventCRDetails.AssociateName" />
                                         </div>
                                         <div class="col-md-3">
                                             <label>Ngày mua</label>
                                             <input kendo-date-picker
                                                    k-options="{format: 'dd/MM/yyyy'}"
-                                                   style="width: 100%;" 
+                                                   style="width: 100%;"
                                                    k-ng-model="vm.eventCRDetails.DateSold"
-                                                   k-on-change="onDateSoldChanged()"
-                                                   />
+                                                   k-on-change="onDateSoldChanged()" />
                                         </div>
                                     </div>
                                     <div class="row col-md-12">
@@ -323,12 +289,10 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Bộ phận</label>
-                                                <select 
-                                                        id="crDepartmentMulDrop"
-                                                        kendo-multi-select k-options="vm.departmentSelectOptions" 
-                                                        k-ng-model="vm.departmentSelectedIds">
-                                                </select>
+                                                <label>Phòng ban</label>
+                                                <select id="crDepartmentMulDrop"
+                                                        kendo-multi-select k-options="vm.departmentSelectOptions"
+                                                        k-ng-model="vm.departmentSelectedIds"></select>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -338,11 +302,10 @@
                                                         <div class="form-group" style="padding: 15px;">
                                                             <label>{{item.department.Name}}</label>
                                                             <div class="row" style="padding:15px;">
-                                                                <button id="crbutton{{child.ID}}"
+                                                                <button id="crbutton{{child.ID}}a"
                                                                         ng-repeat="child in item.tagList"
                                                                         class="btn m-b-xs w-xs btn-default"
-                                                                        ng-click="crTagItemClicked(child,this,$index)"
-                                                                        >
+                                                                        ng-click="crTagItemClicked(child,this,$index)">
                                                                     {{child.NameTag}}
                                                                 </button>
                                                             </div>
@@ -365,47 +328,47 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" id="seconTabContent" ng-hide="tab2Invisible" >
+                                <div class="row" id="seconTabContent" ng-hide="tab2Invisible">
                                     <div class="row col-md-12">
                                         <div class="form-group">
                                             <div class="col-md-3">
                                                 <label>Sản phẩm</label>
-                                                <select kendo-drop-down-list
-                                                        k-data-text-field="'Name'"
-                                                        k-data-value-field="'ID'"
-                                                        k-data-source="vm.reminderProductData"
-                                                        k-option-label="' Sản phẩm... '"
-                                                        k-filter="'contains'"
-                                                        style="width: 100%"
-                                                        k-ng-model="vm.reminderProductTypeSelectedData"
-                                                        k-on-change="onReminderProductTypeSelChanged()"
-                                                        ></select>
+                                                <div class="form-group">
+                                                    <select kendo-drop-down-list
+                                                            k-data-text-field="'Name'"
+                                                            k-data-value-field="'ID'"
+                                                            k-data-source="vm.eventProductTypeData"
+                                                            k-option-label="' Sản phẩm... '"
+                                                            k-filter="'contains'"
+                                                            style="width: 100%"
+                                                            k-ng-model="vm.eventProductTypeSelectedData"
+                                                            k-on-change="onEventProductTypeSelChanged()"></select>
+                                                </div>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-3 serial-dropdown">
                                                 <div class="form-group">
                                                     <label>Serial</label>
                                                     <select kendo-drop-down-list
-                                                            id="serialReminderDropdown"
+                                                            id="serialDropdown"
                                                             k-data-text-field="'device_serial'"
                                                             k-data-value-field="'device_serial'"
                                                             k-option-label="' Serial... '"
-                                                            k-data-source="vm.reminderSerialData"
+                                                            k-data-source="vm.serialData"
                                                             k-filter="'contains'"
                                                             style="width: 100%"
-                                                            k-ng-model="vm.reminderSerialSelectedData"
-                                                            k-on-change="onReminderSerialSelChanged()"></select>
+                                                            k-ng-model="vm.serialSelectedData"
+                                                            k-on-change="onSerialSelChanged()"></select>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row col-md-12">
                                             <div class="col-md-3">
                                                 <label>Lịch hẹn</label>
-                                                <input kendo-date-picker
-                                                       k-options="{format: 'dd/MM/yyyy'}"
+                                                <input kendo-date-time-picker
+                                                       k-options="{format: 'dd/MM/yyyy HH:mm tt'}"
                                                        style="width: 100%;"
                                                        k-ng-model="vm.reminderCRDetails.ReminderDate"
-                                                       k-on-change="reminderOnSelectedDate()"
-                                                />
+                                                       k-on-change="reminderOnSelectedDate()" />
                                             </div>
                                         </div>
                                         <div class="row col-md-12">
@@ -422,23 +385,22 @@
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label>Phòng ban</label>
-                                                    <select kendo-multi-select
-                                                            id="reminderDepartmentMulDrop"
-                                                            k-options="vm.reminderDepartmentSelectOptions"
-                                                            k-ng-model="vm.reminderDepartmentSelectedIds"></select>
+                                                    <select id="crDepartmentMulDropa"
+                                                            kendo-multi-select k-options="vm.departmentSelectOptions"
+                                                            k-ng-model="vm.departmentSelectedIds"></select>
                                                 </div>
-                                            </div>                                    
+                                            </div>
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <div id="listOfRemindTag" title="Danh sách tag theo phòng ban">
-                                                        <div class="row" ng-repeat="item in vm.reminderDepartmentListTag">
+                                                    <div id="listOfCrTaga" title="Danh sách tag theo phòng ban">
+                                                        <div class="row" ng-repeat="item in vm.crDepartmentListTag">
                                                             <div class="form-group" style="padding: 15px;">
                                                                 <label>{{item.department.Name}}</label>
                                                                 <div class="row" style="padding:15px;">
-                                                                    <button id="rebutton{{child.ID}}"
+                                                                    <button id="crbutton{{child.ID}}"
                                                                             ng-repeat="child in item.tagList"
                                                                             class="btn m-b-xs w-xs btn-default"
-                                                                            ng-click="ReminderTagItemClicked(child,this,$index)">
+                                                                            ng-click="crTagItemClickeda(child,this,$index)">
                                                                         {{child.NameTag}}
                                                                     </button>
                                                                 </div>
@@ -475,7 +437,26 @@
                     </div>
                 </div>
             </div>
-            
+
         </tab>
     </tabset>
+    <script type="text/x-kendo-template" id="menucoltemplate">
+        <a id="col-menu" style="float: right;"></a>
+    </script>
+    <div kendo-window="win1"
+         id="historyWindow"
+         k-options="windowOptions"
+         k-on-open="win1visible = true"
+         k-on-close="win1visible = false">
+        <div class="row col-md-12">
+            <div class="col-md-12">
+                <div kendo-grid="histoGrid"
+                     id="historyGrid"
+                     k-options="historyGridOptions"
+                     k-selectable="true"
+                     k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
+            </div>
+        </div>
+
+    </div>
 </div>

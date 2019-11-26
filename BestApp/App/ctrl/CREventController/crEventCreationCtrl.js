@@ -35,6 +35,7 @@ angular.module('app')
         vm.eventCR = {
             DetailEvents: [],
             InteractionHistorys: [],
+            ReminderNotes: [],
         }
         vm.reminderCR = {
             ReminderNotes: [],
@@ -87,18 +88,62 @@ angular.module('app')
             }
         $scope.crTagItemClicked = function(item,_this,index) {
             var idButtonClicked = "#crbutton"+item.ID;
+            var idButtonClicked2 = "#crbutton"+item.ID+"a";
             if($(idButtonClicked).css("background-color") !== 'rgb(66, 133, 244)'){
                 $(idButtonClicked).css({
-                    "background-color" : "#4285F4"
+                    "background-color" : "#4285F4",
+                    "color" : "white !important"
                 });
-                $(idButtonClicked).addClass("tag-blue-color");     
+                $(idButtonClicked2).addClass("tag-blue-color");  
+                $(idButtonClicked2).css({
+                    "background-color" : "#4285F4",
+                    "color" : "white !important"
+                });
+                $(idButtonClicked2).addClass("tag-blue-color");     
                 vm.crtagSelectected.push(item);
                
             } else {
                 $(idButtonClicked).css({
+                    "color" : "#58666e !important",
                     "background-color":"white"      
                 });
                 $(idButtonClicked).removeClass("tag-blue-color");   
+                $(idButtonClicked2).css({
+                    "color" : "#58666e !important",
+                    "background-color":"white"      
+                });
+                $(idButtonClicked2).removeClass("tag-blue-color"); 
+                vm.crtagSelectected.splice(index,1);
+            }
+            console.log(vm.crtagSelectected);
+        };
+        $scope.crTagItemClickeda = function(item,_this,index) {
+            var idButtonClicked = "#crbutton"+item.ID+"a";
+            var idButtonClicked2 = "#crbutton"+item.ID;
+            if($(idButtonClicked).css("background-color") !== 'rgb(66, 133, 244)'){
+                $(idButtonClicked).css({
+                    "background-color" : "#4285F4",
+                    "color" : "white !important"
+                });
+                $(idButtonClicked2).addClass("tag-blue-color");  
+                $(idButtonClicked2).css({
+                    "background-color" : "#4285F4",
+                    "color" : "white !important"
+                });
+                $(idButtonClicked2).addClass("tag-blue-color");     
+                vm.crtagSelectected.push(item);
+               
+            } else {
+                $(idButtonClicked).css({
+                    "color" : "#58666e !important",
+                    "background-color":"white"      
+                });
+                $(idButtonClicked).removeClass("tag-blue-color");   
+                $(idButtonClicked2).css({
+                    "color" : "#58666e !important",
+                    "background-color":"white"      
+                });
+                $(idButtonClicked2).removeClass("tag-blue-color"); 
                 vm.crtagSelectected.splice(index,1);
             }
             console.log(vm.crtagSelectected);
@@ -218,7 +263,6 @@ angular.module('app')
         }
         $scope.reminderOnSelectedDate = function() {
             var time = moment(vm.reminderSelectedDate);
-            vm.reminderCRDetails.ReminderDate = time.utc().format();
         }
         $scope.onDateSoldChanged = function () {
             console.log(vm.eventCR.DateSold)
@@ -299,6 +343,8 @@ angular.module('app')
             console.log(vm.selectedPurposeData);
             // tabStrip.disable(tabStrip.tabGroup.children().eq(0));
             if(vm.selectedPurposeData !== " Mục đích... ") {
+                var tabStrip = $("#eventTabstrip").kendoTabStrip().data("kendoTabStrip");
+                tabStrip.disable(tabStrip.tabGroup.children().eq(1));
                 $scope.tab1Inisible = false;
             }  else {
                 $scope.tab1Inisible = true;
@@ -393,6 +439,7 @@ angular.module('app')
         };     
         vm.dateOfBirth = {};
         kendo.init("#listOfCrTag");
+        kendo.init("#listOfCrTaga");
         kendo.init("#listOfRemindTag");
         vm.departmentSelectOptions = {
             placeholder: "Bộ phận...",
@@ -437,20 +484,20 @@ angular.module('app')
 
         function onCrDepartmentChanged() {
             var multiselect = $("#crDepartmentMulDrop").data("kendoMultiSelect");
+            var multiselect2 = $("#crDepartmentMulDropa").data("kendoMultiSelect");
+            
             console.log(multiselect.value());
             console.log(multiselect.value().length);
             console.log(multiselect.value()[multiselect.value().length - 1]);
+            console.log(multiselect2.value());
+            console.log(multiselect2.value().length);
+            console.log(multiselect2.value()[multiselect2.value().length - 1]);
             console.log(vm.departmentSelectedIds);
         }
-        function onReminderDepartmentChanged() {
-            var multiselect = $("#reminderDepartmentMulDrop").data("kendoMultiSelect");
-            console.log(multiselect.value());
-            console.log(multiselect.value().length);
-            console.log(multiselect.value()[multiselect.value().length - 1]);
+        function onReminderDepartmentChanged() {    
             console.log(vm.reminderDepartmentSelectedIds);
         }
         function onCrDepartmentSelect(e) {
-            console.log("Selected");
             var dataItem = e.dataItem;
             console.log(dataItem);
             $http({
@@ -476,7 +523,6 @@ angular.module('app')
                 }, function errorCallback(response) {
                   console.log(response);
             });
-            
         }
         function onReminderDepartmentSelect(e) {
             console.log("Selected");
@@ -530,6 +576,8 @@ angular.module('app')
             console.log(isHaveInList);
             console.log("Deselected");
             console.log(this.value());
+            $('#listOfCrTag').load();
+            $('#listOfCrTaga').load();
         }
         function onReminderDepartmentDeselect(e) {
             var data = e.dataItem;
@@ -750,60 +798,60 @@ angular.module('app')
                                     vm.reminderSerialData = {
                                         data: response.data.d.Item
                                     };
-                                    $('body').kendoTooltip({
-                                        filter: 'li.k-item',
-                                        position: 'right',
-                                        show: function(e){
-                                            // console.log(this.content[0].childNodes[0].data);
-                                            // console.log(this.content[0].childNodes[0].data);
-                                            if(this.content[0].childNodes.length > 0 ) {
-                                                if(this.content[0].childNodes[0].childNodes.length > 0) { 
-                                                    this.content.parent().css("visibility", "visible");
-                                                }    
-                                            }  
-                                        },
-                                        hide:function(e){
-                                            this.content.parent().css("visibility", "hidden");
-                                        },
-                                        content: function(e){
-                                          var item = $('#serialDropdown').data("kendoDropDownList").dataItem($(e.target));
-                                          var item2 = $('#serialReminderDropdown').data("kendoDropDownList").dataItem($(e.target));
-                                          if(item.device_serial !== '') {
-                                            console.log(item);
-                                            //   console.log(item.device_serial);
-                                              if(item.device_serial == '' || item.device_serial == undefined) {
-                                                  var result = "NO";
-                                                  return result;
-                                              } else {
-                                                var result = '<h4>Mã thiết bị: '+item.device_serial+'</h4>'+'<h5>Tên thiết bị: '+item.device_name+'</h5>';
-                                                if(item.owner_yesno === true) {
-                                                    result +='<h5>Là chủ sở hữu</h5>';
-                                                } else {
-                                                    result +='<h5>Không phải chủ sở hữu</h5>';
-                                                }
-                                                return result;
-                                            }
-                                          }
-                                          if(item2.device_serial !== '') {
-                                            console.log(item2);
-                                            //   console.log(item.device_serial);
-                                              if(item2.device_serial == '' || item2.device_serial == undefined) {
-                                                  var result = "NO";
-                                                  return result;
-                                              } else {
-                                                var result = '<h4>Mã thiết bị: '+item2.device_serial+'</h4>'+'<h5>Tên thiết bị: '+item2.device_name+'</h5>';
-                                                if(item2.owner_yesno === true) {
-                                                    result +='<h5>Là chủ sở hữu</h5>';
-                                                } else {
-                                                    result +='<h5>Không phải chủ sở hữu</h5>';
-                                                }
-                                                return result;
-                                            }
-                                          }
-                                        },
-                                        width: 150,
-                                        height: 150
-                                      });
+                                    // $('body').kendoTooltip({
+                                    //     filter: 'li.k-item',
+                                    //     position: 'right',
+                                    //     show: function(e){
+                                    //         // console.log(this.content[0].childNodes[0].data);
+                                    //         // console.log(this.content[0].childNodes[0].data);
+                                    //         if(this.content[0].childNodes.length > 0 ) {
+                                    //             if(this.content[0].childNodes[0].childNodes.length > 0) { 
+                                    //                 this.content.parent().css("visibility", "visible");
+                                    //             }    
+                                    //         }  
+                                    //     },
+                                    //     hide:function(e){
+                                    //         this.content.parent().css("visibility", "hidden");
+                                    //     },
+                                    //     content: function(e){
+                                    //       var item = $('#serialDropdown').data("kendoDropDownList").dataItem($(e.target));
+                                    //     //   var item2 = $('#serialReminderDropdown').data("kendoDropDownList").dataItem($(e.target));
+                                    //       if(item.device_serial !== '') {
+                                    //         console.log(item);
+                                    //         //   console.log(item.device_serial);
+                                    //           if(item.device_serial == '' || item.device_serial == undefined) {
+                                    //               var result = "NO";
+                                    //               return result;
+                                    //           } else {
+                                    //             var result = '<h4>Mã thiết bị: '+item.device_serial+'</h4>'+'<h5>Tên thiết bị: '+item.device_name+'</h5>';
+                                    //             if(item.owner_yesno === true) {
+                                    //                 result +='<h5>Là chủ sở hữu</h5>';
+                                    //             } else {
+                                    //                 result +='<h5>Không phải chủ sở hữu</h5>';
+                                    //             }
+                                    //             return result;
+                                    //         }
+                                    //       }
+                                    //     //   if(item2.device_serial !== '') {
+                                    //     //     console.log(item2);
+                                    //     //     //   console.log(item.device_serial);
+                                    //     //       if(item2.device_serial == '' || item2.device_serial == undefined) {
+                                    //     //           var result = "NO";
+                                    //     //           return result;
+                                    //     //       } else {
+                                    //     //         var result = '<h4>Mã thiết bị: '+item2.device_serial+'</h4>'+'<h5>Tên thiết bị: '+item2.device_name+'</h5>';
+                                    //     //         if(item2.owner_yesno === true) {
+                                    //     //             result +='<h5>Là chủ sở hữu</h5>';
+                                    //     //         } else {
+                                    //     //             result +='<h5>Không phải chủ sở hữu</h5>';
+                                    //     //         }
+                                    //     //         return result;
+                                    //     //     }
+                                    //     //   }
+                                    //     },
+                                    //     width: 150,
+                                    //     height: 150
+                                    //   });
                                     // console.log(vm.serialData);
                                 } else {
                                     console.log("Không có thông tin")
@@ -899,7 +947,83 @@ angular.module('app')
             }
         };       
         $scope.crCusCreate = function() {
-            console.log("Button Clicked");
+            swal({
+                title: "Tạo phiếu hẹn",
+                text: "Bạn có muốn tạo phiếu hẹn không?",
+                icon: "info",
+                buttons: {
+                    cancel: "Không",
+                    catch: {
+                      text: "Có",
+                      value: true,
+                    }
+                },
+                dangerMode: false,
+              })
+              .then((willCreate) => {
+                if (willCreate) { 
+                    $scope.tab2Invisible = false;
+                    $scope.tab1Inisible = true;
+                    
+                    var tabstrip = $("#eventTabstrip").data("kendoTabStrip");
+                    tabstrip.disable(tabstrip.tabGroup.children().eq(0));
+                    var myTab = tabstrip.tabGroup.children("li").eq(1);
+                    tabstrip.select(myTab);
+                } else {
+                    if(vm.systemCustomer.ID === undefined || vm.systemCustomer.ID === "") {
+                        toaster.pop('error', "Thiếu thông tin", "Thiếu thông tin khách hàng");
+                    } else {                  
+                        var json = JSON.stringify( vm.crtagSelectected, function( key, value ) {
+                            if( key === "$$hashKey" ) {
+                                return undefined;
+                            }   
+                            return value;
+                        });
+                        vm.eventCR.CustomerID = vm.systemCustomer.ID;
+                        vm.eventCRDetails.Serial = vm.serialSelectedData.device_serial;
+                        vm.eventCRDetails.ProductID = vm.eventProductTypeSelectedData.ID;
+                        vm.eventCR.DetailEvents.push(vm.eventCRDetails);
+                        vm.crtagSelectected = JSON.parse(json);                       
+                        vm.eventCR.EventTypeID = vm.selectedEventData.ID;
+                        vm.eventCR.EventPurposeID = vm.selectedPurposeData.ID;
+                        vm.interactionHistoryObj.Type ="Gọi điện";
+                        vm.interactionHistoryObj.Note = vm.eventCRDetails.Note;
+                        vm.eventCR.InteractionHistorys.push(vm.interactionHistoryObj);
+                        if(vm.eventCRDetails.DateSold !== undefined && vm.eventCRDetails.DateSold !== "") {
+                            var time = moment(compareDate(vm.eventCRDetails.DateSold)).format('YYYY-MM-DDTHH:mm:ss');
+                            time+='Z';
+                            vm.eventCRDetails.DateSold = time;
+                        }
+                        $http({
+                            url: _eventURL,
+                            method: 'POST',
+                            data: JSON.stringify(vm.eventCR),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                            },
+                        }).error(function(response) {
+                            toaster.pop('error', "Thất bại", response.error.innererror.message);
+                        })
+                        .then(function(response){
+                            if(response.status == 201) {
+                                toaster.pop('success', "Thành công", "Đã tạo phiếu thành công");                 
+                            }
+                            location.reload();
+                        });
+                    }                               
+                }
+              });
+           
+        }
+        $scope.reminderCreate = function () {
+            vm.eventCR.CustomerID = vm.systemCustomer.ID;
+            if(vm.eventCR.CustomerID == undefined || vm.eventCR.CustomerID === "") {
+                toaster.pop('error', "Thiếu thông tin", "Thiếu thông tin khách hàng");
+            } else 
+            if(vm.reminderCRDetails.ReminderDate == undefined || vm.reminderCRDetails.ReminderDate !=="" ){
+                toaster.pop('error', "Ngày hẹn", "Vui lòng chọn ít nhất một tag phòng ban");
+            }
             var time = moment(compareDate(vm.eventCRDetails.DateSold)).format('YYYY-MM-DDTHH:mm:ss');
             time+='Z';
             var json = JSON.stringify( vm.crtagSelectected, function( key, value ) {
@@ -909,8 +1033,6 @@ angular.module('app')
                 return value;
             });
             vm.crtagSelectected = JSON.parse(json);
-            console.log(vm.crtagSelectected);
-            vm.eventCR.CustomerID = vm.systemCustomer.ID;
             vm.eventCRDetails.DateSold = time;
             vm.eventCR.DetailEvents.push(vm.eventCRDetails);
             vm.eventCR.Tags = vm.crtagSelectected;
@@ -918,80 +1040,16 @@ angular.module('app')
             vm.eventCRDetails.ProductID = vm.eventProductTypeSelectedData.ID;
             vm.eventCR.EventTypeID = vm.selectedEventData.ID;
             vm.eventCR.EventPurposeID = vm.selectedPurposeData.ID;
-            if(vm.eventCR.CustomerID == undefined || vm.eventCR.CustomerID === "") {
-                toaster.pop('error', "Thiếu thông tin", "Thiếu thông tin khách hàng");
-            } else if(vm.eventCR.DetailEvents.length < 1) {
-                toaster.pop('error', "Thiếu thông tin", "Vui lòng chọn ít nhất");
-            } else if(vm.eventCR.Tags.length < 1) {
-                toaster.pop('error', "Thiếu thông tin", "Vui lòng chọn ít nhất một tag phòng ban");
-            }
             vm.interactionHistoryObj.Type ="Gọi điện";
             vm.interactionHistoryObj.Note = vm.eventCRDetails.Note;
             vm.eventCR.InteractionHistorys.push(vm.interactionHistoryObj);
-            // console.log(vm.systemCustomer);
-            // console.log(vm.eventProductTypeSelectedData);
-            // console.log(vm.serialSelectedData);
-            // console.log(vm.eventCRDetails);
-            // console.log(vm.crtagSelectected);
-            // console.log(vm.eventCR);
+            vm.reminderCRDetails.Serial = vm.serialSelectedData.device_serial;
+            vm.eventCR.ReminderNotes.push(vm.reminderCRDetails);
+          
             $http({
                 url: _eventURL,
                 method: 'POST',
                 data: JSON.stringify(vm.eventCR),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
-                },
-            }).error(function(response) {
-                toaster.pop('error', "Thất bại", response.error.innererror.message);
-            })
-            .then(function(response){
-                if(response.status == 201) {
-                    $scope.tab2Invisible = false;
-                    $scope.tab1Inisible = true;
-                    var tabstrip = $("#eventTabstrip").data("kendoTabStrip");
-                    var myTab = tabstrip.tabGroup.children("li").eq(1);
-                    tabstrip.select(myTab);
-                    toaster.pop('success', "Thành công", "Đã tạo phiếu thành công");                 
-                }
-            });
-        }
-        $scope.reminderCreate = function () {
-            console.log("Create reminder pressed");
-
-            var time = moment(vm.reminderCRDetails.ReminderDate);
-            var json = JSON.stringify( vm.reminderTagSelected, function( key, value ) {
-                if( key === "$$hashKey" ) {
-                    return undefined;
-                }
-            
-                return value;
-            });
-            vm.reminderInteractHistory.Type ="Gọi điện";
-            vm.reminderInteractHistory.Note = "CR tạo sự kiện tương tác khách hàng";
-            vm.reminderCR.InteractionHistorys.push(vm.interactionHistoryObj);
-            vm.reminderTagSelected = JSON.parse(json);
-            console.log(vm.reminderTagSelected);
-            vm.reminderCR.CustomerID = vm.systemCustomer.ID;
-            vm.reminderCRDetails.ReminderDate = time.utc().format();
-            vm.reminderCR.ReminderNotes.push(vm.reminderCRDetails);
-            vm.reminderCR.Tags = vm.reminderTagSelected;
-            vm.reminderCRDetails.Serial = vm.reminderSerialSelectedData.device_serial;
-            vm.reminderCR.EventTypeID = vm.selectedEventData.ID;
-            vm.reminderCR.EventPurposeID = vm.selectedPurposeData.ID;
-            console.log(vm.systemCustomer);
-            console.log(vm.reminderProductTypeSelectedData);
-            console.log(vm.reminderSerialSelectedData);
-            console.log(vm.reminderCRDetails);
-            console.log(vm.reminderTagSelected);
-            console.log(vm.reminderCR);
-            vm.interactionHistoryObj.Type ="Gọi điện";
-            vm.interactionHistoryObj.Note = vm.reminderCRDetails.Note;
-            vm.eventCR.InteractionHistorys.push(vm.interactionHistoryObj);
-            $http({
-                url: _eventURL,
-                method: 'POST',
-                data: JSON.stringify(vm.reminderCR),
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
@@ -1074,8 +1132,8 @@ angular.module('app')
         }
         $scope.windowOptions = {
             title : 'Lịch sử tương tác',
-            width : 800,
-            height : 300,
+            width : "70%",
+            height : 600,
             visible : false,
             actions: [
                 "Pin",
@@ -1083,53 +1141,10 @@ angular.module('app')
                 "Maximize",
                 "Close"
             ],
-            position: { top: 400 , left: "56%" },
+            position: { top: "25%" , left: "20%" },
             close: onHistoryClose,
             modal: false,
         }
-        // $scope.schedulerOptions = {
-        //     date: new Date(),
-        //     startTime: new Date(),
-        //     height: 600,
-        //     views: [
-        //         "agenda"
-        //     ],
-        //     timezone: "Etc/UTC",
-        //     dataSource: {
-        //         batch: false,
-        //         autoBind: false,
-        //         editable: false,
-        //         transport: {
-        //             read: {
-        //                 url: _interactURL+"GetInteractionHistoryByCustomer?PhoneNumber="+vm.searchingNumber,
-        //                 dataType: "odata-v4"
-        //             },
-        //             parameterMap: function(options, operation) {
-        //                 if (operation !== "read" && options.models) {
-        //                     return {models: kendo.stringify(options.models)};
-        //                 }
-        //             }
-        //         },
-        //         schema: {
-        //             model: {
-        //                 ID: "ID",
-        //                 fields: {
-        //                     id: { from: "ID", type: "string" },
-        //                     title: { from: "EventCode", type: "string" },
-        //                     start: { type: "date", from: "CreatDate" },
-        //                     end: { type: "date", from: "CreatDate" },
-        //                 }
-        //             }
-        //         },
-        //         // filter: {
-        //         //     logic: "or",
-        //         //     filters: [
-        //         //         { field: "ownerId", operator: "eq", value: 1 },
-        //         //         { field: "ownerId", operator: "eq", value: 2 }
-        //         //     ]
-        //         // }
-        //     }
-        // }
 
         $scope.schedulerOptions = {
             date: new Date(),
@@ -1172,14 +1187,10 @@ angular.module('app')
             },
             sortable: true,
             pageable: true,
-            height: 300,
+            groupable: true,
+            columnMenu: true,
+            height: 500,
             columns: [
-                {
-                    field: "ID",
-                    title: "ID",
-                    width: "50px",
-                    hidden: true
-                },
                 {
                     field: "Type",
                     title: "Hình thức tương tác",
@@ -1212,14 +1223,16 @@ angular.module('app')
                     field:"CreatDate",
                     title:"Ngày tạo",
                     type:"datetime",
-                    template: "#= kendo.toString(kendo.parseDate(CreatDate, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"
+                    template: "#= kendo.toString(kendo.parseDate(CreatDate, 'yyyy-MM-dd'), 'dd/MM/yyyy') #",
+                    groupHeaderTemplate:  "#= kendo.toString(kendo.parseDate(value , 'yyyy-MM-dd'), 'dd/MM/yyyy') #"
                 }, 
                 {
                     field: "Note",
                     title: "Ghi chú"
                 }
             ]
-        }
+        };
+
         $scope.contentChanged = function (editor, html, text) {
             vm.eventCR.Note = text;
            console.log(vm.eventCR.Note);

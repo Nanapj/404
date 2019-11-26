@@ -4,8 +4,12 @@ angular.module('app')
         var vm = this; 
         var _url = "/odata/Staffs";
         var _crEventURL = "/odata/Events";
+        var _departmentURL = "/odata/Departments";
+        var _tagURL = "/odata/Tags";
+        vm.access_token = localStorage.getItem('access_token');
         vm.handleDateRange = handleDateRange;
         vm.selectedEvent = {};
+        vm.crDepartmentListTag = [];    
         vm.tagsList = [
             { "Name" : "Tag A" , "Id" : "1"},
             { "Name" : "Tag B" , "Id" : "2"},
@@ -93,28 +97,66 @@ angular.module('app')
             icon: "close"
         });
         kendo.init("#listoftag");
-        vm.startDate = new Date();
-        vm.endDate = new Date();
+        vm.startDate = moment(new Date(new Date().getFullYear(), new Date().getMonth(), 1)).utc().format();
+        vm.endDate = moment(new Date()).utc().format();
         function handleDateRange() {
-            console.log('Handle changed')
+            console.log(vm.startDate);
+            console.log(vm.endDate);
         }
-        vm.departmentSelectedIds = [ 4, 7 ];
+        vm.departmentSelectedIds = [ ];
         vm.departmentSelectOptions = {
             placeholder: "Bộ phận...",
-            dataTextField: "ProductName",
-            dataValueField: "ProductID",
+            dataTextField: "Name",
+            dataValueField: "ID",
+            change: onCrDepartmentChanged,
+            deselect: onCrDepartmentDeselect,
+            select: onCrDepartmentSelect,
             valuePrimitive: true,
             autoBind: false,
             dataSource: {
-                type: "odata",
+                type: "odata-v4",
                 serverFiltering: true,
                 transport: {
                     read: {
-                        url: "https://demos.telerik.com/kendo-ui/service/Northwind.svc/Products",
+                        url: _departmentURL,
                     }
                 }
             }
         };
+
+        function onCrDepartmentSelect(e) {
+            var dataItem = e.dataItem;
+            $http({
+                method: 'GET',
+                url: _tagURL+"?$filter=DepartmentID eq " + dataItem.ID ,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                },
+              }).then(function successCallback(response) {
+                  if(response.data.value.length > 0) { 
+                    var listItem = response.data.value;
+                    vm.crDepartmentListTag.push({
+                        department: dataItem,
+                        tagList: listItem
+                    });
+                    console.log("This is the department list");
+                    console.log(vm.crDepartmentListTag);
+                    console.log(response.data.value[0]);
+                  } else {
+                      toaster.pop('info', "Rỗng","Phòng ban chưa có tag");
+                  }
+                }, function errorCallback(response) {
+                  console.log(response);
+            });
+        }
+        function onCrDepartmentDeselect(e) {
+            var data = e.dataItem;
+            console.log("Deselected");
+        }
+        function onCrDepartmentChanged() {
+            console.log("change selection");
+        }
         $scope.onDateRangeChange = function() {
             console.log(vm.startDate);
             console.log(vm.endDate);
@@ -123,42 +165,94 @@ angular.module('app')
             dataSource: {
                 type: "odata-v4",
                 transport: {
-                    read: _crEventURL
+                    read: _crEventURL+"?$expand=DetailEvents,InteractionHistorys,Tags&CreatDate lt "+ "'"+vm.endDate+"'"+" &CreatDate gt "+"'"+vm.startDate+"'"
                 },
                 pageSize: 50,
                 serverPaging: true,
-                serverSorting: true
+                serverSorting: true,
+                schema: {
+                    parse: function(response) {
+                      var orders = [];
+                      for (var i = 0; i < response.value.length; i++) {
+                        var dateNoTime = new Date(response.value[i].CreatDate);
+                        var order = {
+                            Code: response.value[i].Code,
+                            CustomerName: response.value[i].CustomerName,
+                            PhoneNumber: response.value[i].PhoneNumber,
+                            Address: response.value[i].Address,
+                            EventTypeName: response.value[i].EventTypeName,
+                            EventPurposeName: response.value[i].EventPurposeName,
+                            Status: response.value[i].Status,
+                            CreatDate: response.value[i].CreatDate,
+                            CreatDateNoTime: new Date(
+                            dateNoTime.getFullYear(),
+                            dateNoTime.getMonth(),
+                            dateNoTime.getDate()
+                          )
+                        };
+                        orders.push(order);
+                      }
+                      return orders;
+                    },
+                    model: {
+                      fields: {
+                        Code: {type: "string"},
+                        CustomerName: {type: "string"},
+                        PhoneNumber: {type: "string"},
+                        Address: {type: "string"},
+                        EventTypeName: {type: "string"},
+                        EventPurposeName: {type: "string"},
+                        Status: {type: "string"},
+                        CreatDate: { type: "date" },
+                        CreatDateNoTime: { type: "date" }
+                      }
+                    }
+                }
             },
             sortable: true,
             pageable: true,
+            groupable: true,
             height: 500,
             dataBound: onDataBound,
             change: onChange,
             columns: [
-                {
-                    field: "Code",
-                    title: "Mã Phiếu",
-                    width: "50px"
-                },
-                {
-                    field: "CustomerName",
-                    title: "Tên khách hàng",
-                    width: "50px"
-                },
-                {
-                    field: "PhoneNumber",
-                    title: "Số điện thoại",
-                    width: "50px"
-                },
-                {
-                    field: "Address",
-                    title: "Địa chỉ",
-                    width: "80px"
-                },
-                {
-                    field: ""
-                },
-                { command: [{ text: "Chi tiết", click: showDetails },{text: "Sửa", click: showEditDetails }], title: " Tùy chỉnh ", width: "200px" }
+            {
+                field: "Code",
+                title: "Mã Phiếu"
+            },
+            {
+                field:"CreatDateNoTime",
+                title:"Ngày tạo",
+                // template: "#= kendo.toString(kendo.parseDate(CreatDate, 'yyyy-MM-dd'), 'dd/MM/yyyy') #",
+                // groupHeaderTemplate: "#= kendo.parseDate(value, 'yyyy-MM-dd') #"
+                template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
+                groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+            },
+            {
+                field: "CustomerName",
+                title: "Tên khách hàng"
+            },
+            {
+                field: "PhoneNumber",
+                title: "Số điện thoại"
+            },
+            {
+                field: "Address",
+                title: "Địa chỉ"
+            },
+            {
+                field: "EventTypeName",
+                title: "Loại sự kiện"
+            },
+            {
+                field: "EventPurposeName",
+                title: "Mục đích"
+            },
+            {
+                field:"Status",
+                title:"Tình trạng phiếu"
+            },
+            { command: [{ text: "Chi tiết", click: showDetails },{text: "Sửa", click: showEditDetails }], title: " Tùy chỉnh ", width: "200px" }
             ]
         };
         var wnd = $("#details")
