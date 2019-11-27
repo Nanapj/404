@@ -114,7 +114,7 @@ namespace BestApp.Services
                     CreatDate = t.CreatDate,
                     Serial = t.Serial,
                     ID =t.Id,
-                    ReminderDate = t.ReminderDate
+                    ReminderDate = t.ReminderDate,        
 
                 }).ToList(),
                 InteractionHistorys = x.InteractionHistorys.Select(t => new InteractionHistoryViewModel

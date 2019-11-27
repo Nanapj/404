@@ -59,7 +59,9 @@ namespace BestApp.Services
             {
                 ID = x.Id,
                 EventCode = x.Event.Code,
+                EventNote = x.Event.Note,
                 EventID = x.Event.Id,
+                Type = _eventTypeService.Find(x.Event.EventTypeId).Name,
                 CreatDate = x.CreatDate,
                 Note = x.Note
             });

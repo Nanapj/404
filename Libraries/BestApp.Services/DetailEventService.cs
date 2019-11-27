@@ -59,7 +59,7 @@ namespace BestApp.Services
                 ProductName = x.ProductType.Name,
                 DateSold = x.DateSold,
                 AgencySold = x.AgencySold,
-                AssociateName = x.AssociateName
+                AssociateName = x.AssociateName,
             });
         }
         public Task<IQueryable<DetailEventViewModel>> GetAllDetailEventsAsync()
