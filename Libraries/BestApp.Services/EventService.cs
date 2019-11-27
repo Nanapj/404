@@ -105,6 +105,7 @@ namespace BestApp.Services
                     DateSold = t.DateSold,
                     AssociateName = t.AssociateName,
                     EventCode = t.Event.Code,
+                    EventID = t.Event.Id,
                     Note = t.Note
                 }).ToList(),
                 ReminderNotes = x.ReminderNotes.Select(t => new ReminderNoteViewModel
