@@ -10,12 +10,12 @@ angular.module('app')
         vm.handleDateRange = handleDateRange;
         vm.selectedEvent = {};
         vm.crDepartmentListTag = [];    
-        vm.tagsList = [
-            { "Name" : "Tag A" , "Id" : "1"},
-            { "Name" : "Tag B" , "Id" : "2"},
-            { "Name": "Tag C" , "Id" : "3"}
-        ];
+        vm.tagsList = [];
         vm.tagFilterList = [];
+        vm.eventDetailList = [];
+        vm.eventHistoryList= [];
+        vm.eventTags = [];
+        vm.eventReminder = [];
         $scope.tagItemClicked = function(item,_this,index) {
             var idButtonClicked = "#button"+item.Id;
             if($(idButtonClicked).css("background-color") !== 'rgb(66, 133, 244)'){
@@ -155,8 +155,16 @@ angular.module('app')
             console.log("Deselected");
         }
         function onCrDepartmentChanged() {
-            console.log("change selection");
+            var multiselect = $("#departMulDrop").data("kendoMultiSelect");
+            
+            console.log(multiselect.value());
+            console.log(multiselect.value().length);
+            console.log(multiselect.value()[multiselect.value().length - 1]);
+            console.log(vm.departmentSelectedIds);
         }
+        $scope.filterTagClicked = function(item,_this,index) {
+            var idButtonClicked = "#filter"+item.ID;
+        };
         $scope.onDateRangeChange = function() {
             console.log(vm.startDate);
             console.log(vm.endDate);
@@ -165,17 +173,19 @@ angular.module('app')
             dataSource: {
                 type: "odata-v4",
                 transport: {
-                    read: _crEventURL+"?$expand=DetailEvents,InteractionHistorys,Tags&CreatDate lt "+ "'"+vm.endDate+"'"+" &CreatDate gt "+"'"+vm.startDate+"'"
+                    read: _crEventURL+"?$expand=DetailEvents,InteractionHistorys,Tags,ReminderNotes&CreatDate lt "+ "'"+vm.endDate+"'"+" &CreatDate gt "+"'"+vm.startDate+"'"
                 },
                 pageSize: 50,
                 serverPaging: true,
                 serverSorting: true,
+                resizable: true,
+                
                 schema: {
                     parse: function(response) {
-                      var orders = [];
+                      var events = [];
                       for (var i = 0; i < response.value.length; i++) {
                         var dateNoTime = new Date(response.value[i].CreatDate);
-                        var order = {
+                        var event = {
                             Code: response.value[i].Code,
                             CustomerName: response.value[i].CustomerName,
                             PhoneNumber: response.value[i].PhoneNumber,
@@ -185,14 +195,18 @@ angular.module('app')
                             Status: response.value[i].Status,
                             CreatDate: response.value[i].CreatDate,
                             CreatDateNoTime: new Date(
-                            dateNoTime.getFullYear(),
-                            dateNoTime.getMonth(),
-                            dateNoTime.getDate()
-                          )
+                                dateNoTime.getFullYear(),
+                                dateNoTime.getMonth(),
+                                dateNoTime.getDate()
+                            ),
+                            DetailEvents: response.value[i].DetailEvents,
+                            InteractionHistorys: response.value[i].InteractionHistorys,
+                            Tags:  response.value[i].Tags,
+                            ReminderNotes: response.value[i].ReminderNotes
                         };
-                        orders.push(order);
+                        events.push(event);
                       }
-                      return orders;
+                      return events;
                     },
                     model: {
                       fields: {
@@ -212,6 +226,8 @@ angular.module('app')
             sortable: true,
             pageable: true,
             groupable: true,
+            reorderable: true,
+            columnMenu: true,
             height: 500,
             dataBound: onDataBound,
             change: onChange,
@@ -223,8 +239,6 @@ angular.module('app')
             {
                 field:"CreatDateNoTime",
                 title:"Ngày tạo",
-                // template: "#= kendo.toString(kendo.parseDate(CreatDate, 'yyyy-MM-dd'), 'dd/MM/yyyy') #",
-                // groupHeaderTemplate: "#= kendo.parseDate(value, 'yyyy-MM-dd') #"
                 template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
                 groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
             },
@@ -364,6 +378,13 @@ angular.module('app')
                 { field: "UnitsInStock", title:"Đã gọi", width: "120px" },
             ]
           }).data("kendoGrid");
+          $("#windowTabstrip").kendoTabStrip({
+            animation:  {
+                open: {
+                    effects: "fadeIn"
+                }
+            }
+        });
         function showEditDetails(e) {
             e.preventDefault();
             var dataItem = this.dataItem($(e.currentTarget).closest("tr"));

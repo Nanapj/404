@@ -101,7 +101,10 @@ namespace BestApp.Services
                     CreatDate = t.CreatDate,
                     ProductCode = t.ProductType.Code,
                     ProductName = t.ProductType.Name,
-                    EventID = t.Event.Id,
+                    AgencySold = t.AgencySold,
+                    DateSold = t.DateSold,
+                    AssociateName = t.AssociateName,
+                    EventCode = t.Event.Code,
                     Note = t.Note
                 }).ToList(),
                 ReminderNotes = x.ReminderNotes.Select(t => new ReminderNoteViewModel
@@ -120,7 +123,8 @@ namespace BestApp.Services
                     Note = t.Note,
                     CreatDate = t.CreatDate,
                     EmployeeCall = t.EmployeeCall,
-                    EmployeeID = t.EmployeeID
+                    EmployeeID = t.EmployeeID,
+                    EventCode = t.Event.Code
                 }).ToList()
             }).ToList();
             foreach(var item in result)

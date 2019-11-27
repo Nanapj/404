@@ -10,10 +10,12 @@
                             <form class="m-b-md" ng-submit="!vm.tabDisable ? (steps.step2=true) : (steps.step2=false)">
                                 <div class="input-group">
                                     <input type="text" name="masked" ng-change="phoneNumChange()" ui-mask="999 999 9999" ng-model="vm.searchingNumber" placeholder="___ ___ ____" class="form-control m-b" required>
+
                                     <span class="input-group-btn">
                                         <button class="btn btn-md btn-default" ng-disabled="vm.tabDisable" type="submit" ng-click="vm.searchPhoneNum()">Tiếp tục</button>
                                     </span>
                                 </div>
+                                <label>Ví dụ: 0869246117</label>
                             </form>
                         </div>
                     </div>

@@ -295,7 +295,7 @@ angular.module('app')
         $scope.onEventSelChanged = function() {
             $scope.purDis = 1;
             console.log(vm.selectedEventData);
-            if(vm.selectedEventData !== " Mục đích... ") {
+            if(vm.selectedEventData.Name !== " Sự kiện... ") {
                 var tabStrip = $("#eventTabstrip").kendoTabStrip().data("kendoTabStrip");
                 // $("#purposedropdown").data("kendoDropDownList").dataSource.read().then(function() {
                 //     $($("#purposedropdown").data("kendoDropDownList").dataItems()).each(function (item) {
@@ -307,6 +307,8 @@ angular.module('app')
                 vm.purposeData = vm.selectedEventData.EventPurposes;
                 $scope.purDis = 0;
             } else {
+                $scope.tab1Inisible = true;
+                $scope.tab2Invisible = true;
                 $scope.purDis = 1;
             }
             
@@ -342,12 +344,13 @@ angular.module('app')
         $scope.onPurSelChanged = function() {
             console.log(vm.selectedPurposeData);
             // tabStrip.disable(tabStrip.tabGroup.children().eq(0));
-            if(vm.selectedPurposeData !== " Mục đích... ") {
+            if(vm.selectedPurposeData.Name !== " Mục đích... ") {
                 var tabStrip = $("#eventTabstrip").kendoTabStrip().data("kendoTabStrip");
                 tabStrip.disable(tabStrip.tabGroup.children().eq(1));
                 $scope.tab1Inisible = false;
             }  else {
                 $scope.tab1Inisible = true;
+                $scope.tab2Invisible = true;
             }
         }
         $scope.onReminderSerialSelChanged = function () {
@@ -571,6 +574,9 @@ angular.module('app')
                         object.splice(index,1);
                     }
                 });
+                if(vm.crDepartmentListTag.length == 0) {
+                    vm.crDepartmentListTag = [];
+                }
             }
             console.log(vm.crtagSelectected);
             console.log(isHaveInList);
@@ -967,50 +973,57 @@ angular.module('app')
                     
                     var tabstrip = $("#eventTabstrip").data("kendoTabStrip");
                     tabstrip.disable(tabstrip.tabGroup.children().eq(0));
+                    tabstrip.enable(tabstrip.tabGroup.children().eq(1));
                     var myTab = tabstrip.tabGroup.children("li").eq(1);
                     tabstrip.select(myTab);
                 } else {
                     if(vm.systemCustomer.ID === undefined || vm.systemCustomer.ID === "") {
                         toaster.pop('error', "Thiếu thông tin", "Thiếu thông tin khách hàng");
-                    } else {                  
-                        var json = JSON.stringify( vm.crtagSelectected, function( key, value ) {
-                            if( key === "$$hashKey" ) {
-                                return undefined;
-                            }   
-                            return value;
-                        });
-                        vm.eventCR.CustomerID = vm.systemCustomer.ID;
-                        vm.eventCRDetails.Serial = vm.serialSelectedData.device_serial;
-                        vm.eventCRDetails.ProductID = vm.eventProductTypeSelectedData.ID;
-                        vm.eventCR.DetailEvents.push(vm.eventCRDetails);
-                        vm.crtagSelectected = JSON.parse(json);                       
-                        vm.eventCR.EventTypeID = vm.selectedEventData.ID;
-                        vm.eventCR.EventPurposeID = vm.selectedPurposeData.ID;
-                        vm.interactionHistoryObj.Type ="Gọi điện";
-                        vm.interactionHistoryObj.Note = vm.eventCRDetails.Note;
-                        vm.eventCR.InteractionHistorys.push(vm.interactionHistoryObj);
-                        if(vm.eventCRDetails.DateSold !== undefined && vm.eventCRDetails.DateSold !== "") {
-                            var time = moment(compareDate(vm.eventCRDetails.DateSold)).format('YYYY-MM-DDTHH:mm:ss');
-                            time+='Z';
-                            vm.eventCRDetails.DateSold = time;
-                        }
-                        $http({
-                            url: _eventURL,
-                            method: 'POST',
-                            data: JSON.stringify(vm.eventCR),
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
-                            },
-                        }).error(function(response) {
-                            toaster.pop('error', "Thất bại", response.error.innererror.message);
-                        })
-                        .then(function(response){
-                            if(response.status == 201) {
-                                toaster.pop('success', "Thành công", "Đã tạo phiếu thành công");                 
+                    } else {              
+                        if(vm.crtagSelectected.length < 1) {
+                            toaster.pop('error', "Thiếu thông tin", "Vui lòng chọn ít nhất 1 tag");
+                        } 
+                        else {
+                            var json = JSON.stringify( vm.crtagSelectected, function( key, value ) {
+                                if( key === "$$hashKey" ) {
+                                    return undefined;
+                                }   
+                                return value;
+                            });
+                            vm.eventCR.CustomerID = vm.systemCustomer.ID;
+                            vm.eventCRDetails.Serial = vm.serialSelectedData.device_serial;
+                            vm.eventCRDetails.ProductID = vm.eventProductTypeSelectedData.ID;
+                            vm.eventCR.DetailEvents.push(vm.eventCRDetails);
+                            vm.crtagSelectected = JSON.parse(json);                       
+                            vm.eventCR.EventTypeID = vm.selectedEventData.ID;
+                            vm.eventCR.EventPurposeID = vm.selectedPurposeData.ID;
+                            vm.interactionHistoryObj.Type ="Gọi điện";
+                            vm.interactionHistoryObj.Note = vm.eventCRDetails.Note;
+                            vm.eventCR.InteractionHistorys.push(vm.interactionHistoryObj);
+                            if(vm.eventCRDetails.DateSold !== undefined && vm.eventCRDetails.DateSold !== "") {
+                                var time = moment(compareDate(vm.eventCRDetails.DateSold)).format('YYYY-MM-DDTHH:mm:ss');
+                                time+='Z';
+                                vm.eventCRDetails.DateSold = time;
                             }
-                            location.reload();
-                        });
+    
+                            $http({
+                                url: _eventURL,
+                                method: 'POST',
+                                data: JSON.stringify(vm.eventCR),
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                                },
+                            }).error(function(response) {
+                                toaster.pop('error', "Thất bại", response.error.innererror.message);
+                            })
+                            .then(function(response){
+                                if(response.status == 201) {
+                                    toaster.pop('success', "Thành công", "Đã tạo phiếu thành công");                 
+                                }
+                                location.reload();
+                            });
+                        }  
                     }                               
                 }
               });
@@ -1183,13 +1196,55 @@ angular.module('app')
                 },
                 pageSize: 50,
                 serverPaging: true,
-                serverSorting: true
+                serverSorting: true,
+                resizable: true,
+                schema: {
+                    parse: function(response) {
+                        var histories = [];
+                        for (var i = 0; i < response.value.length; i++) {
+                            var dateNoTime = new Date(response.value[i].CreatDate);
+                            var history = {
+                                Type: response.value[i].Type,
+                                EventCode: response.value[i].EventCode,
+                                EventNote: response.value[i].EventNote,
+                                EventPurpose: response.value[i].EventPurpose,
+                                EventType: response.value[i].EventType,
+                                DetailEventNote: response.value[i].DetailEventNote,   
+                                Serial: response.value[i].Serial,
+                                CreatDate: response.value[i].CreatDate,
+                                CreatDateNoTime: new Date(
+                                    dateNoTime.getFullYear(),
+                                    dateNoTime.getMonth(),
+                                    dateNoTime.getDate()
+                                ),
+                                Note: response.value[i].Note
+                            };
+                            histories.push(history);
+                        }
+                        return histories;
+                    },
+                    model: {
+                        fields: {
+                            Type: {type: "string"},
+                            EventCode: {type: "string"},
+                            EventNote: {type: "string"},
+                            EventPurpose: {type: "string"},
+                            EventType: {type: "string"},
+                            DetailEventNote: {type: "string"},
+                            Serial: {type: "string"},
+                            CreatDate: { type: "date" },
+                            CreatDateNoTime: { type: "date" },
+                            Note: {type: "string"}
+                        }
+                      }
+                }
             },
             sortable: true,
             pageable: true,
             groupable: true,
             columnMenu: true,
             height: 500,
+           
             columns: [
                 {
                     field: "Type",
@@ -1220,11 +1275,10 @@ angular.module('app')
                     title: "Serial"
                 },
                 {
-                    field:"CreatDate",
+                    field:"CreatDateNoTime",
                     title:"Ngày tạo",
-                    type:"datetime",
-                    template: "#= kendo.toString(kendo.parseDate(CreatDate, 'yyyy-MM-dd'), 'dd/MM/yyyy') #",
-                    groupHeaderTemplate:  "#= kendo.toString(kendo.parseDate(value , 'yyyy-MM-dd'), 'dd/MM/yyyy') #"
+                    template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
                 }, 
                 {
                     field: "Note",
