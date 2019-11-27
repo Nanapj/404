@@ -101,6 +101,7 @@ namespace BestApp.Services
                     CreatDate = t.CreatDate,
                     ProductCode = t.ProductType.Code,
                     ProductName = t.ProductType.Name,
+                    EventID = t.Event.Id,
                     Note = t.Note
                 }).ToList(),
                 ReminderNotes = x.ReminderNotes.Select(t => new ReminderNoteViewModel
