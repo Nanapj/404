@@ -93,6 +93,7 @@ namespace BestApp.Services
                     ID = t.Id,
                     NameTag = t.NameTag,
                     CodeTag = t.CodeTag,
+                    DepartmentName = t.Departments.Name
                 }).ToList(),
                 DetailEvents = x.DetailEvents.Select(t => new DetailEventViewModel
                 {
