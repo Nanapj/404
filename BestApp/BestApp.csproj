@@ -250,7 +250,7 @@
     <Compile Include="Areas\Api\Controllers\EventPurposesController.cs" />
     <Compile Include="Areas\Api\Controllers\EventsController.cs" />
     <Compile Include="Areas\Api\Controllers\EventTypesController.cs" />
-    <Compile Include="Areas\Api\Controllers\InteractionHistorysController.cs" />
+    <Compile Include="Areas\Api\Controllers\InteractionHistoriesController.cs" />
     <Compile Include="Areas\Api\Controllers\ProductTypesController.cs" />
     <Compile Include="Areas\Api\Controllers\ReminderNotesController.cs" />
     <Compile Include="Areas\Api\Controllers\StaffsController.cs" />

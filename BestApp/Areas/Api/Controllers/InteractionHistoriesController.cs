@@ -13,12 +13,12 @@ using static BestApp.Services.InteractionHistoryService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class InteractionHistorysController : ODataController
+    public class InteractionHistoriesController : ODataController
     {
         private readonly IInteractionHistoryService _interactionHistoryService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
       
-        public InteractionHistorysController(IInteractionHistoryService interactionHistoryService, IUnitOfWorkAsync unitOfWorkAsync)
+        public InteractionHistoriesController(IInteractionHistoryService interactionHistoryService, IUnitOfWorkAsync unitOfWorkAsync)
         {
             _interactionHistoryService = interactionHistoryService;
             _unitOfWorkAsync = unitOfWorkAsync;
