@@ -6,6 +6,8 @@ angular.module('app')
         var _crEventURL = "/odata/Events";
         var _departmentURL = "/odata/Departments";
         var _tagURL = "/odata/Tags";
+        var _eventDetailURL = "/odata/DetailEvents";
+        var _historyInteractionURL = "/odata/InteractionHistorys";
         vm.access_token = localStorage.getItem('access_token');
         vm.handleDateRange = handleDateRange;
         vm.selectedEvent = {};
@@ -173,19 +175,19 @@ angular.module('app')
             dataSource: {
                 type: "odata-v4",
                 transport: {
-                    read: _crEventURL+"?$expand=DetailEvents,InteractionHistorys,Tags,ReminderNotes&CreatDate lt "+ "'"+vm.endDate+"'"+" &CreatDate gt "+"'"+vm.startDate+"'"
+                    read: _crEventURL+"?$expand=DetailEvents,InteractionHistorys,Tags,ReminderNotes&CreatDate lt "+ "'"+vm.endDate+"'"+" &CreatDate gt "+"'"+vm.startDate+"'&orderby CreatDate desc"
                 },
                 pageSize: 50,
                 serverPaging: true,
                 serverSorting: true,
-                resizable: true,
-                
+                resizable: true,              
                 schema: {
                     parse: function(response) {
                       var events = [];
                       for (var i = 0; i < response.value.length; i++) {
                         var dateNoTime = new Date(response.value[i].CreatDate);
                         var event = {
+                            ID: response.value[i].ID,
                             Code: response.value[i].Code,
                             CustomerName: response.value[i].CustomerName,
                             PhoneNumber: response.value[i].PhoneNumber,
@@ -232,41 +234,46 @@ angular.module('app')
             dataBound: onDataBound,
             change: onChange,
             columns: [
-            {
-                field: "Code",
-                title: "Mã Phiếu"
-            },
-            {
-                field:"CreatDateNoTime",
-                title:"Ngày tạo",
-                template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
-                groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
-            },
-            {
-                field: "CustomerName",
-                title: "Tên khách hàng"
-            },
-            {
-                field: "PhoneNumber",
-                title: "Số điện thoại"
-            },
-            {
-                field: "Address",
-                title: "Địa chỉ"
-            },
-            {
-                field: "EventTypeName",
-                title: "Loại sự kiện"
-            },
-            {
-                field: "EventPurposeName",
-                title: "Mục đích"
-            },
-            {
-                field:"Status",
-                title:"Tình trạng phiếu"
-            },
-            { command: [{ text: "Chi tiết", click: showDetails },{text: "Sửa", click: showEditDetails }], title: " Tùy chỉnh ", width: "200px" }
+                {
+                    field: "ID",
+                    title: "ID",
+                    hidden: true
+                },
+                {
+                    field: "Code",
+                    title: "Mã Phiếu"
+                },
+                {
+                    field:"CreatDateNoTime",
+                    title:"Ngày tạo",
+                    template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+                },
+                {
+                    field: "CustomerName",
+                    title: "Tên khách hàng"
+                },
+                {
+                    field: "PhoneNumber",
+                    title: "Số điện thoại"
+                },
+                {
+                    field: "Address",
+                    title: "Địa chỉ"
+                },
+                {
+                    field: "EventTypeName",
+                    title: "Loại sự kiện"
+                },
+                {
+                    field: "EventPurposeName",
+                    title: "Mục đích"
+                },
+                {
+                    field:"Status",
+                    title:"Tình trạng phiếu"
+                },
+                { command: [{ text: "Chi tiết", click: showDetails },{text: "Sửa", click: showEditDetails }], title: " Tùy chỉnh ", width: "200px" }
             ]
         };
         var wnd = $("#details")
@@ -274,7 +281,7 @@ angular.module('app')
                             title: "Chi tiết phiếu",
                             modal: true,
                             visible: false,
-                            resizable: false,
+                            resizable: true,
                             width: 600
                         }).data("kendoWindow");
         var editwnd = $("#editdetails")
@@ -344,38 +351,130 @@ angular.module('app')
             editable: "inline"
           }).data("kendoGrid");
         var detailsGrid = $("#gridDetails").kendoGrid({
-            dataSource: {
-                type:'odata-v4',
-                transport: {
-                    read: {
-                        url: function () {
-                            return "https://demos.telerik.com/kendo-ui/service-v4/odata/Products";
-                        }
-                    }
+            dataSource:{
+                transport:{
+                   read:  _eventDetailURL+"?$filter=EventID eq "+vm.selectedEvent.ID,
                 },
-                batch: true,
-                pageSize: 10,      
                 schema: {
+                    parse: function(response){
+                        var details =[];
+                        for (var i = 0; i < response.value.length; i++) {
+                            var dateNoTime = new Date(response.value[i].CreatDate);
+                            var detail = {
+                                ID: response.value[i].ID,
+                                Serial: response.value[i].Serial,
+                                EventCode: response.value[i].EventCode,
+                                ProductCode: response.value[i].ProductCode,
+                                ProductName: response.value[i].ProductName,
+                                AgencySold: response.value[i].AgencySold,
+                                AssociateName: response.value[i].AssociateName,
+                                CreatDate: response.value[i].CreatDate,
+                                CreatDateNoTime: new Date(
+                                    dateNoTime.getFullYear(),
+                                    dateNoTime.getMonth(),
+                                    dateNoTime.getDate()
+                                )
+                            };
+                            details.push(detail);
+                          }
+                          return details;
+                    },
                     model: {
-                        id: "ProductID",
                         fields: {
-                            ProductID: { editable: false, nullable: true },
-                            ProductName: { validation: { required: true } },
-                            UnitPrice: { type: "number", validation: { required: true, min: 1} },
-                            Discontinued: { type: "boolean" },
-                            UnitsInStock: { type: "number", validation: { min: 0, required: true } }
+                            ID: { type: "string" },
+                            Serial: { type: "string" },
+                            EventCode: { type: "string" },
+                            ProductCode: { type: "string" },
+                            ProductName: { type: "string" },
+                            AgencySold: { type: "string" },
+                            AssociateName: { type: "string" },
+                            CreatDate: { type: "date" },
+                            CreatDateNoTime: { type: "date" },
                         }
                     }
+                },    
+            } ,
+            sortable: true,
+            pageable: true,
+            groupable: true,
+            reorderable: true,
+            columnMenu: true,
+            height: 600,
+            columns: [
+                { field: "Serial", title: "Serial" },
+                { field: "EventCode", title: "Mã sự kiện" },
+                { field: "ProductCode", title: "Mã sản phẩm"},
+                { field: "ProductName",  title: "Tên sản phẩm"},
+                { field: "AgencySold", title: "Đại lí bán"},
+                { field: "AssociateName", title: "Tên nhân viên"},
+                {  
+                    field:"CreatDateNoTime",
+                    title:"Ngày tạo",
+                    template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+                }
+            ]
+          }).data("kendoGrid");
+          var historyGrids = $("#gridHistoryInteractions").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: _historyInteractionURL+"?$filter=EventID eq "+vm.selectedEvent.ID
+                },
+                schema: {
+                    parse: function(response){
+                    var histories =[];
+                    for (var i = 0; i < response.value.length; i++) {
+                        var dateNoTime = new Date(response.value[i].CreatDate);
+                        var history = {
+                            ID: response.value[i].ID,
+                            Type: response.value[i].Type,
+                            EventCode: response.value[i].EventCode,
+                            Note: response.value[i].Note,
+                            Status: response.value[i].Status,
+                            CreatDate: response.value[i].CreatDate,
+                            CreatDateNoTime: new Date(
+                                dateNoTime.getFullYear(),
+                                dateNoTime.getMonth(),
+                                dateNoTime.getDate()
+                            )
+                    };
+                    histories.push(history);
+                    }
+                    return histories;
+                },
+                model: {
+                    fields: {
+                        ID: { type: "string" },
+                        Type: { type: "string" },
+                        EventCode: {type: "string"},
+                        Note: { type: "string" },
+                        Status: { type: "string" },
+                        CreatDate: { type: "date" },
+                        CreatDateNoTime: { type: "date" },
+                    }
+                }
                 }
             },
             sortable: true,
             pageable: true,
+            groupable: true,
+            reorderable: true,
+            columnMenu: true,
             height: 468,
-            width: 600,
             columns: [
-                { field: "ProductName", title: "Id", format: "{0:c}", width: "120px" },
-                { field: "UnitPrice", title: "Thời gian", format: "{0:c}", width: "120px" },
-                { field: "UnitsInStock", title:"Đã gọi", width: "120px" },
+                { field: "Type", title: "Hình thức sự kiện" },
+                { field: "EventCode", title: "Mã sự kiện" },
+                { field: "Note", title: "Nội dung phiếu"},
+                { field: "Status",  title: "Trạng thái phiếu"},
+                {  
+                    field:"CreatDateNoTime",
+                    title:"Ngày tạo",
+                    template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+                },
+                {
+                    field: "Note", title: " Ghi chú"
+                }
             ]
           }).data("kendoGrid");
           $("#windowTabstrip").kendoTabStrip({
@@ -406,6 +505,32 @@ angular.module('app')
             var grid = $('#eventGrid').data('kendoGrid');
             var selectedItem = grid.dataItem(grid.select());
             vm.selectedEvent = selectedItem;
+            console.log(vm.selectedEvent.ID);
+            console.log(vm.selectedEvent.DetailEvents);
+            console.log(vm.selectedEvent.InteractionHistorys);
+            console.log(vm.selectedEvent.ReminderNotes);
+            if(vm.eventDetailList.length > 0) {
+                vm.eventDetailList = [];
+            }
+            if(vm.eventHistoryList.length > 0) {
+                vm.eventHistoryList = [];
+            }
+            for(var i = 0 ; i < vm.selectedEvent.DetailEvents.length ; i++) {
+                vm.eventDetailList.push(vm.selectedEvent.DetailEvents[i]);
+            }
+            for(var i = 0 ; i < vm.selectedEvent.InteractionHistorys.length ; i++) {
+                vm.eventHistoryList.push(vm.selectedEvent.InteractionHistorys[i]);
+            }
+            var gridDetails = $('#gridDetails').data('kendoGrid');
+            var historyGrids = $('#gridHistoryInteractions').data('kendoGrid');
+            gridDetails.dataSource.transport.options.read.url = _eventDetailURL+"?$filter=EventID eq " + vm.selectedEvent.ID ;
+            gridDetails.dataSource.read();
+            gridDetails.refresh();
+            historyGrids.dataSource.transport.options.read.url = _historyInteractionURL+"?$filter=EventID eq " + vm.selectedEvent.ID ;
+            historyGrids.dataSource.read();
+            historyGrids.refresh();
+            console.log(vm.eventDetailList);
+
         }
     }
 ]);

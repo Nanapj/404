@@ -1001,7 +1001,7 @@ angular.module('app')
                             vm.interactionHistoryObj.Note = vm.eventCRDetails.Note;
                             vm.eventCR.InteractionHistorys.push(vm.interactionHistoryObj);
                             if(vm.eventCRDetails.DateSold !== undefined && vm.eventCRDetails.DateSold !== "") {
-                                var time = moment(compareDate(vm.eventCRDetails.DateSold)).format('YYYY-MM-DDTHH:mm:ss');
+                                var time = moment(vm.eventCRDetails.DateSold).format('YYYY-MM-DDTHH:mm:ss');
                                 time+='Z';
                                 vm.eventCRDetails.DateSold = time;
                             }
@@ -1035,9 +1035,9 @@ angular.module('app')
                 toaster.pop('error', "Thiếu thông tin", "Thiếu thông tin khách hàng");
             } else 
             if(vm.reminderCRDetails.ReminderDate == undefined || vm.reminderCRDetails.ReminderDate !=="" ){
-                toaster.pop('error', "Ngày hẹn", "Vui lòng chọn ít nhất một tag phòng ban");
+                toaster.pop('error', "Ngày hẹn", "Vui lòng chọn ngày hẹn");
             }
-            var time = moment(compareDate(vm.eventCRDetails.DateSold)).format('YYYY-MM-DDTHH:mm:ss');
+            var time = moment(vm.eventCRDetails.DateSold).format('YYYY-MM-DDTHH:mm:ss');
             time+='Z';
             var json = JSON.stringify( vm.crtagSelectected, function( key, value ) {
                 if( key === "$$hashKey" ) {
@@ -1236,7 +1236,7 @@ angular.module('app')
                             CreatDateNoTime: { type: "date" },
                             Note: {type: "string"}
                         }
-                      }
+                    }
                 }
             },
             sortable: true,
