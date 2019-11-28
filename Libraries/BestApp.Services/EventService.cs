@@ -117,7 +117,7 @@ namespace BestApp.Services
                     ReminderDate = t.ReminderDate,        
 
                 }).ToList(),
-                InteractionHistorys = x.InteractionHistorys.Select(t => new InteractionHistoryViewModel
+                InteractionHistories = x.InteractionHistories.Select(t => new InteractionHistoryViewModel
                 {
                     ID = t.Id,
                     Type = t.Type,
@@ -219,12 +219,12 @@ namespace BestApp.Services
                 }
             }
                 
-            if(model.InteractionHistorys != null)
+            if(model.InteractionHistories != null)
             {
-                data.InteractionHistorys = new List<InteractionHistory>();
-                foreach (var item in model.InteractionHistorys)
+                data.InteractionHistories = new List<InteractionHistory>();
+                foreach (var item in model.InteractionHistories)
                 {
-                    data.InteractionHistorys.Add(new InteractionHistory()
+                    data.InteractionHistories.Add(new InteractionHistory()
                     {
                         Type = item.Type,
                         Note = item.Note,

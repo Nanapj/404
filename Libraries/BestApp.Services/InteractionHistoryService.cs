@@ -24,8 +24,8 @@ namespace BestApp.Services
             InteractionHistory Insert(InteractionHistoryViewModel model);
             Task<InteractionHistory> InsertAsync(InteractionHistoryViewModel model);
             Task<InteractionHistoryViewModel> UpdateAsync(InteractionHistoryViewModel model);
-            Task<IQueryable<InteractionHistoryViewModel>> GetAllInteractionHistorysAsync();
-            IQueryable<InteractionHistoryViewModel> GetAllInteractionHistorys();
+            Task<IQueryable<InteractionHistoryViewModel>> GetAllInteractionHistoriesAsync();
+            IQueryable<InteractionHistoryViewModel> GetAllInteractionHistories();
             IEnumerable<InteractionHistoryViewModel> GetInteractionHistoryByCustomer(SearchViewModel model);
             bool Delete(Guid Id);
         }
@@ -52,7 +52,7 @@ namespace BestApp.Services
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
         }
-        public IQueryable<InteractionHistoryViewModel> GetAllInteractionHistorys()
+        public IQueryable<InteractionHistoryViewModel> GetAllInteractionHistories()
         {
             return _repository.Queryable().Where(x => x.Delete == false)
             .Select(x => new InteractionHistoryViewModel()
@@ -66,9 +66,9 @@ namespace BestApp.Services
                 Note = x.Note
             });
         }
-        public Task<IQueryable<InteractionHistoryViewModel>> GetAllInteractionHistorysAsync()
+        public Task<IQueryable<InteractionHistoryViewModel>> GetAllInteractionHistoriesAsync()
         {
-            return Task.Run(() => GetAllInteractionHistorys());
+            return Task.Run(() => GetAllInteractionHistories());
         }
       
         public IEnumerable<InteractionHistoryViewModel> GetInteractionHistoryByCustomer(SearchViewModel model)
@@ -79,7 +79,7 @@ namespace BestApp.Services
                 var result = new List<InteractionHistoryViewModel>();
                 //result1.CustomerName = findCus.Name;
                 //result1.CustomerPhone = findCus.PhoneNumber;
-                var listEvent = _eventService.Queryable().Include(x => x.DetailEvents).Include(x => x.InteractionHistorys).Include(x => x.ReminderNotes).Where(x => x.Customer.Id == findCus.Id).ToList();
+                var listEvent = _eventService.Queryable().Include(x => x.DetailEvents).Include(x => x.InteractionHistories).Include(x => x.ReminderNotes).Where(x => x.Customer.Id == findCus.Id).ToList();
                 if(listEvent.Count > 0)
                 {
                     foreach(var item in listEvent)

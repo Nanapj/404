@@ -15,7 +15,7 @@ namespace BestApp.Core.Models
         public StatusEvent Status { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
         public List<DetailEvent> DetailEvents { get; set; }
-        public List<InteractionHistory> InteractionHistorys { get; set; }
+        public List<InteractionHistory> InteractionHistories { get; set; }
         public List<ReminderNote> ReminderNotes { get; set; }
         public virtual Customer Customer { get; set; }
         public Guid? EmployeeID { get; set; }

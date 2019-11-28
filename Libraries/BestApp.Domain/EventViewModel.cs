@@ -25,7 +25,7 @@ namespace BestApp.Domain
         public StatusEvent Status { get; set; }
         public List<TagViewModel> Tags { get; set; } = new List<TagViewModel>();
         public List<DetailEventViewModel> DetailEvents { get; set; } = new List<DetailEventViewModel>();
-        public List<InteractionHistoryViewModel> InteractionHistorys { get; set; } = new List<InteractionHistoryViewModel>();
+        public List<InteractionHistoryViewModel> InteractionHistories { get; set; } = new List<InteractionHistoryViewModel>();
         public List<ReminderNoteViewModel> ReminderNotes { get; set; } = new List<ReminderNoteViewModel>();
         public DateTime CreatDate { get; set; }
         public DateTime LastModifiedDate { get; set; }

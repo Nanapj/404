@@ -27,7 +27,7 @@ namespace BestApp.Areas.Api.Controllers
         [EnableQuery]
         public async Task<IQueryable<InteractionHistoryViewModel>> Get()
         {
-            return await _interactionHistoryService.GetAllInteractionHistorysAsync();
+            return await _interactionHistoryService.GetAllInteractionHistoriesAsync();
         }
         [HttpGet]
         [EnableQuery]

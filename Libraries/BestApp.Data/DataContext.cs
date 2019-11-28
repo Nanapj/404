@@ -29,7 +29,7 @@ namespace Repository.Pattern
         public DbSet<CustomerTag> CustomerTags { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<DetailEvent> Detailevents { get; set; }
-        public DbSet<InteractionHistory> InteractionHistorys { get; set; }
+        public DbSet<InteractionHistory> InteractionHistories { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<ReminderNote> ReminderNotes { get; set; }
         public DbSet<City> Citys { get; set; }

@@ -139,6 +139,14 @@
     <Compile Include="Migrations\201911230431371_F20.Designer.cs">
       <DependentUpon>201911230431371_F20.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911280341144_F21.cs" />
+    <Compile Include="Migrations\201911280341144_F21.Designer.cs">
+      <DependentUpon>201911280341144_F21.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911280342230_F22.cs" />
+    <Compile Include="Migrations\201911280342230_F22.Designer.cs">
+      <DependentUpon>201911280342230_F22.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
@@ -217,6 +225,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911230431371_F20.resx">
       <DependentUpon>201911230431371_F20.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911280341144_F21.resx">
+      <DependentUpon>201911280341144_F21.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911280342230_F22.resx">
+      <DependentUpon>201911280342230_F22.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
