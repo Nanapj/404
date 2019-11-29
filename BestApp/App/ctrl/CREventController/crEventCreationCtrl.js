@@ -11,7 +11,7 @@ angular.module('app')
         var _tagURL = "/odata/Tags";
         var _eventTypeURL = "/odata/EventTypes";
         var _productTypeOdata = "/odata/ProductTypes";
-        var _interactURL = "/odata/InteractionHistorys/";
+        var _interactURL = "/odata/InteractionHistories/";
         var _pitechCusURL = "http://api.test.haveyougotpi.com/project404.aspx/GetCustomerInfoByPhone";
         var _pitechDevURL = "http://api.test.haveyougotpi.com/project404.aspx/GetDeviceListByPhoneNumber";
         var _pitechDeviceDetailsURL = "http://api.test.haveyougotpi.com/project404.aspx/GetDeviceInfoBySerialNo";
@@ -34,12 +34,14 @@ angular.module('app')
         vm.reminderEvent = {};
         vm.eventCR = {
             DetailEvents: [],
-            InteractionHistorys: [],
+            InteractionHistories: [],
             ReminderNotes: [],
+            Tags: []
         }
         vm.reminderCR = {
             ReminderNotes: [],
-            InteractionHistorys: [],
+            InteractionHistories: [],
+            Tags: []
         }
         vm.crDepartmentListTag = [];     
         vm.reminderDepartmentListTag = [];
@@ -214,6 +216,7 @@ angular.module('app')
                     })
                     .then(function(response){
                         if(response.status == 201) {
+                            vm.systemCustomer.ID = response.data.ID;
                             toaster.pop('success', "Thành công", "Đã tạo thông tin khách hàng");
                             $scope.eventTypeDis = "false";
                         }
@@ -995,11 +998,12 @@ angular.module('app')
                             vm.eventCRDetails.ProductID = vm.eventProductTypeSelectedData.ID;
                             vm.eventCR.DetailEvents.push(vm.eventCRDetails);
                             vm.crtagSelectected = JSON.parse(json);                       
+                            vm.eventCR.Tags = vm.crtagSelectected;
                             vm.eventCR.EventTypeID = vm.selectedEventData.ID;
                             vm.eventCR.EventPurposeID = vm.selectedPurposeData.ID;
                             vm.interactionHistoryObj.Type ="Gọi điện";
                             vm.interactionHistoryObj.Note = vm.eventCRDetails.Note;
-                            vm.eventCR.InteractionHistorys.push(vm.interactionHistoryObj);
+                            vm.eventCR.InteractionHistories.push(vm.interactionHistoryObj);
                             if(vm.eventCRDetails.DateSold !== undefined && vm.eventCRDetails.DateSold !== "") {
                                 var time = moment(vm.eventCRDetails.DateSold).format('YYYY-MM-DDTHH:mm:ss');
                                 time+='Z';
@@ -1055,7 +1059,7 @@ angular.module('app')
             vm.eventCR.EventPurposeID = vm.selectedPurposeData.ID;
             vm.interactionHistoryObj.Type ="Gọi điện";
             vm.interactionHistoryObj.Note = vm.eventCRDetails.Note;
-            vm.eventCR.InteractionHistorys.push(vm.interactionHistoryObj);
+            vm.eventCR.InteractionHistories.push(vm.interactionHistoryObj);
             vm.reminderCRDetails.Serial = vm.serialSelectedData.device_serial;
             vm.eventCR.ReminderNotes.push(vm.reminderCRDetails);
           
