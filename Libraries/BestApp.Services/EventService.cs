@@ -135,6 +135,7 @@ namespace BestApp.Services
                 item.EventTypeName = _eventTypeService.Queryable()
                     .Where(t => t.Delete == false && t.Id == item.EventTypeID).FirstOrDefault().Name;
             }
+
             //if(model.To != null || model.From != null)
             //{
             //    result = result.Where(x => ((!model.From.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
@@ -258,6 +259,26 @@ namespace BestApp.Services
                 data.EventPurposeId = model.EventPurposeID;
                 data.Note = model.Note;
                 data.Status = model.Status;
+                if(data.Tags != null)
+                {
+                    if (model.Tags != null)
+                    {
+                        foreach (var item in data.Tags)
+                        {
+                            Delete(item.Id);
+                        }
+                        data.Tags = new List<Tag>();
+                        foreach (var item in model.Tags)
+                        {
+                            var t = _tagService.Find(item.ID);
+                            if (t != null)
+                            {
+                                data.Tags.Add(t);
+                            }
+                        }
+                    }
+                }
+                
                 data.LastModifiedDate = DateTime.Now;
             }
             return true;
