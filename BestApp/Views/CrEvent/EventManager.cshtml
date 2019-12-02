@@ -47,17 +47,15 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <div id="listOfCrTaga" title="Danh sách tag sự kiện">
-                                            <div class="row" ng-repeat="item in vm.crDepartmentListTag">
-                                                <div class="form-group" style="padding: 15px;">
-                                                    <label>{{item.department.Name}}</label>
-                                                    <div class="row" style="padding:15px;">
-                                                        <button id="filter{{child.ID}}"
-                                                                ng-repeat="child in item.tagList"
-                                                                class="btn m-b-xs w-xs btn-default"
-                                                                ng-click="filterTagClicked(child,this,$index)">
-                                                            {{child.NameTag}}
-                                                        </button>
-                                                    </div>
+                                            <div class="form-group" style="padding: 15px; float: left;" ng-repeat="item in vm.crDepartmentListTag">
+                                                <label>{{item.department.Name}}</label>
+                                                <div class="row" style="padding:15px;">
+                                                    <button id="filter{{child.ID}}"
+                                                            ng-repeat="child in item.tagList"
+                                                            class="btn m-b-xs btn-default"
+                                                            ng-click="filterTagClicked(child,this,$index)">
+                                                        {{child.NameTag}}
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -91,7 +89,7 @@
                            Tags
                         </li>
                         <li>
-                            Lịch hẹn phiếu
+                            Lịch sử hẹn
                         </li>
                     </ul>
                     <div>

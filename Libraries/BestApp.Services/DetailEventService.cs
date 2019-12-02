@@ -93,6 +93,10 @@ namespace BestApp.Services
             if (data != null)
             {
                 data.Serial = model.Serial;
+                data.ProductType = _productTypeService.Find(model.ProductID);
+                data.AgencySold = model.AgencySold;
+                data.AssociateName = model.AssociateName;
+                data.DateSold = model.DateSold;
                 data.Note = model.Note;
                 data.LastModifiedDate = DateTime.Now;
             }
