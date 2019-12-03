@@ -219,22 +219,22 @@ angular.module('app')
             });          
             var eventGrid = $("#eventGrid").data("kendoGrid");
             if(vm.filterTagString === "") {
-                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&$filter=Tags/all(c: c/NameTag in ("+ vm.filterTagString+"))&CreatDate lt "+ "'"+vm.endDate+"'"+" &CreatDate gt "+"'"+vm.startDate+"'&orderby CreatDate desc";
+                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&$filter=Tags/all(c: c/NameTag in ("+ vm.filterTagString+"))&orderby CreatDate desc";
                 eventGrid.dataSource.read();
             } else {
                 vm.filterTagString = vm.filterTagString.substring(0, vm.filterTagString.length - 1);
-                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&$filter=Tags/any(c: c/NameTag in ("+ vm.filterTagString+"))&CreatDate lt "+ "'"+vm.endDate+"'"+" &CreatDate gt "+"'"+vm.startDate+"'&orderby CreatDate desc";
+                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&$filter=Tags/any(c: c/NameTag in ("+ vm.filterTagString+"))&orderby CreatDate desc";
                 eventGrid.dataSource.read();
             }     
         };
         $scope.onDateRangeChange = function() {
             var eventGrid = $("#eventGrid").data("kendoGrid");
             if(vm.filterTagString === "") {
-                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&$filter=Tags/all(c: c/NameTag in ("+ vm.filterTagString+"))&CreatDate lt "+ "'"+vm.endDate+"'"+" &CreatDate gt "+"'"+vm.startDate+"'&orderby CreatDate desc";
+                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&$filter=Tags/all(c: c/NameTag in ("+ vm.filterTagString+"))&orderby CreatDate desc";
                 eventGrid.dataSource.read();
             } else {
                 vm.filterTagString = vm.filterTagString.substring(0, vm.filterTagString.length - 1);
-                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&$filter=Tags/any(c: c/NameTag in ("+ vm.filterTagString+"))&CreatDate lt "+ "'"+vm.endDate+"'"+" &CreatDate gt "+"'"+vm.startDate+"'&orderby CreatDate desc";
+                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&$filter=Tags/any(c: c/NameTag in ("+ vm.filterTagString+"))&orderby CreatDate desc";
                 eventGrid.dataSource.read();
             }
         };
@@ -242,7 +242,7 @@ angular.module('app')
             dataSource: {
                 type: "odata-v4",
                 transport: {
-                    read: _crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&$filter=Tags/all(c: c/NameTag in ())&CreatDate lt "+ "'"+vm.endDate+"'"+" &CreatDate gt "+"'"+vm.startDate+"'&orderby CreatDate desc"
+                    read: _crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&orderby CreatDate desc"
                 },         
                 schema: {
                     parse: function(response) {
@@ -467,10 +467,15 @@ angular.module('app')
             columns: [
                 { field: "ID", title: "Id", hidden: true },
                 { 
+                    field: "ProductName", title:"Tên sản phẩm",
+                    editor: ProductTypeDropdownEditor, 
+                    template: "#= ProductName #" 
+                },
+                { 
                     field: "Serial", 
                     title: "Serial",
                     editor: SerialDropdownEditor,
-                    template: "#= Serial #"
+                    template: "#= Serial ? Serial : 'Noinformation' #"
                 },
                 { field: "EventCode", title:"Mã phiếu" },
                 {   
@@ -479,12 +484,7 @@ angular.module('app')
                     template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
                     groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #" 
                 },
-                { field: "ProductCode", title:"Mã sản phẩm" },
-                { 
-                    field: "ProductName", title:"Tên sản phẩm",
-                    editor: ProductTypeDropdownEditor, 
-                    template: "#= ProductName #" 
-                },
+                { field: "ProductCode", title:"Mã sản phẩm" },   
                 { field: "AgencySold", title:"Đại lý bán" },
                 { 
                     field: "DateSold",
@@ -510,6 +510,9 @@ angular.module('app')
                     Note: e.model.Note,
                     AgencySold: e.model.AgencySold,
                     AssociateName: e.model.AssociateName,
+                }
+                if(model.Serial == "[object Object]"){
+                    model.Serial = "Noinformation";
                 }
                 if(e.model.DateSold !== undefined && e.model.DateSold !== "") {
                     model.DateSold = moment(e.model.DateSold).utc().format();
@@ -593,6 +596,9 @@ angular.module('app')
                 .kendoDropDownList({
                     autoBind: false,
                     filter: "startswith",
+                    optionLabel: {
+                        device_serial: "Select Serial...",
+                    },
                     dataTextField: "device_serial",
                     dataValueField: "device_serial",
                     select: onSerialSelected,
@@ -871,6 +877,13 @@ angular.module('app')
         $("#windowTabstrip").kendoTabStrip({
             animation:  {
                 open: {
+                    effects: "fadeIn"
+                }
+            }
+        });
+        $("#editWindowTabstrip").kendoTabStrip({
+            animation: {
+                opren: {
                     effects: "fadeIn"
                 }
             }
