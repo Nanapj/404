@@ -179,11 +179,11 @@ angular.module('app')
             });
             var eventGrid = $("#eventGrid").data("kendoGrid");
             if(vm.filterTagString === "") {
-                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&$filter=Tags/all(c: c/NameTag in ("+ vm.filterTagString+"))&CreatDate lt "+ "'"+vm.endDate+"'"+" &CreatDate gt "+"'"+vm.startDate+"'&orderby CreatDate desc";
+                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&orderby CreatDate desc";
                 eventGrid.dataSource.read();
             } else {
                 vm.filterTagString = vm.filterTagString.substring(0, vm.filterTagString.length - 1);
-                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&$filter=Tags/any(c: c/NameTag in ("+ vm.filterTagString+"))&CreatDate lt "+ "'"+vm.endDate+"'"+" &CreatDate gt "+"'"+vm.startDate+"'&orderby CreatDate desc";
+                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&$filter=Tags/any(c: c/NameTag in ("+ vm.filterTagString+"))&orderby CreatDate desc";
                 eventGrid.dataSource.read();
             }
         }
@@ -219,7 +219,7 @@ angular.module('app')
             });          
             var eventGrid = $("#eventGrid").data("kendoGrid");
             if(vm.filterTagString === "") {
-                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&$filter=Tags/all(c: c/NameTag in ("+ vm.filterTagString+"))&orderby CreatDate desc";
+                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&orderby CreatDate desc";
                 eventGrid.dataSource.read();
             } else {
                 vm.filterTagString = vm.filterTagString.substring(0, vm.filterTagString.length - 1);
@@ -230,7 +230,7 @@ angular.module('app')
         $scope.onDateRangeChange = function() {
             var eventGrid = $("#eventGrid").data("kendoGrid");
             if(vm.filterTagString === "") {
-                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&$filter=Tags/all(c: c/NameTag in ("+ vm.filterTagString+"))&orderby CreatDate desc";
+                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&orderby CreatDate desc";
                 eventGrid.dataSource.read();
             } else {
                 vm.filterTagString = vm.filterTagString.substring(0, vm.filterTagString.length - 1);
@@ -276,6 +276,9 @@ angular.module('app')
                       }
                       return events;
                     },
+                    total: function (response) {
+                        return response.length;
+                    },
                     model: {
                       fields: {
                         Code: {type: "string"},
@@ -288,19 +291,23 @@ angular.module('app')
                         Status: {type: "string"},
                         CreatDate: { type: "date" },
                       }
-                    }
-                },
-                pageSize: 10,
-                serverPaging: true,
-                serverFiltering: true,
-                serverSorting: true,
-                pageable: true,
-                groupable: true,
-                reorderable: true,
+                    },
+                    serverPaging: true,
+                    serverFiltering: true,
+                    serverSorting: true,
+                    pageable: {
+                        pageSize: 10,
+                        refresh: true
+                    },
+                    groupable: true,
+                    reorderable: true,
+                }      
             },
             sortable: true,
-            pageSize: 10,
-            pageable: true,
+            pageable: {
+                pageSize: 10,
+                refresh: true
+            },
             groupable: true,
             reorderable: true,
             columnMenu: true,
@@ -689,7 +696,10 @@ angular.module('app')
                 },    
             } ,
             sortable: true,
-            pageable: true,
+            pageable: {
+                pageSize: 5,
+                refresh: true
+            },
             groupable: true,
             reorderable: true,
             columnMenu: true,
