@@ -203,8 +203,7 @@ angular.module('app')
                     "color" : "white !important"
                 });
                 $(idButtonClicked).addClass("tag-blue-color");   
-                vm.crfilterTagSelectected.push(item);
-               
+                vm.crfilterTagSelectected.push(item);            
             } else {
                 $(idButtonClicked).css({
                     "color" : "#58666e !important",
