@@ -3,14 +3,51 @@ angular.module('app')
     .controller('crReminderManagerCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', function ($scope, $state, $stateParams, $http, toaster){
         var vm = this; 
         var _url = "/odata/Staffs";
+        var _crEventURL = "/odata/Events";
+        var _departmentURL = "/odata/Departments";
+        var _pitechDeviceURL = "http://api.test.haveyougotpi.com/project404.aspx/GetDeviceListByPhoneNumber";
+        var _pitechDeviceDetailsURL = "http://api.test.haveyougotpi.com/project404.aspx/GetDeviceInfoBySerialNo";
+        var _tagURL = "/odata/Tags";
+        var _eventDetailURL = "/odata/DetailEvents";
+        var _productTypeOdata = "/odata/ProductTypes";
+        var _historyInteractionURL = "/odata/InteractionHistories";
+        var _reminderNoteURL = "/odata/ReminderNotes";
+        vm.access_token = localStorage.getItem('access_token');
         vm.handleDateRange = handleDateRange;
-        vm.selectedStaff = {};
-        vm.reminderTagsList = [
-            { "Name" : "Tag A" , "Id" : "1"},
-            { "Name" : "Tag B" , "Id" : "2"},
-            { "Name": "Tag C" , "Id" : "3"}
-        ];
+        vm.selectedEvent = {};
+        vm.crDepartmentListTag = [];    
+        vm.tagsList = [];
+        vm.eventDetailList = [];
+        vm.eventHistoryList= [];
+        vm.eventTags = [];
+        vm.eventReminders = [];
+        vm.crfilterTagSelectected = [];
+        vm.productEditSelected = {};
+        vm.pitechSerialList = [];
+        vm.filterTagString = "";
         vm.reminderTagFilterList = [];
+        $("#timeline").kendoTimeline({
+            dataSource: {
+              transport: {
+                read: {
+                    url: "https://demos.telerik.com/kendo-ui/content/web/timeline/events-vertical-part1.json",
+                    dataType: "json"
+                }
+              },
+              schema: {
+                model: {
+                  fields: {
+                    date: {
+                      type: "date"
+                    },
+                  }
+                }
+              }
+            },
+            alternatingMode: true,
+            collapsibleEvents: true,
+            orientation: "vertical"
+        });
         $scope.reminderTagItemClicked = function(item,_this,index) {
             var idButtonClicked = "#button"+item.Id;
             if($(idButtonClicked).css("background-color") !== 'rgb(66, 133, 244)'){
@@ -287,5 +324,7 @@ angular.module('app')
             var selectedItem = grid.dataItem(grid.select());
             vm.selectedStaff = selectedItem;
         }
+       
     }
+    
 ]);
