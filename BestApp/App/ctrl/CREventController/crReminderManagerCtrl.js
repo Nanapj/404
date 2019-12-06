@@ -33,6 +33,11 @@ angular.module('app')
             var date1 = new Date(yr1, mon1-1, dt1);
             return date1;
             }
+        $("#timeline").kendoTimeline({
+            alternatingMode: true,
+            collapsibleEvents: true,
+            orientation: "vertical"
+        });
         $scope.tagGridOptions = {
             dataSource: {
                 type:'odata-v4',
@@ -124,7 +129,7 @@ angular.module('app')
                 }
             }
         };
-
+      
         function onCrDepartmentSelect(e) {
             var dataItem = e.dataItem;
             $http({
@@ -981,6 +986,7 @@ angular.module('app')
             var tagGrid = $('#gridTagDetails').data('kendoGrid');
             var reminderGrid = $('#reminderDetails').data('kendoGrid');
             var editDetailGrid = $('#gridEditDetails').data('kendoGrid');
+            var historyTimeline = $('#timeline').data('kendoTimeline');
             var detailsDatasource = new kendo.data.DataSource({
                 data: vm.eventDetailList,
                 schema: {
@@ -1106,6 +1112,52 @@ angular.module('app')
                     }
                 }
             });
+            var historyTimelineData = new kendo.data.DataSource({
+                data: vm.eventReminders,
+                schema: {
+                    parse: function(response) {
+                        var reminderItems =[];
+                        for (var i = 0; i < response.length; i++) {
+                            var createDateNotTime = new Date(response[i].CreatDate);
+                            var reminderDateNoTime = new Date(response[i].ReminderDate);
+                            var reminder = {
+                                ID: response[i].ID,
+                                description: response[i].Note,
+                                date:  new Date(
+                                    createDateNotTime.getFullYear(),
+                                    createDateNotTime.getMonth(),
+                                    createDateNotTime.getDate(),
+                                    createDateNotTime.getHours(),
+                                    createDateNotTime.getMinutes(),
+                                    createDateNotTime.getSeconds(),
+                                ),
+                                subtitle: "Ngày hẹn: " + moment(new Date(
+                                    reminderDateNoTime.getFullYear(),
+                                    reminderDateNoTime.getMonth(),
+                                    reminderDateNoTime.getDate(),
+                                    reminderDateNoTime.getHours(),
+                                    reminderDateNoTime.getMinutes(),
+                                    reminderDateNoTime.getSeconds(),
+                                )).format("DD/MM/YYYY"),
+                                title: response[i].Serial
+                                
+                        };
+                        reminderItems.push(reminder);
+                        }
+                        return reminderItems;
+                    },
+                    model: {
+                        fields: {
+                            ID: { type: "string" },
+                            description: { type: "string" },
+                            date: { type: "date" },
+                            subtitle: { type: "tring" },
+                            title: { type: "string" }
+                        }
+                    }
+                }
+            });
+            historyTimeline.setDataSource(historyTimelineData);
             editDetailGrid.dataSource.transport.options.read.url = _eventDetailURL+"?$filter=EventID eq "+vm.selectedEvent.ID;
             editDetailGrid.dataSource.read();
             gridDetails.setDataSource(detailsDatasource);
