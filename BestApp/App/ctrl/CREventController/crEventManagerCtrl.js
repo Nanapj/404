@@ -238,6 +238,7 @@ angular.module('app')
             }
         };
         $scope.mainGridOptions = {
+            toolbar: ["search"],
             dataSource: {
                 type: "odata-v4",
                 transport: {
@@ -356,9 +357,33 @@ angular.module('app')
                     field: "EventPurposeName",
                     title: "Mục đích"
                 },
-                { command: [{ text: "Chi tiết", click: showDetails },{text: "Sửa", click: showEditDetails }], title: " Tùy chỉnh ", width: "200px" }
+                { command: [{ text: "Chi tiết", click: showDetails },{text: "Sửa", click: showEditDetails },{text:"Đóng phiếu", click: closeEvent }], title: " Tùy chỉnh ", width: "300px" }
             ]
         };
+        function closeEvent(e) {
+            e.preventDefault();
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            vm.selectedEvent = dataItem;
+            dataItem.Status = '1';
+            $http({
+                    url: _crEventURL +'('+ dataItem.ID +')',
+                    method: 'PUT',
+                    data: JSON.stringify(dataItem),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                    },
+            }).then(function(response){
+                if(response.status == 204) {
+                    toaster.pop('success', "Thành công", "Đã cập nhật xong");        
+                    $('#eventGrid').data('kendoGrid').dataSource.read();
+                    $('#eventGrid').data('kendoGrid').refresh();       
+                } else {
+                    toaster.pop('error', "Lỗi", "Có lỗi trong quá trình cập nhật");
+                }
+            });      
+            console.log(vm.selectedEvent);
+        }
         var wnd = $("#details")
                         .kendoWindow({
                             title: "Chi tiết phiếu",

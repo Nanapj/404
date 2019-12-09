@@ -256,8 +256,14 @@ namespace BestApp.Services
             var data = Find(model.ID);
             if (data != null)
             {
-                data.EventTypeId = model.EventTypeID;
-                data.EventPurposeId = model.EventPurposeID;
+                if(model.EventPurposeID.ToString() != "00000000-0000-0000-0000-000000000000")
+                {
+                    data.EventPurposeId = model.EventPurposeID;
+                }
+                if(model.EventTypeID.ToString() != "00000000-0000-0000-0000-000000000000")
+                {
+                    data.EventTypeId = model.EventTypeID;
+                }            
                 data.Note = model.Note;
                 data.Status = model.Status;
                 if(data.Tags != null)
