@@ -61,10 +61,10 @@ namespace BestApp.Services
         public ReminderNote Insert(ReminderNoteViewModel model)
         {
             var data = new ReminderNote();
-            var employee = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
+           // var employee = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
             data.Note = model.Note;
             data.Event = _eventService.Find(model.EventID);
-            data.UserAccount = employee;
+            //data.UserAccount = employee;
             data.ReminderDate = model.ReminderDate;
             data.Serial = model.Serial;
             data.CreatDate = DateTime.Now;
