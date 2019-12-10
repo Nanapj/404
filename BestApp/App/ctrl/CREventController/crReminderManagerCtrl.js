@@ -25,14 +25,21 @@ angular.module('app')
         vm.productEditSelected = {};
         vm.pitechSerialList = [];
         vm.filterTagString = "";
+        vm.newReminderNote = "";
+        vm.newReminderDate = new Date();
         var scheduleWindow = $("#newScheduleWindow");
         scheduleWindow.kendoWindow({
-            width: "40%",
-            title: "Thêm lịch hẹn",
-            visible: false,
-            actions: [
-                "Close"
-            ]
+                width: "40%",
+                title: "Thêm lịch hẹn",
+                visible: false,
+                actions: [
+                    "Close"
+                ]
+            });
+        $("#reminderpicker").kendoDateTimePicker({
+            value: vm.newReminderDate,
+            dateInput: true,
+            change: newReminderChanged
         });
         function compareDate(str1){
             // str1 format should be dd/mm/yyyy. Separator can be anything e.g. / or -. It wont effect
@@ -151,6 +158,17 @@ angular.module('app')
             console.log(multiselect.value().length);
             console.log(multiselect.value()[multiselect.value().length - 1]);
             console.log(vm.departmentSelectedIds);
+        }
+        function newReminderChanged() {
+            console.log(vm.newReminderDate);
+            console.log(vm.newReminderNote);
+        }
+        $scope.newReminderNoteChange = function(){
+            console.log("Reminder changed");
+            console.log(vm.newReminderNote);
+        }
+        $scope.createReminderClick = function() {
+            console.log("Get the date reminder");
         }
         $scope.filterTagClicked = function(item,_this,index) {
             var idButtonClicked = "#filter"+item.ID;
@@ -435,6 +453,7 @@ angular.module('app')
         });
         $(".k-grid-new").click(function(e){
             e.preventDefault();
+           
             scheduleWindow.data("kendoWindow").center().open();
             // handler body
           });
