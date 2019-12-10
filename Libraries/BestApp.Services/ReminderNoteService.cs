@@ -27,18 +27,15 @@ namespace BestApp.Services
             IQueryable<ReminderNoteViewModel> GetAllReminderNotes();
             bool Delete(Guid Id);
         }
-        private readonly ReminderNoteService _reminderNoteService;
         private readonly EventService _eventService;
         private readonly IRepositoryAsync<ReminderNote> _repository;
         private readonly IRepository<ApplicationUser> _userRepository;
         protected readonly DataContext db;
         protected UserManager<ApplicationUser> userManager;
         public ReminderNoteService(IRepositoryAsync<ReminderNote> repository,
-            ReminderNoteService reminderNoteService,
             EventService eventService) : base(repository)
         {
             _repository = repository;
-            _reminderNoteService = reminderNoteService;
             _eventService = eventService;
             db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
