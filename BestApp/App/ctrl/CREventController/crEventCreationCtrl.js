@@ -96,7 +96,7 @@ angular.module('app')
                     "background-color" : "#4285F4",
                     "color" : "white !important"
                 });
-                $(idButtonClicked2).addClass("tag-blue-color");  
+                $(idButtonClicked).addClass("tag-blue-color");  
                 $(idButtonClicked2).css({
                     "background-color" : "#4285F4",
                     "color" : "white !important"

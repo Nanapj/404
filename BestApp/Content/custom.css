@@ -5,3 +5,6 @@
 [ng-quill-editor] {
     padding: 15px !important;
 }
+.tag-blue-color:hover, .tag-blue-color:focus, .tag-blue-color:active {
+    color: #fff !important;
+}
