@@ -25,7 +25,7 @@ angular.module('app')
         vm.productEditSelected = {};
         vm.pitechSerialList = [];
         vm.filterTagString = "";
-        vm.newReminderNote = "";
+        $scope.newReminderNote = "";
         vm.newReminderDate = new Date();
         var scheduleWindow = $("#newScheduleWindow");
         scheduleWindow.kendoWindow({
@@ -39,8 +39,10 @@ angular.module('app')
         $("#reminderpicker").kendoDateTimePicker({
             value: vm.newReminderDate,
             dateInput: true,
-            change: newReminderChanged
+            change: newReminderDateChanged
         });
+        var datetimepicker = $("#reminderpicker").data("kendoDateTimePicker");
+        datetimepicker.min(new Date());
         function compareDate(str1){
             // str1 format should be dd/mm/yyyy. Separator can be anything e.g. / or -. It wont effect
             var dt1   = parseInt(str1.substring(0,2));
@@ -152,24 +154,52 @@ angular.module('app')
             }
         }
         function onCrDepartmentChanged() {
-            var multiselect = $("#departMulDrop").data("kendoMultiSelect");
-            
+            var multiselect = $("#departMulDrop").data("kendoMultiSelect");       
             console.log(multiselect.value());
             console.log(multiselect.value().length);
             console.log(multiselect.value()[multiselect.value().length - 1]);
             console.log(vm.departmentSelectedIds);
         }
-        function newReminderChanged() {
+        function newReminderDateChanged() {
             console.log(vm.newReminderDate);
-            console.log(vm.newReminderNote);
+            console.log(angular.element('#newReminderNoteText').val());
         }
-        $scope.newReminderNoteChange = function(){
-            console.log("Reminder changed");
-            console.log(vm.newReminderNote);
-        }
-        $scope.createReminderClick = function() {
-            console.log("Get the date reminder");
-        }
+        document.getElementById("createReminderButton").addEventListener("click", function(){
+            console.log(vm.newReminderDate);
+            console.log(angular.element('#newReminderNoteText').val());
+            if(!(vm.newReminderDate !== undefined && vm.newReminderDate !== "")) {
+                toaster.pop('info', "Ngày rỗng", "Vui lòng chọn ngày hẹn");
+            } else {
+                var formatDate = moment(vm.newReminderDate).utc().format();
+                var reminderNote = {
+                    Note: angular.element('#newReminderNoteText').val(),
+                    EventID: vm.selectedEvent.ID,
+                    ReminderDate: formatDate,
+                    Serial: vm.selectedEvent.Serial
+                }
+                $http({
+                    url: _reminderNoteURL,
+                    method: 'POST',
+                    data: JSON.stringify(reminderNote),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                    },
+                }).error(function(response) {
+                    toaster.pop('error', "Thất bại", response.error);
+                })
+                .then(function(response){
+                    if(response.status == 201) {
+                        toaster.pop('success', "Thành công", "Đã tạo lịch hẹn thành công");
+                        vm.newReminderDate = new Date();
+                        angular.element('#newReminderNoteText').val() = "";
+                        scheduleWindow.data("kendoWindow").close();
+                        reminderGrid.dataSource.read();
+                        reminderGrid.refresh();
+                    }
+                });
+            }
+        });
         $scope.filterTagClicked = function(item,_this,index) {
             var idButtonClicked = "#filter"+item.ID;
             if($(idButtonClicked).css("background-color") !== 'rgb(66, 133, 244)'){

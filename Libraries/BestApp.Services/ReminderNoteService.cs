@@ -1,7 +1,6 @@
 ﻿using BestApp.Core.Models;
 using BestApp.Domain;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Repository.Pattern;
 using Repository.Repositories;
 using Service;
@@ -9,6 +8,7 @@ using Service.Pattern;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -30,7 +30,6 @@ namespace BestApp.Services
         private readonly EventService _eventService;
         private readonly IRepositoryAsync<ReminderNote> _repository;
         private readonly IRepository<ApplicationUser> _userRepository;
-        protected readonly DataContext db;
         protected UserManager<ApplicationUser> userManager;
         public ReminderNoteService(IRepositoryAsync<ReminderNote> repository,
             IRepository<ApplicationUser> userRepository,
@@ -39,14 +38,10 @@ namespace BestApp.Services
             _repository = repository;
             _userRepository = userRepository;
             _eventService = eventService;
-            db = new DataContext();
-            userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
-
         }
         public IQueryable<ReminderNoteViewModel> GetAllReminderNotes()
         {
-            var test = HttpContext.Current.User.Identity.GetUserId();
-            var employee = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
+            var t = HttpContext.Current.User.Identity.GetUserId();
             return _repository.Queryable().Where(x => x.Delete == false)
             .Select(x => new ReminderNoteViewModel()
             {

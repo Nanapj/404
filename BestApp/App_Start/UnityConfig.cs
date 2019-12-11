@@ -11,6 +11,7 @@ using System.Data.Entity;
 using System.Web.Http;
 using System.Web.Mvc;
 using Unity;
+using Unity.Mvc5;
 using Unity.Injection;
 using Unity.Lifetime;
 using Unity.WebApi;
@@ -43,35 +44,34 @@ namespace BestApp
 
             // e.g. container.RegisterType<ITestService, TestService>();
             container
-            .RegisterType<DbContext, DataContext>(new HierarchicalLifetimeManager())
-            .RegisterType(typeof(IRepositoryAsync<>), typeof(Repository<>))
-            .RegisterType(typeof(IRepository<>), typeof(Repository<>))
-            .RegisterType<IUnitOfWorkAsync, UnitOfWork>(new HierarchicalLifetimeManager())
-            .RegisterType<IDataContext, DataContext>(new HierarchicalLifetimeManager())
+                .RegisterType(typeof(IRepositoryAsync<>), typeof(Repository<>))
+                .RegisterType(typeof(IRepository<>), typeof(Repository<>))
+                .RegisterType<DbContext, DataContext>(new HierarchicalLifetimeManager())
+                .RegisterType<IDataContext, DataContext>(new HierarchicalLifetimeManager())
+                .RegisterType<IUnitOfWorkAsync, UnitOfWork>(new HierarchicalLifetimeManager())
+                .RegisterType<ICatService, CatService>()
+                .RegisterType<IStaffService, StaffService>()
+                .RegisterType<IDepartmentService, DepartmentService>()
+                .RegisterType<ITagService, TagService>()
+                .RegisterType<ICustomerService, CustomerService>()
+                .RegisterType<IEventService, EventService>()
+                .RegisterType<IDetailEventService, DetailEventService>()
+                .RegisterType<IProductTypeService, ProductTypeService>()
+                .RegisterType<IReminderNoteService, ReminderNoteService>()
+                .RegisterType<IInteractionHistoryService, InteractionHistoryService>()
+                .RegisterType<IDistrictService, DistrictService>()
+                .RegisterType<IWardService, WardService>()
+                .RegisterType<ICityService, CityService>()
+                .RegisterType<IEventTypeService, EventTypeService>()
+                .RegisterType<IEventPurposeService, EventPurposeService>()
+                .RegisterType<UserManager<ApplicationUser>>(new HierarchicalLifetimeManager())
+                .RegisterType<AccountController>(new InjectionConstructor())
+                .RegisterType<ApplicationUserManager>(new HierarchicalLifetimeManager())
+                .RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>(new HierarchicalLifetimeManager())
+                .RegisterType<ManageController>(new InjectionConstructor());
 
-            // Custom services
-            .RegisterType<ICatService, CatService>()
-            .RegisterType<IStaffService, StaffService>()
-            .RegisterType<IDepartmentService, DepartmentService>()
-            .RegisterType<ITagService, TagService>()
-            .RegisterType<ICustomerService, CustomerService>()
-            .RegisterType<IEventService, EventService>()
-            .RegisterType<IDetailEventService, DetailEventService>()
-            .RegisterType<IProductTypeService, ProductTypeService>()
-            .RegisterType<IReminderNoteService, ReminderNoteService>()
-            .RegisterType<IInteractionHistoryService, InteractionHistoryService>()
-            .RegisterType<IDistrictService, DistrictService>()
-            .RegisterType<IWardService, WardService>()
-            .RegisterType<ICityService, CityService>()
-            .RegisterType<IEventTypeService, EventTypeService>()
-            .RegisterType<IEventPurposeService, EventPurposeService>()
-            .RegisterType<UserManager<ApplicationUser>>(new HierarchicalLifetimeManager())
-            .RegisterType<AccountController>(new InjectionConstructor())
-            .RegisterType<ApplicationUserManager>(new HierarchicalLifetimeManager())
-            .RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>(new HierarchicalLifetimeManager())
-            .RegisterType<ManageController>(new InjectionConstructor());
-
-            GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
+            DependencyResolver.SetResolver(new Unity.Mvc5.UnityDependencyResolver(container));
+            GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);
         }
     }
 }

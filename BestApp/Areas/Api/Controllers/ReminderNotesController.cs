@@ -2,10 +2,12 @@
 using BestApp.Domain;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.OData;
+using Repository.Pattern;
 using Repository.Repositories;
 using Repository.UnitOfWork;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -34,7 +36,10 @@ namespace BestApp.Areas.Api.Controllers
         public async Task<IQueryable<ReminderNoteViewModel>> Get()
         {
             var test = HttpContext.Current.User.Identity.GetUserId();
-            var employee = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
+            var test1 = User.Identity.GetUserId();
+            DataContext d = new DataContext();
+            DbSet t = d.Set<ApplicationUser>();
+            var test2 = t.Find(test); 
             return await _reminderNoteService.GetAllReminderNotesAsync();
         }
         [HttpPost]
