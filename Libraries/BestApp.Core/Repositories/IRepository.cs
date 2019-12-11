@@ -7,6 +7,7 @@ namespace Repository.Repositories
 {
     public interface IRepository<TEntity> where TEntity : class
     {
+        TEntity Find(object Id);
         TEntity Find(params object[] keyValues);
         IQueryable<TEntity> SelectQuery(string query, params object[] parameters);
         void Insert(TEntity entity);

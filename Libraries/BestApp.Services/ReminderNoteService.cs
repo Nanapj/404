@@ -33,9 +33,11 @@ namespace BestApp.Services
         protected readonly DataContext db;
         protected UserManager<ApplicationUser> userManager;
         public ReminderNoteService(IRepositoryAsync<ReminderNote> repository,
+            IRepository<ApplicationUser> userRepository,
             EventService eventService) : base(repository)
         {
             _repository = repository;
+            _userRepository = userRepository;
             _eventService = eventService;
             db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
@@ -43,6 +45,8 @@ namespace BestApp.Services
         }
         public IQueryable<ReminderNoteViewModel> GetAllReminderNotes()
         {
+            var test = HttpContext.Current.User.Identity.GetUserId();
+            var employee = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
             return _repository.Queryable().Where(x => x.Delete == false)
             .Select(x => new ReminderNoteViewModel()
             {
@@ -61,7 +65,8 @@ namespace BestApp.Services
         public ReminderNote Insert(ReminderNoteViewModel model)
         {
             var data = new ReminderNote();
-           // var employee = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
+            var test = HttpContext.Current.User.Identity.GetUserId();
+            var employee = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
             data.Note = model.Note;
             data.Event = _eventService.Find(model.EventID);
             //data.UserAccount = employee;

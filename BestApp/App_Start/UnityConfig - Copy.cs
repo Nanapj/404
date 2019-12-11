@@ -7,13 +7,14 @@ using Repository.DataContext;
 using Repository.Pattern;
 using Repository.Repositories;
 using Repository.UnitOfWork;
+using System;
 using System.Data.Entity;
 using System.Web.Http;
 using System.Web.Mvc;
 using Unity;
+using Unity.AspNet.Mvc;
 using Unity.Injection;
 using Unity.Lifetime;
-using Unity.WebApi;
 using static BestApp.Services.CatService;
 using static BestApp.Services.CityService;
 using static BestApp.Services.CustomerService;
@@ -36,12 +37,8 @@ namespace BestApp
     {
         public static void RegisterComponents()
         {
-			var container = new UnityContainer();
+            var container = new UnityContainer();
 
-            // register all your components with the container here
-            // it is NOT necessary to register your controllers
-
-            // e.g. container.RegisterType<ITestService, TestService>();
             container
             .RegisterType<DbContext, DataContext>(new HierarchicalLifetimeManager())
             .RegisterType(typeof(IRepositoryAsync<>), typeof(Repository<>))
@@ -71,7 +68,9 @@ namespace BestApp
             .RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>(new HierarchicalLifetimeManager())
             .RegisterType<ManageController>(new InjectionConstructor());
 
-            GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
+            DependencyResolver.SetResolver(new UnityDependencyResolver(container));
+            GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);
+
         }
     }
 }

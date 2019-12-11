@@ -1,5 +1,6 @@
 using BestApp.Core.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Repository.DataContext;
 using System;
 using System.Data.Entity;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Pattern
 {
-    public class DataContext : IdentityDbContext<ApplicationUser>
+    public class DataContext : IdentityDbContext<ApplicationUser>, IDataContext
     {
         private readonly Guid _instanceId;
 

@@ -1,5 +1,4 @@
-﻿#region
-
+﻿using Repository.DataContext;
 using Repository.Repositories;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-#endregion
 
 namespace Repository.Pattern
 {
@@ -18,13 +16,18 @@ namespace Repository.Pattern
         IRepository<TEntity>, 
         IRepositoryAsync<TEntity> where TEntity : class
     {
-        private readonly DbContext _context;
-        private readonly DbSet<TEntity> _dbSet;
+        private DataContext _context;
+        private DbSet<TEntity> _dbSet;
 
-        public Repository(DbContext context)
+        public Repository(IDataContext context)
         {
-            _context = context;
-            _dbSet = context.Set<TEntity>();
+            _context = context as DataContext;
+            _dbSet = _context.Set<TEntity>();
+        }
+
+        public virtual TEntity Find(object Id)
+        {
+            return _dbSet.Find(Id);
         }
 
         public virtual TEntity Find(params object[] keyValues)
