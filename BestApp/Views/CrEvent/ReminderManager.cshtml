@@ -100,18 +100,17 @@
                 <form role="form">
                     <div class="form-group">
                         <label>Lịch hẹn:</label>
-                        <input 
-                               id="reminderpicker" 
-                               title="datetimepicker" 
+                        <input id="reminderpicker"
+                               title="datetimepicker"
                                style="width: 100%;" />
                     </div>
                     <div class="form-group">
                         <label>Ghi chú lịch hẹn:</label>
-                        <textarea style="width: 100%; height: 6em; resize:none;" 
-                                  k-ng-model="vm.newReminderNote" 
-                                  k-ng-change="newReminderNoteChange"></textarea>
+                        <textarea id="newReminderNoteText"
+                                  style="width: 100%; height: 6em; resize:none;"
+                                  ng-model="newReminderNote"></textarea>
                     </div>
-                    <button  class="btn btn-success" ng-click="createReminderClick()">Tạo lịch hẹn</button>
+                    <button id="createReminderButton" class="btn btn-success btn-default" >Tạo lịch hẹn</button>
                 </form>
             </div>
         </div>
