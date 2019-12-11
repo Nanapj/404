@@ -36,7 +36,6 @@ namespace BestApp.Areas.Api.Controllers
         public async Task<IQueryable<ReminderNoteViewModel>> Get()
         {
             var test = HttpContext.Current.User.Identity.GetUserId();
-            var test1 = User.Identity.GetUserId();
             DataContext d = new DataContext();
             DbSet t = d.Set<ApplicationUser>();
             var test2 = t.Find(test); 
