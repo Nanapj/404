@@ -32,7 +32,9 @@ namespace BestApp.Areas.Api.Controllers
         [HttpGet]
         [EnableQuery]
         public async Task<IQueryable<ReminderNoteViewModel>> Get()
-        {          
+        {
+            var test = HttpContext.Current.User.Identity.GetUserId();
+            var employee = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
             return await _reminderNoteService.GetAllReminderNotesAsync();
         }
         [HttpPost]
