@@ -1,6 +1,7 @@
 'use strict';
 angular.module('app')
     .controller('crEventManagerCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', function ($scope, $state, $stateParams, $http, toaster){
+
         var vm = this; 
         var _url = "/odata/Staffs";
         var _crEventURL = "/odata/Events";
@@ -25,6 +26,8 @@ angular.module('app')
         vm.productEditSelected = {};
         vm.pitechSerialList = [];
         vm.filterTagString = "";
+        $scope.showWindow = false;
+        $scope.showEditWindow = false;
         function compareDate(str1){
             // str1 format should be dd/mm/yyyy. Separator can be anything e.g. / or -. It wont effect
             var dt1   = parseInt(str1.substring(0,2));
@@ -32,7 +35,429 @@ angular.module('app')
             var yr1   = parseInt(str1.substring(6,10));
             var date1 = new Date(yr1, mon1-1, dt1);
             return date1;
+        }
+                
+        var detailsGrid = $("#gridDetails").kendoGrid({
+            dataSource:{
+                // transport:{
+                //    read:  _eventDetailURL+"?$filter=EventID eq "+vm.selectedEvent.ID,
+
+                // },
+                data: vm.eventDetailList,
+                schema: {
+                    parse: function(response){
+                        var details =[];
+                        for (var i = 0; i < response.length; i++) {
+                            var dateNoTime = new Date(response[i].CreatDate);
+                            var detail = {
+                                ID: response[i].ID,
+                                Serial: response[i].Serial,
+                                EventCode: response[i].EventCode,
+                                ProductCode: response[i].ProductCode,
+                                ProductName: response[i].ProductName,
+                                AgencySold: response[i].AgencySold,
+                                AssociateName: response[i].AssociateName,
+                                CreatDate: new Date(
+                                    dateNoTime.getFullYear(),
+                                    dateNoTime.getMonth(),
+                                    dateNoTime.getDate()
+                                )
+                            };
+                            details.push(detail);
+                          }
+                          return details;
+                    },
+                    model: {
+                        fields: {
+                            ID: { type: "string" },
+                            Serial: { type: "string" },
+                            EventCode: { type: "string" },
+                            ProductCode: { type: "string" },
+                            ProductName: { type: "string" },
+                            AgencySold: { type: "string" },
+                            AssociateName: { type: "string" },
+                            CreatDate: { type: "date" }
+                        }
+                    }
+                },    
+            } ,
+            sortable: true,
+            pageable: {
+                pageSize: 5,
+                refresh: true
+            },
+            groupable: true,
+            reorderable: true,
+            columnMenu: true,
+            height: 600,
+            cache: false,
+            columns: [
+                { field: "Serial", title: "Serial" },
+                { field: "EventCode", title: "Mã sự kiện" },
+                { field: "ProductCode", title: "Mã sản phẩm"},
+                { field: "ProductName",  title: "Tên sản phẩm"},
+                { field: "AgencySold", title: "Đại lí bán"},
+                { field: "AssociateName", title: "Tên nhân viên"},
+                {  
+                    field:"CreatDate",
+                    title:"Ngày tạo",
+                    template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+                }
+            ]
+          }).data("kendoGrid");
+        var historyGrid = $("#gridHistoryInteractions").kendoGrid({
+        dataSource: {
+            // transport: {
+            //     read: _historyInteractionURL+"?$filter=EventID eq "+vm.selectedEvent.ID
+            // },
+            data: vm.eventHistoryList,
+            schema: {
+                parse: function(response){
+                var histories =[];
+                for (var i = 0; i < response.length; i++) {
+                    var dateNoTime = new Date(response[i].CreatDate);
+                    var history = {
+                        ID: response[i].ID,
+                        EventCode: response[i].EventCode,
+                        Note: response[i].Note,
+                        Status: response[i].Status,
+                        CreatDate:new Date(
+                            dateNoTime.getFullYear(),
+                            dateNoTime.getMonth(),
+                            dateNoTime.getDate()
+                        )
+                };
+                histories.push(history);
+                }
+                return histories;
+            },
+            model: {
+                fields: {
+                    ID: { type: "string" },
+                    EventCode: {type: "string"},
+                    Note: { type: "string" },
+                    Status: { type: "string" },
+                    CreatDate: { type: "date" }
+                }
             }
+            }
+        },
+        sortable: true,
+        pageable: {
+            refresh: true,
+            pageSize:10,
+        },
+        groupable: true,
+        reorderable: true,
+        columnMenu: true,
+        height: 468,
+        columns: [
+            { field: "EventCode", title: "Mã sự kiện" },
+            { field: "Note", title: "Nội dung phiếu"},
+            { field: "Status",  title: "Trạng thái phiếu"},
+            {  
+                field:"CreatDate",
+                title:"Ngày tạo",
+                template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
+                groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+            },
+            {
+                field: "Note", title: " Ghi chú"
+            }
+        ]
+        }).data("kendoGrid");
+        var tagGrid = $('#gridTagDetails').kendoGrid({
+            data: vm.eventTags,
+            sortable: true,
+            pageable: {
+                refresh: true,
+                pageSize:10,
+            },
+            groupable: true,
+            reorderable: true,
+            columnMenu: true,
+            height: 468,
+            columns: [
+                {
+                    field: "ID",
+                    hidden: true,
+                },
+                {
+                    field: "NameTag",
+                    title: "Tên tag"
+                },
+                {
+                    field: "CodeTag",
+                    title: "Mã tag"
+                },
+                {
+                    field: "DepartmentName",
+                    title: "Phòng ban được tag"
+                }
+            ]
+        });
+        var reminderGrid = $('#reminderDetails').kendoGrid({
+            dataSource: {
+                data: vm.eventReminders,
+                schema: {
+                    parse: function(response) {
+                        var reminders =[];
+                        for (var i = 0; i < response.length; i++) {
+                            var createDateNotTime = new Date(response[i].CreatDate);
+                            var reminderDateNoTime = new Date(response[i].ReminderDate);
+                            var reminder = {
+                                ID: response[i].ID,
+                                Note: response[i].Note,
+                                CreatDate:  new Date(
+                                    createDateNotTime.getFullYear(),
+                                    createDateNotTime.getMonth(),
+                                    createDateNotTime.getDate(),
+                                    createDateNotTime.getHours(),
+                                    createDateNotTime.getMinutes(),
+                                    createDateNotTime.getSeconds(),
+                                ),
+                                ReminderDate: new Date(
+                                    reminderDateNoTime.getFullYear(),
+                                    reminderDateNoTime.getMonth(),
+                                    reminderDateNoTime.getDate(),
+                                    reminderDateNoTime.getMinutes(),
+                                    reminderDateNoTime.getSeconds(),
+                                )
+                        };
+                        reminders.push(reminder);
+                        }
+                        return reminders;
+                    },
+                    model: {
+                        fields: {
+                            ID: { type: "string" },
+                            Note: { type: "string" },
+                            CreatDate: { type: "date" },
+                            ReminderDate: { type: "date" },
+                        }
+                    }
+                }
+            },
+            sortable: true,
+            pageable: {
+                refresh: true,
+                pageSize:10,
+            },
+            groupable: true,
+            reorderable: true,
+            columnMenu: true,
+            height: 468,
+            columns: [
+                {
+                    field: "ID",
+                    hidden: true,
+                },
+                {
+                    field: "Note",
+                    title: "Ghi chú lịch hẹn"
+                },
+                {
+                    field:"CreatDate",
+                    title:"Ngày tạo",
+                    template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+                },
+                {
+                    field:"ReminderDate",
+                    title:"Ngày hẹn",
+                    template: "#= kendo.toString(ReminderDate, 'dd/MM/yyyy HH:mm:ss') #",
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+                }
+            ]
+        })
+        var editGrid = $("#gridEditDetails").kendoGrid({
+            dataSource: {
+                type:'odata-v4',
+                transport: {
+                    read: {
+                        url: function () {
+                            return _eventDetailURL;
+                        }
+                    }
+                    // create: {
+                    //     url: function (dataItem) {
+                    //         $http({
+                    //             url: _eventDetailURL+'('+ dataItem.ID +')',
+                    //             method: 'PUT',
+                    //             data: JSON.stringify(dataItem),
+                    //             headers: {
+                    //                 'Content-Type': 'application/json',
+                    //                 'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                    //             },
+                    //         }).then(function(response){
+                    //             if(response.status == 204) {
+                                    
+                    //                 toaster.pop('success', "Thành công", "Đã cập nhật xong");               
+                    //             } else {
+                    //                 toaster.pop('error', "Lỗi", "Có lỗi trong quá trình cập nhật");
+                    //             }
+                    //         });      
+                    //         kendo.ui.progress($("#gridEditDetails"), false);  
+                    //         // var grid = $("#gridEditDetails").data("kendoGrid");
+                    //         // grid.editRow($("#gridEditDetails tr:eq(-1)"));
+                    //         return _eventDetailURL+"?$filter=EventID eq "+vm.selectedEvent.ID ; 
+                    //     }
+                    // }
+                },
+                batch: true,
+                pageSize: 10,      
+                schema: {
+                    parse: function(response) {
+                        var details = [];
+                        for (var i = 0; i < response.value.length; i++) {
+                            var createDate = new Date(response.value[i].CreatDate);
+                            var soldDate = new Date();
+                            if(response.value[i].DateSold !== "") {
+                                soldDate = new Date(response.value[i].DateSold);
+                            }
+                            var detail = {
+                                ID: response.value[i].ID,
+                                Serial: response.value[i].Serial,
+                                EventCode: response.value[i].EventCode,
+                                ProductCode: response.value[i].ProductCode,
+                                ProductName: response.value[i].ProductName,
+                                AgencySold: response.value[i].AgencySold, 
+                                AssociateName: response.value[i].AssociateName, 
+                                CreatDate: new Date(
+                                    createDate.getFullYear(),
+                                    createDate.getMonth(),
+                                    createDate.getDate(),
+                                    createDate.getHours(),
+                                    createDate.getMinutes(),
+                                    createDate.getSeconds()
+                                ),
+                                DateSold: new Date(
+                                    soldDate.getFullYear(),
+                                    soldDate.getMonth(),
+                                    soldDate.getDate(),
+                                    soldDate.getHours(),
+                                    soldDate.getMinutes(),
+                                    soldDate.getSeconds()
+                                ),
+                                Note: response.value[i].Note
+                            };
+                            details.push(detail);
+                        }
+                        return details;
+                    },
+                    model: {
+                        fields: {
+                            ID: { editable: false, hidden: true },
+                            Serial: { type: "string" },
+                            EventCode: { type: "string", editable: false},
+                            CreatDate: { type: "date", editable: false },
+                            ProductCode: { type: "string" , editable: false },                  
+                            ProductName: { type: "string" },
+                            AgencySold: { type: "string", editable: false },
+                            DateSold: { type: "date", nullable:true, editable: false },
+                            AssociateName: { type: "string",  editable: false },
+                            Note: { type: "string" }
+                        }
+                    }
+                }
+            },
+            sortable: true,
+            pageable: true,
+            height: 468,
+            columns: [
+                { field: "ID", title: "Id", hidden: true },
+                { 
+                    field: "ProductName", title:"Tên sản phẩm",
+                    editor: ProductTypeDropdownEditor, 
+                    template: "#= ProductName #" 
+                },
+                { 
+                    field: "Serial", 
+                    title: "Serial",
+                    editor: SerialDropdownEditor,
+                    template: "#= Serial ? Serial : 'Noinformation' #"
+                },
+                { field: "EventCode", title:"Mã phiếu" },
+                {   
+                    field:"CreatDate",
+                    title:"Ngày tạo",
+                    template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #" 
+                },
+                { field: "ProductCode", title:"Mã sản phẩm" },   
+                { field: "AgencySold", title:"Đại lý bán" },
+                { 
+                    field: "DateSold",
+                    title:"Ngày mua",
+                    template: "#= kendo.toString(DateSold, 'dd/MM/yyyy HH:mm:ss') #",
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #" 
+                },
+                { field: "AssociateName", title:"Nhân viên bán" },    
+                { field: "Note", title: "Ghi chú"},
+                {   
+                    command: ["edit"], title: "&nbsp;", width: "250px" 
+                }
+            ],
+            editable: "inline",
+            save: function (e) {
+                e.preventDefault();
+                console.log(e.dataItem);
+                console.log(e.model);debugger;
+                var model = {
+                    ID: e.model.ID,
+                    Serial: e.model.Serial,
+                    ProductID: e.model.ProductName,
+                    Note: e.model.Note,
+                    AgencySold: e.model.AgencySold,
+                    AssociateName: e.model.AssociateName,
+                }
+                if(model.Serial == "[object Object]"){
+                    model.Serial = "Noinformation";
+                }
+                if(e.model.DateSold !== undefined && e.model.DateSold !== "") {
+                    model.DateSold = moment(e.model.DateSold).utc().format();
+                }
+                $http({
+                    url: _eventDetailURL+'('+ e.model.ID +')',
+                    method: 'PUT',
+                    data: JSON.stringify(model),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                    },
+                }).then(function(response){
+                    if(response.status == 204) {
+                        var grid = $("#gridEditDetails").data("kendoGrid");
+                        grid.dataSource.read();
+                        toaster.pop('success', "Thành công", "Đã cập nhật xong");               
+                    } else {
+                        toaster.pop('error', "Lỗi", "Có lỗi trong quá trình cập nhật");
+                    }
+                });      
+               console.log(e); 
+            },
+            cancel: function(e) {
+                e.preventDefault();
+                var model = $("#gridEditDetails").data("kendoGrid");
+                model.dataSource.cancelChanges();
+                this.closeCell();
+            }
+          }).data("kendoGrid");
+        $("#eventWindowTabstrip").kendoTabStrip({
+            animation:  {
+                open: {
+                    effects: "fadeIn"
+                }
+            }
+        });
+        $("#editeventWindowTabstrip").kendoTabStrip({
+            animation: {
+                opren: {
+                    effects: "fadeIn"
+                }
+            }
+        });
         $scope.tagGridOptions = {
             dataSource: {
                 type:'odata-v4',
@@ -237,7 +662,7 @@ angular.module('app')
                 eventGrid.dataSource.read();
             }
         };
-        $scope.mainGridOptions = {
+        $scope.listEventGridOptions = {
             toolbar: ["search"],
             dataSource: {
                 type: "odata-v4",
@@ -384,14 +809,7 @@ angular.module('app')
             });      
             console.log(vm.selectedEvent);
         }
-        var wnd = $("#details")
-                        .kendoWindow({
-                            title: "Chi tiết phiếu",
-                            modal: true,
-                            visible: false,
-                            resizable: true,
-                            width: "80%"
-                        }).data("kendoWindow");
+
         var editwnd = $("#editdetails")
                 .kendoWindow({
                     title: "Chỉnh sửa chi tiết",
@@ -401,180 +819,181 @@ angular.module('app')
                     width: "80%"
                 }).data("kendoWindow");
         var detailsTemplate = kendo.template($("#template").html());
-        var editGrid = $("#gridEditDetails").kendoGrid({
-            dataSource: {
-                type:'odata-v4',
-                transport: {
-                    read: {
-                        url: function () {
-                            return _eventDetailURL+"?$filter=EventID eq "+vm.selectedEvent.ID ;
-                        }
-                    }
-                    // create: {
-                    //     url: function (dataItem) {
-                    //         $http({
-                    //             url: _eventDetailURL+'('+ dataItem.ID +')',
-                    //             method: 'PUT',
-                    //             data: JSON.stringify(dataItem),
-                    //             headers: {
-                    //                 'Content-Type': 'application/json',
-                    //                 'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
-                    //             },
-                    //         }).then(function(response){
-                    //             if(response.status == 204) {
-                                    
-                    //                 toaster.pop('success', "Thành công", "Đã cập nhật xong");               
-                    //             } else {
-                    //                 toaster.pop('error', "Lỗi", "Có lỗi trong quá trình cập nhật");
-                    //             }
-                    //         });      
-                    //         kendo.ui.progress($("#gridEditDetails"), false);  
-                    //         // var grid = $("#gridEditDetails").data("kendoGrid");
-                    //         // grid.editRow($("#gridEditDetails tr:eq(-1)"));
-                    //         return _eventDetailURL+"?$filter=EventID eq "+vm.selectedEvent.ID ; 
-                    //     }
-                    // }
-                },
-                batch: true,
-                pageSize: 10,      
+
+        function onActiveDetail() {
+            if(vm.eventDetailList.length > 0) {
+                vm.eventDetailList = [];
+            }
+            if(vm.eventHistoryList.length > 0) {
+                vm.eventHistoryList = [];
+            }
+            if(vm.eventTags.length > 0) {
+                vm.eventTags = [];
+            }
+            if(vm.eventReminders.length > 0) {
+                vm.eventReminders = [];
+            }
+            for(var i = 0 ; i < vm.selectedEvent.DetailEvents.length ; i++) {
+                vm.eventDetailList.push(vm.selectedEvent.DetailEvents[i]);
+            }
+            for(var i = 0 ; i < vm.selectedEvent.InteractionHistories.length ; i++) {
+                vm.eventHistoryList.push(vm.selectedEvent.InteractionHistories[i]);
+            }
+            for(var i = 0 ; i < vm.selectedEvent.Tags.length ; i++) {
+                vm.eventTags.push(vm.selectedEvent.Tags[i]);
+            }  
+            for(var i = 0 ; i < vm.selectedEvent.ReminderNotes.length ; i++) {
+                vm.eventReminders.push(vm.selectedEvent.ReminderNotes[i]);
+            }
+            var gridDetails = $('#gridDetails').data('kendoGrid');
+            var historyGrids = $('#gridHistoryInteractions').data('kendoGrid');
+            var tagGrid = $('#gridTagDetails').data('kendoGrid');
+            var reminderGrid = $('#reminderDetails').data('kendoGrid');
+            var editDetailGrid = $('#gridEditDetails').data('kendoGrid');
+            var detailsDatasource = new kendo.data.DataSource({
+                data: vm.eventDetailList,
                 schema: {
-                    parse: function(response) {
-                        var details = [];
-                        for (var i = 0; i < response.value.length; i++) {
-                            var createDate = new Date(response.value[i].CreatDate);
-                            var soldDate = new Date();
-                            if(response.value[i].DateSold !== "") {
-                                soldDate = new Date(response.value[i].DateSold);
-                            }
+                    parse: function(response){
+                        var details =[];
+                        for (var i = 0; i < response.length; i++) {
+                            var dateNoTime = new Date(response[i].CreatDate);
                             var detail = {
-                                ID: response.value[i].ID,
-                                Serial: response.value[i].Serial,
-                                EventCode: response.value[i].EventCode,
-                                ProductCode: response.value[i].ProductCode,
-                                ProductName: response.value[i].ProductName,
-                                AgencySold: response.value[i].AgencySold, 
-                                AssociateName: response.value[i].AssociateName, 
-                                CreatDate: new Date(
-                                    createDate.getFullYear(),
-                                    createDate.getMonth(),
-                                    createDate.getDate(),
-                                    createDate.getHours(),
-                                    createDate.getMinutes(),
-                                    createDate.getSeconds()
-                                ),
-                                DateSold: new Date(
-                                    soldDate.getFullYear(),
-                                    soldDate.getMonth(),
-                                    soldDate.getDate(),
-                                    soldDate.getHours(),
-                                    soldDate.getMinutes(),
-                                    soldDate.getSeconds()
-                                ),
-                                Note: response.value[i].Note
+                                ID: response[i].ID,
+                                Serial: response[i].Serial,
+                                EventCode: response[i].EventCode,
+                                ProductCode: response[i].ProductCode,
+                                ProductName: response[i].ProductName,
+                                AgencySold: response[i].AgencySold,
+                                AssociateName: response[i].AssociateName,
+                                CreatDate: response[i].CreatDate,
+                                CreatDateNoTime: new Date(
+                                    dateNoTime.getFullYear(),
+                                    dateNoTime.getMonth(),
+                                    dateNoTime.getDate()
+                                )
                             };
                             details.push(detail);
-                        }
-                        return details;
+                          }
+                          return details;
                     },
                     model: {
                         fields: {
-                            ID: { editable: false, hidden: true },
+                            ID: { type: "string" },
                             Serial: { type: "string" },
-                            EventCode: { type: "string", editable: false},
-                            CreatDate: { type: "date", editable: false },
-                            ProductCode: { type: "string" , editable: false },                  
+                            EventCode: { type: "string" },
+                            ProductCode: { type: "string" },
                             ProductName: { type: "string" },
-                            AgencySold: { type: "string", editable: false },
-                            DateSold: { type: "date", nullable:true, editable: false },
-                            AssociateName: { type: "string",  editable: false },
-                            Note: { type: "string" }
+                            AgencySold: { type: "string" },
+                            AssociateName: { type: "string" },
+                            CreatDate: { type: "date" },
+                            CreatDateNoTime: { type: "date" },
+                        }
+                    }
+                },    
+                
+              });
+            var historyDatasource = new kendo.data.DataSource({ 
+                data: vm.selectedEvent.InteractionHistories,
+                schema: {
+                    parse: function(response){
+                    var histories =[];
+                    for (var i = 0; i < response.length; i++) {
+                        var dateNoTime = new Date(response[i].CreatDate);
+                        var history = {
+                            ID: response[i].ID,
+                            EventCode: response[i].EventCode,
+                            Note: response[i].Note,
+                            Status: response[i].Status,
+                            CreatDate: response[i].CreatDate,
+                            CreatDateNoTime: new Date(
+                                dateNoTime.getFullYear(),
+                                dateNoTime.getMonth(),
+                                dateNoTime.getDate(),
+                                dateNoTime.getHours(),
+                                dateNoTime.getMinutes(),
+                                dateNoTime.getSeconds()
+                            )
+                    };
+                    histories.push(history);
+                    }
+                    return histories;
+                },
+                model: {
+                    fields: {
+                        ID: { type: "string" },
+                        EventCode: {type: "string"},
+                        Note: { type: "string" },
+                        Status: { type: "string" },
+                        CreatDate: { type: "date" },
+                        CreatDateNoTime: { type: "date" },
+                    }
+                }
+                }
+            });
+            var tagDatasource = new kendo.data.DataSource({
+                data: vm.eventTags
+            });
+            var reminderDatasource = new kendo.data.DataSource({
+                data: vm.eventReminders,
+                schema: {
+                    parse: function(response) {
+                        var reminders =[];
+                        for (var i = 0; i < response.length; i++) {
+                            var createDateNotTime = new Date(response[i].CreatDate);
+                            var reminderDateNoTime = new Date(response[i].ReminderDate);
+                            var reminder = {
+                                ID: response[i].ID,
+                                Note: response[i].Note,
+                                CreatDate:  new Date(
+                                    createDateNotTime.getFullYear(),
+                                    createDateNotTime.getMonth(),
+                                    createDateNotTime.getDate(),
+                                    createDateNotTime.getHours(),
+                                    createDateNotTime.getMinutes(),
+                                    createDateNotTime.getSeconds(),
+                                ),
+                                ReminderDate: new Date(
+                                    reminderDateNoTime.getFullYear(),
+                                    reminderDateNoTime.getMonth(),
+                                    reminderDateNoTime.getDate(),
+                                    reminderDateNoTime.getHours(),
+                                    reminderDateNoTime.getMinutes(),
+                                    reminderDateNoTime.getSeconds(),
+                                )
+                        };
+                        reminders.push(reminder);
+                        }
+                        return reminders;
+                    },
+                    model: {
+                        fields: {
+                            ID: { type: "string" },
+                            Note: { type: "string" },
+                            CreatDate: { type: "date" },
+                            ReminderDate: { type: "date" },
                         }
                     }
                 }
-            },
-            sortable: true,
-            pageable: true,
-            height: 468,
-            columns: [
-                { field: "ID", title: "Id", hidden: true },
-                { 
-                    field: "ProductName", title:"Tên sản phẩm",
-                    editor: ProductTypeDropdownEditor, 
-                    template: "#= ProductName #" 
-                },
-                { 
-                    field: "Serial", 
-                    title: "Serial",
-                    editor: SerialDropdownEditor,
-                    template: "#= Serial ? Serial : 'Noinformation' #"
-                },
-                { field: "EventCode", title:"Mã phiếu" },
-                {   
-                    field:"CreatDate",
-                    title:"Ngày tạo",
-                    template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
-                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #" 
-                },
-                { field: "ProductCode", title:"Mã sản phẩm" },   
-                { field: "AgencySold", title:"Đại lý bán" },
-                { 
-                    field: "DateSold",
-                    title:"Ngày mua",
-                    template: "#= kendo.toString(DateSold, 'dd/MM/yyyy HH:mm:ss') #",
-                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #" 
-                },
-                { field: "AssociateName", title:"Nhân viên bán" },    
-                { field: "Note", title: "Ghi chú"},
-                {   
-                    command: ["edit"], title: "&nbsp;", width: "250px" 
-                }
-            ],
-            editable: "inline",
-            save: function (e) {
-                e.preventDefault();
-                console.log(e.dataItem);
-                console.log(e.model);debugger;
-                var model = {
-                    ID: e.model.ID,
-                    Serial: e.model.Serial,
-                    ProductID: e.model.ProductName,
-                    Note: e.model.Note,
-                    AgencySold: e.model.AgencySold,
-                    AssociateName: e.model.AssociateName,
-                }
-                if(model.Serial == "[object Object]"){
-                    model.Serial = "Noinformation";
-                }
-                if(e.model.DateSold !== undefined && e.model.DateSold !== "") {
-                    model.DateSold = moment(e.model.DateSold).utc().format();
-                }
-                $http({
-                    url: _eventDetailURL+'('+ e.model.ID +')',
-                    method: 'PUT',
-                    data: JSON.stringify(model),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
-                    },
-                }).then(function(response){
-                    if(response.status == 204) {
-                        var grid = $("#gridEditDetails").data("kendoGrid");
-                        grid.dataSource.read();
-                        toaster.pop('success', "Thành công", "Đã cập nhật xong");               
-                    } else {
-                        toaster.pop('error', "Lỗi", "Có lỗi trong quá trình cập nhật");
-                    }
-                });      
-               console.log(e); 
-            },
-            cancel: function(e) {
-                e.preventDefault();
-                var model = $("#gridEditDetails").data("kendoGrid");
-                model.dataSource.cancelChanges();
-                this.closeCell();
-            }
-          }).data("kendoGrid");
-
+            });
+            editDetailGrid.dataSource.transport.options.read.url = _eventDetailURL+"?$filter=EventID eq "+vm.selectedEvent.ID;
+            editDetailGrid.dataSource.read();
+            $('#gridDetails').data('kendoGrid').setDataSource(detailsDatasource);
+            $('#gridDetails').data('kendoGrid').dataSource.read().then(function(){
+                $('#gridDetails').data('kendoGrid').refresh();
+            });
+            $('#gridDetails').data('kendoGrid').refresh();
+            historyGrids.setDataSource(historyDatasource);
+            historyGrids.dataSource.read();
+            historyGrids.refresh();
+            tagGrid.setDataSource(tagDatasource);
+            tagGrid.dataSource.read();
+            tagGrid.refresh();
+            reminderGrid.setDataSource(reminderDatasource);
+            reminderGrid.dataSource.read();
+            reminderGrid.refresh();
+            console.log(vm.eventDetailList);
+            
+        }
         function ProductTypeDropdownEditor(container, options) {
             $('<input required name="' + options.field + '"/>')
                 .appendTo(container)
@@ -673,264 +1092,21 @@ angular.module('app')
         function onSerialSelected(e) {
             
         }
-
-        
-        var detailsGrid = $("#gridDetails").kendoGrid({
-            dataSource:{
-                // transport:{
-                //    read:  _eventDetailURL+"?$filter=EventID eq "+vm.selectedEvent.ID,
-
-                // },
-                data: vm.eventDetailList,
-                schema: {
-                    parse: function(response){
-                        var details =[];
-                        for (var i = 0; i < response.length; i++) {
-                            var dateNoTime = new Date(response[i].CreatDate);
-                            var detail = {
-                                ID: response[i].ID,
-                                Serial: response[i].Serial,
-                                EventCode: response[i].EventCode,
-                                ProductCode: response[i].ProductCode,
-                                ProductName: response[i].ProductName,
-                                AgencySold: response[i].AgencySold,
-                                AssociateName: response[i].AssociateName,
-                                CreatDate: new Date(
-                                    dateNoTime.getFullYear(),
-                                    dateNoTime.getMonth(),
-                                    dateNoTime.getDate()
-                                )
-                            };
-                            details.push(detail);
-                          }
-                          return details;
-                    },
-                    model: {
-                        fields: {
-                            ID: { type: "string" },
-                            Serial: { type: "string" },
-                            EventCode: { type: "string" },
-                            ProductCode: { type: "string" },
-                            ProductName: { type: "string" },
-                            AgencySold: { type: "string" },
-                            AssociateName: { type: "string" },
-                            CreatDate: { type: "date" }
-                        }
-                    }
-                },    
-            } ,
-            sortable: true,
-            pageable: {
-                pageSize: 5,
-                refresh: true
-            },
-            groupable: true,
-            reorderable: true,
-            columnMenu: true,
-            height: 600,
-            columns: [
-                { field: "Serial", title: "Serial" },
-                { field: "EventCode", title: "Mã sự kiện" },
-                { field: "ProductCode", title: "Mã sản phẩm"},
-                { field: "ProductName",  title: "Tên sản phẩm"},
-                { field: "AgencySold", title: "Đại lí bán"},
-                { field: "AssociateName", title: "Tên nhân viên"},
-                {  
-                    field:"CreatDate",
-                    title:"Ngày tạo",
-                    template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
-                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
-                }
-            ]
-          }).data("kendoGrid");
-        var historyGrid = $("#gridHistoryInteractions").kendoGrid({
-        dataSource: {
-            // transport: {
-            //     read: _historyInteractionURL+"?$filter=EventID eq "+vm.selectedEvent.ID
-            // },
-            data: vm.eventHistoryList,
-            schema: {
-                parse: function(response){
-                var histories =[];
-                for (var i = 0; i < response.length; i++) {
-                    var dateNoTime = new Date(response[i].CreatDate);
-                    var history = {
-                        ID: response[i].ID,
-                        EventCode: response[i].EventCode,
-                        Note: response[i].Note,
-                        Status: response[i].Status,
-                        CreatDate:new Date(
-                            dateNoTime.getFullYear(),
-                            dateNoTime.getMonth(),
-                            dateNoTime.getDate()
-                        )
-                };
-                histories.push(history);
-                }
-                return histories;
-            },
-            model: {
-                fields: {
-                    ID: { type: "string" },
-                    EventCode: {type: "string"},
-                    Note: { type: "string" },
-                    Status: { type: "string" },
-                    CreatDate: { type: "date" }
-                }
-            }
-            }
-        },
-        sortable: true,
-        pageable: {
-            refresh: true,
-            pageSize:10,
-        },
-        groupable: true,
-        reorderable: true,
-        columnMenu: true,
-        height: 468,
-        columns: [
-            { field: "EventCode", title: "Mã sự kiện" },
-            { field: "Note", title: "Nội dung phiếu"},
-            { field: "Status",  title: "Trạng thái phiếu"},
-            {  
-                field:"CreatDate",
-                title:"Ngày tạo",
-                template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
-                groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
-            },
-            {
-                field: "Note", title: " Ghi chú"
-            }
-        ]
-        }).data("kendoGrid");
-        var tagGrid = $('#gridTagDetails').kendoGrid({
-            data: vm.eventTags,
-            sortable: true,
-            pageable: {
-                refresh: true,
-                pageSize:10,
-            },
-            groupable: true,
-            reorderable: true,
-            columnMenu: true,
-            height: 468,
-            columns: [
-                {
-                    field: "ID",
-                    hidden: true,
-                },
-                {
-                    field: "NameTag",
-                    title: "Tên tag"
-                },
-                {
-                    field: "CodeTag",
-                    title: "Mã tag"
-                },
-                {
-                    field: "DepartmentName",
-                    title: "Phòng ban được tag"
-                }
-            ]
-        });
-        var reminderGrid = $('#reminderDetails').kendoGrid({
-            dataSource: {
-                data: vm.eventReminders,
-                schema: {
-                    parse: function(response) {
-                        var reminders =[];
-                        for (var i = 0; i < response.length; i++) {
-                            var createDateNotTime = new Date(response[i].CreatDate);
-                            var reminderDateNoTime = new Date(response[i].ReminderDate);
-                            var reminder = {
-                                ID: response[i].ID,
-                                Note: response[i].Note,
-                                CreatDate:  new Date(
-                                    createDateNotTime.getFullYear(),
-                                    createDateNotTime.getMonth(),
-                                    createDateNotTime.getDate(),
-                                    createDateNotTime.getHours(),
-                                    createDateNotTime.getMinutes(),
-                                    createDateNotTime.getSeconds(),
-                                ),
-                                ReminderDate: new Date(
-                                    reminderDateNoTime.getFullYear(),
-                                    reminderDateNoTime.getMonth(),
-                                    reminderDateNoTime.getDate(),
-                                    reminderDateNoTime.getMinutes(),
-                                    reminderDateNoTime.getSeconds(),
-                                )
-                        };
-                        reminders.push(reminder);
-                        }
-                        return reminders;
-                    },
-                    model: {
-                        fields: {
-                            ID: { type: "string" },
-                            Note: { type: "string" },
-                            CreatDate: { type: "date" },
-                            ReminderDate: { type: "date" },
-                        }
-                    }
-                }
-            },
-            sortable: true,
-            pageable: {
-                refresh: true,
-                pageSize:10,
-            },
-            groupable: true,
-            reorderable: true,
-            columnMenu: true,
-            height: 468,
-            columns: [
-                {
-                    field: "ID",
-                    hidden: true,
-                },
-                {
-                    field: "Note",
-                    title: "Ghi chú lịch hẹn"
-                },
-                {
-                    field:"CreatDate",
-                    title:"Ngày tạo",
-                    template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
-                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
-                },
-                {
-                    field:"ReminderDate",
-                    title:"Ngày hẹn",
-                    template: "#= kendo.toString(ReminderDate, 'dd/MM/yyyy HH:mm:ss') #",
-                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
-                }
-            ]
-        })
-        $("#windowTabstrip").kendoTabStrip({
-            animation:  {
-                open: {
-                    effects: "fadeIn"
-                }
-            }
-        });
-        $("#editWindowTabstrip").kendoTabStrip({
-            animation: {
-                opren: {
-                    effects: "fadeIn"
-                }
-            }
-        });
         function showEditDetails(e) {
             e.preventDefault();
             var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
             vm.selectedEvent = dataItem;
             console.log(vm.selectedEvent);
             updateGrid();
-            // editwnd.content(editDetailsTemplate(dataItem));
-            editGrid.resize();
-            editwnd.center().open();
+            $scope.showEditWindow = true;
+            $("#editDetailWindow").kendoWindow({
+                position: {
+                  top: "10%", 
+                  left: "5%"
+                },
+                maxWidth: 600
+              });
+            $("#editDetailWindow").data("kendoWindow").open();
             $http({
                 url: _pitechDeviceURL,
                 method: 'POST',
@@ -958,12 +1134,190 @@ angular.module('app')
         }
         function showDetails(e) {
             e.preventDefault();
-
             var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
             console.log(dataItem);
-            vm.selectedEvent = dataItem;
-            updateGrid();
-            detailsGrid.resize();
+            vm.selectedEvent = dataItem;  
+            updateGrid();     
+            if(vm.eventDetailList.length > 0) {
+                vm.eventDetailList = [];
+            }
+            if(vm.eventHistoryList.length > 0) {
+                vm.eventHistoryList = [];
+            }
+            if(vm.eventTags.length > 0) {
+                vm.eventTags = [];
+            }
+            if(vm.eventReminders.length > 0) {
+                vm.eventReminders = [];
+            }
+            for(var i = 0 ; i < vm.selectedEvent.DetailEvents.length ; i++) {
+                vm.eventDetailList.push(vm.selectedEvent.DetailEvents[i]);
+            }
+            for(var i = 0 ; i < vm.selectedEvent.InteractionHistories.length ; i++) {
+                vm.eventHistoryList.push(vm.selectedEvent.InteractionHistories[i]);
+            }
+            for(var i = 0 ; i < vm.selectedEvent.Tags.length ; i++) {
+                vm.eventTags.push(vm.selectedEvent.Tags[i]);
+            }  
+            for(var i = 0 ; i < vm.selectedEvent.ReminderNotes.length ; i++) {
+                vm.eventReminders.push(vm.selectedEvent.ReminderNotes[i]);
+            }
+            var editDetailGrid = $('#gridEditDetails').data('kendoGrid');
+            var detailsDatasource = new kendo.data.DataSource({
+                data: vm.eventDetailList,
+                schema: {
+                    parse: function(response){
+                        var details =[];
+                        for (var i = 0; i < response.length; i++) {
+                            var dateNoTime = new Date(response[i].CreatDate);
+                            var detail = {
+                                ID: response[i].ID,
+                                Serial: response[i].Serial,
+                                EventCode: response[i].EventCode,
+                                ProductCode: response[i].ProductCode,
+                                ProductName: response[i].ProductName,
+                                AgencySold: response[i].AgencySold,
+                                AssociateName: response[i].AssociateName,
+                                CreatDate: response[i].CreatDate,
+                                CreatDateNoTime: new Date(
+                                    dateNoTime.getFullYear(),
+                                    dateNoTime.getMonth(),
+                                    dateNoTime.getDate()
+                                )
+                            };
+                            details.push(detail);
+                          }
+                          return details;
+                    },
+                    model: {
+                        fields: {
+                            ID: { type: "string" },
+                            Serial: { type: "string" },
+                            EventCode: { type: "string" },
+                            ProductCode: { type: "string" },
+                            ProductName: { type: "string" },
+                            AgencySold: { type: "string" },
+                            AssociateName: { type: "string" },
+                            CreatDate: { type: "date" },
+                            CreatDateNoTime: { type: "date" },
+                        }
+                    }
+                },    
+                
+              });
+            var historyDatasource = new kendo.data.DataSource({ 
+                data: vm.selectedEvent.InteractionHistories,
+                schema: {
+                    parse: function(response){
+                    var histories =[];
+                    for (var i = 0; i < response.length; i++) {
+                        var dateNoTime = new Date(response[i].CreatDate);
+                        var history = {
+                            ID: response[i].ID,
+                            EventCode: response[i].EventCode,
+                            Note: response[i].Note,
+                            Status: response[i].Status,
+                            CreatDate: response[i].CreatDate,
+                            CreatDateNoTime: new Date(
+                                dateNoTime.getFullYear(),
+                                dateNoTime.getMonth(),
+                                dateNoTime.getDate(),
+                                dateNoTime.getHours(),
+                                dateNoTime.getMinutes(),
+                                dateNoTime.getSeconds()
+                            )
+                    };
+                    histories.push(history);
+                    }
+                    return histories;
+                },
+                model: {
+                    fields: {
+                        ID: { type: "string" },
+                        EventCode: {type: "string"},
+                        Note: { type: "string" },
+                        Status: { type: "string" },
+                        CreatDate: { type: "date" },
+                        CreatDateNoTime: { type: "date" },
+                    }
+                }
+                }
+            });
+            var tagDatasource = new kendo.data.DataSource({
+                data: vm.eventTags
+            });
+            var reminderDatasource = new kendo.data.DataSource({
+                data: vm.eventReminders,
+                schema: {
+                    parse: function(response) {
+                        var reminders =[];
+                        for (var i = 0; i < response.length; i++) {
+                            var createDateNotTime = new Date(response[i].CreatDate);
+                            var reminderDateNoTime = new Date(response[i].ReminderDate);
+                            var reminder = {
+                                ID: response[i].ID,
+                                Note: response[i].Note,
+                                CreatDate:  new Date(
+                                    createDateNotTime.getFullYear(),
+                                    createDateNotTime.getMonth(),
+                                    createDateNotTime.getDate(),
+                                    createDateNotTime.getHours(),
+                                    createDateNotTime.getMinutes(),
+                                    createDateNotTime.getSeconds(),
+                                ),
+                                ReminderDate: new Date(
+                                    reminderDateNoTime.getFullYear(),
+                                    reminderDateNoTime.getMonth(),
+                                    reminderDateNoTime.getDate(),
+                                    reminderDateNoTime.getHours(),
+                                    reminderDateNoTime.getMinutes(),
+                                    reminderDateNoTime.getSeconds(),
+                                )
+                        };
+                        reminders.push(reminder);
+                        }
+                        return reminders;
+                    },
+                    model: {
+                        fields: {
+                            ID: { type: "string" },
+                            Note: { type: "string" },
+                            CreatDate: { type: "date" },
+                            ReminderDate: { type: "date" },
+                        }
+                    }
+                }
+            });
+            editDetailGrid.dataSource.transport.options.read.url = _eventDetailURL+"?$filter=EventID eq "+vm.selectedEvent.ID;
+            editDetailGrid.dataSource.read();
+            var editGrid = $("#editDetailsGrid").data('kendoGrid');
+            editGrid.dataSource.transport.options.read.url = _eventDetailURL+"?$filter=EventID eq "+vm.selectedEvent.ID;
+            editGrid.dataSource.read();
+            $scope.showWindow = true;
+            $("#detailWindow").kendoWindow({
+                position: {
+                  top: "20%", 
+                  left: "5%"
+                },
+                width: 600,
+                height: 458,
+                maxWidth: 600
+              });
+            $("#detailWindow").data("kendoWindow").open();
+            $('a.k-pager-refresh.k-link').click();
+            $('#eventDetailsGrid').data('kendoGrid').setDataSource(detailsDatasource);
+            $("#eventDetailsGrid").data("kendoGrid").dataSource.read();
+            $("#eventDetailsGrid").data("kendoGrid").refresh();
+            $('#historyDetailsGrid').data('kendoGrid').setDataSource(historyDatasource);
+            $("#historyDetailsGrid").data("kendoGrid").dataSource.read();
+            $("#historyDetailsGrid").data("kendoGrid").refresh();
+            $('#tagDetailsGrid').data('kendoGrid').setDataSource(tagDatasource);
+            $("#tagDetailsGrid").data("kendoGrid").dataSource.read();
+            $("#tagDetailsGrid").data("kendoGrid").refresh();
+            $('#reminderDetailsGrid').data('kendoGrid').setDataSource(reminderDatasource);
+            $("#reminderDetailsGrid").data("kendoGrid").dataSource.read();
+            $("#reminderDetailsGrid").data("kendoGrid").refresh();
+            wnd.refresh();
             wnd.center().open();
         }
         function onChange(e) {
@@ -1001,10 +1355,6 @@ angular.module('app')
             for(var i = 0 ; i < vm.selectedEvent.ReminderNotes.length ; i++) {
                 vm.eventReminders.push(vm.selectedEvent.ReminderNotes[i]);
             }
-            var gridDetails = $('#gridDetails').data('kendoGrid');
-            var historyGrids = $('#gridHistoryInteractions').data('kendoGrid');
-            var tagGrid = $('#gridTagDetails').data('kendoGrid');
-            var reminderGrid = $('#reminderDetails').data('kendoGrid');
             var editDetailGrid = $('#gridEditDetails').data('kendoGrid');
             var detailsDatasource = new kendo.data.DataSource({
                 data: vm.eventDetailList,
@@ -1133,19 +1483,399 @@ angular.module('app')
             });
             editDetailGrid.dataSource.transport.options.read.url = _eventDetailURL+"?$filter=EventID eq "+vm.selectedEvent.ID;
             editDetailGrid.dataSource.read();
-            gridDetails.setDataSource(detailsDatasource);
-            gridDetails.dataSource.read();
-            gridDetails.refresh();
-            historyGrids.setDataSource(historyDatasource);
-            historyGrids.dataSource.read();
-            historyGrids.refresh();
-            tagGrid.setDataSource(tagDatasource);
-            tagGrid.dataSource.read();
-            tagGrid.refresh();
-            reminderGrid.setDataSource(reminderDatasource);
-            reminderGrid.dataSource.read();
-            reminderGrid.refresh();
-            console.log(vm.eventDetailList);
+            var editGrid = $("#editDetailsGrid").data('kendoGrid');
+            editGrid.dataSource.transport.options.read.url = _eventDetailURL+"?$filter=EventID eq "+vm.selectedEvent.ID;
+            editGrid.dataSource.read();
+            console.log(vm.eventDetailList);   
+            // $("#eventWindowTabstrip").kendoTabStrip({
+            //     animation:  {
+            //         open: {
+            //             effects: "fadeIn"
+            //         }
+            //     }
+            // });
+            // $("#eventWindowTabstrip").data("kendoTabStrip").reload("li:first");
+        }
+        $scope.detailsGridOption =  {
+                dataSource:{
+                    data: vm.eventDetailList,
+                    schema: {
+                        parse: function(response){
+                            var details =[];
+                            for (var i = 0; i < response.length; i++) {
+                                var dateNoTime = new Date(response[i].CreatDate);
+                                var detail = {
+                                    ID: response[i].ID,
+                                    Serial: response[i].Serial,
+                                    EventCode: response[i].EventCode,
+                                    ProductCode: response[i].ProductCode,
+                                    ProductName: response[i].ProductName,
+                                    AgencySold: response[i].AgencySold,
+                                    AssociateName: response[i].AssociateName,
+                                    CreatDate: new Date(
+                                        dateNoTime.getFullYear(),
+                                        dateNoTime.getMonth(),
+                                        dateNoTime.getDate()
+                                    )
+                                };
+                                details.push(detail);
+                              }
+                              return details;
+                        },
+                        model: {
+                            fields: {
+                                ID: { type: "string" },
+                                Serial: { type: "string" },
+                                EventCode: { type: "string" },
+                                ProductCode: { type: "string" },
+                                ProductName: { type: "string" },
+                                AgencySold: { type: "string" },
+                                AssociateName: { type: "string" },
+                                CreatDate: { type: "date" }
+                            }
+                        }
+                    },    
+                } ,
+                sortable: true,
+                pageable: {
+                    pageSize: 5,
+                    refresh: true
+                },
+                groupable: true,
+                reorderable: true,
+                columnMenu: true,
+                height: 600,
+                cache: false,
+                columns: [
+                    { field: "Serial", title: "Serial" },
+                    { field: "EventCode", title: "Mã sự kiện" },
+                    { field: "ProductCode", title: "Mã sản phẩm"},
+                    { field: "ProductName",  title: "Tên sản phẩm"},
+                    { field: "AgencySold", title: "Đại lí bán"},
+                    { field: "AssociateName", title: "Tên nhân viên"},
+                    {  
+                        field:"CreatDate",
+                        title:"Ngày tạo",
+                        template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
+                        groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+                    }
+                ]
+        };
+        $scope.historyGridOption = {
+            dataSource: {
+                data: vm.eventHistoryList,
+                schema: {
+                    parse: function(response){
+                    var histories =[];
+                    for (var i = 0; i < response.length; i++) {
+                        var dateNoTime = new Date(response[i].CreatDate);
+                        var history = {
+                            ID: response[i].ID,
+                            EventCode: response[i].EventCode,
+                            Note: response[i].Note,
+                            Status: response[i].Status,
+                            CreatDate:new Date(
+                                dateNoTime.getFullYear(),
+                                dateNoTime.getMonth(),
+                                dateNoTime.getDate()
+                            )
+                    };
+                    histories.push(history);
+                    }
+                    return histories;
+                },
+                model: {
+                    fields: {
+                        ID: { type: "string" },
+                        EventCode: {type: "string"},
+                        Note: { type: "string" },
+                        Status: { type: "string" },
+                        CreatDate: { type: "date" }
+                    }
+                }
+                }
+            },
+            sortable: true,
+            pageable: {
+                refresh: true,
+                pageSize:10,
+            },
+            groupable: true,
+            reorderable: true,
+            columnMenu: true,
+            height: 468,
+            columns: [
+                { field: "EventCode", title: "Mã sự kiện" },
+                { field: "Note", title: "Nội dung phiếu"},
+                { field: "Status",  title: "Trạng thái phiếu"},
+                {  
+                    field:"CreatDate",
+                    title:"Ngày tạo",
+                    template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+                },
+                {
+                    field: "Note", title: " Ghi chú"
+                }
+            ]
+        }
+        $scope.tagDetailsOption ={
+            data: vm.eventTags,
+            sortable: true,
+            pageable: {
+                refresh: true,
+                pageSize:10,
+            },
+            groupable: true,
+            reorderable: true,
+            columnMenu: true,
+            height: 468,
+            columns: [
+                {
+                    field: "ID",
+                    hidden: true,
+                },
+                {
+                    field: "NameTag",
+                    title: "Tên tag"
+                },
+                {
+                    field: "CodeTag",
+                    title: "Mã tag"
+                },
+                {
+                    field: "DepartmentName",
+                    title: "Phòng ban được tag"
+                }
+            ]
+        }
+        $scope.reminderDetailsOption = {
+            dataSource: {
+                data: vm.eventReminders,
+                schema: {
+                    parse: function(response) {
+                        var reminders =[];
+                        for (var i = 0; i < response.length; i++) {
+                            var createDateNotTime = new Date(response[i].CreatDate);
+                            var reminderDateNoTime = new Date(response[i].ReminderDate);
+                            var reminder = {
+                                ID: response[i].ID,
+                                Note: response[i].Note,
+                                CreatDate:  new Date(
+                                    createDateNotTime.getFullYear(),
+                                    createDateNotTime.getMonth(),
+                                    createDateNotTime.getDate(),
+                                    createDateNotTime.getHours(),
+                                    createDateNotTime.getMinutes(),
+                                    createDateNotTime.getSeconds(),
+                                ),
+                                ReminderDate: new Date(
+                                    reminderDateNoTime.getFullYear(),
+                                    reminderDateNoTime.getMonth(),
+                                    reminderDateNoTime.getDate(),
+                                    reminderDateNoTime.getMinutes(),
+                                    reminderDateNoTime.getSeconds(),
+                                )
+                        };
+                        reminders.push(reminder);
+                        }
+                        return reminders;
+                    },
+                    model: {
+                        fields: {
+                            ID: { type: "string" },
+                            Note: { type: "string" },
+                            CreatDate: { type: "date" },
+                            ReminderDate: { type: "date" },
+                        }
+                    }
+                }
+            },
+            sortable: true,
+            pageable: {
+                refresh: true,
+                pageSize:10,
+            },
+            groupable: true,
+            reorderable: true,
+            columnMenu: true,
+            height: 468,
+            columns: [
+                {
+                    field: "ID",
+                    hidden: true,
+                },
+                {
+                    field: "Note",
+                    title: "Ghi chú lịch hẹn"
+                },
+                {
+                    field:"CreatDate",
+                    title:"Ngày tạo",
+                    template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+                },
+                {
+                    field:"ReminderDate",
+                    title:"Ngày hẹn",
+                    template: "#= kendo.toString(ReminderDate, 'dd/MM/yyyy HH:mm:ss') #",
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+                }
+            ]
+        }
+        $scope.editDetailsOptions = {
+            dataSource: {
+                type:'odata-v4',
+                transport: {
+                    read: {
+                        url: function () {
+                            return _eventDetailURL;
+                        }
+                    }, 
+                    update: {
+                        url: function(dataItem) {
+                            return _eventDetailURL+"(" + dataItem.ID + ")";
+                        }
+                    }
+                },
+                batch: true,
+                pageSize: 10,      
+                schema: {
+                    parse: function(response) {
+                        var details = [];
+                        for (var i = 0; i < response.value.length; i++) {
+                            var createDate = new Date(response.value[i].CreatDate);
+                            var soldDate = new Date();
+                            if(response.value[i].DateSold !== "") {
+                                soldDate = new Date(response.value[i].DateSold);
+                            }
+                            var detail = {
+                                ID: response.value[i].ID,
+                                Serial: response.value[i].Serial,
+                                EventCode: response.value[i].EventCode,
+                                ProductCode: response.value[i].ProductCode,
+                                ProductName: response.value[i].ProductName,
+                                AgencySold: response.value[i].AgencySold, 
+                                AssociateName: response.value[i].AssociateName, 
+                                CreatDate: new Date(
+                                    createDate.getFullYear(),
+                                    createDate.getMonth(),
+                                    createDate.getDate(),
+                                    createDate.getHours(),
+                                    createDate.getMinutes(),
+                                    createDate.getSeconds()
+                                ),
+                                DateSold: new Date(
+                                    soldDate.getFullYear(),
+                                    soldDate.getMonth(),
+                                    soldDate.getDate(),
+                                    soldDate.getHours(),
+                                    soldDate.getMinutes(),
+                                    soldDate.getSeconds()
+                                ),
+                                Note: response.value[i].Note
+                            };
+                            details.push(detail);
+                        }
+                        return details;
+                    },
+                    model: {
+                        fields: {
+                            ID: { editable: false, hidden: true },
+                            Serial: { type: "string" },
+                            EventCode: { type: "string", editable: false},
+                            CreatDate: { type: "date", editable: false },
+                            ProductCode: { type: "string" , editable: false },                  
+                            ProductName: { type: "string" },
+                            AgencySold: { type: "string", editable: false },
+                            DateSold: { type: "date", nullable:true, editable: false },
+                            AssociateName: { type: "string",  editable: false },
+                            Note: { type: "string" }
+                        }
+                    }
+                }
+            },
+            sortable: true,
+            pageable: true,
+            height: 468,
+            columns: [
+                { field: "ID", title: "Id", hidden: true },
+                { 
+                    field: "ProductName", title:"Tên sản phẩm",
+                    editor: ProductTypeDropdownEditor, 
+                    template: "#= ProductName #" 
+                },
+                { 
+                    field: "Serial", 
+                    title: "Serial",
+                    editor: SerialDropdownEditor,
+                    template: "#= Serial ? Serial : 'Noinformation' #"
+                },
+                { field: "EventCode", title:"Mã phiếu" },
+                {   
+                    field:"CreatDate",
+                    title:"Ngày tạo",
+                    template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #" 
+                },
+                { field: "ProductCode", title:"Mã sản phẩm" },   
+                { field: "AgencySold", title:"Đại lý bán" },
+                { 
+                    field: "DateSold",
+                    title:"Ngày mua",
+                    template: "#= kendo.toString(DateSold, 'dd/MM/yyyy HH:mm:ss') #",
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #" 
+                },
+                { field: "AssociateName", title:"Nhân viên bán" },    
+                { field: "Note", title: "Ghi chú"},
+                {   
+                    command: ["edit"], title: "&nbsp;", width: "250px" 
+                }
+            ],
+            editable: "inline",
+            save: function (e) {
+                e.preventDefault();
+                console.log(e.dataItem);
+                console.log(e.model);debugger;
+                var model = {
+                    ID: e.model.ID,
+                    Serial: e.model.Serial,
+                    ProductID: e.model.ProductName,
+                    Note: e.model.Note,
+                    AgencySold: e.model.AgencySold,
+                    AssociateName: e.model.AssociateName,
+                }
+                if(model.Serial == "[object Object]"){
+                    model.Serial = "Noinformation";
+                }
+                if(e.model.DateSold !== undefined && e.model.DateSold !== "") {
+                    model.DateSold = moment(e.model.DateSold).utc().format();
+                }
+                $http({
+                    url: _eventDetailURL+'('+ e.model.ID +')',
+                    method: 'PUT',
+                    data: JSON.stringify(model),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                    },
+                }).then(function(response){
+                    if(response.status == 204) {
+                        var grid = $("#editDetailsGrid").data("kendoGrid");
+                        grid.dataSource.read();
+                        toaster.pop('success', "Thành công", "Đã cập nhật xong");               
+                    } else {
+                        toaster.pop('error', "Lỗi", "Có lỗi trong quá trình cập nhật");
+                    }
+                });      
+               console.log(e); 
+            },
+            cancel: function(e) {
+                e.preventDefault();
+                var model = $("#editDetailsGrid").data("kendoGrid");
+                model.dataSource.cancelChanges();
+                this.closeCell();
+            }
         }
     }
 ]);

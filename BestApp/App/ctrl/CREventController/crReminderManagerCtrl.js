@@ -27,7 +27,23 @@ angular.module('app')
         vm.filterTagString = "";
         $scope.newReminderNote = "";
         vm.newReminderDate = new Date();
+        var reminderGrid = $('#reminderDetails').data("kendoGrid");
+        var wnd = $("#details")
+        .kendoWindow({
+            title: "Chi tiết phiếu",
+            modal: true,
+            visible: false,
+            resizable: true,
+            width: "80%"
+        }).data("kendoWindow");
         var scheduleWindow = $("#newScheduleWindow");
+        $("#windowTabstrip").kendoTabStrip({
+            animation:  {
+                open: {
+                    effects: "fadeIn"
+                }
+            }
+        });
         scheduleWindow.kendoWindow({
                 width: "40%",
                 title: "Thêm lịch hẹn",
@@ -365,14 +381,7 @@ angular.module('app')
             ]
         };
 
-        var wnd = $("#details")
-                .kendoWindow({
-                    title: "Chi tiết phiếu",
-                    modal: true,
-                    visible: false,
-                    resizable: true,
-                    width: "80%"
-                }).data("kendoWindow");
+
         function onDetailSelected(e) {
             if (e.dataItem) {
                 var dataItem = e.dataItem;
@@ -401,109 +410,105 @@ angular.module('app')
                 });
             }
         }
-        var reminderGrid = $('#reminderDetails').kendoGrid({
-            dataSource: {
-                data: vm.eventReminders,
-                schema: {
-                    parse: function(response) {
-                        var reminders =[];
-                        for (var i = 0; i < response.length; i++) {
-                            var createDateNotTime = new Date(response[i].CreatDate);
-                            var reminderDateNoTime = new Date(response[i].ReminderDate);
-                            var reminder = {
-                                ID: response[i].ID,
-                                Note: response[i].Note,
-                                CreatDate:  new Date(
-                                    createDateNotTime.getFullYear(),
-                                    createDateNotTime.getMonth(),
-                                    createDateNotTime.getDate(),
-                                    createDateNotTime.getHours(),
-                                    createDateNotTime.getMinutes(),
-                                    createDateNotTime.getSeconds(),
-                                ),
-                                ReminderDate: new Date(
-                                    reminderDateNoTime.getFullYear(),
-                                    reminderDateNoTime.getMonth(),
-                                    reminderDateNoTime.getDate(),
-                                    reminderDateNoTime.getMinutes(),
-                                    reminderDateNoTime.getSeconds(),
-                                )
-                        };
-                        reminders.push(reminder);
-                        }
-                        return reminders;
-                    },
-                    model: {
-                        fields: {
-                            ID: { type: "string" },
-                            Note: { type: "string" },
-                            CreatDate: { type: "date" },
-                            ReminderDate: { type: "date" },
-                        }
-                    }
-                }
-            },
-            sortable: true,
-            pageable: {
-                refresh: true,
-                pageSize:10,
-            },
-            groupable: true,
-            reorderable: true,
-            columnMenu: true,
-            height: 468,
-            columns: [
-                {
-                    field: "ID",
-                    hidden: true,
-                },
-                {
-                    field: "Note",
-                    title: "Ghi chú lịch hẹn"
-                },
-                {
-                    field:"CreatDate",
-                    title:"Ngày tạo",
-                    template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
-                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
-                },
-                {
-                    field:"ReminderDate",
-                    title:"Ngày hẹn",
-                    template: "#= kendo.toString(ReminderDate, 'dd/MM/yyyy HH:mm:ss') #",
-                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
-                }
-            ],
-            toolbar: [
-                {
-                    name: "new",
-                    text: "Thêm lịch hẹn"
-                }
-            ]
-        });
-        $(".k-grid-new").click(function(e){
-            e.preventDefault();
-           
-            scheduleWindow.data("kendoWindow").center().open();
-            // handler body
-          });
-        $("#windowTabstrip").kendoTabStrip({
-            animation:  {
-                open: {
-                    effects: "fadeIn"
-                }
-            }
-        });
+       
         function onDataBound(e) {
             this.expandRow(this.tbody.find("tr.k-master-row").first());
+            $(".k-grid-new").click(function(e){
+                e.preventDefault();   
+                scheduleWindow.data("kendoWindow").center().open();   
+            });
+            reminderGrid = $('#reminderDetails').kendoGrid({
+                dataSource: {
+                    data: vm.eventReminders,
+                    schema: {
+                        parse: function(response) {
+                            var reminders =[];
+                            for (var i = 0; i < response.length; i++) {
+                                var createDateNotTime = new Date(response[i].CreatDate);
+                                var reminderDateNoTime = new Date(response[i].ReminderDate);
+                                var reminder = {
+                                    ID: response[i].ID,
+                                    Note: response[i].Note,
+                                    CreatDate:  new Date(
+                                        createDateNotTime.getFullYear(),
+                                        createDateNotTime.getMonth(),
+                                        createDateNotTime.getDate(),
+                                        createDateNotTime.getHours(),
+                                        createDateNotTime.getMinutes(),
+                                        createDateNotTime.getSeconds(),
+                                    ),
+                                    ReminderDate: new Date(
+                                        reminderDateNoTime.getFullYear(),
+                                        reminderDateNoTime.getMonth(),
+                                        reminderDateNoTime.getDate(),
+                                        reminderDateNoTime.getMinutes(),
+                                        reminderDateNoTime.getSeconds(),
+                                    )
+                            };
+                            reminders.push(reminder);
+                            }
+                            return reminders;
+                        },
+                        model: {
+                            fields: {
+                                ID: { type: "string" },
+                                Note: { type: "string" },
+                                CreatDate: { type: "date" },
+                                ReminderDate: { type: "date" },
+                            }
+                        }
+                    }
+                },
+                sortable: true,
+                pageable: {
+                    refresh: true,
+                    pageSize:10,
+                },
+                groupable: true,
+                reorderable: true,
+                columnMenu: true,
+                height: 468,
+                columns: [
+                    {
+                        field: "ID",
+                        hidden: true,
+                    },
+                    {
+                        field: "Note",
+                        title: "Ghi chú lịch hẹn"
+                    },
+                    {
+                        field:"CreatDate",
+                        title:"Ngày tạo",
+                        template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
+                        groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+                    },
+                    {
+                        field:"ReminderDate",
+                        title:"Ngày hẹn",
+                        template: "#= kendo.toString(ReminderDate, 'dd/MM/yyyy HH:mm:ss') #",
+                        groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+                    }
+                ],
+                toolbar: [
+                    {
+                        name: "new",
+                        text: "Thêm lịch hẹn"
+                    }
+                ]
+            });
         }
         function showDetails(e) {
             e.preventDefault();
             var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var tabStrip = $("#windowTabstrip").data("kendoTabStrip");
             console.log(dataItem);
             vm.selectedEvent = dataItem;
             updateGrid();
             reminderGrid.resize();
+            tabStrip.reload("li:first");
+            $("#details").data("kendoWindow").refresh();
+            wnd.refresh();
             wnd.center().open();
         }
         function onChange(e) {
@@ -633,8 +638,9 @@ angular.module('app')
             });
             historyTimeline.setDataSource(historyTimelineData);
             reminderGrid.setDataSource(reminderDatasource);
-            reminderGrid.dataSource.read();
-            reminderGrid.refresh();
+            reminderGrid.dataSource.read().then(function(){
+                reminderGrid.refresh();
+            });
             console.log(vm.eventDetailList);
         }
     }

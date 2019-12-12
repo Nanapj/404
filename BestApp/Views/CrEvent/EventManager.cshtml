@@ -71,41 +71,56 @@
             <div class="col-md-12">
                 <div id="eventGrid"
                      kendo-grid
-                     k-options="mainGridOptions"
+                     k-options="listEventGridOptions"
                      k-selectable="true"
                      k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
             </div>
-            <div id="details">
-                <div id="windowTabstrip">
+            <div kendo-window="win1"
+                 k-title="'Chi tiết sự kiện'"
+                 ng-show="showWindow"
+                 id="detailWindow"
+                 k-on-open="win1visible = true"
+                 k-on-close="win1visible = false">
+                <div kendo-tab-strip k-content-urls="[ null, null]">
+                    <!-- tab list -->
                     <ul>
-                        <li class="k-state-active">
-                            Chi tiết phiếu
-                        </li>
-                        <li>
-                            Lịch sử tương tác
-                        </li>
-                        <li>
-                           Tags
-                        </li>
-                        <li>
-                            Lịch sử hẹn
-                        </li>              
+                        <li class="k-state-active">Chi tiết phiếu</li>
+                        <li>Lịch sử tương tác</li>
+                        <li>Tags</li>
+                        <li>Lịch sử hẹn</li>
                     </ul>
-                    <div>
-                        <div id="gridDetails"></div>
+                    <div style="padding: 1em">
+                        <div class="col-md-12">
+                            <div id="eventDetailsGrid"
+                                 kendo-grid
+                                 k-options="detailsGridOption"
+                                 k-selectable="true"
+                                 k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
+                        </div>
+                    </div>
+                    <div style="padding: 1em">
+                        <div id="historyDetailsGrid"
+                             kendo-grid
+                             k-options="historyGridOption"
+                             k-selectable="true"
+                             k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
                     </div>
                     <div>
-                        <div id="gridHistoryInteractions"></div> 
+                        <div id="tagDetailsGrid"
+                             kendo-grid
+                             k-options="tagDetailsOption"
+                             k-selectable="true"
+                             k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
                     </div>
                     <div>
-                        <div id="gridTagDetails"></div>
+                        <div id="reminderDetailsGrid"
+                             kendo-grid
+                             k-options="reminderDetailsOption"
+                             k-selectable="true"
+                             k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
                     </div>
-                    <div>
-                        <div id="reminderDetails"></div>
-                    </div>       
                 </div>
             </div>
-
             <script type="text/x-kendo-template" id="template">
                 <div id="details-container">
                     <h2>#= FullName # #= FullName #</h2>
@@ -116,9 +131,20 @@
                     </dl>
                 </div>
             </script>
-
+            <div kendo-window="win2"
+                 k-title="'Chỉnh sửa chi tiết'"
+                 ng-show="showEditWindow"
+                 id="editDetailWindow"
+                 k-on-open="win1visible = true"
+                 k-on-close="win1visible = false">
+                <div id="editDetailsGrid"
+                     kendo-grid
+                     k-options="editDetailsOptions"
+                     k-selectable="true"
+                     k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
+            </div>
             <div id="editdetails">
-                <div id="editWindowTabstrip">
+                <div id="editeventWindowTabstrip">
                     <ul>
                         <li class="k-state-active">
                             Chi tiết phiếu
@@ -128,8 +154,8 @@
                         <div id="gridEditDetails"></div>
                     </div>
                 </div>
-                
+
+            </div>
             </div>
         </div>
-    </div>
  </div>
