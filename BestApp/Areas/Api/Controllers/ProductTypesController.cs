@@ -39,13 +39,13 @@ namespace BestApp.Areas.Api.Controllers
             try
             {
                 var stf = await _productTypeService.InsertAsync(model);
-                _unitOfWorkAsync.Commit();
                 var resultObject = new ProductTypeViewModel()
                 {
                     Name = stf.Name,
                     Code = stf.Code,
                     ID = stf.Id,
                 };
+                bool de = _unitOfWorkAsync.Commit();
                 return Created(resultObject);
             }
             catch (Exception ex)

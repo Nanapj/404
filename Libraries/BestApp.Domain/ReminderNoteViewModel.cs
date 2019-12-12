@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BestApp.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,8 @@ namespace BestApp.Domain
         public DateTime LastModifiedDate { get; set; }
         public bool Delete { get; set; }
         public string Serial { get; set; }
+        public ApplicationUser UserAccount { get; set; }
+        public string UserId { get; set; }
     }
 }
  

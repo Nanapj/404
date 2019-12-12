@@ -249,6 +249,7 @@
     <Compile Include="Areas\Api\Controllers\EventsController.cs" />
     <Compile Include="Areas\Api\Controllers\EventTypesController.cs" />
     <Compile Include="Areas\Api\Controllers\InteractionHistoriesController.cs" />
+    <Compile Include="Areas\Api\Controllers\ODataBaseController.cs" />
     <Compile Include="Areas\Api\Controllers\ProductTypesController.cs" />
     <Compile Include="Areas\Api\Controllers\ReminderNotesController.cs" />
     <Compile Include="Areas\Api\Controllers\StaffsController.cs" />
@@ -324,6 +325,7 @@
     <Folder Include="Areas\Api\Views\Events\" />
     <Folder Include="Areas\Api\Views\EventTypes\" />
     <Folder Include="Areas\Api\Views\InteractionHistorys\" />
+    <Folder Include="Areas\Api\Views\ODataBase\" />
     <Folder Include="Areas\Api\Views\ProductType\" />
     <Folder Include="Areas\Api\Views\ReminderNotes\" />
     <Folder Include="Areas\Api\Views\Shared\" />

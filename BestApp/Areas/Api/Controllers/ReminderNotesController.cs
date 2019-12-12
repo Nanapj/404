@@ -17,7 +17,7 @@ using static BestApp.Services.ReminderNoteService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class ReminderNotesController : ODataController
+    public class ReminderNotesController : ODataBaseController
     {
         private readonly IReminderNoteService _reminderNoteService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
@@ -35,10 +35,7 @@ namespace BestApp.Areas.Api.Controllers
         [EnableQuery]
         public async Task<IQueryable<ReminderNoteViewModel>> Get()
         {
-            var test = HttpContext.Current.User.Identity.GetUserId();
-            DataContext d = new DataContext();
-            DbSet t = d.Set<ApplicationUser>();
-            var test2 = t.Find(test); 
+           
             return await _reminderNoteService.GetAllReminderNotesAsync();
         }
         [HttpPost]
@@ -51,6 +48,8 @@ namespace BestApp.Areas.Api.Controllers
 
             try
             {
+                //ApplicationUser test = GetCurrentUser();
+                //model.UserAccount = test;
                 var stf = await _reminderNoteService.InsertAsync(model);
                 _unitOfWorkAsync.Commit();
                 var resultObject = new ReminderNoteViewModel()

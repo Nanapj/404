@@ -19,10 +19,10 @@ namespace Repository.Pattern
         private DataContext _context;
         private DbSet<TEntity> _dbSet;
 
-        public Repository(IDataContext context)
+        public Repository(DataContext context)
         {
-            _context = context as DataContext;
-            _dbSet = _context.Set<TEntity>();
+            _context = context;
+            _dbSet = context.Set<TEntity>();
         }
 
         public virtual TEntity Find(object Id)
