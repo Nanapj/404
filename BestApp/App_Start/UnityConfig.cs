@@ -45,9 +45,7 @@ namespace BestApp
             // e.g. container.RegisterType<ITestService, TestService>();
             container
                 .RegisterType(typeof(IRepositoryAsync<>), typeof(Repository<>))
-                .RegisterType(typeof(IRepository<>), typeof(Repository<>))
                 .RegisterType<DbContext, DataContext>(new HierarchicalLifetimeManager())
-                .RegisterType<IDataContext, DataContext>(new HierarchicalLifetimeManager())
                 .RegisterType<IUnitOfWorkAsync, UnitOfWork>(new HierarchicalLifetimeManager())
                 .RegisterType<ICatService, CatService>()
                 .RegisterType<IStaffService, StaffService>()
