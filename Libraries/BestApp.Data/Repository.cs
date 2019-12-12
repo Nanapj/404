@@ -16,13 +16,13 @@ namespace Repository.Pattern
         IRepository<TEntity>, 
         IRepositoryAsync<TEntity> where TEntity : class
     {
-        private DataContext _context;
+        private DbContext _context;
         private DbSet<TEntity> _dbSet;
 
-        public Repository(DataContext context)
+        public Repository(DbContext context)
         {
             _context = context;
-            _dbSet = context.Set<TEntity>();
+            _dbSet = _context.Set<TEntity>();
         }
 
         public virtual TEntity Find(object Id)

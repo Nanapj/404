@@ -12,7 +12,7 @@ using static BestApp.Services.CatService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class CatsController : ODataController
+    public class CatsController : ODataBaseController
     {
         private readonly ICatService _customerService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
@@ -27,6 +27,7 @@ namespace BestApp.Areas.Api.Controllers
         [EnableQuery]
         public async Task<IQueryable<Cat>> Get()
         {
+            ApplicationUser test = GetCurrentUser();
             return await _customerService.GetAllCatsAsync();
         }
 

@@ -11,10 +11,9 @@ using System.Data.Entity;
 using System.Web.Http;
 using System.Web.Mvc;
 using Unity;
-using Unity.Mvc5;
 using Unity.Injection;
 using Unity.Lifetime;
-using Unity.WebApi;
+using Unity.Mvc5;
 using static BestApp.Services.CatService;
 using static BestApp.Services.CityService;
 using static BestApp.Services.CustomerService;
@@ -46,6 +45,7 @@ namespace BestApp
             container
                 .RegisterType(typeof(IRepositoryAsync<>), typeof(Repository<>))
                 .RegisterType<DbContext, DataContext>(new HierarchicalLifetimeManager())
+                //.RegisterType<IDataContext, DataContext>(new HierarchicalLifetimeManager())
                 .RegisterType<IUnitOfWorkAsync, UnitOfWork>(new HierarchicalLifetimeManager())
                 .RegisterType<ICatService, CatService>()
                 .RegisterType<IStaffService, StaffService>()
@@ -68,7 +68,7 @@ namespace BestApp
                 .RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>(new HierarchicalLifetimeManager())
                 .RegisterType<ManageController>(new InjectionConstructor());
 
-            DependencyResolver.SetResolver(new Unity.Mvc5.UnityDependencyResolver(container));
+            DependencyResolver.SetResolver(new UnityDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);
         }
     }

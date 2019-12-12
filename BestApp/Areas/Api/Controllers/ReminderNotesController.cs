@@ -1,13 +1,8 @@
-﻿using BestApp.Core.Models;
-using BestApp.Domain;
-using Microsoft.AspNet.Identity;
+﻿using BestApp.Domain;
 using Microsoft.AspNet.OData;
-using Repository.Pattern;
-using Repository.Repositories;
 using Repository.UnitOfWork;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -21,23 +16,22 @@ namespace BestApp.Areas.Api.Controllers
     {
         private readonly IReminderNoteService _reminderNoteService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
-        private readonly IRepository<ApplicationUser> _userRepository;
-        // GET: Api/Tags
+
         public ReminderNotesController(IReminderNoteService reminderNoteService,
-            IUnitOfWorkAsync unitOfWorkAsync,
-            IRepository<ApplicationUser> userRepository)
+            IUnitOfWorkAsync unitOfWorkAsync)
         {
             _reminderNoteService = reminderNoteService;
             _unitOfWorkAsync = unitOfWorkAsync;
-            _userRepository = userRepository;
         }
+
         [HttpGet]
         [EnableQuery]
         public async Task<IQueryable<ReminderNoteViewModel>> Get()
         {
-           
+            //ApplicationUser test = GetCurrentUser();
             return await _reminderNoteService.GetAllReminderNotesAsync();
         }
+
         [HttpPost]
         public async Task<IHttpActionResult> Post(ReminderNoteViewModel model)
         {

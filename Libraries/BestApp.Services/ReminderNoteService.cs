@@ -29,19 +29,14 @@ namespace BestApp.Services
         }
         private readonly EventService _eventService;
         private readonly IRepositoryAsync<ReminderNote> _repository;
-        private readonly IRepository<ApplicationUser> _userRepository;
-        protected UserManager<ApplicationUser> userManager;
         public ReminderNoteService(IRepositoryAsync<ReminderNote> repository,
-            IRepository<ApplicationUser> userRepository,
             EventService eventService) : base(repository)
         {
             _repository = repository;
-            _userRepository = userRepository;
             _eventService = eventService;
         }
         public IQueryable<ReminderNoteViewModel> GetAllReminderNotes()
         {
-            var t = HttpContext.Current.User.Identity.GetUserId();
             return _repository.Queryable().Where(x => x.Delete == false)
             .Select(x => new ReminderNoteViewModel()
             {
@@ -64,13 +59,11 @@ namespace BestApp.Services
             data.Note = model.Note;
             data.UserAccount = model.UserAccount;
             data.Event = _eventService.Find(model.EventID);
-            //data.UserAccount = employee;
             data.ReminderDate = model.ReminderDate;
             data.Serial = model.Serial;
             data.CreatDate = DateTime.Now;
             data.Delete = false;
             data.LastModifiedDate = DateTime.Now;
-            //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
             base.Insert(data);
             return data;
         }
