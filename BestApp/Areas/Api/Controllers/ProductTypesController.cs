@@ -12,7 +12,7 @@ using static BestApp.Services.ProductTypeService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class ProductTypesController : ODataController
+    public class ProductTypesController : ODataBaseController
     {
         private readonly IProductTypeService _productTypeService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
@@ -38,7 +38,7 @@ namespace BestApp.Areas.Api.Controllers
 
             try
             {
-                var stf = await _productTypeService.InsertAsync(model);
+                var stf = await _productTypeService.InsertAsync(model, GetCurrentUser());
                 var resultObject = new ProductTypeViewModel()
                 {
                     Name = stf.Name,

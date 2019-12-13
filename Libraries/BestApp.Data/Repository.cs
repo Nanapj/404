@@ -16,12 +16,12 @@ namespace Repository.Pattern
         IRepository<TEntity>, 
         IRepositoryAsync<TEntity> where TEntity : class
     {
-        private DbContext _context;
+        private DataContext _context;
         private DbSet<TEntity> _dbSet;
 
-        public Repository(DbContext context)
+        public Repository(IDataContext context)
         {
-            _context = context;
+            _context = context as DataContext;
             _dbSet = _context.Set<TEntity>();
         }
 

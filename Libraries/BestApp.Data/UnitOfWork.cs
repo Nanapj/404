@@ -15,13 +15,13 @@ namespace Repository.Pattern
 {
     public class UnitOfWork : IUnitOfWorkAsync
     {
-        private readonly DbContext _context;
+        private readonly DataContext _context;
         protected DbTransaction Transaction;
         protected Dictionary<string, dynamic> Repositories;
 
-        public UnitOfWork(DbContext context)
+        public UnitOfWork(IDataContext context)
         {
-            _context = context;
+            _context = context as DataContext;
             Repositories = new Dictionary<string, dynamic>();
         }
 

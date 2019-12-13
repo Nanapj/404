@@ -43,10 +43,17 @@ namespace BestApp
 
             // e.g. container.RegisterType<ITestService, TestService>();
             container
+                .RegisterType(typeof(IRepository<>), typeof(Repository<>))
                 .RegisterType(typeof(IRepositoryAsync<>), typeof(Repository<>))
                 .RegisterType<DbContext, DataContext>(new HierarchicalLifetimeManager())
-                //.RegisterType<IDataContext, DataContext>(new HierarchicalLifetimeManager())
+                .RegisterType<IDataContext, DataContext>(new HierarchicalLifetimeManager())
                 .RegisterType<IUnitOfWorkAsync, UnitOfWork>(new HierarchicalLifetimeManager())
+                .RegisterType<UserManager<ApplicationUser>>(new HierarchicalLifetimeManager())
+                .RegisterType<AccountController>(new InjectionConstructor())
+                .RegisterType<ApplicationUserManager>(new HierarchicalLifetimeManager())
+                .RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>(new HierarchicalLifetimeManager())
+                .RegisterType<ManageController>(new InjectionConstructor())
+
                 .RegisterType<ICatService, CatService>()
                 .RegisterType<IStaffService, StaffService>()
                 .RegisterType<IDepartmentService, DepartmentService>()
@@ -61,12 +68,7 @@ namespace BestApp
                 .RegisterType<IWardService, WardService>()
                 .RegisterType<ICityService, CityService>()
                 .RegisterType<IEventTypeService, EventTypeService>()
-                .RegisterType<IEventPurposeService, EventPurposeService>()
-                .RegisterType<UserManager<ApplicationUser>>(new HierarchicalLifetimeManager())
-                .RegisterType<AccountController>(new InjectionConstructor())
-                .RegisterType<ApplicationUserManager>(new HierarchicalLifetimeManager())
-                .RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>(new HierarchicalLifetimeManager())
-                .RegisterType<ManageController>(new InjectionConstructor());
+                .RegisterType<IEventPurposeService, EventPurposeService>();
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);

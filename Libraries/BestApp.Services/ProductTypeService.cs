@@ -1,7 +1,6 @@
 ﻿using BestApp.Core.Models;
 using BestApp.Domain;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Repository.Pattern;
 using Repository.Repositories;
 using Service;
@@ -11,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using static BestApp.Services.ProductTypeService;
 
 namespace BestApp.Services
@@ -19,40 +19,35 @@ namespace BestApp.Services
     {
         public interface IProductTypeService : IService<ProductType>
         {
-            ProductType Insert(ProductTypeViewModel model);
-            Task<ProductType> InsertAsync(ProductTypeViewModel model);
+            ProductType Insert(ProductTypeViewModel model, string CurrentId);
+            Task<ProductType> InsertAsync(ProductTypeViewModel model, string CurrentId);
             Task<ProductTypeViewModel> UpdateAsync(ProductTypeViewModel model);
             Task<IQueryable<ProductTypeViewModel>> GetAllProductTypesAsync(SearchViewModel model);
             IQueryable<ProductTypeViewModel> GetAllProductTypes();
             bool Delete(Guid Id);
         }
-        private readonly IRepositoryAsync<ProductType> _repository;
-        private readonly IRepository<ApplicationUser> _userRepository;
-        protected readonly DataContext db;
-        protected UserManager<ApplicationUser> userManager;
-        public ProductTypeService(IRepositoryAsync<ProductType> repository) : base(repository)
-        {
-            _repository = repository;
-            db = new DataContext();
-            userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
+        private readonly IRepositoryAsync<ApplicationUser> _userRepository;
+
+        public ProductTypeService(IRepositoryAsync<ProductType> repository, IRepositoryAsync<ApplicationUser> userRepository) : base(repository)
+        {
+            _userRepository = userRepository;   
         }
         public IQueryable<ProductTypeViewModel> GetAllProductTypes()
         {
-            return _repository.Queryable().Where(x => x.Delete == false)
+            return Queryable().Where(x => x.Delete == false)
             .Select(x => new ProductTypeViewModel()
             {
                 ID = x.Id,
                 Name = x.Name,
                 Code = x.Code
-
             });
         }
         public Task<IQueryable<ProductTypeViewModel>> GetAllProductTypesAsync(SearchViewModel model)
         {
             return Task.Run(() => GetAllProductTypes());
         }
-        public ProductType Insert(ProductTypeViewModel model)
+        public ProductType Insert(ProductTypeViewModel model, string CurrentId)
         {
             var find = Queryable().Where(x => x.Code == model.Code && x.Delete == false).FirstOrDefault();
             if (find != null)
@@ -66,15 +61,15 @@ namespace BestApp.Services
                 data.Name = model.Name;
                 data.CreatDate = DateTime.Now;
                 data.Delete = false;
+                data.UserAccount = _userRepository.Find(CurrentId);
                 data.LastModifiedDate = DateTime.Now;
-                //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
                 base.Insert(data);
                 return data;
             }
         }
-        public async Task<ProductType> InsertAsync(ProductTypeViewModel model)
+        public async Task<ProductType> InsertAsync(ProductTypeViewModel model, string CurrentId)
         {
-            return await Task.Run(() => Insert(model));
+            return await Task.Run(() => Insert(model, CurrentId));
         }
         public bool Update(ProductTypeViewModel model)
         {

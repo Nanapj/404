@@ -22,6 +22,7 @@ namespace BestApp.Areas.Api.Controllers
         {
             _reminderNoteService = reminderNoteService;
             _unitOfWorkAsync = unitOfWorkAsync;
+            var test = GetCurrentUser();
         }
 
         [HttpGet]

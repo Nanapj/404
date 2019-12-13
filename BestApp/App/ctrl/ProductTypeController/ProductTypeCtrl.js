@@ -46,7 +46,7 @@ angular.module('app')
                              method: 'DELETE',
                              url: _url+'(' + vm.selectedProductType.ID +')',
                              headers: {
-                                 'Content-Type': 'application/json',
+                                 'Content-Type': 'application/json; charset=utf-8',
                                  'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
                              },
                          }).then(function successCallback(response) {
@@ -54,8 +54,6 @@ angular.module('app')
                             $('#producttypegrid').data('kendoGrid').refresh();
                              toaster.pop('success', "Thành công", "Đã xóa thông tin loại sản phẩm");
                          });
-                   
-                   } else {
                    
                    }
                 });
@@ -76,9 +74,9 @@ angular.module('app')
                     method: 'POST',
                     data: JSON.stringify(vm.model),
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json; charset=utf-8',
                         'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
-                    },
+                    }
                 }).then(function(response){
                     if(response.status == 201) {
                         toaster.pop('success', "Thành công", "Đã tạo thông tin loại sản phẩm");

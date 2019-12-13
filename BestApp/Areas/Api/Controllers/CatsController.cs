@@ -27,7 +27,6 @@ namespace BestApp.Areas.Api.Controllers
         [EnableQuery]
         public async Task<IQueryable<Cat>> Get()
         {
-            ApplicationUser test = GetCurrentUser();
             return await _customerService.GetAllCatsAsync();
         }
 
