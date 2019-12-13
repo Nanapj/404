@@ -419,16 +419,19 @@ angular.module('app')
                 vm.eventReminders.push(vm.selectedEvent.ReminderNotes[i]);
             }
             var reminderDatasource = new kendo.data.DataSource({
-                data: vm.eventReminders,
+                type: 'odata-v4',
+                transport: {
+                    read: _reminderNoteURL + "?$filter=EventID eq "+ vm.selectedEvent.ID
+                },
                 schema: {
                     parse: function(response) {
                         var reminders =[];
-                        for (var i = 0; i < response.length; i++) {
-                            var createDateNotTime = new Date(response[i].CreatDate);
-                            var reminderDateNoTime = new Date(response[i].ReminderDate);
+                        for (var i = 0; i < response.value.length; i++) {
+                            var createDateNotTime = new Date(response.value[i].CreatDate);
+                            var reminderDateNoTime = new Date(response.value[i].ReminderDate);
                             var reminder = {
-                                ID: response[i].ID,
-                                Note: response[i].Note,
+                                ID: response.value[i].ID,
+                                Note: response.value[i].Note,
                                 CreatDate:  new Date(
                                     createDateNotTime.getFullYear(),
                                     createDateNotTime.getMonth(),
@@ -508,17 +511,19 @@ angular.module('app')
             });
             $('#timeline').data('kendoTimeline').setDataSource(historyTimelineData);
             $('#timeline').data('kendoTimeline').dataSource.read();
-            $('#historyGrid').data('kendoGrid').dataSource.options.transport.read.url = _eventDetailURL + "?$filter=EventID eq "+vm.selectedEvent.ID;
-            $("#historyGrid").data("kendoGrid").dataSource.read();
-            $("#historyGrid").data("kendoGrid").refresh();
+            $('#historyGrid').data('kendoGrid').setDataSource(reminderDatasource);
+            $("#historyGrid").data("kendoGrid").dataSource.read().then(function (){
+                $("#historyGrid").data("kendoGrid").refresh();
+            });
+           
             console.log(vm.eventDetailList);
         }
         $scope.historyReOption = {
                 dataSource: {
-                type: 'odata-v4',
-                transport: {
-                    read: _eventDetailURL
-                },
+                    type: 'odata-v4',
+                    transport: {
+                        read: _reminderNoteURL
+                    },
                 schema: {
                     parse: function(response) {
                         var reminders =[];
