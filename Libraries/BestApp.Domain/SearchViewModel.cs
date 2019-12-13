@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BestApp.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,5 @@ namespace BestApp.Domain
         public string Code { get; set; }
         public DateTime? From { get; set; }
         public DateTime? To { get; set; }
-        
     }
 }

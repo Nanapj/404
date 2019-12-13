@@ -10,6 +10,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BestApp.Models;
 using BestApp.Core.Models;
+using Repository.DataContext;
+using Repository.Pattern;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace BestApp.Controllers
 {
@@ -18,15 +21,20 @@ namespace BestApp.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
+        protected readonly DataContext db;
+        protected UserManager<ApplicationUser> userManager;
+
         public AccountController()
         {
+            db = new DataContext();
+            userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-        }
+        //public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        //{
+        //    UserManager = userManager;
+        //    SignInManager = signInManager;
+        //}
 
         public ApplicationSignInManager SignInManager
         {
