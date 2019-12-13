@@ -11,15 +11,22 @@ namespace BestApp.Areas.Api.Controllers
     public class ODataBaseController : ODataController
     {
         private readonly string CURRENT_USER_ID;
+        private readonly string CURRENT_USER_NAME;
 
         public ODataBaseController()
         {
             CURRENT_USER_ID = HttpContext.Current.User.Identity.GetUserId();
+            CURRENT_USER_NAME = HttpContext.Current.User.Identity.GetUserName();
         }
 
-        protected string GetCurrentUser()
+        protected string GetCurrentUserID()
         {
             return this.CURRENT_USER_ID;
+        }
+
+        protected string GetCurrentUserName()
+        {
+            return this.CURRENT_USER_NAME;
         }
     }
 }

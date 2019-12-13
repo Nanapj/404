@@ -38,7 +38,7 @@ namespace BestApp.Areas.Api.Controllers
 
             try
             {
-                var stf = await _productTypeService.InsertAsync(model, GetCurrentUser());
+                var stf = await _productTypeService.InsertAsync(model, GetCurrentUserID());
                 var resultObject = new ProductTypeViewModel()
                 {
                     Name = stf.Name,
