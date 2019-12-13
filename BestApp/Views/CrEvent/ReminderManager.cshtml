@@ -72,31 +72,43 @@
             <div class="col-md-12">
                 <div id="eventGrid"
                      kendo-grid
-                     k-options="mainGridOptions"
+                     k-options="reminderGridOption"
                      k-selectable="true"
                      k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
             </div>
-            <div id="details">
-                <div id="windowTabstrip">
+            <div kendo-window="win1"
+                 id="detailWindow"
+                 ng-show="reminderShowWindow"
+                 k-title="'Chi tiết lịch hẹn'"
+                 k-on-open="win1visible = true"
+                 k-on-close="win1visible = false">
+                <div kendo-tab-strip k-content-urls="[ null, null]">
+                    <!-- tab list -->
                     <ul>
-                        <li class="k-state-active">
-                            Lịch sử hẹn
-                        </li>
-                        <li>
-                            Timeline
-                        </li>
+                        <li class="k-state-active">Lịch sử hẹn</li>
+                        <li>Timeline lịch sử</li>
                     </ul>
-                    <div>
-                        <div id="reminderDetails">
-                        </div>
-                        
+
+                    <div style="padding: 1em">
+                        <div id="historyGrid"
+                             kendo-grid
+                             k-options="historyReOption"
+                             k-selectable="true"
+                             k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
                     </div>
-                    <div>
+
+                    <div style="padding: 1em">
                         <div id="timeline"></div>
                     </div>
                 </div>
             </div>
-            <div id="newScheduleWindow">
+            <div 
+                 kendo-window="win2" 
+                 k-title="'Thêm lịch hẹn'" 
+                 id="scheduleWindow"
+                 ng-show="newReminderShowWindow"
+                 k-on-open="win2visible = true" 
+                 k-on-close="win2visible = false">
                 <form role="form">
                     <div class="form-group">
                         <label>Lịch hẹn:</label>
@@ -110,7 +122,7 @@
                                   style="width: 100%; height: 6em; resize:none;"
                                   ng-model="newReminderNote"></textarea>
                     </div>
-                    <button id="createReminderButton" class="btn btn-success btn-default" >Tạo lịch hẹn</button>
+                    <button id="createReminderButton" class="btn btn-success btn-default">Tạo lịch hẹn</button>
                 </form>
             </div>
         </div>
