@@ -158,7 +158,7 @@ angular.module('app')
             console.log(vm.newReminderDate);
             console.log(angular.element('#newReminderNoteText').val());
         }
-        document.getElementById("createReminderButton").addEventListener("click", function(){
+        document.getElementById("createReminderButton").addEventListener("click", function(e){
             e.preventDefault();
             console.log(vm.newReminderDate);
             console.log(angular.element('#newReminderNoteText').val());
@@ -187,7 +187,9 @@ angular.module('app')
                     if(response.status == 201) {
                         toaster.pop('success', "Thành công", "Đã tạo lịch hẹn thành công");
                         vm.newReminderDate = new Date();
-                        angular.element('#newReminderNoteText').val() = "";
+                        vm.newReminderShowWindow = false;
+                        $("#historyGrid").data("kendoGrid").dataSource.read();
+                        $("#historyGrid").data("kendoGrid").refresh();
                         scheduleWindow.data("kendoWindow").close();
                     }
                 });
@@ -391,6 +393,7 @@ angular.module('app')
             console.log(vm.selectedEvent.ReminderNotes);
         }
         function updateGrid() {
+         
             if(vm.eventDetailList.length > 0) {
                 vm.eventDetailList = [];
             }
@@ -505,14 +508,17 @@ angular.module('app')
             });
             $('#timeline').data('kendoTimeline').setDataSource(historyTimelineData);
             $('#timeline').data('kendoTimeline').dataSource.read();
-            $('#historyGrid').data('kendoGrid').setDataSource(reminderDatasource);
+            $('#historyGrid').data('kendoGrid').dataSource.options.transport.read.url = _eventDetailURL + "?$filter=EventID eq "+vm.selectedEvent.ID;
             $("#historyGrid").data("kendoGrid").dataSource.read();
             $("#historyGrid").data("kendoGrid").refresh();
             console.log(vm.eventDetailList);
         }
         $scope.historyReOption = {
                 dataSource: {
-                data: vm.eventReminders,
+                type: 'odata-v4',
+                transport: {
+                    read: _eventDetailURL
+                },
                 schema: {
                     parse: function(response) {
                         var reminders =[];
