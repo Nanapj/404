@@ -1,7 +1,6 @@
 ﻿using BestApp.Core.Models;
 using BestApp.Domain;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Repository.Pattern;
 using Repository.Repositories;
 using Service;
@@ -20,8 +19,8 @@ namespace BestApp.Services
     {
         public interface IProductTypeService : IService<ProductType>
         {
-            ProductType Insert(ProductTypeViewModel model);
-            Task<ProductType> InsertAsync(ProductTypeViewModel model);
+            ProductType Insert(ProductTypeViewModel model, string CurrentId);
+            Task<ProductType> InsertAsync(ProductTypeViewModel model, string CurrentId);
             Task<ProductTypeViewModel> UpdateAsync(ProductTypeViewModel model);
             Task<IQueryable<ProductTypeViewModel>> GetAllProductTypesAsync(SearchViewModel model);
             IQueryable<ProductTypeViewModel> GetAllProductTypes();
@@ -48,7 +47,7 @@ namespace BestApp.Services
         {
             return Task.Run(() => GetAllProductTypes());
         }
-        public ProductType Insert(ProductTypeViewModel model)
+        public ProductType Insert(ProductTypeViewModel model, string CurrentId)
         {
             var find = Queryable().Where(x => x.Code == model.Code && x.Delete == false).FirstOrDefault();
             if (find != null)
@@ -62,15 +61,15 @@ namespace BestApp.Services
                 data.Name = model.Name;
                 data.CreatDate = DateTime.Now;
                 data.Delete = false;
-                //data.UserAccount = _userRepository.Find(System.Web.HttpContext.Current.User.Identity.GetUserId());
+                data.UserAccount = _userRepository.Find(CurrentId);
                 data.LastModifiedDate = DateTime.Now;
                 base.Insert(data);
                 return data;
             }
         }
-        public async Task<ProductType> InsertAsync(ProductTypeViewModel model)
+        public async Task<ProductType> InsertAsync(ProductTypeViewModel model, string CurrentId)
         {
-            return await Task.Run(() => Insert(model));
+            return await Task.Run(() => Insert(model, CurrentId));
         }
         public bool Update(ProductTypeViewModel model)
         {
