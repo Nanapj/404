@@ -10,7 +10,7 @@ angular.module('app')
                 transport: {
                     read: _cusURL
                 },
-                pageSize: 20,
+                pageSize: 19,
                 serverPaging: true,
                 serverSorting: true
             },
@@ -19,6 +19,7 @@ angular.module('app')
             filterable: {
                 extra: false
             },
+            selectable: true,
             height: 700,
             serverFiltering: true,
             dataBound: function() {
@@ -67,39 +68,6 @@ angular.module('app')
                 width: "120px"
                 }
             ]
-        };
-
-        $scope.detailGridOptions = function(dataItem) {
-            return {
-                dataSource: {
-                    type: "odata-v4",
-                    transport: {
-                        read: _eventURL
-                    },
-                    serverPaging: true,
-                    serverSorting: true,
-                    serverFiltering: true,
-                    pageSize: 10,
-                    filter: { field: "ID", operator: "eq", value: dataItem.CustomerID }
-                },
-                scrollable: false,
-                sortable: true,
-                pageable: true,
-                selectable: true,
-                filterable: {
-                    extra: false
-                },
-                serverFiltering: true,
-                columns: [
-                { field: "ID", hidden: true},
-                { field: "Code", title:"Mã sự kiện", width: "110px" },
-                { field: "CreatDate",  
-                  format: "{0:yyyy-MM-dd hh:mm:ss tt}",
-                  parseFormats: ["dd/MM/yyyy h:mm:ss"], 
-                title:"Ngày tạo phiếu" },
-                { field: "TypeEvent", title: "Loại sự kiện", width: "190px" }
-                ]
-            };
         };
     }
 ]);

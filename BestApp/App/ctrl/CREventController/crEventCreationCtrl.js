@@ -1041,7 +1041,7 @@ angular.module('app')
             if(vm.reminderCRDetails.ReminderDate == undefined || vm.reminderCRDetails.ReminderDate !=="" ){
                 toaster.pop('error', "Ngày hẹn", "Vui lòng chọn ngày hẹn");
             }
-            var time = moment(vm.eventCRDetails.DateSold).format('YYYY-MM-DDTHH:mm:ss');
+            var time = moment(compareDate(vm.eventCRDetails.DateSold)).format('YYYY-MM-DDTHH:mm:ss');
             time+='Z';
             var json = JSON.stringify( vm.crtagSelectected, function( key, value ) {
                 if( key === "$$hashKey" ) {
