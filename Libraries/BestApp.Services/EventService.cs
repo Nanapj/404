@@ -21,8 +21,8 @@ namespace BestApp.Services
     {
         public interface IEventService : IService<Event>
         {
-            Event Insert(EventViewModel model);
-            Task<Event> InsertAsync(EventViewModel model);
+            Event Insert(EventViewModel model, string CurrentId);
+            Task<Event> InsertAsync(EventViewModel model, string CurrentId);
             Task<EventViewModel> UpdateAsync(EventViewModel model);
             Task<IQueryable<EventViewModel>> GetAllEventsAsync(SearchViewModel model);
             IQueryable<EventViewModel> GetAllEvents(SearchViewModel model);
@@ -151,7 +151,7 @@ namespace BestApp.Services
             return Task.Run(() => GetAllEvents(model));
             
         }
-        public Event Insert(EventViewModel model)
+        public Event Insert(EventViewModel model, string CurrentId)
         {
             var data = new Event();
             Random generator = new Random();
@@ -168,8 +168,8 @@ namespace BestApp.Services
             data.Code = CodeEvent;
             data.Customer = _customerService.Find(model.CustomerID);
             data.Status = model.Status;
-            data.EmployeeID = model.CustomerID;
             data.EventPurposeId = model.EventPurposeID;
+            data.UserAccount = _userRepository.Find(CurrentId);
             data.EventTypeId = model.EventTypeID;
             data.Note = model.Note;
                 
@@ -189,6 +189,7 @@ namespace BestApp.Services
                         ProductType = _productTypeService.Find(item.ProductID),
                         CreatDate = DateTime.Now,
                         LastModifiedDate = DateTime.Now,
+                        UserAccount = _userRepository.Find(CurrentId),
                         Delete = false
                     });
                 }
@@ -202,6 +203,7 @@ namespace BestApp.Services
                     if (t != null)
                     {
                         data.Tags.Add(t);
+                        data.UserAccount = _userRepository.Find(CurrentId);
                     }
                 }
             }
@@ -217,6 +219,7 @@ namespace BestApp.Services
                         CreatDate = DateTime.Now,
                         LastModifiedDate = DateTime.Now,
                         Note = item.Note,
+                        UserAccount = _userRepository.Find(CurrentId),
                     });
                 }
             }
@@ -234,6 +237,7 @@ namespace BestApp.Services
                         EmployeeID = item.EmployeeID,
                         CreatDate = DateTime.Now,
                         LastModifiedDate = DateTime.Now,
+                        UserAccount = _userRepository.Find(CurrentId),
                         Delete = false
                     });
                 }
@@ -247,9 +251,9 @@ namespace BestApp.Services
             
 
         }
-        public async Task<Event> InsertAsync(EventViewModel model)
+        public async Task<Event> InsertAsync(EventViewModel model, string CurrentId)
         {
-            return await Task.Run(() => Insert(model));
+            return await Task.Run(() => Insert(model, CurrentId));
         }
         public bool Update(EventViewModel model)
         {

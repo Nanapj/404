@@ -19,9 +19,9 @@ namespace BestApp.Services
     {
         public interface IEventTypeService : IService<EventType>
         {
-            EventType Insert(EventTypeViewModel model);
+            EventType Insert(EventTypeViewModel model, string CurrentId);
             Task<IQueryable<EventTypeViewModel>> GetAllEventTypesAsync();
-            Task<EventType> InsertAsync(EventTypeViewModel model);
+            Task<EventType> InsertAsync(EventTypeViewModel model, string CurrentId);
             IQueryable<EventTypeViewModel> GetAllEventTypes();
             Task<EventTypeViewModel> UpdateAsync(EventTypeViewModel model);
             bool Delete(Guid Id);
@@ -56,7 +56,7 @@ namespace BestApp.Services
         {
             return Task.Run(() => GetAllEventTypes());
         }
-        public EventType Insert(EventTypeViewModel model)
+        public EventType Insert(EventTypeViewModel model, string CurrentId)
         {
             var find = Queryable().Where(x => x.Name == model.Name && x.Delete == false).FirstOrDefault();
             if (find != null)
@@ -68,6 +68,7 @@ namespace BestApp.Services
                 var data = new EventType();
                 data.Name = model.Name;
                 data.CreatDate = DateTime.Now;
+                data.UserAccount = _userRepository.Find(CurrentId);
                 data.Delete = false;
                 data.LastModifiedDate = DateTime.Now;
                 //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
@@ -75,9 +76,9 @@ namespace BestApp.Services
                 return data;
             }
         }
-        public async Task<EventType> InsertAsync(EventTypeViewModel model)
+        public async Task<EventType> InsertAsync(EventTypeViewModel model, string CurrentId)
         {
-            return await Task.Run(() => Insert(model));
+            return await Task.Run(() => Insert(model, CurrentId));
         }
         public bool Update(EventTypeViewModel model)
         {

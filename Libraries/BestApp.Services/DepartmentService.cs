@@ -21,9 +21,9 @@ namespace BestApp.Services
         public interface IDepartmentService : IService<Department>
         {
             //IQueryable<Department> GetAllStaffs();
-            Department Insert(DepartmentViewModel model);
+            Department Insert(DepartmentViewModel model, string CurrentId);
             Task<IQueryable<DepartmentViewModel>> GetAllDepartmentsAsync();
-            Task<Department> InsertAsync(DepartmentViewModel model);
+            Task<Department> InsertAsync(DepartmentViewModel model, string CurrentId);
             IQueryable<DepartmentViewModel> GetAllDepartments();
             Task<DepartmentViewModel> UpdateAsync(DepartmentViewModel model);
             bool Delete(Guid Id);
@@ -60,7 +60,7 @@ namespace BestApp.Services
         {
             return Task.Run(() => GetAllDepartments());
         }
-        public Department Insert(DepartmentViewModel model)
+        public Department Insert(DepartmentViewModel model, string CurrentId)
         {
             var find = Queryable().Where(x => x.Name == model.Name).FirstOrDefault();
             if (find != null)
@@ -75,6 +75,7 @@ namespace BestApp.Services
                 data.CreatDate = DateTime.Now;
                 data.Delete = false;
                 data.LastModifiedDate = DateTime.Now;
+                data.UserAccount = _userRepository.Find(CurrentId);
                 //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
 
 
@@ -130,9 +131,9 @@ namespace BestApp.Services
         }
 
         
-        public async Task<Department> InsertAsync(DepartmentViewModel model)
+        public async Task<Department> InsertAsync(DepartmentViewModel model, string CurrentId)
         {
-            return await Task.Run(() => Insert(model));
+            return await Task.Run(() => Insert(model, CurrentId));
         }
 
     }

@@ -19,8 +19,8 @@ namespace BestApp.Services
     {
         public interface ITagService : IService<Tag>
         {
-            Tag Insert(TagViewModel model);
-            Task<Tag> InsertAsync(TagViewModel model);
+            Tag Insert(TagViewModel model, string CurrentId);
+            Task<Tag> InsertAsync(TagViewModel model, string CurrentId);
             Task<TagViewModel> UpdateAsync(TagViewModel model);
             Task<IQueryable<TagViewModel>> GetAllTagsAsync();
             IQueryable<TagViewModel> GetAllTags();
@@ -58,7 +58,7 @@ namespace BestApp.Services
         {
             return Task.Run(() => GetAllTags());
         }
-        public Tag Insert(TagViewModel model)
+        public Tag Insert(TagViewModel model, string CurrentId)
         {
             var find = Queryable().Where(x => x.NameTag == model.NameTag && x.Departments.Id == model.DepartmentID).FirstOrDefault();
             if (find != null)
@@ -73,6 +73,7 @@ namespace BestApp.Services
                 data.CodeTag = model.CodeTag;
                 data.Status = Core.Enum.StatusTag.New;
                 data.Departments = _departmentService.Find(model.DepartmentID);
+                data.UserAccount = _userRepository.Find(CurrentId);
                 data.CreatDate = DateTime.Now;
                 data.Delete = false;
                 data.LastModifiedDate = DateTime.Now;
@@ -82,9 +83,9 @@ namespace BestApp.Services
             }
 
         }
-        public async Task<Tag> InsertAsync(TagViewModel model)
+        public async Task<Tag> InsertAsync(TagViewModel model, string CurrentId)
         {
-            return await Task.Run(() => Insert(model));
+            return await Task.Run(() => Insert(model, CurrentId));
         }
         public bool Update(TagViewModel model)
         {

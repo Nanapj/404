@@ -19,8 +19,8 @@ namespace BestApp.Services
     {
         public interface IEventPurposeService : IService<EventPurpose>
         {
-            EventPurpose Insert(EventPurposeViewModel model);
-            Task<EventPurpose> InsertAsync(EventPurposeViewModel model);
+            EventPurpose Insert(EventPurposeViewModel model, string CurrentId);
+            Task<EventPurpose> InsertAsync(EventPurposeViewModel model, string CurrentId);
             Task<EventPurposeViewModel> UpdateAsync(EventPurposeViewModel model);
             Task<IQueryable<EventPurposeViewModel>> GetAllEventPurposesAsync();
             IQueryable<EventPurposeViewModel> GetAllEventPurposes();
@@ -56,7 +56,7 @@ namespace BestApp.Services
         {
             return Task.Run(() => GetAllEventPurposes());
         }
-        public EventPurpose Insert(EventPurposeViewModel model)
+        public EventPurpose Insert(EventPurposeViewModel model, string CurrentId)
         {
             var find = Queryable().Where(x => x.Name == model.Name && x.EventType.Id == model.EventTypeID).FirstOrDefault();
             if (find != null)
@@ -72,15 +72,15 @@ namespace BestApp.Services
                 data.CreatDate = DateTime.Now;
                 data.Delete = false;
                 data.LastModifiedDate = DateTime.Now;
-                //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
+                data.UserAccount = _userRepository.Find(CurrentId);
                 base.Insert(data);
                 return data;
             }
 
         }
-        public async Task<EventPurpose> InsertAsync(EventPurposeViewModel model)
+        public async Task<EventPurpose> InsertAsync(EventPurposeViewModel model, string CurrentId)
         {
-            return await Task.Run(() => Insert(model));
+            return await Task.Run(() => Insert(model,CurrentId));
         }
         public bool Update(EventPurposeViewModel model)
         {

@@ -19,8 +19,8 @@ namespace BestApp.Services
     {
         public interface ICustomerService : IService<Customer>
         {
-            Customer Insert(CustomerViewModel model);
-            Task<Customer> InsertAsync(CustomerViewModel model);
+            Customer Insert(CustomerViewModel model, string CurrentId);
+            Task<Customer> InsertAsync(CustomerViewModel model, string CurrentId);
             Task<CustomerViewModel> UpdateAsync(CustomerViewModel model);
             Task<IQueryable<CustomerViewModel>> GetAllCustomersAsync(SearchViewModel model);
             IQueryable<CustomerViewModel> GetAllCustomers();
@@ -57,7 +57,7 @@ namespace BestApp.Services
         {
             return Task.Run(() => GetAllCustomers());
         } 
-        public Customer Insert(CustomerViewModel model)
+        public Customer Insert(CustomerViewModel model, string CurrentId)
         {
             var find = Queryable().Where(x => x.PhoneNumber.Trim() == model.PhoneNumber.Trim() && x.Delete == false).FirstOrDefault();
             if (find != null)
@@ -79,14 +79,15 @@ namespace BestApp.Services
                 data.CreatDate = DateTime.Now;
                 data.Delete = false;
                 data.LastModifiedDate = DateTime.Now;
+                data.UserAccount = _userRepository.Find(CurrentId);
                 //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
                 base.Insert(data);
                 return data;
             }
         }
-        public async Task<Customer> InsertAsync(CustomerViewModel model)
+        public async Task<Customer> InsertAsync(CustomerViewModel model, string CurrentId)
         {
-            return await Task.Run(() => Insert(model));
+            return await Task.Run(() => Insert(model, CurrentId));
         }
         public bool Update(CustomerViewModel model)
         {

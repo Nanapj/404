@@ -20,8 +20,8 @@ namespace BestApp.Services
         public interface IStaffService : IService<Staff>
         {
             IQueryable<Staff> GetAllStaffs();
-            Staff Insert(StaffViewModel model);
-            Task<Staff> InsertAsync(StaffViewModel model);
+            Staff Insert(StaffViewModel model, string CurrentId);
+            Task<Staff> InsertAsync(StaffViewModel model, string CurrentId);
             Task<IQueryable<StaffViewModel>> GetAllStaffsAsync();
             Task<StaffViewModel> UpdateAsync(StaffViewModel model);
             bool Delete(Guid Id);
@@ -40,7 +40,7 @@ namespace BestApp.Services
             
         }
 
-        public Staff Insert(StaffViewModel model)
+        public Staff Insert(StaffViewModel model, string CurrentId)
         {
             var check = Queryable().Where(x=> x.Email == model.Email).FirstOrDefault();
             if(check != null)
@@ -57,7 +57,8 @@ namespace BestApp.Services
                     CreatDate = DateTime.Now,
                     HasAccount = model.HasAccount,
                     LastModifiedDate = DateTime.Now,
-                    Phone = model.Phone
+                    Phone = model.Phone,
+                    UserAccount = _userRepository.Find(CurrentId),
                 };
 
                 // Nếu muốn tạo tài khoản
@@ -151,9 +152,9 @@ namespace BestApp.Services
             return _repository.Queryable();
         }
 
-        public async Task<Staff> InsertAsync(StaffViewModel model)
+        public async Task<Staff> InsertAsync(StaffViewModel model, string CurrentId)
         {
-            return await Task.Run(() => Insert(model));
+            return await Task.Run(() => Insert(model, CurrentId));
         }
         public async Task<StaffViewModel> UpdateAsync(StaffViewModel model)
         {
