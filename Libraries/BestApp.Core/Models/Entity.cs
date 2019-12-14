@@ -17,6 +17,6 @@ namespace BestApp.Core.Models
         public DateTime CreatDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public bool Delete { get; set; }
-        public ApplicationUser UserAccount { get; set; }
+        public virtual ApplicationUser UserAccount { get; set; }
     }
 }

@@ -36,7 +36,6 @@ angular.module('app')
             var date1 = new Date(yr1, mon1-1, dt1);
             return date1;
         }
-                
         var detailsGrid = $("#gridDetails").kendoGrid({
             dataSource:{
                 // transport:{
@@ -1317,8 +1316,6 @@ angular.module('app')
             $('#reminderDetailsGrid').data('kendoGrid').setDataSource(reminderDatasource);
             $("#reminderDetailsGrid").data("kendoGrid").dataSource.read();
             $("#reminderDetailsGrid").data("kendoGrid").refresh();
-            wnd.refresh();
-            wnd.center().open();
         }
         function onChange(e) {
             var grid = $('#eventGrid').data('kendoGrid');
