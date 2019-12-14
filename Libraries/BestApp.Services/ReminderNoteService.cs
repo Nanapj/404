@@ -20,8 +20,8 @@ namespace BestApp.Services
     {
         public interface IReminderNoteService : IService<ReminderNote>
         {
-            ReminderNote Insert(ReminderNoteViewModel model);
-            Task<ReminderNote> InsertAsync(ReminderNoteViewModel model);
+            ReminderNote Insert(ReminderNoteViewModel model, string CurrentId);
+            Task<ReminderNote> InsertAsync(ReminderNoteViewModel model, string CurrentId);
             Task<ReminderNoteViewModel> UpdateAsync(ReminderNoteViewModel model);
             Task<IQueryable<ReminderNoteViewModel>> GetAllReminderNotesAsync();
             IQueryable<ReminderNoteViewModel> GetAllReminderNotes();
@@ -29,10 +29,13 @@ namespace BestApp.Services
         }
         private readonly EventService _eventService;
         private readonly IRepositoryAsync<ReminderNote> _repository;
+        private readonly IRepositoryAsync<ApplicationUser> _userRepository;
         public ReminderNoteService(IRepositoryAsync<ReminderNote> repository,
+            IRepositoryAsync<ApplicationUser> userRepository,
             EventService eventService) : base(repository)
         {
             _repository = repository;
+            _userRepository = userRepository;
             _eventService = eventService;
         }
         public IQueryable<ReminderNoteViewModel> GetAllReminderNotes()
@@ -45,14 +48,15 @@ namespace BestApp.Services
                 ReminderDate = x.ReminderDate,
                 CreatDate = x.CreatDate,
                 EventID = x.Event.Id,
-                Serial = x.Serial
+                Serial = x.Serial,
+                UserId = x.UserAccount.Id
             });
         }
         public Task<IQueryable<ReminderNoteViewModel>> GetAllReminderNotesAsync()
         {
             return Task.Run(() => GetAllReminderNotes());
         }
-        public ReminderNote Insert(ReminderNoteViewModel model)
+        public ReminderNote Insert(ReminderNoteViewModel model, string CurrentId)
         {
             var data = new ReminderNote();
             
@@ -63,13 +67,14 @@ namespace BestApp.Services
             data.Serial = model.Serial;
             data.CreatDate = DateTime.Now;
             data.Delete = false;
+            data.UserAccount = _userRepository.Find(CurrentId);
             data.LastModifiedDate = DateTime.Now;
             base.Insert(data);
             return data;
         }
-        public async Task<ReminderNote> InsertAsync(ReminderNoteViewModel model)
+        public async Task<ReminderNote> InsertAsync(ReminderNoteViewModel model, string CurrentId)
         {
-            return await Task.Run(() => Insert(model));
+            return await Task.Run(() => Insert(model, CurrentId));
         }
         public bool Update(ReminderNoteViewModel model)
         {

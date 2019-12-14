@@ -21,8 +21,8 @@ namespace BestApp.Services
     {
         public interface IInteractionHistoryService : IService<InteractionHistory>
         {
-            InteractionHistory Insert(InteractionHistoryViewModel model);
-            Task<InteractionHistory> InsertAsync(InteractionHistoryViewModel model);
+            InteractionHistory Insert(InteractionHistoryViewModel model, string CurrentId);
+            Task<InteractionHistory> InsertAsync(InteractionHistoryViewModel model, string CurrentId);
             Task<InteractionHistoryViewModel> UpdateAsync(InteractionHistoryViewModel model);
             Task<IQueryable<InteractionHistoryViewModel>> GetAllInteractionHistoriesAsync();
             IQueryable<InteractionHistoryViewModel> GetAllInteractionHistories();
@@ -131,7 +131,7 @@ namespace BestApp.Services
                 throw new Exception("Không tìm thấy khách hàng");
             }
         }
-        public InteractionHistory Insert(InteractionHistoryViewModel model)
+        public InteractionHistory Insert(InteractionHistoryViewModel model, string CurrentId)
         {
             var data = new InteractionHistory();
             data.Note = model.Note;
@@ -139,13 +139,14 @@ namespace BestApp.Services
             data.CreatDate = DateTime.Now;
             data.Delete = false;
             data.LastModifiedDate = DateTime.Now;
+            data.UserAccount = _userRepository.Find(CurrentId);
             //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
             base.Insert(data);
             return data;
         }
-        public async Task<InteractionHistory> InsertAsync(InteractionHistoryViewModel model)
+        public async Task<InteractionHistory> InsertAsync(InteractionHistoryViewModel model, string CurrentId)
         {
-            return await Task.Run(() => Insert(model));
+            return await Task.Run(() => Insert(model, CurrentId));
         }
         public bool Update(InteractionHistoryViewModel model)
         {

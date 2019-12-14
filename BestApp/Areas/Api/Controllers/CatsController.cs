@@ -12,7 +12,7 @@ using static BestApp.Services.CatService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class CatsController : ODataBaseController
+    public class CatsController : ODataController
     {
         private readonly ICatService _customerService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;

@@ -49,10 +49,12 @@ namespace BestApp.Services
         }
         public ProductType Insert(ProductTypeViewModel model, string CurrentId)
         {
-            var find = Queryable().Where(x => x.Code == model.Code && x.Delete == false).FirstOrDefault();
+            var find = Queryable()
+                .Where(x => ((x.Code == model.Code) || (x.Name == model.Name)) && x.Delete == false)
+                .FirstOrDefault();
             if (find != null)
             {
-                throw new Exception("Khách hàng đã tồn tại");
+                throw new Exception("sản phẩm đã tồn tại");
             }
             else
             {

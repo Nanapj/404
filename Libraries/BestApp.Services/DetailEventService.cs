@@ -19,8 +19,8 @@ namespace BestApp.Services
     {
         public interface IDetailEventService : IService<DetailEvent>
         {
-            DetailEvent Insert(DetailEventViewModel model);
-            Task<DetailEvent> InsertAsync(DetailEventViewModel model);
+            DetailEvent Insert(DetailEventViewModel model, string CurrentId);
+            Task<DetailEvent> InsertAsync(DetailEventViewModel model, string CurrentId);
             Task<DetailEventViewModel> UpdateAsync(DetailEventViewModel model);
             Task<IQueryable<DetailEventViewModel>> GetAllDetailEventsAsync();
             IQueryable<DetailEventViewModel> GetAllDetailEvents();
@@ -66,7 +66,7 @@ namespace BestApp.Services
         {
             return Task.Run(() => GetAllDetailEvents());
         }
-        public DetailEvent Insert(DetailEventViewModel model)
+        public DetailEvent Insert(DetailEventViewModel model, string CurrentId)
         {
             var data = new DetailEvent();
             data.Serial = model.Serial;
@@ -76,6 +76,7 @@ namespace BestApp.Services
             data.Delete = false;
             data.LastModifiedDate = DateTime.Now;
             data.ProductType = _productTypeService.Find(model.ProductID);
+            data.UserAccount = _userRepository.Find(CurrentId);
             data.DateSold = model.DateSold;
             data.AgencySold = model.AgencySold;
             data.AssociateName = model.AssociateName;
@@ -83,9 +84,9 @@ namespace BestApp.Services
             base.Insert(data);
             return data;
         }
-        public async Task<DetailEvent> InsertAsync(DetailEventViewModel model)
+        public async Task<DetailEvent> InsertAsync(DetailEventViewModel model, string CurrentId)
         {
-            return await Task.Run(() => Insert(model));
+            return await Task.Run(() => Insert(model, CurrentId));
         }
         public bool Update(DetailEventViewModel model)
         {

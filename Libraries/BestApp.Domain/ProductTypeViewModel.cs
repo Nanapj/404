@@ -12,6 +12,7 @@ namespace BestApp.Domain
         public Guid? ID { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
+        public ApplicationUser UserAccount { get; set; }
         public List<DetailEventViewModel> DetailEvents { get; set; } = new List<DetailEventViewModel>();
     }
 }
