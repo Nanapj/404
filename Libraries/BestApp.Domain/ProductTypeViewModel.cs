@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BestApp.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace BestApp.Domain
         public Guid? ID { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
+        public ApplicationUser UserAccount { get; set; }
         public List<DetailEventViewModel> DetailEvents { get; set; } = new List<DetailEventViewModel>();
     }
 }

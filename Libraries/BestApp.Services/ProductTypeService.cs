@@ -64,6 +64,7 @@ namespace BestApp.Services
                 var data = new ProductType();
                 data.Code = model.Code;
                 data.Name = model.Name;
+                data.UserAccount = model.UserAccount;
                 data.CreatDate = DateTime.Now;
                 data.Delete = false;
                 data.LastModifiedDate = DateTime.Now;

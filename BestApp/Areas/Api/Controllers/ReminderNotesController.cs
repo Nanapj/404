@@ -1,8 +1,12 @@
-﻿using BestApp.Domain;
+﻿using BestApp.Core.Models;
+using BestApp.Domain;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.OData;
+using Repository.Pattern;
 using Repository.UnitOfWork;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -16,12 +20,14 @@ namespace BestApp.Areas.Api.Controllers
     {
         private readonly IReminderNoteService _reminderNoteService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
+        private readonly DataContext _context;
 
-        public ReminderNotesController(IReminderNoteService reminderNoteService,
-            IUnitOfWorkAsync unitOfWorkAsync)
+        public ReminderNotesController(DataContext context, IReminderNoteService reminderNoteService,
+            IUnitOfWorkAsync unitOfWorkAsync) : base(context)
         {
             _reminderNoteService = reminderNoteService;
             _unitOfWorkAsync = unitOfWorkAsync;
+            _context = context;
         }
 
         [HttpGet]
@@ -42,8 +48,8 @@ namespace BestApp.Areas.Api.Controllers
 
             try
             {
-                //ApplicationUser test = GetCurrentUser();
-                //model.UserAccount = test;
+                var test = GetCurrentUser();
+                model.UserAccount = test;
                 var stf = await _reminderNoteService.InsertAsync(model);
                 _unitOfWorkAsync.Commit();
                 var resultObject = new ReminderNoteViewModel()

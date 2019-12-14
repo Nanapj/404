@@ -1,5 +1,6 @@
 ﻿using BestApp.Domain;
 using Microsoft.AspNet.OData;
+using Repository.Pattern;
 using Repository.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -12,15 +13,18 @@ using static BestApp.Services.ProductTypeService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class ProductTypesController : ODataController
+    public class ProductTypesController : ODataBaseController
     {
         private readonly IProductTypeService _productTypeService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
+        private readonly DataContext _context;
         // GET: Api/Tags
-        public ProductTypesController(IProductTypeService productTypeService, IUnitOfWorkAsync unitOfWorkAsync)
+        public ProductTypesController(DataContext context, IProductTypeService productTypeService, IUnitOfWorkAsync unitOfWorkAsync)
+            : base(context)
         {
             _productTypeService = productTypeService;
             _unitOfWorkAsync = unitOfWorkAsync;
+            _context = context;
         }
         [HttpGet]
         [EnableQuery]
@@ -38,6 +42,8 @@ namespace BestApp.Areas.Api.Controllers
 
             try
             {
+                var test = GetCurrentUser();
+                model.UserAccount = test;
                 var stf = await _productTypeService.InsertAsync(model);
                 var resultObject = new ProductTypeViewModel()
                 {
@@ -50,7 +56,7 @@ namespace BestApp.Areas.Api.Controllers
             }
             catch (Exception ex)
             {
-                
+               
                 throw ex;
             }
         }

@@ -10,18 +10,19 @@ namespace BestApp.Areas.Api.Controllers
 {
     public class ODataBaseController : ODataController
     {
-        private readonly ApplicationUser user;
+        private ApplicationUser user;
+        private readonly DataContext _context;
 
-        public ODataBaseController()
+        public ODataBaseController(DataContext context)
         {
-            var id = HttpContext.Current.User.Identity.GetUserId();
-            DataContext d = new DataContext();
-            DbSet t = d.Set<ApplicationUser>();
-            user = (ApplicationUser)t.Find(id);
+            _context = context;
         }
 
         protected ApplicationUser GetCurrentUser()
         {
+            var id = HttpContext.Current.User.Identity.GetUserId();
+            DbSet t = _context.Set<ApplicationUser>();
+            user = (ApplicationUser)t.Find(id);
             return this.user;
         }
     }
