@@ -30,12 +30,13 @@ namespace BestApp.Services
         private readonly IRepository<ApplicationUser> _userRepository;
         protected readonly DataContext db;
         protected UserManager<ApplicationUser> userManager;
-        public CustomerService(IRepositoryAsync<Customer> repository) : base(repository)
+        public CustomerService(IRepositoryAsync<Customer> repository,
+            IRepositoryAsync<ApplicationUser> userRepository) : base(repository)
         {
             _repository = repository;
             db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
-
+            _userRepository = userRepository;
         }
         public IQueryable<CustomerViewModel> GetAllCustomers()
         {

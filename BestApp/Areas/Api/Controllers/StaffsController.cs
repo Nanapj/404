@@ -13,7 +13,7 @@ using static BestApp.Services.StaffService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class StaffsController : ODataController
+    public class StaffsController : ODataBaseController
     {
         private readonly IStaffService _staffService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
@@ -41,7 +41,7 @@ namespace BestApp.Areas.Api.Controllers
 
             try
             {
-                var stf = await _staffService.InsertAsync(model);
+                var stf = await _staffService.InsertAsync(model, GetCurrentUserID());
                 _unitOfWorkAsync.Commit();
                 var resultObject = new StaffViewModel()
                 {

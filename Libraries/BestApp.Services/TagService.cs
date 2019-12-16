@@ -32,10 +32,12 @@ namespace BestApp.Services
         protected readonly DataContext db;
         protected UserManager<ApplicationUser> userManager;
         public TagService(IRepositoryAsync<Tag> repository,
-            DepartmentService departmentService) : base(repository)
+            DepartmentService departmentService,
+            IRepositoryAsync<ApplicationUser> userRepository) : base(repository)
         {
             _repository = repository;
             _departmentService = departmentService;
+            _userRepository = userRepository;
             db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 

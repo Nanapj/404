@@ -12,7 +12,7 @@ using static BestApp.Services.CustomerService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class CustomersController : ODataController
+    public class CustomersController : ODataBaseController
     {
         private readonly ICustomerService _customerService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
@@ -38,7 +38,7 @@ namespace BestApp.Areas.Api.Controllers
 
             try
             {
-                var stf = await _customerService.InsertAsync(model);
+                var stf = await _customerService.InsertAsync(model, GetCurrentUserID());
                 _unitOfWorkAsync.Commit();
                 var resultObject = new CustomerViewModel()
                 {

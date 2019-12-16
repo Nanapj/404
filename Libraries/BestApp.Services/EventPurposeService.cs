@@ -33,9 +33,11 @@ namespace BestApp.Services
         protected UserManager<ApplicationUser> userManager;
         public EventPurposeService(
             IRepositoryAsync<EventPurpose> repository,
-            EventTypeService eventTypeService) : base(repository)
+            EventTypeService eventTypeService,
+            IRepositoryAsync<ApplicationUser> userRepository) : base(repository)
         {
             _repository = repository;
+            _userRepository = userRepository;
             _eventTypeService = eventTypeService;
             db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));

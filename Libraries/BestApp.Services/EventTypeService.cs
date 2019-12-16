@@ -30,9 +30,11 @@ namespace BestApp.Services
         private readonly IRepository<ApplicationUser> _userRepository;
         protected readonly DataContext db;
         protected UserManager<ApplicationUser> userManager;
-        public EventTypeService(IRepositoryAsync<EventType> repository) : base(repository)
+        public EventTypeService(IRepositoryAsync<EventType> repository,
+            IRepositoryAsync<ApplicationUser> userRepository) : base(repository)
         {
             _repository = repository;
+            _userRepository = userRepository;
             db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 

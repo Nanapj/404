@@ -41,12 +41,14 @@ namespace BestApp.Services
              EventService eventService,
               EventTypeService eventTypeService,
              EventPurposeService eventPurposeService,
-             CustomerService customerService) : base(repository)
+             CustomerService customerService,
+             IRepositoryAsync<ApplicationUser> userRepository) : base(repository)
         {
             _eventService = eventService;
             _customerService = customerService;
             _eventTypeService = eventTypeService;
             _eventPurposeService = eventPurposeService;
+            _userRepository = userRepository;
             _repository = repository;
             db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));

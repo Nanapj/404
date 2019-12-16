@@ -35,9 +35,11 @@ namespace BestApp.Services
         public DetailEventService(IRepositoryAsync<DetailEvent> repository,
              EventService eventService,
              CustomerService customerService,
-             ProductTypeService productTypeService) : base(repository)
+             ProductTypeService productTypeService,
+             IRepositoryAsync<ApplicationUser> userRepository) : base(repository)
         {
             _eventService = eventService;
+            _userRepository = userRepository;
             _productTypeService = productTypeService;
             _repository = repository;
             db = new DataContext();

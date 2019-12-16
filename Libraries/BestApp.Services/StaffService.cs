@@ -32,10 +32,12 @@ namespace BestApp.Services
         protected readonly DataContext db;
         protected UserManager<ApplicationUser> userManager;
 
-        public StaffService(IRepositoryAsync<Staff> repository) : base(repository)
+        public StaffService(IRepositoryAsync<Staff> repository,
+            IRepositoryAsync<ApplicationUser> userRepository) : base(repository)
         {
             _repository = repository;
             db = new DataContext();
+            _userRepository = userRepository;
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
             
         }

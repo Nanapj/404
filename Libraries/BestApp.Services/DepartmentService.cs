@@ -34,9 +34,11 @@ namespace BestApp.Services
         private readonly IRepository<ApplicationUser> _userRepository;
         protected readonly DataContext db;
         protected UserManager<ApplicationUser> userManager;
-        public DepartmentService(IRepositoryAsync<Department> repository) : base(repository)
+        public DepartmentService(IRepositoryAsync<Department> repository,
+            IRepositoryAsync<ApplicationUser> userRepository) : base(repository)
         {
             _repository = repository;
+            _userRepository = userRepository;
             db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 

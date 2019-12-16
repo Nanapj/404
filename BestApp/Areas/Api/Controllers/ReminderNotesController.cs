@@ -45,7 +45,7 @@ namespace BestApp.Areas.Api.Controllers
             {
                 //ApplicationUser test = GetCurrentUser();
                 //model.UserAccount = test;
-                var stf = await _reminderNoteService.InsertAsync(model);
+                var stf = await _reminderNoteService.InsertAsync(model, GetCurrentUserID());
                 _unitOfWorkAsync.Commit();
                 var resultObject = new ReminderNoteViewModel()
                 {

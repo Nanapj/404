@@ -12,7 +12,7 @@ using static BestApp.Services.TagService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class TagsController : ODataController
+    public class TagsController : ODataBaseController
     {
         private readonly ITagService _tagService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
@@ -38,7 +38,7 @@ namespace BestApp.Areas.Api.Controllers
 
             try
             {
-                var stf = await _tagService.InsertAsync(model);
+                var stf = await _tagService.InsertAsync(model, GetCurrentUserID());
                 _unitOfWorkAsync.Commit();
                 var resultObject = new TagViewModel()
                 {

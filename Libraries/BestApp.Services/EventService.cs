@@ -42,7 +42,8 @@ namespace BestApp.Services
              EventTypeService eventTypeService,
              EventPurposeService eventPurposeService,
              CustomerService customerService,
-             ProductTypeService productTypeService) : base(repository)
+             ProductTypeService productTypeService,
+             IRepositoryAsync<ApplicationUser> userRepository) : base(repository)
         {
             _tagService = tagService;
             _customerService = customerService;
@@ -50,7 +51,8 @@ namespace BestApp.Services
             _eventPurposeService = eventPurposeService;
             _productTypeService = productTypeService;
             _repository = repository;
-           db = new DataContext();
+            _userRepository = userRepository;
+            db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
         }

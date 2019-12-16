@@ -12,7 +12,7 @@ using static BestApp.Services.DetailEventService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class DetailEventsController : ODataController
+    public class DetailEventsController : ODataBaseController
     {
         private readonly IDetailEventService _detailEventService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
@@ -38,7 +38,7 @@ namespace BestApp.Areas.Api.Controllers
 
             try
             {
-                var stf = await _detailEventService.InsertAsync(model);
+                var stf = await _detailEventService.InsertAsync(model, GetCurrentUserID());
                 _unitOfWorkAsync.Commit();
                 var resultObject = new DetailEventViewModel()
                 {

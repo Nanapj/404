@@ -12,7 +12,7 @@ using static BestApp.Services.EventPurposeService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class EventPurposesController : ODataController
+    public class EventPurposesController : ODataBaseController
     {
         private readonly IEventPurposeService _eventPurposeService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
@@ -38,7 +38,7 @@ namespace BestApp.Areas.Api.Controllers
 
             try
             {
-                var stf = await _eventPurposeService.InsertAsync(model);
+                var stf = await _eventPurposeService.InsertAsync(model, GetCurrentUserID());
                 _unitOfWorkAsync.Commit();
                 var resultObject = new EventPurposeViewModel()
                 {

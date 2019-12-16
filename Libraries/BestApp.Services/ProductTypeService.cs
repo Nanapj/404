@@ -29,7 +29,8 @@ namespace BestApp.Services
 
         private readonly IRepositoryAsync<ApplicationUser> _userRepository;
 
-        public ProductTypeService(IRepositoryAsync<ProductType> repository, IRepositoryAsync<ApplicationUser> userRepository) : base(repository)
+        public ProductTypeService(IRepositoryAsync<ProductType> repository,
+            IRepositoryAsync<ApplicationUser> userRepository) : base(repository)
         {
             _userRepository = userRepository;   
         }

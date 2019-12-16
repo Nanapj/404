@@ -13,7 +13,7 @@ using static BestApp.Services.InteractionHistoryService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class InteractionHistoriesController : ODataController
+    public class InteractionHistoriesController : ODataBaseController
     {
         private readonly IInteractionHistoryService _interactionHistoryService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
@@ -46,7 +46,7 @@ namespace BestApp.Areas.Api.Controllers
 
             try
             {
-                var stf = await _interactionHistoryService.InsertAsync(model);
+                var stf = await _interactionHistoryService.InsertAsync(model, GetCurrentUserID());
                 _unitOfWorkAsync.Commit();
                 var resultObject = new InteractionHistoryViewModel()
                 {

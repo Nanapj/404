@@ -13,7 +13,7 @@ using static BestApp.Services.DepartmentService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class DepartmentsController : ODataController
+    public class DepartmentsController : ODataBaseController
     {
         private readonly IDepartmentService _departmentService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
@@ -39,7 +39,7 @@ namespace BestApp.Areas.Api.Controllers
 
             try
             {
-                var stf = await _departmentService.InsertAsync(model);
+                var stf = await _departmentService.InsertAsync(model, GetCurrentUserID());
                 _unitOfWorkAsync.Commit();
                 var resultObject = new DepartmentViewModel()
                 {
