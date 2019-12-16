@@ -45,11 +45,11 @@ angular.module('app')
             var date1 = new Date(yr1, mon1-1, dt1);
             return date1;
             }
-        $("#timeline").kendoTimeline({
-            alternatingMode: true,
-            collapsibleEvents: true,
-            orientation: "vertical"
-        });
+        // $("#timeline").kendoTimeline({
+        //     alternatingMode: true,
+        //     collapsibleEvents: true,
+        //     orientation: "vertical"
+        // });
         $(".editButton").kendoButton({
             icon: "edit"
         });
@@ -464,7 +464,10 @@ angular.module('app')
                 }
             });
             var historyTimelineData = new kendo.data.DataSource({
-                data: vm.eventReminders,
+                type: 'odata-v4',
+                transport: {
+                    read: _reminderNoteURL + "?$filter=EventID eq "+ vm.selectedEvent.ID
+                },
                 schema: {
                     parse: function(response) {
                         var reminderItems =[];
@@ -509,8 +512,8 @@ angular.module('app')
                 },
               
             });
-            $('#timeline').data('kendoTimeline').setDataSource(historyTimelineData);
-            $('#timeline').data('kendoTimeline').dataSource.read();
+            // $('#timeline').data('kendoTimeline').setDataSource(historyTimelineData);
+            // $('#timeline').data('kendoTimeline').dataSource.read();
             $('#historyGrid').data('kendoGrid').setDataSource(reminderDatasource);
             $("#historyGrid").data("kendoGrid").dataSource.read().then(function (){
                 $("#historyGrid").data("kendoGrid").refresh();

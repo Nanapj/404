@@ -8,3 +8,11 @@
 .tag-blue-color:hover, .tag-blue-color:focus, .tag-blue-color:active {
     color: #fff !important;
 }
+.create-cr-btn {
+    padding-left: 0px;
+}
+@media(max-width: 992px) {
+    .cus-cr-btn {
+        padding-left: 0px;
+    }
+}
