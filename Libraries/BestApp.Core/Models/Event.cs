@@ -17,6 +17,7 @@ namespace BestApp.Core.Models
         public List<DetailEvent> DetailEvents { get; set; }
         public List<InteractionHistory> InteractionHistories { get; set; }
         public List<ReminderNote> ReminderNotes { get; set; }
+        public List<EStatusLog> EStatusLogs { get; set; }
         public virtual Customer Customer { get; set; }
         public Guid? EmployeeID { get; set; }
         public string Note { get; set; }

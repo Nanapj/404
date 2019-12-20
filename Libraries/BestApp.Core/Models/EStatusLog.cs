@@ -11,7 +11,8 @@ namespace BestApp.Core.Models
     {
         public StatusEvent Status { get; set; }
         public string Note { get; set; }
-        public Guid EventId { get; set; }
-        public string EventCode { get; set; }
+        public virtual Event Event { get; set; }
+        
     }
 }
+    
