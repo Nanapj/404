@@ -20,6 +20,7 @@ using static BestApp.Services.CustomerService;
 using static BestApp.Services.DepartmentService;
 using static BestApp.Services.DetailEventService;
 using static BestApp.Services.DistrictService;
+using static BestApp.Services.EStatusLogService;
 using static BestApp.Services.EventPurposeService;
 using static BestApp.Services.EventService;
 using static BestApp.Services.EventTypeService;
@@ -68,7 +69,8 @@ namespace BestApp
                 .RegisterType<IWardService, WardService>()
                 .RegisterType<ICityService, CityService>()
                 .RegisterType<IEventTypeService, EventTypeService>()
-                .RegisterType<IEventPurposeService, EventPurposeService>();
+                .RegisterType<IEventPurposeService, EventPurposeService>()
+                .RegisterType<IEStatusLogService, EStatusLogService>();
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);

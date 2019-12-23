@@ -38,6 +38,7 @@ namespace BestApp
             builder.EntitySet<DistrictViewModel>("Districts");
             builder.EntitySet<EventPurposeViewModel>("EventPurposes");
             builder.EntitySet<EventTypeViewModel>("EventTypes");
+            builder.EntitySet<EStatusLogViewModel>("EStatusLogs");
             config.Formatters.Remove(config.Formatters.XmlFormatter);
             IEdmModel model = builder.GetEdmModel();
             // Web API routes

@@ -67,6 +67,7 @@
     <Compile Include="Models\DetailEvent.cs" />
     <Compile Include="Models\District.cs" />
     <Compile Include="Models\Entity.cs" />
+    <Compile Include="Models\EStatusLog.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\EventPurpose.cs" />
     <Compile Include="Models\EventType.cs" />
