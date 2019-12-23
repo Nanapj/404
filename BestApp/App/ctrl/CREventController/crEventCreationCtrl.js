@@ -72,6 +72,8 @@ angular.module('app')
             { text: 'Ok', action: onResetOk },
             { text: 'Cancel', primary: true, action: onResetCancel }
         ];
+        $scope.dropVisible = true;
+        $scope.serialVisible = false;
         // $scope.gotoDiv = function(x) {
         //     if ($location.hash() !== newHash) {
         //       $location.hash(x);
@@ -338,6 +340,7 @@ angular.module('app')
             .then(function(response){
                if(response.data.d.Success === true) {
                     console.log(response.data.d.Item);
+
                     vm.eventCRDetails.AgencySold = response.data.d.Item.agency_sold;
                     vm.eventCRDetails.DateSold = moment(compareDate(response.data.d.Item.date_sold)).format("DD/MM/YYYY");
                     vm.eventCRDetails.AssociateName = response.data.d.Item.associate_name;
@@ -800,7 +803,9 @@ angular.module('app')
                             })
                             .then(function(response){
                                 if(response.data.d.Success === true) {
-                                    // console.log(response.data.d.Item);
+                                    if(response.data.d.Item.length < 1) {
+                                        $scope.serialVisible = true;
+                                    }
                                     vm.serialData = {
                                         data: response.data.d.Item
                                     };
@@ -994,7 +999,9 @@ angular.module('app')
                                 return value;
                             });
                             vm.eventCR.CustomerID = vm.systemCustomer.ID;
-                            vm.eventCRDetails.Serial = vm.serialSelectedData.device_serial;
+                            if(vm.serialSelectedData.device_serial !== "" && vm.serialSelectedData.device_serial !== " Serial... " && vm.serialSelectedData.device_serial !== undefined) {
+                                vm.eventCRDetails.Serial = vm.serialSelectedData.device_serial;
+                            }
                             vm.eventCRDetails.ProductID = vm.eventProductTypeSelectedData.ID;
                             vm.eventCR.DetailEvents.push(vm.eventCRDetails);
                             vm.crtagSelectected = JSON.parse(json);                       
@@ -1003,9 +1010,12 @@ angular.module('app')
                             vm.eventCR.EventPurposeID = vm.selectedPurposeData.ID;
                             vm.interactionHistoryObj.Type ="Gọi điện";
                             vm.interactionHistoryObj.Note = vm.eventCRDetails.Note;
-                            vm.eventCR.InteractionHistories.push(vm.interactionHistoryObj);
                             if(vm.eventCRDetails.DateSold !== undefined && vm.eventCRDetails.DateSold !== "") {
                                 var time = moment(vm.eventCRDetails.DateSold).format('YYYY-MM-DDTHH:mm:ss');
+                                time+='Z';
+                                vm.eventCRDetails.DateSold = time;
+                            } else {
+                                var time = moment().format('YYYY-MM-DDTHH:mm:ss');
                                 time+='Z';
                                 vm.eventCRDetails.DateSold = time;
                             }
@@ -1038,7 +1048,7 @@ angular.module('app')
             if(vm.eventCR.CustomerID == undefined || vm.eventCR.CustomerID === "") {
                 toaster.pop('error', "Thiếu thông tin", "Thiếu thông tin khách hàng");
             } else 
-            if(vm.reminderCRDetails.ReminderDate == undefined || vm.reminderCRDetails.ReminderDate !=="" ){
+            if(!vm.reminderCRDetails.ReminderDate.HasValue ){
                 toaster.pop('error', "Ngày hẹn", "Vui lòng chọn ngày hẹn");
             }
             var time = moment(compareDate(vm.eventCRDetails.DateSold)).format('YYYY-MM-DDTHH:mm:ss');
@@ -1053,7 +1063,9 @@ angular.module('app')
             vm.eventCRDetails.DateSold = time;
             vm.eventCR.DetailEvents.push(vm.eventCRDetails);
             vm.eventCR.Tags = vm.crtagSelectected;
-            vm.eventCRDetails.Serial = vm.serialSelectedData.device_serial;
+            if(vm.serialSelectedData.device_serial !== "" && vm.serialSelectedData.device_serial !== " Serial... " && vm.serialSelectedData.device_serial !== undefined) {
+                vm.eventCRDetails.Serial = vm.serialSelectedData.device_serial;
+            }
             vm.eventCRDetails.ProductID = vm.eventProductTypeSelectedData.ID;
             vm.eventCR.EventTypeID = vm.selectedEventData.ID;
             vm.eventCR.EventPurposeID = vm.selectedPurposeData.ID;
@@ -1085,7 +1097,7 @@ angular.module('app')
             vm.systemCustomer.Name = vm.pitechCustomer.customer_fullname;
             vm.systemCustomer.Address = vm.pitechCustomer.customer_address;
             //Transfer the city from pitech information
-            if(vm.pitechCustomer.customer_province !== undefined && vm.pitechCustomer.customer_province !== "") {
+            if(vm.pitechCustomer.customer_province !== undefined && vm.pitechCustomer.customer_province !== "" && vm.serialSelectedData.device_serial !== undefined) {
                 var City = $('#citydropdown').data('kendoDropDownList');
                 City.select(function (dataItem) {
                     return dataItem.name === vm.pitechCustomer.customer_province;
