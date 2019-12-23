@@ -27,6 +27,7 @@ namespace BestApp.Domain
         public List<DetailEventViewModel> DetailEvents { get; set; } = new List<DetailEventViewModel>();
         public List<InteractionHistoryViewModel> InteractionHistories { get; set; } = new List<InteractionHistoryViewModel>();
         public List<ReminderNoteViewModel> ReminderNotes { get; set; } = new List<ReminderNoteViewModel>();
+        public List<EStatusLogViewModel> EStatusLogs { get; set; } = new List<EStatusLogViewModel>();
         public DateTime CreatDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public string UserName { get; set; }

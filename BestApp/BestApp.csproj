@@ -245,6 +245,7 @@
     <Compile Include="Areas\Api\Controllers\DepartmentsController.cs" />
     <Compile Include="Areas\Api\Controllers\DetailEventsController.cs" />
     <Compile Include="Areas\Api\Controllers\DistrictsController.cs" />
+    <Compile Include="Areas\Api\Controllers\EStatusLogsController.cs" />
     <Compile Include="Areas\Api\Controllers\EventPurposesController.cs" />
     <Compile Include="Areas\Api\Controllers\EventsController.cs" />
     <Compile Include="Areas\Api\Controllers\EventTypesController.cs" />
@@ -321,6 +322,7 @@
     <Folder Include="Areas\Api\Views\Department\" />
     <Folder Include="Areas\Api\Views\DetailEvents\" />
     <Folder Include="Areas\Api\Views\Districts\" />
+    <Folder Include="Areas\Api\Views\EStatusLogs\" />
     <Folder Include="Areas\Api\Views\EventPurposes\" />
     <Folder Include="Areas\Api\Views\Events\" />
     <Folder Include="Areas\Api\Views\EventTypes\" />

@@ -82,6 +82,7 @@
     <Compile Include="DepartmentService.cs" />
     <Compile Include="DetailEventService.cs" />
     <Compile Include="DistrictService.cs" />
+    <Compile Include="EStatusLogService.cs" />
     <Compile Include="EventPurposeService.cs" />
     <Compile Include="EventService.cs" />
     <Compile Include="EventTypeService.cs" />

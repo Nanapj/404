@@ -8,29 +8,29 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using static BestApp.Services.EventService;
+using static BestApp.Services.EStatusLogService;
 
 namespace BestApp.Areas.Api.Controllers
 {
-    public class EventsController : ODataBaseController
+    public class EStatusLogsController : ODataBaseController
     {
-        private readonly IEventService _eventService;
+        private readonly IEStatusLogService _eStatusLogService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
         // GET: Api/Tags
-        public EventsController(IEventService eventService, IUnitOfWorkAsync unitOfWorkAsync)
+        public EStatusLogsController(IEStatusLogService eStatusLogService, IUnitOfWorkAsync unitOfWorkAsync)
         {
-            _eventService = eventService;
+            _eStatusLogService = eStatusLogService;
             _unitOfWorkAsync = unitOfWorkAsync;
         }
         [HttpGet]
         [EnableQuery]
-        public async Task<IQueryable<EventViewModel>> Get([FromUri] SearchViewModel model)
+        public async Task<IQueryable<EStatusLogViewModel>> Get([FromUri] SearchViewModel model)
         {
-            var result = await _eventService.GetAllEventsAsync(model);
+            var result = await _eStatusLogService.GetAllEStatusLogsAsync(model);
             return result;
         }
         [HttpPost]
-        public async Task<IHttpActionResult> Post(EventViewModel model)
+        public async Task<IHttpActionResult> Post(EStatusLogViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -39,27 +39,25 @@ namespace BestApp.Areas.Api.Controllers
 
             try
             {
-                var stf = await _eventService.InsertAsync(model, GetCurrentUserID());
+                var stf = await _eStatusLogService.InsertAsync(model, GetCurrentUserID());
                 _unitOfWorkAsync.Commit();
-                var resultObject = new EventViewModel()
+                var resultObject = new EStatusLogViewModel()
                 {
-                    Code = stf.Code,
                     Status = stf.Status,
-                    CustomerID = stf.Customer.Id,
-                    CustomerName = stf.Customer.Name,
                     Note = stf.Note,
                     ID = stf.Id,
+                    CreatDate = stf.CreatDate
                 };
                 return Created(resultObject);
-               
+
             }
             catch (Exception ex)
             {
-               
+
                 throw ex;
             }
         }
-        public async Task<IHttpActionResult> Put(Guid key, EventViewModel model)
+        public async Task<IHttpActionResult> Put(Guid key, EStatusLogViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -67,7 +65,7 @@ namespace BestApp.Areas.Api.Controllers
             }
             try
             {
-                await _eventService.UpdateAsync(model, GetCurrentUserID());
+                await _eStatusLogService.UpdateAsync(model, GetCurrentUserID());
                 _unitOfWorkAsync.Commit();
                 return Updated(model);
             }
@@ -80,7 +78,7 @@ namespace BestApp.Areas.Api.Controllers
 
         public IHttpActionResult Delete(Guid key)
         {
-            _eventService.Delete(key);
+            _eStatusLogService.Delete(key);
             _unitOfWorkAsync.Commit();
             return StatusCode(HttpStatusCode.OK);
 

@@ -23,7 +23,7 @@ namespace BestApp.Services
         {
             Event Insert(EventViewModel model, string CurrentId);
             Task<Event> InsertAsync(EventViewModel model, string CurrentId);
-            Task<EventViewModel> UpdateAsync(EventViewModel model);
+            Task<EventViewModel> UpdateAsync(EventViewModel model, string CurrentId);
             Task<IQueryable<EventViewModel>> GetAllEventsAsync(SearchViewModel model);
             IQueryable<EventViewModel> GetAllEvents(SearchViewModel model);
             bool Delete(Guid Id);
@@ -244,6 +244,16 @@ namespace BestApp.Services
                     });
                 }
             }
+            data.EStatusLogs = new List<EStatusLog>();
+            data.EStatusLogs.Add(new EStatusLog()
+            {
+                CreatDate = DateTime.Now,
+                LastModifiedDate = DateTime.Now,
+                Status = 0,
+                Note = "Nhân viên " + _userRepository.Find(CurrentId).UserName + " tạo sự kiện " + CodeEvent,
+                UserAccount = _userRepository.Find(CurrentId),
+                Delete = false
+            });
             data.CreatDate = DateTime.Now;
             data.Delete = false; 
             data.LastModifiedDate = DateTime.Now;
@@ -257,7 +267,7 @@ namespace BestApp.Services
         {
             return await Task.Run(() => Insert(model, CurrentId));
         }
-        public bool Update(EventViewModel model)
+        public bool Update(EventViewModel model, string CurrentId)
         {
             var data = Find(model.ID);
             if (data != null)
@@ -269,7 +279,20 @@ namespace BestApp.Services
                 if(model.EventTypeID.ToString() != "00000000-0000-0000-0000-000000000000")
                 {
                     data.EventTypeId = model.EventTypeID;
-                }            
+                }
+                //kiểm tra có phải update status không 
+                if(data.Status != model.Status)
+                {
+                    data.EStatusLogs.Add(new EStatusLog()
+                    {
+                        CreatDate = DateTime.Now,
+                        LastModifiedDate = DateTime.Now,
+                        Status = model.Status,
+                        Note = "Nhân viên " + _userRepository.Find(CurrentId).UserName + " cập nhập Status phiếu " + data.Code,
+                        UserAccount = _userRepository.Find(CurrentId),
+                        Delete = false
+                    });
+                }
                 data.Note = model.Note;
                 data.Status = model.Status;
                 if(data.Tags != null)
@@ -293,15 +316,26 @@ namespace BestApp.Services
                 }
                 
                 data.LastModifiedDate = DateTime.Now;
+                data.InteractionHistories.Add(new InteractionHistory()
+                {
+                    Type = "",
+                    Note = "Nhân viên " + _userRepository.Find(CurrentId).UserName + " Cập nhập phiếu " + data.Code,
+                    CreatDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
+                    UserAccount = _userRepository.Find(CurrentId),
+                    Event = data,
+                    Delete = false
+                });
+               
             }
             return true;
 
         }
-        public async Task<EventViewModel> UpdateAsync(EventViewModel model)
+        public async Task<EventViewModel> UpdateAsync(EventViewModel model, string CurrentId)
         {
             try
             {
-                await Task.Run(() => Update(model));
+                await Task.Run(() => Update(model, CurrentId));
                 return model;
             }
             catch (Exception e)
