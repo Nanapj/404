@@ -1,4 +1,8 @@
-﻿
+﻿<style>
+    .hide-drop {
+        display: none;
+    }
+</style>
 <div class="wrapper-md" ng-controller="crEventCreationCtrl as vm">
     <tabset class="tab-container" ng-init="steps={percent:40, step1:!vm.secActived, step2:vm.secActived}">
         <tab heading="Bước 1" active="steps.step1" disabled="!vm.tabDisable" select="steps.percent=40">
@@ -234,7 +238,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-3 serial-dropdown">
-                                                <div class="form-group">
+                                                <div class="form-group" ng-if="!serialVisible">
                                                     <label>Serial</label>
                                                     <select kendo-drop-down-list
                                                             id="serialDropdown"
@@ -246,6 +250,15 @@
                                                             style="width: 100%"
                                                             k-ng-model="vm.serialSelectedData"
                                                             k-on-change="onSerialSelChanged()"></select>
+                                                </div>
+                                                <div class="form-group" ng-if="serialVisible">
+                                                    <label>Serial</label>
+                                                    <input style="height:17px;
+                                                           width:93%"
+                                                           type="text"
+                                                           class="form-control"
+                                                           placeholder="Serial..."
+                                                           ng-model="vm.eventCRDetails.Serial" />
                                                 </div>
                                             </div>
                                         </div>
@@ -348,7 +361,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-3 serial-dropdown">
-                                                <div class="form-group">
+                                                <div class="form-group" ng-if="!serialVisible">
                                                     <label>Serial</label>
                                                     <select kendo-drop-down-list
                                                             id="serialDropdown"
@@ -357,9 +370,20 @@
                                                             k-option-label="' Serial... '"
                                                             k-data-source="vm.serialData"
                                                             k-filter="'contains'"
+                                                            
                                                             style="width: 100%"
                                                             k-ng-model="vm.serialSelectedData"
                                                             k-on-change="onSerialSelChanged()"></select>
+                                                   
+                                                </div>
+                                                <div class="form-group"  ng-if="serialVisible">
+                                                    <label>Serial</label>
+                                                    <input style="height:17px;
+                                                           width:93%"
+                                                           type="text"
+                                                           class="form-control"
+                                                           placeholder="Serial"
+                                                           ng-model="vm.eventCRDetails.Serial" />
                                                 </div>
                                             </div>
                                         </div>

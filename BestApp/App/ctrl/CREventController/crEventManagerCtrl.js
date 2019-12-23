@@ -401,8 +401,6 @@ angular.module('app')
             editable: "inline",
             save: function (e) {
                 e.preventDefault();
-                console.log(e.dataItem);
-                console.log(e.model);debugger;
                 var model = {
                     ID: e.model.ID,
                     Serial: e.model.Serial,
@@ -433,8 +431,7 @@ angular.module('app')
                     } else {
                         toaster.pop('error', "Lỗi", "Có lỗi trong quá trình cập nhật");
                     }
-                });      
-               console.log(e); 
+                });       
             },
             cancel: function(e) {
                 e.preventDefault();
@@ -525,8 +522,6 @@ angular.module('app')
         vm.startDate = moment(new Date(new Date().getFullYear(), new Date().getMonth(), 1)).utc().format();
         vm.endDate = moment(new Date()).utc().format();
         function handleDateRange() {
-            console.log(vm.startDate);
-            console.log(vm.endDate);
         }
         vm.departmentSelectedIds = [ ];
         vm.departmentSelectOptions = {
@@ -565,9 +560,6 @@ angular.module('app')
                         department: dataItem,
                         tagList: listItem
                     });
-                    console.log("This is the department list");
-                    console.log(vm.crDepartmentListTag);
-                    console.log(response.data.value[0]);
                   } else {
                       toaster.pop('info', "Rỗng","Phòng ban chưa có tag");
                   }
@@ -613,11 +605,6 @@ angular.module('app')
         }
         function onCrDepartmentChanged() {
             var multiselect = $("#departMulDrop").data("kendoMultiSelect");
-            
-            console.log(multiselect.value());
-            console.log(multiselect.value().length);
-            console.log(multiselect.value()[multiselect.value().length - 1]);
-            console.log(vm.departmentSelectedIds);
         }
         $scope.filterTagClicked = function(item,_this,index) {
             var idButtonClicked = "#filter"+item.ID;
@@ -691,6 +678,7 @@ angular.module('app')
                                 dateNoTime.getMinutes(),
                                 dateNoTime.getSeconds()
                             ),
+                            Note: response.value[i].Note,
                             DetailEvents: response.value[i].DetailEvents,
                             InteractionHistories: response.value[i].InteractionHistories,
                             Tags:  response.value[i].Tags,
@@ -714,6 +702,7 @@ angular.module('app')
                         EventPurposeName: {type: "string"},
                         Status: {type: "string"},
                         CreatDate: { type: "date" },
+                        Note: { type: "string" }
                       }
                     },
                     serverPaging: true,
@@ -755,7 +744,26 @@ angular.module('app')
                     field:"CreatDate",
                     title:"Ngày tạo",
                     template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
-                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #",
+                    filterable: {
+                        ui: function (element) {
+                            element.kendoDatePicker({
+                              format: "dd/MM/yyyy"
+                            });
+                        },
+                        extra: true,
+                        operators: {
+                        //specify filters according to the field type - string, date, number
+                            date: {
+                                eq: "Equal to",
+                                neq: "Not equal to",
+                                gte: "Is after or equal to",
+                                gt: "Is after",
+                                lte: "Is before or equal to",
+                                lt: "Is before"
+                            }
+                        }                   
+                    }
                 },
                 {
                     field: "CustomerName",
@@ -780,6 +788,10 @@ angular.module('app')
                 {
                     field: "EventPurposeName",
                     title: "Mục đích"
+                },
+                {
+                    field: "Note",
+                    title: "Ghi chú sự kiện"
                 },
                 { command: [{ text: "Chi tiết", click: showDetails },{text: "Sửa", click: showEditDetails },{text:"Đóng phiếu", click: closeEvent }], title: " Tùy chỉnh ", width: "300px" }
             ]
@@ -806,7 +818,6 @@ angular.module('app')
                     toaster.pop('error', "Lỗi", "Có lỗi trong quá trình cập nhật");
                 }
             });      
-            console.log(vm.selectedEvent);
         }
 
         var editwnd = $("#editdetails")
@@ -989,9 +1000,7 @@ angular.module('app')
             tagGrid.refresh();
             reminderGrid.setDataSource(reminderDatasource);
             reminderGrid.dataSource.read();
-            reminderGrid.refresh();
-            console.log(vm.eventDetailList);
-            
+            reminderGrid.refresh();           
         }
         function ProductTypeDropdownEditor(container, options) {
             $('<input required name="' + options.field + '"/>')
@@ -1014,7 +1023,6 @@ angular.module('app')
             if (e.dataItem) {
                 var dataItem = e.dataItem;
                 vm.productEditSelected = dataItem;
-                console.log(dataItem);
                 $http({
                     url: _pitechDeviceURL,
                     method: 'POST',
@@ -1031,8 +1039,6 @@ angular.module('app')
                 .then(function(response){
                     if(response.data.d.Success === true) {
                         vm.pitechSerialList = response.data.d.Item;
-                        console.log("Got the serial list from server");
-                        console.log(vm.pitechSerialList);
                     } else {
                     }
                 });
@@ -1095,7 +1101,6 @@ angular.module('app')
             e.preventDefault();
             var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
             vm.selectedEvent = dataItem;
-            console.log(vm.selectedEvent);
             updateGrid();
             $scope.showEditWindow = true;
             $("#editDetailWindow").kendoWindow({
@@ -1122,8 +1127,6 @@ angular.module('app')
             .then(function(response){
                 if(response.data.d.Success === true) {
                     vm.pitechSerialList = response.data.d.Item;
-                    console.log("Got the serial list from server");
-                    console.log(vm.pitechSerialList);
                 } else {
                 }
             });
@@ -1134,7 +1137,6 @@ angular.module('app')
         function showDetails(e) {
             e.preventDefault();
             var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-            console.log(dataItem);
             vm.selectedEvent = dataItem;  
             updateGrid();     
             if(vm.eventDetailList.length > 0) {
@@ -1321,10 +1323,6 @@ angular.module('app')
             var grid = $('#eventGrid').data('kendoGrid');
             var selectedItem = grid.dataItem(grid.select());
             vm.selectedEvent = selectedItem;
-            console.log(vm.selectedEvent.ID);
-            console.log(vm.selectedEvent.DetailEvents);
-            console.log(vm.selectedEvent.InteractionHistories);
-            console.log(vm.selectedEvent.ReminderNotes);
             updateGrid();
         }
         function updateGrid() {
@@ -1483,7 +1481,6 @@ angular.module('app')
             var editGrid = $("#editDetailsGrid").data('kendoGrid');
             editGrid.dataSource.transport.options.read.url = _eventDetailURL+"?$filter=EventID eq "+vm.selectedEvent.ID;
             editGrid.dataSource.read();
-            console.log(vm.eventDetailList);   
             // $("#eventWindowTabstrip").kendoTabStrip({
             //     animation:  {
             //         open: {
@@ -1513,7 +1510,8 @@ angular.module('app')
                                         dateNoTime.getFullYear(),
                                         dateNoTime.getMonth(),
                                         dateNoTime.getDate()
-                                    )
+                                    ),
+                                    Note: response[i].Note
                                 };
                                 details.push(detail);
                               }
@@ -1528,7 +1526,8 @@ angular.module('app')
                                 ProductName: { type: "string" },
                                 AgencySold: { type: "string" },
                                 AssociateName: { type: "string" },
-                                CreatDate: { type: "date" }
+                                CreatDate: { type: "date" },
+                                Note: { type: "string" }
                             }
                         }
                     },    
@@ -1555,7 +1554,8 @@ angular.module('app')
                         title:"Ngày tạo",
                         template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
                         groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
-                    }
+                    },
+                    { field: "Note", title: "Ghi chú" }
                 ]
         };
         $scope.historyGridOption = {
@@ -1704,7 +1704,11 @@ angular.module('app')
                 },
                 {
                     field: "Note",
-                    title: "Ghi chú lịch hẹn"
+                    title: "Ghi chú lịch hẹn",
+                    attributes: {
+                        "class": "breakWord120"
+
+                    }
                 },
                 {
                     field:"CreatDate",
@@ -1719,6 +1723,10 @@ angular.module('app')
                     groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
                 }
             ]
+        }
+        $scope.noteEditor = function(container, options) {
+            var editor =  $('<textarea data-bind="value: ' + options.field + '" cols="20" rows="4"></textarea>')
+                  .appendTo(container);
         }
         $scope.editDetailsOptions = {
             dataSource: {
@@ -1794,6 +1802,7 @@ angular.module('app')
             },
             sortable: true,
             pageable: true,
+            resizable: true,    
             height: 468,
             columns: [
                 { field: "ID", title: "Id", hidden: true },
@@ -1824,7 +1833,7 @@ angular.module('app')
                     groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #" 
                 },
                 { field: "AssociateName", title:"Nhân viên bán" },    
-                { field: "Note", title: "Ghi chú"},
+                { field: "Note", title: "Ghi chú", editor: $scope.noteEditor },
                 {   
                     command: ["edit"], title: "&nbsp;", width: "250px" 
                 }
@@ -1832,8 +1841,6 @@ angular.module('app')
             editable: "inline",
             save: function (e) {
                 e.preventDefault();
-                console.log(e.dataItem);
-                console.log(e.model);debugger;
                 var model = {
                     ID: e.model.ID,
                     Serial: e.model.Serial,
@@ -1865,7 +1872,6 @@ angular.module('app')
                         toaster.pop('error', "Lỗi", "Có lỗi trong quá trình cập nhật");
                     }
                 });      
-               console.log(e); 
             },
             cancel: function(e) {
                 e.preventDefault();
@@ -1874,5 +1880,6 @@ angular.module('app')
                 this.closeCell();
             }
         }
+       
     }
 ]);

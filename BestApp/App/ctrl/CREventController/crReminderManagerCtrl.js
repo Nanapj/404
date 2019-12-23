@@ -191,6 +191,7 @@ angular.module('app')
                         $("#historyGrid").data("kendoGrid").dataSource.read();
                         $("#historyGrid").data("kendoGrid").refresh();
                         scheduleWindow.data("kendoWindow").close();
+                        
                     }
                 });
             }
@@ -238,6 +239,7 @@ angular.module('app')
             }
         };
         $scope.reminderGridOption = {
+            toolbar: ["search"],
             dataSource: {
                 type: "odata-v4",
                 transport: {
