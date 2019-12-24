@@ -4,7 +4,9 @@ angular.module('app')
         var vm = this;
         var _cusURL = "/odata/Customers";
         var _eventURL = "/odata/Events";
+        vm.selectedCus = {};
         $scope.mainGridOptions = {
+            toolbar:['search'],
             dataSource: {
                 type: "odata-v4",
                 transport: {
@@ -66,8 +68,18 @@ angular.module('app')
                 field: "Note",
                 title: "Ghi chú",
                 width: "120px"
-                }
+                },
+                { command: [{ text: "Chi tiết", click: showDetails }], title: " Tùy chỉnh ", width: "300px" }
             ]
         };
+        function showDetails(e) {
+            e.preventDefault();
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            vm.selectedCus = dataItem;
+            $state.go('app.customer.profile', {
+                ID: vm.selectedCus.ID
+            });
+            console.log(dataItem);
+        }
     }
 ]);

@@ -384,7 +384,7 @@ angular.module('app')
 
 
         $scope.onEventProductTypeSelChanged = function() {
-            if(vm.eventProductTypeSelectedData.Name == "FOX") {
+            if(vm.eventProductTypeSelectedData.Name == "FOX" && vm.serialData.length > 0) {
                 $("#serialDropdown").data("kendoDropDownList").dataSource.read().then(function() {
                     $($("#serialDropdown").data("kendoDropDownList").dataItems()).each(function (item) {
                         var deviceSerial = this.device_serial.substring(0,2);
@@ -393,7 +393,7 @@ angular.module('app')
                         }
                     });    
                 });
-            } else if(vm.eventProductTypeSelectedData.Name == "RHINO") {
+            } else if(vm.eventProductTypeSelectedData.Name == "RHINO" && vm.serialData.length > 0) {
                 $("#serialDropdown").data("kendoDropDownList").dataSource.read().then(function() {
                     $($("#serialDropdown").data("kendoDropDownList").dataItems()).each(function (item) {
                         var deviceSerial = this.device_serial.substring(0,2);
@@ -405,7 +405,7 @@ angular.module('app')
             }
         }
         $scope.onReminderProductTypeSelChanged = function() {
-            if(vm.reminderProductTypeSelectedData.Name == "FOX") {
+            if(vm.reminderProductTypeSelectedData.Name == "FOX" && vm.serialData.length > 0) {
                 $("#serialReminderDropdown").data("kendoDropDownList").dataSource.read().then(function() {
                     $($("#serialReminderDropdown").data("kendoDropDownList").dataItems()).each(function (item) {
                         var deviceSerial = this.device_serial.substring(0,2);
@@ -414,7 +414,7 @@ angular.module('app')
                         }
                     });    
                 });
-            } else if(vm.reminderProductTypeSelectedData.Name == "RHINO") {
+            } else if(vm.reminderProductTypeSelectedData.Name == "RHINO" && vm.serialData.length > 0) {
                 $("#serialReminderDropdown").data("kendoDropDownList").dataSource.read().then(function() {
                     $($("#serialReminderDropdown").data("kendoDropDownList").dataItems()).each(function (item) {
                         var deviceSerial = this.device_serial.substring(0,2);

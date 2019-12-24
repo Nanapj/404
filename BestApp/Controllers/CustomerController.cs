@@ -13,5 +13,9 @@ namespace BestApp.Controllers
         {
             return PartialView();
         }
+        public ActionResult ProfileDetail()
+        {
+            return PartialView();
+        }
     }
 }

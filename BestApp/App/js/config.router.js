@@ -172,7 +172,15 @@ angular.module('app')
                         url:'/index',
                         templateUrl: '/customer/Index'
                     })
-
+                    .state('app.customer.profile', {
+                        url:'/profile/:ID',
+                        templateUrl: '/customer/ProfileDetail',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                                return $ocLazyLoad.load('/App/ctrl/CustomerController/cusProfileCtrl.js');
+                            }]
+                        }
+                    })
                     .state('app.producttype', {
                         url:'/producttype',
                         template: '<div ui-view class="fade-in-down"></div>',

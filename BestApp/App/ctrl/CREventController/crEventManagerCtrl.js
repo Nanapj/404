@@ -1844,7 +1844,7 @@ angular.module('app')
                 var model = {
                     ID: e.model.ID,
                     Serial: e.model.Serial,
-                    ProductID: e.model.ProductName,
+                    ProductID: e.model.ID,
                     Note: e.model.Note,
                     AgencySold: e.model.AgencySold,
                     AssociateName: e.model.AssociateName,
