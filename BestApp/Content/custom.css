@@ -11,6 +11,10 @@
 .create-cr-btn {
     padding-left: 0px;
 }
+.cus-profile-form {
+    margin-top: 50px;
+    margin-left: -50px;
+}
 @media(max-width: 992px) {
     .cus-cr-btn {
         padding-left: 0px;

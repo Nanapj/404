@@ -10,6 +10,10 @@ angular.module('app')
                 $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                   if (localStorage.getItem("UserLogged") != null) {
                       $rootScope.UserLogged = JSON.parse(localStorage.getItem("UserLogged"));
+                      if(localStorage.getItem("expired") < new Date()) {
+                            localStorage.clear();
+                            $state.go('account.login');
+                      }
                   } else {
                       if (toState.name != 'account.login' && toState.name != 'account.register') {
                           event.preventDefault();

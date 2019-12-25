@@ -36,7 +36,8 @@ angular.module('app')
             DetailEvents: [],
             InteractionHistories: [],
             ReminderNotes: [],
-            Tags: []
+            Tags: [],
+            EStatusLogs: []
         }
         vm.reminderCR = {
             ReminderNotes: [],
@@ -721,7 +722,8 @@ angular.module('app')
                                           } else 
                                           {
                                             //If no found, show here
-                                            //console.log('no found');
+                                           
+                                            console.log('no found');
                                           }
                                         
                                         }, function errorCallback(response) {
@@ -730,6 +732,7 @@ angular.module('app')
                                 }
                               } else 
                               {
+                                
                                console.log('no found');
                               }
                             
@@ -769,6 +772,9 @@ angular.module('app')
                 // console.log(response.data.d.Info);
                 if(response.data.d.Success === true) {
                     vm.pitechCustomer = response.data.d.Item;
+                    if(vm.pitechCustomer == null) {
+                        $scope.serialVisible = true;
+                    }
                     $http({
                         url: _pitechCusURL,
                         method: 'POST',
@@ -879,6 +885,7 @@ angular.module('app')
                     $scope.pitechInfoInvi = false;
                 } else {
                     $scope.pitechInfoInvi = true;
+                    $scope.serialVisible = true;
                 }
             });
         }
@@ -1029,7 +1036,7 @@ angular.module('app')
                                     'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
                                 },
                             }).error(function(response) {
-                                toaster.pop('error', "Thất bại", response.error.innererror.message);
+                                toaster.pop('error', "Thất bại", response);
                             })
                             .then(function(response){
                                 if(response.status == 201) {

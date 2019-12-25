@@ -12,6 +12,7 @@ angular.module('app')
         vm.edit = edit;
         vm.destroy = destroy;
         var blockui = blockUI.instances.get('BlockUI');
+        
         function toolbarTemplate() {
             return kendo.template($("#toolbar").html());
         }

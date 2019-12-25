@@ -18,6 +18,7 @@ angular.module('app')
             },
             sortable: true,
             pageable: true,
+            groupable: true,
             filterable: {
                 extra: false
             },
