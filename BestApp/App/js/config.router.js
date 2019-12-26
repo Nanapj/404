@@ -10,6 +10,10 @@ angular.module('app')
                 $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                   if (localStorage.getItem("UserLogged") != null) {
                       $rootScope.UserLogged = JSON.parse(localStorage.getItem("UserLogged"));
+                      if(localStorage.getItem("expired") < new Date()) {
+                            localStorage.clear();
+                            $state.go('account.login');
+                      }
                   } else {
                       if (toState.name != 'account.login' && toState.name != 'account.register') {
                           event.preventDefault();
@@ -172,7 +176,15 @@ angular.module('app')
                         url:'/index',
                         templateUrl: '/customer/Index'
                     })
-
+                    .state('app.customer.profile', {
+                        url:'/profile/:ID',
+                        templateUrl: '/customer/ProfileDetail',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function($ocLazyLoad){
+                                return $ocLazyLoad.load('/App/ctrl/CustomerController/cusProfileCtrl.js');
+                            }]
+                        }
+                    })
                     .state('app.producttype', {
                         url:'/producttype',
                         template: '<div ui-view class="fade-in-down"></div>',
