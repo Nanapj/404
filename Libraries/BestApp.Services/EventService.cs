@@ -26,6 +26,7 @@ namespace BestApp.Services
             Task<EventViewModel> UpdateAsync(EventViewModel model, string CurrentId);
             Task<IQueryable<EventViewModel>> GetAllEventsAsync(SearchViewModel model);
             IQueryable<EventViewModel> GetAllEvents(SearchViewModel model);
+            IEnumerable<EventViewModel> GetEventByCustomer(SearchViewModel model);
             bool Delete(Guid Id);
         }
         private readonly TagService _tagService;
@@ -138,12 +139,6 @@ namespace BestApp.Services
                 item.EventTypeName = _eventTypeService.Queryable()
                     .Where(t => t.Delete == false && t.Id == item.EventTypeID).FirstOrDefault().Name;
             }
-
-            //if(model.To != null || model.From != null)
-            //{
-            //    result = result.Where(x => ((!model.From.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
-            //    && ((!model.To.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) <= DbFunctions.TruncateTime(model.To)))).ToList();
-            //}
             
             return result.AsQueryable();
         }
@@ -152,6 +147,89 @@ namespace BestApp.Services
             
             return Task.Run(() => GetAllEvents(model));
             
+        }
+        public IEnumerable<EventViewModel> GetEventByCustomer(SearchViewModel model)
+        {
+            //var findId = Queryable().Where(x => x.Customer.Id == model.CustomerID).Select(x => x.Id).FirstOrDefault();
+            //if (findId != null)
+            //{
+            //    model.ID = findId;
+            //}
+
+            var result = _repository.Queryable().Where(x => x.Delete == false
+            && ((!model.CustomerID.HasValue) || x.Customer.Id == model.CustomerID)
+            && ((!model.From.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
+            && ((!model.To.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) <= DbFunctions.TruncateTime(model.To))))
+            .Select(x => new EventViewModel
+            {
+                CreatDate = x.CreatDate,
+                ID = x.Id,
+                Code = x.Code,
+                CustomerID = x.Customer.Id,
+                CustomerName = x.Customer.Name,
+                Address = x.Customer.Address,
+                PhoneNumber = x.Customer.PhoneNumber,
+                EventPurposeID = x.EventPurposeId,
+                EventTypeID = x.EventTypeId,
+                Status = x.Status,
+                UserName = x.UserAccount.UserName,
+                Note = x.Note,
+                Tags = x.Tags.Select(t => new TagViewModel
+                {
+                    ID = t.Id,
+                    NameTag = t.NameTag,
+                    CodeTag = t.CodeTag,
+                    DepartmentName = t.Departments.Name
+                }).ToList(),
+                DetailEvents = x.DetailEvents.Select(t => new DetailEventViewModel
+                {
+                    ID = t.Id,
+                    Serial = t.Serial,
+                    CreatDate = t.CreatDate,
+                    ProductCode = t.ProductType.Code,
+                    ProductName = t.ProductType.Name,
+                    AgencySold = t.AgencySold,
+                    DateSold = t.DateSold,
+                    AssociateName = t.AssociateName,
+                    EventCode = t.Event.Code,
+                    EventID = t.Event.Id,
+                    Note = t.Note
+                }).ToList(),
+                ReminderNotes = x.ReminderNotes.Select(t => new ReminderNoteViewModel
+                {
+                    Note = t.Note,
+                    CreatDate = t.CreatDate,
+                    Serial = t.Serial,
+                    ID = t.Id,
+                    ReminderDate = t.ReminderDate,
+
+                }).ToList(),
+                InteractionHistories = x.InteractionHistories.Select(t => new InteractionHistoryViewModel
+                {
+                    ID = t.Id,
+                    Type = t.Type,
+                    Note = t.Note,
+                    CreatDate = t.CreatDate,
+                    EmployeeCall = t.EmployeeCall,
+                    EmployeeID = t.EmployeeID,
+                    EventCode = t.Event.Code
+                }).ToList()
+            }).ToList();
+            foreach (var item in result)
+            {
+                item.EventPurposeName = _eventPurposeService.Queryable()
+                     .Where(t => t.Delete == false && t.Id == item.EventPurposeID).FirstOrDefault().Name;
+                item.EventTypeName = _eventTypeService.Queryable()
+                    .Where(t => t.Delete == false && t.Id == item.EventTypeID).FirstOrDefault().Name;
+            }
+
+            //if(model.To != null || model.From != null)
+            //{
+            //    result = result.Where(x => ((!model.From.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
+            //    && ((!model.To.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) <= DbFunctions.TruncateTime(model.To)))).ToList();
+            //}
+
+            return result;
         }
         public Event Insert(EventViewModel model, string CurrentId)
         {

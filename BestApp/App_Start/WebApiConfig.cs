@@ -32,6 +32,10 @@ namespace BestApp
                 .Function("GetInteractionHistoryByCustomer")
                 .ReturnsCollectionFromEntitySet<InteractionHistoryViewModel>("InteractionHistories");
             builder.EntitySet<EventViewModel>("Events");
+            builder.EntityType<EventViewModel>()
+                .Collection
+                .Function("GetEventByCustomer")
+                .ReturnsCollectionFromEntitySet<EventViewModel>("Events");
             builder.EntitySet<ProductTypeViewModel>("ProductTypes");
             builder.EntitySet<WardViewModel>("Wards");
             builder.EntitySet<CityViewModel>("Cities");

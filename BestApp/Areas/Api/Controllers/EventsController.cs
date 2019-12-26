@@ -29,6 +29,12 @@ namespace BestApp.Areas.Api.Controllers
             var result = await _eventService.GetAllEventsAsync(model);
             return result;
         }
+        [EnableQuery]
+        public IEnumerable<EventViewModel> GetEventByCustomer([FromUri] SearchViewModel model)
+        {
+            var result =  _eventService.GetEventByCustomer(model);
+            return result;
+        }
         [HttpPost]
         public async Task<IHttpActionResult> Post(EventViewModel model)
         {
