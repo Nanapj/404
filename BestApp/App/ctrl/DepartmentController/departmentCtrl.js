@@ -73,7 +73,7 @@ angular.module('app')
             },
             sortable: true,
             pageable: true,
-            height: 700,
+            height: 500,
             dataBound: onDataBound,
             change: onChange,
             columns: [

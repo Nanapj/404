@@ -10,10 +10,6 @@ angular.module('app')
                 $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                   if (localStorage.getItem("UserLogged") != null) {
                       $rootScope.UserLogged = JSON.parse(localStorage.getItem("UserLogged"));
-                      if(localStorage.getItem("expired") < new Date()) {
-                            localStorage.clear();
-                            $state.go('account.login');
-                      }
                   } else {
                       if (toState.name != 'account.login' && toState.name != 'account.register') {
                           event.preventDefault();
@@ -208,6 +204,32 @@ angular.module('app')
                         resolve: {
                             deps: ['$ocLazyLoad', function ($ocLazyLoad) {
                                 return $ocLazyLoad.load('/App/ctrl/ProductTypeController/ProductTypeEditCtrl.js'); // Resolve promise and load before view 
+                            }]
+                        }
+                    })
+                    .state('app.creventsource',{
+                        url:'/creventsource',
+                        template: '<div ui-view class="fade-in-down"></div>',
+                        resolve: {
+                            devs: ['$ocLazyLoad', function($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/CrEventSourceController/crEventSourceCtrl.js');
+                            }]
+                        }
+                    })
+                    .state('app.creventsource.index', {
+                        url:'/index',
+                        templateUrl: '/CrEventSource/Index'
+                    })
+                    .state('app.creventsource.create', {
+                        url:'/create',
+                        templateUrl: '/CrEventSource/Create'
+                    })
+                    .state('app.creventsource.edit', {
+                        url: '/edit/:ID',
+                        templateUrl:'/CrEventSource/Edit',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/CrEventSourceController/crEventSourceEditCtrl.js');
                             }]
                         }
                     })

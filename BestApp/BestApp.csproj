@@ -259,6 +259,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CatController.cs" />
     <Compile Include="Controllers\CrEventController.cs" />
+    <Compile Include="Controllers\CrEventSourceController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -363,6 +364,9 @@
     <Content Include="Views\ProductType\Create.cshtml" />
     <Content Include="Views\ProductType\Edit.cshtml" />
     <Content Include="Views\Customer\ProfileDetail.cshtml" />
+    <Content Include="Views\CrEventSource\Index.cshtml" />
+    <Content Include="Views\CrEventSource\Edit.cshtml" />
+    <Content Include="Views\CrEventSource\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\BestApp.Core\BestApp.Core.csproj">

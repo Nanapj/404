@@ -157,12 +157,12 @@ angular.module('app')
             { field: "Status",  title: "Trạng thái phiếu"},
             {  
                 field:"CreatDate",
-                title:"Ngày tạo",
+                title:"Ngày chỉnh sửa",
                 template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
                 groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
             },
             {
-                field: "Note", title: " Ghi chú"
+                field: "Note", title: "Người chỉnh sửa"
             }
         ]
         }).data("kendoGrid");
@@ -637,7 +637,29 @@ angular.module('app')
                 eventGrid.dataSource.read();
             }     
         };
-        $scope.onDateRangeChange = function() {
+        // $scope.onDateRangeChange = function() {
+        //     var eventGrid = $("#eventGrid").data("kendoGrid");
+        //     if(vm.filterTagString === "") {
+        //         eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes,EStatusLogs&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&orderby CreatDate desc";
+        //         eventGrid.dataSource.read();
+        //     } else {
+        //         vm.filterTagString = vm.filterTagString.substring(0, vm.filterTagString.length - 1);
+        //         eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes,EStatusLogs&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&$filter=Tags/any(c: c/NameTag in ("+ vm.filterTagString+"))&orderby CreatDate desc";
+        //         eventGrid.dataSource.read();
+        //     }
+        // };
+        $scope.onStartDateChange = function() {
+            var eventGrid = $("#eventGrid").data("kendoGrid");
+            if(vm.filterTagString === "") {
+                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes,EStatusLogs&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&orderby CreatDate desc";
+                eventGrid.dataSource.read();
+            } else {
+                vm.filterTagString = vm.filterTagString.substring(0, vm.filterTagString.length - 1);
+                eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes,EStatusLogs&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&$filter=Tags/any(c: c/NameTag in ("+ vm.filterTagString+"))&orderby CreatDate desc";
+                eventGrid.dataSource.read();
+            }
+        };
+        $scope.onEndDateChange = function() {
             var eventGrid = $("#eventGrid").data("kendoGrid");
             if(vm.filterTagString === "") {
                 eventGrid.dataSource.transport.options.read.url =_crEventURL+"?$expand=DetailEvents,InteractionHistories,Tags,ReminderNotes,EStatusLogs&From="+moment(vm.startDate).utc().format()+"&To="+moment(vm.endDate).utc().format()+"&orderby CreatDate desc";
@@ -793,7 +815,11 @@ angular.module('app')
                     field: "Note",
                     title: "Ghi chú sự kiện"
                 },
-                { command: [{ text: "Chi tiết", click: showDetails },{text: "Sửa", click: showEditDetails },{text:"Đóng phiếu", click: closeEvent }], title: " Tùy chỉnh ", width: "300px" }
+                { command: [{ text: "Chi tiết", click: showDetails },{text: "Sửa", click: showEditDetails , 
+                    visible: function(dataItem) { return dataItem.Status ==="Open" }
+                },{text:"Đóng phiếu", click: closeEvent , 
+                    visible: function(dataItem) { return dataItem.Status ==="Open" }
+                }], title: " Tùy chỉnh ", width: "300px" }
             ]
         };
         function closeEvent(e) {
@@ -1741,7 +1767,12 @@ angular.module('app')
                         url: function(dataItem) {
                             return _eventDetailURL+"(" + dataItem.ID + ")";
                         }
+                    },
+                    parameterMap: function(options, operation) {
+                    if (operation !== "read" && options.models) {
+                        return {models: kendo.stringify(options.models)};
                     }
+                }
                 },
                 batch: true,
                 pageSize: 10,      
@@ -1807,7 +1838,8 @@ angular.module('app')
             columns: [
                 { field: "ID", title: "Id", hidden: true },
                 { 
-                    field: "ProductName", title:"Tên sản phẩm",
+                    field: "ProductName", 
+                    title:"Tên sản phẩm",
                     editor: ProductTypeDropdownEditor, 
                     template: "#= ProductName #" 
                 },

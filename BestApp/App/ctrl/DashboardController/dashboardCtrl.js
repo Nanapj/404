@@ -7,11 +7,6 @@ angular.module('app')
         var colandlinectx = document.getElementById('columnAndLineChart').getContext('2d');
         var barctx = document.getElementById('barChart').getContext('2d');
         $scope.initialDashboard = function() {
-            var expired = localStorage.getItem('expired');
-            if(!(new Date() > expired)) {
-                localStorage.clear();
-                $state.go('account.login');
-            }
         }
         $scope.initialDashboard();
         var pieData = {

@@ -32,7 +32,7 @@ namespace BestApp.Domain
         public DateTime LastModifiedDate { get; set; }
         public string UserName { get; set; }
         public bool Delete { get; set; }
-        public Guid ProductID { get; set; }
+        public Guid? ProductID { get; set; }
      
     }
 }

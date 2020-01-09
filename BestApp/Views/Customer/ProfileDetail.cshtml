@@ -1,75 +1,128 @@
-﻿
-<div class="col">
-    <div class="bg-light lter b-b wrapper-md">
-        <div class="bg-light lter b-b wrapper-md" ng-controller="cusProfileCtrl as vm">
-            <h1 class="m-n font-thin h3">Customer Profile</h1>
-            <div class="col-sm-6 wrapper-md cus-profile-form">
-                <div class="panel panel-default">
-                    <div class="panel-heading font-bold">Thông tin khách hàng</div>
-                    <div class="panel-body">
-                        <div class="form-horizontal">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label"><b>Tên khách hàng:</b></label>
-                                <div class="col-sm-9">
-                                    <p class="form-control-static">
-                                        <a>{{ vm.customer.Name || 'empty' }}</a>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label"><b>Số điện thoại:</b></label>
-                                <div class="col-sm-9">
-                                    <p class="form-control-static">
-                                        <a>{{ vm.customer.PhoneNumber || 'empty' }}</a>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label"><b>Ngày sinh:</b></label>
-                                <div class="col-sm-9">
-                                    <p class="form-control-static">
-                                        <a>{{ vm.customer.Birthday || 'empty' }}</a>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label"><b>Địa chỉ:</b></label>
-                                <div class="col-sm-9">
-                                    <p class="form-control-static">
-                                        <a>{{ vm.customer.Address || 'empty' }}</a>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label"><b>Thành phố/Tỉnh:</b></label>
-                                <div class="col-sm-9">
-                                    <p class="form-control-static">
-                                        <a>{{ vm.customer.City || 'empty' }}</a>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label"><b>Quận/Huyện:</b></label>
-                                <div class="col-sm-9">
-                                    <p class="form-control-static">
-                                        <a>{{ vm.customer.District || 'empty' }}</a>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label"><b>Phường/Xã:</b></label>
-                                <div class="col-sm-9">
-                                    <p class="form-control-static">
-                                        <a>{{ vm.customer.Ward || 'empty' }}</a>
-                                    </p>
-                                </div>
-                            </div>
+﻿<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Customer Profile</h1>
+</div>
+<div class="wrapper-sm" ng-controller="cusProfileCtrl as vm">
+    <div class="row col-md-3">
+        <button class="btn m-b-xs w-xs btn-danger" ng-click="vm.backClicked()"><i class="glyphicon glyphicon-chevron-left icon text-light"></i>Back</button>
+    </div>
+    <div class="col-sm-6  cus-profile-form">
+        <div class="panel panel-default">
+            <div class="panel-heading font-bold">Thông tin khách hàng</div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><b>Tên khách hàng:</b></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static">
+                                <a>{{ vm.customer.Name || 'empty' }}</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><b>Số điện thoại:</b></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static">
+                                <a>{{ vm.customer.PhoneNumber || 'empty' }}</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><b>Ngày sinh:</b></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static">
+                                <a>{{ vm.customer.Birthday || 'empty' }}</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><b>Địa chỉ:</b></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static">
+                                <a>{{ vm.customer.Address || 'empty' }}</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><b>Thành phố/Tỉnh:</b></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static">
+                                <a>{{ vm.customer.City || 'empty' }}</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><b>Quận/Huyện:</b></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static">
+                                <a>{{ vm.customer.District || 'empty' }}</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><b>Phường/Xã:</b></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static">
+                                <a>{{ vm.customer.Ward || 'empty' }}</a>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row col-md-12">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="eventGrid"
+                 kendo-grid
+                 k-options="cusEventOptions"
+                 k-selectable="true"
+                 k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
+        </div>
+        <div kendo-window="win1"
+             k-title="'Chi tiết sự kiện'"
+             ng-show="showWindow"
+             id="detailWindow"
+             k-on-open="win1visible = true"
+             k-on-close="win1visible = false">
+            <div kendo-tab-strip k-content-urls="[ null, null]">
+                <!-- tab list -->
+                <ul>
+                    <li class="k-state-active">Chi tiết phiếu</li>
+                    <li>Lịch sử tương tác</li>
+                    <li>Tags</li>
+                    <li>Lịch sử hẹn</li>
+                </ul>
+                <div style="padding: 1em">
+                    <div class="col-md-12">
+                        <div id="eventDetailsGrid"
+                             kendo-grid
+                             k-options="detailsGridOption"
+                             k-selectable="true"
+                             k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
+                    </div>
+                </div>
+                <div style="padding: 1em">
+                    <div id="historyDetailsGrid"
+                         kendo-grid
+                         k-options="historyGridOption"
+                         k-selectable="true"
+                         k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
+                </div>
+                <div>
+                    <div id="tagDetailsGrid"
+                         kendo-grid
+                         k-options="tagDetailsOption"
+                         k-selectable="true"
+                         k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
+                </div>
+                <div>
+                    <div id="reminderDetailsGrid"
+                         kendo-grid
+                         k-options="reminderDetailsOption"
+                         k-selectable="true"
+                         k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+

@@ -36,17 +36,16 @@ namespace BestApp.Areas.Api.Controllers
             return result;
         }
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IHttpActionResult> Post(EventViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
             try
             {
-                var stf = await _eventService.InsertAsync(model, GetCurrentUserID());
-                _unitOfWorkAsync.Commit();
+                var stf = await _eventService.InsertAsync(model, GetCurrentUserID());           
                 var resultObject = new EventViewModel()
                 {
                     Code = stf.Code,
@@ -55,14 +54,18 @@ namespace BestApp.Areas.Api.Controllers
                     CustomerName = stf.Customer.Name,
                     Note = stf.Note,
                     ID = stf.Id,
+                    EventTypeID = stf.EventTypeId,
+                    EventPurposeID = stf.EventPurposeId,
+                    Birthday = stf.Customer.Birthday
                 };
+                _unitOfWorkAsync.Commit();
                 return Created(resultObject);
                
             }
             catch (Exception ex)
             {
                
-                throw ex;
+                throw ex.InnerException;
             }
         }
         public async Task<IHttpActionResult> Put(Guid key, EventViewModel model)

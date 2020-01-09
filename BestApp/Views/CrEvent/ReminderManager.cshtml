@@ -25,12 +25,24 @@
                             <div class="col-md-6">
                                 <div class="form-group" style="padding-left: 15px;">
                                     <h5>Ngày tạo</h5>
-                                    <div kendo-date-range-picker
+                                    @*<div kendo-date-range-picker
                                          id="dateRangeFilter"
                                          k-ng-model="vm.startDate, vm.endDate"
                                          k-on-change="onDateRangeChange()"
                                          k-options="{format: 'dd/MM/yyyy'}"
-                                         style="width: 100%;" />
+                                         style="width: 100%;" />*@
+                                    <h6>Start</h6>
+                                    <input kendo-date-picker
+                                           k-ng-model="vm.startDate"
+                                           k-options="{format: 'dd/MM/yyyy'}"
+                                           k-on-change="onStartDateChange()"
+                                           style="width: 50%;" />
+                                    <h6>End</h6>
+                                    <input kendo-date-picker
+                                           k-ng-model="vm.endDate"
+                                           k-options="{format: 'dd/MM/yyyy'}"
+                                           k-on-change="onEndDateChange()"
+                                           style="width: 50%;" />
                                 </div>
                             </div>
                         </div>

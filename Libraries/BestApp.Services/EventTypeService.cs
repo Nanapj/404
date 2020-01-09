@@ -8,6 +8,7 @@ using Service;
 using Service.Pattern;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -107,12 +108,12 @@ namespace BestApp.Services
         }
         public bool Delete(Guid Id)
         {
-            var result = Find(Id);
+            var result = Queryable().Include(x => x.EventPurposes).Where(x=> x.Id == Id).FirstOrDefault();
             if (result != null)
             {
                 if (result.EventPurposes.Any())
                 {
-                    throw new Exception("Không được phép xóa do sự kiện có mục đích");
+                    throw new Exception("Không được phép xóa do nguồn sự kiện có mục đích");
                 }
                 else
                 {

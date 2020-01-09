@@ -7,6 +7,7 @@ angular.module('app')
         var _cusURL = "/odata/Customers";
         var _cityURL = "/odata/Cities";
         var _districtURL = "/odata/Districts";
+        var _eventReminder = "/odata/ReminderNotes";
         var _wardURL = "/odata/Wards";
         var _tagURL = "/odata/Tags";
         var _eventTypeURL = "/odata/EventTypes";
@@ -73,8 +74,10 @@ angular.module('app')
             { text: 'Ok', action: onResetOk },
             { text: 'Cancel', primary: true, action: onResetCancel }
         ];
+        vm.EventIDReturn = "";
         $scope.dropVisible = true;
         $scope.serialVisible = false;
+
         // $scope.gotoDiv = function(x) {
         //     if ($location.hash() !== newHash) {
         //       $location.hash(x);
@@ -301,7 +304,7 @@ angular.module('app')
         $scope.onEventSelChanged = function() {
             $scope.purDis = 1;
             console.log(vm.selectedEventData);
-            if(vm.selectedEventData.Name !== " Sự kiện... ") {
+            if(vm.selectedEventData.Name !== " Nguồn sự kiện... ") {
                 var tabStrip = $("#eventTabstrip").kendoTabStrip().data("kendoTabStrip");
                 // $("#purposedropdown").data("kendoDropDownList").dataSource.read().then(function() {
                 //     $($("#purposedropdown").data("kendoDropDownList").dataItems()).each(function (item) {
@@ -382,8 +385,6 @@ angular.module('app')
             //    }
             // });
         }
-
-
         $scope.onEventProductTypeSelChanged = function() {
             if(vm.eventProductTypeSelectedData.Name == "FOX" && vm.serialData.length > 0) {
                 $("#serialDropdown").data("kendoDropDownList").dataSource.read().then(function() {
@@ -649,6 +650,8 @@ angular.module('app')
                     vm.secActived = true;
                     vm.tabDisable = false;
                     $scope.eventTypeDis = 0;
+                    var tabStrip = $("#eventTabstrip").kendoTabStrip().data("kendoTabStrip");
+                    tabStrip.disable(tabStrip.tabGroup.children().eq(1));
                     vm.systemCustomer = response.data.value[0];
                     //Check the customer view model
                     // console.log(vm.systemCustomer.District);
@@ -718,7 +721,7 @@ angular.module('app')
                                                     }
                                                 }
                                             );
-                                           
+                                          
                                           } else 
                                           {
                                             //If no found, show here
@@ -991,6 +994,78 @@ angular.module('app')
                     tabstrip.enable(tabstrip.tabGroup.children().eq(1));
                     var myTab = tabstrip.tabGroup.children("li").eq(1);
                     tabstrip.select(myTab);
+                    if(vm.systemCustomer.ID === undefined || vm.systemCustomer.ID === "") {
+                        toaster.pop('error', "Thiếu thông tin", "Thiếu thông tin khách hàng");
+                    } else {              
+                        if(vm.crtagSelectected.length < 1) {
+                            toaster.pop('error', "Thiếu thông tin", "Vui lòng chọn ít nhất 1 tag");
+                        } 
+                        else {
+                            var json = JSON.stringify( vm.crtagSelectected, function( key, value ) {
+                                if( key === "$$hashKey" ) {
+                                    return undefined;
+                                }   
+                                return value;
+                            });
+                            vm.eventCR.CustomerID = vm.systemCustomer.ID;
+                            if(vm.serialSelectedData.device_serial !== "" && vm.serialSelectedData.device_serial !== " Serial... " && vm.serialSelectedData.device_serial !== undefined) {
+                                vm.eventCRDetails.Serial = vm.serialSelectedData.device_serial;
+                            }
+                            vm.eventCRDetails.ProductID = vm.eventProductTypeSelectedData.ID;
+                            vm.eventCR.DetailEvents.push(vm.eventCRDetails);
+                            vm.crtagSelectected = JSON.parse(json);                       
+                            vm.eventCR.Tags = vm.crtagSelectected;
+                            vm.eventCR.EventTypeID = vm.selectedEventData.ID;
+                            vm.eventCR.EventPurposeID = vm.selectedPurposeData.ID;
+                            if(moment(vm.eventCRDetails.DateSold).format('YYYY-MM-DDTHH:mm:ss') !== "Invalid date" && vm.eventCRDetails.DateSold !== "" && vm.eventCRDetails.DateSold !== undefined) {
+                                var time = moment(vm.eventCRDetails.DateSold).format('YYYY-MM-DDTHH:mm:ss');
+                                time+='Z';
+                                vm.eventCRDetails.DateSold = time;
+                            } else {
+                                var time = moment().format('YYYY-MM-DDTHH:mm:ss');
+                                time+='Z';
+                                vm.eventCRDetails.DateSold = time;
+                            }
+                            debugger;
+                            $http({
+                                url: _eventURL,
+                                method: 'POST',
+                                data: JSON.stringify(vm.eventCR),
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                                },
+                            }).success(function(data, status, headers, config) {
+                                debugger;
+                                console.log(data);
+                                console.log(status);
+                                console.log(headers);
+                                console.log(config);
+                            }).
+                            error(function(data, status, headers, config) {
+                                debugger;
+                                console.log(data);
+                                console.log(status);
+                                console.log(headers);
+                                console.log(config);
+                            })
+                            .then(function(response){
+                                console.log(response.data.ID);
+                                vm.EventIDReturn = response.data.ID;
+                                vm.eventCR = {
+                                    DetailEvents: [],
+                                    InteractionHistories: [],
+                                    ReminderNotes: [],
+                                    Tags: [],
+                                    EStatusLogs: []
+                                }
+                                if(response.status == 201) {
+                                    toaster.pop('success', "Thành công", "Đã tạo sự kiện");                 
+                                }
+                            });
+                        }  
+                    } 
+                    
                 } else {
                     if(vm.systemCustomer.ID === undefined || vm.systemCustomer.ID === "") {
                         toaster.pop('error', "Thiếu thông tin", "Thiếu thông tin khách hàng");
@@ -1015,9 +1090,7 @@ angular.module('app')
                             vm.eventCR.Tags = vm.crtagSelectected;
                             vm.eventCR.EventTypeID = vm.selectedEventData.ID;
                             vm.eventCR.EventPurposeID = vm.selectedPurposeData.ID;
-                            vm.interactionHistoryObj.Type ="Gọi điện";
-                            vm.interactionHistoryObj.Note = vm.eventCRDetails.Note;
-                            if(vm.eventCRDetails.DateSold !== undefined && vm.eventCRDetails.DateSold !== "") {
+                            if(moment(vm.eventCRDetails.DateSold).format('YYYY-MM-DDTHH:mm:ss') !== "Invalid date" && vm.eventCRDetails.DateSold !== "" && vm.eventCRDetails.DateSold !== undefined) {
                                 var time = moment(vm.eventCRDetails.DateSold).format('YYYY-MM-DDTHH:mm:ss');
                                 time+='Z';
                                 vm.eventCRDetails.DateSold = time;
@@ -1052,10 +1125,11 @@ angular.module('app')
         }
         $scope.reminderCreate = function () {
             vm.eventCR.CustomerID = vm.systemCustomer.ID;
+        
             if(vm.eventCR.CustomerID == undefined || vm.eventCR.CustomerID === "") {
                 toaster.pop('error', "Thiếu thông tin", "Thiếu thông tin khách hàng");
             } else 
-            if(!vm.reminderCRDetails.ReminderDate.HasValue ){
+            if(!vm.reminderCRDetails.ReminderDate){
                 toaster.pop('error', "Ngày hẹn", "Vui lòng chọn ngày hẹn");
             }
             var time = moment(compareDate(vm.eventCRDetails.DateSold)).format('YYYY-MM-DDTHH:mm:ss');
@@ -1080,12 +1154,12 @@ angular.module('app')
             vm.interactionHistoryObj.Note = vm.eventCRDetails.Note;
             vm.eventCR.InteractionHistories.push(vm.interactionHistoryObj);
             vm.reminderCRDetails.Serial = vm.serialSelectedData.device_serial;
-            vm.eventCR.ReminderNotes.push(vm.reminderCRDetails);
-          
+            vm.reminderCRDetails.EventID = vm.EventIDReturn;
+            
             $http({
-                url: _eventURL,
+                url: _eventReminder,
                 method: 'POST',
-                data: JSON.stringify(vm.eventCR),
+                data: JSON.stringify(vm.reminderCRDetails),
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')

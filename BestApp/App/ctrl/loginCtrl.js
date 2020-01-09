@@ -34,11 +34,11 @@ angular.module('app')
                         console.log(response)
                         $rootScope.UserLogged = response.data.userName;
                         $rootScope.access_token = response.data.access_token;
-                        $rootScope.expired_time = response.data['.expires'];
+                        $rootScope.expiredDate = response.data['.expires'];
                         // Save to local
                         localStorage.setItem("UserLogged", JSON.stringify($rootScope.UserLogged));
                         localStorage.setItem("access_token", JSON.stringify($rootScope.access_token));
-                        localStorage.setItem("expired", JSON.stringify($rootScope.expired_time));
+                        localStorage.setItem(".expires", JSON.stringify($rootScope.expiredDate));
                         $state.go('app.dashboard');
                     });
                 }else{
