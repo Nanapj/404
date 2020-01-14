@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestApp.Ultilities", "Libra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestApp.Admin", "BestApp.Admin\BestApp.Admin.csproj", "{4E2376B1-7A73-4D32-B962-9EC0A1A2595A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestApp.Pishop", "BestApp.Pishop\BestApp.Pishop.csproj", "{FED5DD0B-83EF-4C82-9B7F-E6886BEB6D4F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{4E2376B1-7A73-4D32-B962-9EC0A1A2595A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E2376B1-7A73-4D32-B962-9EC0A1A2595A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E2376B1-7A73-4D32-B962-9EC0A1A2595A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FED5DD0B-83EF-4C82-9B7F-E6886BEB6D4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FED5DD0B-83EF-4C82-9B7F-E6886BEB6D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FED5DD0B-83EF-4C82-9B7F-E6886BEB6D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FED5DD0B-83EF-4C82-9B7F-E6886BEB6D4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,25 @@
+﻿<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Create Event Source</h1>
+</div>
+<div class="wrapper-sm" ng-controller="CrEventSourceCtrl as vm">
+    <toaster-container></toaster-container>
+    <div class="row col-md-12">
+        <button class="btn m-b-xs w-xs btn-danger" ng-click="vm.backToSourceClicked()"><i class="glyphicon glyphicon-chevron-left icon text-light"></i>Back</button>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default" block-ui="BlockUI">
+                <div class="panel-heading font-bold">Create form</div>
+                <div class="panel-body" style="height:150px;">
+                    <form role="form">
+                        <div class="form-group">
+                            <label>Fullname</label>
+                            <input type="text" class="form-control" ng-model="vm.model.Name">
+                        </div>
+                        <button type="submit" class="btn btn-success" ng-click="vm.createSubmit()">Tạo nguồn sự kiện</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

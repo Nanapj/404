@@ -1,0 +1,29 @@
+﻿
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Cat Management</h1>
+</div>
+<div class="wrapper-sm" ng-controller="CatCtrl as vm">
+    <div class="row">
+        <div class="col-md-12">
+            <div kendo-grid 
+                k-options="mainGridOptions"
+                k-selectable="true"
+                k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'
+                k-toolbar='[ { template: vm.toolbarTemplate() } ]'></div>
+        </div>
+    </div>
+    <script type="text/x-kendo-template" id="toolbar">
+        <div>
+            <div class="toolbar">
+                <button kendo-button ng-click="vm.quick(this)"><span class="fa fa-terminal"></span>&nbsp;Quick</button>
+                <button kendo-button ng-click="vm.create(this)"><span class="fa fa-plus-circle"></span>&nbsp;Thêm</button>
+                <button kendo-button ng-click="vm.edit(this)"><span class="fa fa-pencil"></span>&nbsp;Sửa</button>
+                <button kendo-button ng-click="vm.destroy(this)"><span class="fa fa-trash"></span>&nbsp;Xóa</button>
+            </div>
+            <div class="toolbar" style="display:none">
+                <button kendo-button ng-click="vm.save(this)"><span class="fa fa-floppy-o"></span>&nbsp;Lưu</button>
+                <button kendo-button ng-click="vm.cancel(this)"><span class="fa fa-times-circle-o"></span>&nbsp;Hủy</button>
+            </div>
+        </div>
+    </script>
+</div>
