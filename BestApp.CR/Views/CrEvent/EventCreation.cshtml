@@ -1,0 +1,488 @@
+﻿<style>
+    .hide-drop {
+        display: none;
+    }
+</style>
+<div class="wrapper-md" ng-controller="crEventCreationCtrl as vm">
+    <toaster-container  toaster-options="{ 'time-out': 1000 }"></toaster-container>
+    <tabset class="tab-container" ng-init="steps={percent:40, step1:!vm.secActived, step2:vm.secActived}">
+        <tab heading="Bước 1" active="steps.step1" disabled="!vm.tabDisable" select="steps.percent=40">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="panel panel-default">
+                        <div class="panel-heading font-bold">TẠO SỰ KIỆN</div>
+                        <div class="panel-body">
+                            <form class="m-b-md" ng-submit="!vm.tabDisable ? (steps.step2=true) : (steps.step2=false)">
+                                <div class="input-group">
+                                    <input type="text" name="masked" ng-change="phoneNumChange()" ui-mask="999 999 9999" ng-model="vm.searchingNumber" placeholder="___ ___ ____" class="form-control m-b" required>
+
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-md btn-default" ng-disabled="vm.tabDisable" type="submit" ng-click="vm.searchPhoneNum()">Tiếp tục</button>
+                                    </span>
+                                </div>
+                                <label>Ví dụ: 0869246117</label>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </tab>
+        <tab heading="Bước 2" disabled="vm.tabDisable" active="steps.step2" select="steps.percent=60">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading font-bold">THÔNG TIN KHÁCH HÀNG 404</div>
+                        <div class="panel-body">
+                            <form role="form">
+                                <div class="form-group">
+                                    <label>Tên khách hàng</label>
+                                    <input type="text" class="form-control" placeholder="Tên khách hàng" ng-model="vm.systemCustomer.Name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Địa chỉ</label>
+                                    <input type="text" class="form-control" placeholder="Địa chỉ" ng-model="vm.systemCustomer.Address">
+                                </div>
+                                <div class="row ">
+                                    <div class="col-md-6 btn-group m-b-md col-sm-12">
+                                        <label>Thành phố / Tỉnh</label>
+                                        <select id="citydropdown"
+                                                kendo-drop-down-list
+                                                k-ng-model="vm.selectedCity"
+                                                k-data-text-field="'name_with_type'"
+                                                k-data-value-field="'code'"
+                                                k-data-source="vm.cityData"
+                                                k-option-label="' Thành phố... '"
+                                                k-filter="'contains'"
+                                                k-on-change="onCityChanged()"
+                                                style="width: 100%"></select>
+                                    </div>
+                                    <div class="col-md-6 btn-group m-b-md col-sm-12">
+                                        <label>Quận / Huyện</label>
+                                        <select id="districtdropdown"
+                                                kendo-drop-down-list
+                                                ng-disabled="districtDis === 1"
+                                                k-data-text-field="'name_with_type'"
+                                                k-data-value-field="'code'"
+                                                k-data-source="vm.districtData"
+                                                k-option-label="' Quận / Huyện... '"
+                                                k-filter="'contains'"
+                                                k-ng-model="vm.selectedDistrict"
+                                                k-on-change="onDistrictChanged()"
+                                                style="width: 100%"></select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 btn-group m-b-md col-sm-12">
+                                        <label>Phường / Xã</label>
+                                        <select id="warddropdown"
+                                                kendo-drop-down-list
+                                                ng-disabled="wardDis === 1"
+                                                k-data-text-field="'name_with_type'"
+                                                k-data-value-field="'code'"
+                                                k-data-source="vm.wardData"
+                                                k-option-label="' Phường / Xã... '"
+                                                k-ng-model="vm.selectedWard"
+                                                k-on-change="onWardChanged()"
+                                                k-filter="'contains'"
+                                                style="width: 100%"></select>
+                                    </div>
+                                    <div class="col-md-6 btn-group m-b-md col-sm-12">
+                                        <label>Ngày sinh</label>
+                                        <input kendo-date-picker
+                                               k-options="{format: 'dd/MM/yyyy'}"
+                                               value="{{vm.selectedDate}}"
+                                               k-ng-model="vm.selectedDate"
+                                               k-on-change="onSelectedDate()"
+                                               style="width: 100%;" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 create-cr-btn">
+                                    <div class="form-group" style="padding-top: 10px;">
+                                        <button class="btn btn-success btn-default " ng-click="vm.creUpdCusClicked()">Tạo mới / Chỉnh sửa</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 cus-cr-btn" style="padding-top: 10px;">
+                                    <button class="btn btn-info btn-default" title="Lịch sử tương tác với khách hàng" ng-click="win1.open()">
+                                        <i class="fa fa-file"></i>
+                                        Lịch sử
+                                    </button>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="panel panel-default" id="pitechInfo" ng-hide="pitechInfoInvi">
+                        <div class="panel-heading font-bold">THÔNG TIN KHÁCH HÀNG PITECH</div>
+                        <div class="panel-body">
+                            <form role="form">
+                                <div class="form-group">
+                                    <label><b>Tên khách hàng</b></label>
+                                    <p class="form-control-static">{{vm.pitechCustomer.customer_fullname}}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label><b>Địa chỉ</b></label>
+                                    <p class="form-control-static">
+                                        {{vm.pitechCustomer.customer_address}}
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label><b>Thành phố / Tỉnh</b></label>
+                                        <p class="form-control-static">  {{vm.pitechCustomer.customer_province}}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label><b>Quận / Huyện</b></label>
+                                        <p class="form-control-static">  {{vm.pitechCustomer.customer_district}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label><b>Phường / Xã</b></label>
+                                        <p class="form-control-static">  {{vm.pitechCustomer.customer_ward}}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label><b>Ngày sinh</b></label>
+                                        <p class="form-control-static">  {{vm.pitechCustomer.customer_birthday}}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label><b>Tùy chọn</b></label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-success btn-default" title="Lấy thông tin từ Pitech" ng-click="transferInfo()">
+                                        <i class="fa fa-mail-reply-all"></i>
+                                        Transfer
+                                    </button>
+                                    <button class="btn btn-info btn-default" title="Gửi yêu cầu thay đổi thông tin cho Pitech">
+                                        <i class="fa fa-comments-o"></i>
+                                        Gửi yêu cầu
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <p class="text-muted" ng-hide="!pitechInfoInvi">Pitech hiện chưa có thông tin khách hàng này</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading font-bold">PHÂN LOẠI PHIẾU</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6 k-content">
+                                    <label>Nguồn sự kiện</label>
+                                    <select id="eventtypedropdown"
+                                            kendo-drop-down-list
+                                            ng-disabled="eventTypeDis === 1"
+                                            k-data-text-field="'Name'"
+                                            k-data-value-field="'ID'"
+                                            k-data-source="vm.eventData"
+                                            k-option-label="' Nguồn sự kiện... '"
+                                            k-ng-model="vm.selectedEventData"
+                                            k-on-change="onEventSelChanged()"
+                                            k-filter="'contains'"
+                                            style="width: 100%"></select>
+                                </div>
+                                <div class="col-md-6 k-content">
+                                    <label>Mục đích</label>
+                                    <select id="purposedropdown"
+                                            kendo-drop-down-list
+                                            ng-disabled="purDis === 1"
+                                            k-data-text-field="'Name'"
+                                            k-data-value-field="'ID'"
+                                            k-data-source="vm.purposeData"
+                                            k-ng-model="vm.selectedPurposeData"
+                                            k-on-change="onPurSelChanged()"
+                                            k-option-label="' Mục đích... '"
+                                            k-filter="'contains'"
+                                            style="width: 100%"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading font-bold">THÔNG TIN PHIẾU</div>
+                        <div class="panel-body">
+                            <div id="eventTabstrip"
+                                 kendo-tab-strip
+                                 k-content-urls="[ null, null]" style="background-color: #edf1f2; border-color: white">
+                                <!-- tab list -->
+                                <ul>
+                                    <li class="k-state-active">Sự kiện</li>
+                                    <li>Phiếu hẹn</li>
+                                </ul>
+
+                                <div class="row" id="firstTabContent">
+                                    <div class="row col-md-12">
+                                        <div class="form-group">
+                                            <div class="col-md-3">
+                                                <label>Sản phẩm</label>
+                                                <div class="form-group">
+                                                    <select kendo-drop-down-list
+                                                            k-data-text-field="'Name'"
+                                                            k-data-value-field="'ID'"
+                                                            k-data-source="vm.eventProductTypeData"
+                                                            k-option-label="' Sản phẩm... '"
+                                                            k-filter="'contains'"
+                                                            style="width: 100%"
+                                                            k-ng-model="vm.eventProductTypeSelectedData"
+                                                            k-on-change="onEventProductTypeSelChanged()"></select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 serial-dropdown">
+                                                <div class="form-group" ng-if="!serialVisible">
+                                                    <label>Serial</label>
+                                                    <select kendo-drop-down-list
+                                                            id="serialDropdown"
+                                                            k-data-text-field="'device_serial'"
+                                                            k-data-value-field="'device_serial'"
+                                                            k-option-label="' Serial... '"
+                                                            k-data-source="vm.serialData"
+                                                            k-filter="'contains'"
+                                                            style="width: 100%"
+                                                            k-ng-model="vm.serialSelectedData"
+                                                            k-on-change="onSerialSelChanged()"></select>
+                                                </div>
+                                                <div class="form-group" ng-if="serialVisible">
+                                                    <label>Serial</label>
+                                                    <input style="height:17px;
+                                                           width:93%"
+                                                           type="text"
+                                                           class="form-control"
+                                                           placeholder="Serial..."
+                                                           ng-model="vm.eventCRDetails.Serial" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-12">
+                                        <div class="col-md-3">
+                                            <label>Đại lý</label>
+                                            <input style="height:17px;
+                                                   width:93%"
+                                                   type="text"
+                                                   class="form-control"
+                                                   placeholder="Đại lý"
+                                                   ng-model="vm.eventCRDetails.AgencySold" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>Nhân viên bán hàng</label>
+                                            <input style="height:17px;
+                                                   width:93%"
+                                                   type="text"
+                                                   class="form-control"
+                                                   placeholder="Nhân viên bán hàng"
+                                                   ng-model="vm.eventCRDetails.AssociateName" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>Ngày mua</label>
+                                            <input kendo-date-picker
+                                                   k-options="{format: 'dd/MM/yyyy'}"
+                                                   style="width: 100%;"
+                                                   k-ng-model="vm.eventCRDetails.DateSold"
+                                                   k-on-change="onDateSoldChanged()" />
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-12">
+                                        <div class="form-group" style="padding: 15px;">
+                                            <label>Nội dung</label>
+                                            <ng-quill-editor on-content-changed="contentChanged(editor, html, text)"
+                                                             ng-model="vm.eventCR.Note" modules="{toolbar: false}"></ng-quill-editor>
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-12">
+                                        <div class="form-group" style="padding:15px;">
+                                            <label><b>Tags:</b></label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Phòng ban</label>
+                                                <select id="crDepartmentMulDrop"
+                                                        kendo-multi-select k-options="vm.departmentSelectOptions"
+                                                        k-ng-model="vm.departmentSelectedIds"></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div id="listOfCrTag" title="Danh sách tag theo phòng ban">
+                                                    <div class="row" ng-repeat="item in vm.crDepartmentListTag">
+                                                        <div class="form-group" style="padding: 15px;">
+                                                            <label>{{item.department.Name}}</label>
+                                                            <div class="row" style="padding:15px;">
+                                                                <button id="crbutton{{child.ID}}a"
+                                                                        ng-repeat="child in item.tagList"
+                                                                        class="btn m-b-xs w-xs btn-default"
+                                                                        ng-click="crTagItemClicked(child,this,$index)">
+                                                                    {{child.NameTag}}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="form-group" style="padding: 15px;">
+                                                <h4>Kết quả hỗ trợ</h4>
+                                                <ng-quill-editor on-content-changed="CREventDetailscontentChanged(editor, html, text)"
+                                                                 ng-model="vm.eventCRDetails.Note" modules="{toolbar: false}"></ng-quill-editor>
+                                            </div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="form-group" style="padding: 15px;">
+                                                <button class="btn btn-success btn-default" ng-click="crCusCreate()">Tạo sự kiện</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="seconTabContent">
+                                    <div class="row col-md-12">
+                                        <div class="form-group">
+                                            <div class="col-md-3">
+                                                <label>Sản phẩm</label>
+                                                <div class="form-group">
+                                                    <select kendo-drop-down-list
+                                                            k-data-text-field="'Name'"
+                                                            k-data-value-field="'ID'"
+                                                            k-data-source="vm.eventProductTypeData"
+                                                            k-option-label="' Sản phẩm... '"
+                                                            k-filter="'contains'"
+                                                            style="width: 100%"
+                                                            k-ng-model="vm.eventProductTypeSelectedData"
+                                                            k-on-change="onEventProductTypeSelChanged()"></select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 serial-dropdown">
+                                                <div class="form-group" ng-if="!serialVisible">
+                                                    <label>Serial</label>
+                                                    <select kendo-drop-down-list
+                                                            id="serialDropdown"
+                                                            k-data-text-field="'device_serial'"
+                                                            k-data-value-field="'device_serial'"
+                                                            k-option-label="' Serial... '"
+                                                            k-data-source="vm.serialData"
+                                                            k-filter="'contains'"
+                                                            style="width: 100%"
+                                                            k-ng-model="vm.serialSelectedData"
+                                                            k-on-change="onSerialSelChanged()"></select>
+
+                                                </div>
+                                                <div class="form-group" ng-if="serialVisible">
+                                                    <label>Serial</label>
+                                                    <input style="height:17px;
+                                                           width:93%"
+                                                           type="text"
+                                                           class="form-control"
+                                                           placeholder="Serial"
+                                                           ng-model="vm.eventCRDetails.Serial" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="col-md-3">
+                                                <label>Lịch hẹn</label>
+                                                <input kendo-date-time-picker
+                                                       k-options="{format: 'dd/MM/yyyy HH:mm tt'}"
+                                                       style="width: 100%;"
+                                                       k-ng-model="vm.reminderCRDetails.ReminderDate"
+                                                       k-on-change="reminderOnSelectedDate()" />
+                                            </div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="form-group" style="padding: 15px;">
+                                                <label>Lời nhắc</label>
+                                                <ng-quill-editor on-content-changed="reminderContentChanged(editor, html, text)"
+                                                                 ng-model="vm.reminderCR.Note" modules="{toolbar: false}"></ng-quill-editor>
+                                            </div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div class="form-group" style="padding:15px;">
+                                                <label><b>Tags:</b></label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Phòng ban</label>
+                                                    <select id="crDepartmentMulDropa"
+                                                            kendo-multi-select k-options="vm.departmentSelectOptions"
+                                                            k-ng-model="vm.departmentSelectedIds"></select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div id="listOfCrTaga" title="Danh sách tag theo phòng ban">
+                                                        <div class="row" ng-repeat="item in vm.crDepartmentListTag">
+                                                            <div class="form-group" style="padding: 15px;">
+                                                                <label>{{item.department.Name}}</label>
+                                                                <div class="row" style="padding:15px;">
+                                                                    <button id="crbutton{{child.ID}}"
+                                                                            ng-repeat="child in item.tagList"
+                                                                            class="btn m-b-xs w-xs btn-default"
+                                                                            ng-click="crTagItemClickeda(child,this,$index)">
+                                                                        {{child.NameTag}}
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row col-md-12">
+                                                <div class="form-group" style="padding: 15px;">
+                                                    <h4>Ghi chú lịch hẹn</h4>
+                                                    <ng-quill-editor on-content-changed="reminderCRDetailContentChanged(editor, html, text)"
+                                                                     ng-model="vm.reminderCRDetails.Note" modules="{toolbar: false}"></ng-quill-editor>
+                                                </div>
+                                            </div>
+                                            <div class="row col-md-12">
+                                                <div class="form-group" style="padding: 15px;">
+                                                    <button class="btn btn-success btn-default" ng-click="reminderCreate()">Tạo phiếu hẹn</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row col-md-12">
+                        <button class="btn btn-danger btn-default" ng-show="!dialogVisible" ng-click="dialog.open()">Reset</button>
+                        <div kendo-dialog="dialog" k-title="'Reset'" k-on-open="dialogVisible = true"
+                             k-on-close="dialogVisible = false" k-width="450"
+                             k-actions="actions" k-modal="false">
+                            <p>Bạn có chắc muốn xóa thông tin đang thao tác ?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </tab>
+    </tabset>
+    <script type="text/x-kendo-template" id="menucoltemplate">
+        <a id="col-menu" style="float: right;"></a>
+    </script>
+    <div kendo-window="win1"
+         id="historyWindow"
+         k-options="windowOptions"
+         k-on-open="win1visible = true"
+         k-on-close="win1visible = false">
+        <div class="row col-md-12">
+            <div class="col-md-12">
+                <div kendo-grid="histoGrid"
+                     id="historyGrid"
+                     k-options="historyGridOptions"
+                     k-selectable="true"
+                     k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
+            </div>
+        </div>
+
+    </div>
+</div>
