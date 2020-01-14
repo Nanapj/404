@@ -111,7 +111,7 @@ namespace BestApp.Services
             var result = Queryable().Include(x => x.EventPurposes).Where(x=> x.Id == Id).FirstOrDefault();
             if (result != null)
             {
-                if (result.EventPurposes.Any())
+                if (result.EventPurposes.Where(x => x.Delete ==false).Count() >0)
                 {
                     throw new Exception("Không được phép xóa do nguồn sự kiện có mục đích");
                 }

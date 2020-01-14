@@ -66,7 +66,7 @@ namespace BestApp.Areas.Api.Controllers
             }
             try
             {
-                await _detailEventService.UpdateAsync(model);
+                await _detailEventService.UpdateAsync(model, GetCurrentUserID());
                 _unitOfWorkAsync.Commit();
                 return Updated(model);
             }

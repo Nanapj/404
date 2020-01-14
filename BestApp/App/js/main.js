@@ -24,6 +24,7 @@ angular.module('app')
           dark:    '#3a3f51',
           black:   '#1c2b36'
         },
+        username:localStorage.getItem('userName'),
         settings: {
           themeID: 6,
           navbarHeaderColor: 'bg-info dker',

@@ -13,7 +13,7 @@ angular.module('app')
         vm.eventTypeId = $stateParams.ID.replace(/['"]+/g, '');
         vm.access_token = localStorage.getItem('access_token');
         vm.model = {};
-        vm.backToSourceClicked = backToSourceClicked;
+        vm.editBackToSourceClicked = editBackToSourceClicked;
         var editBlock = blockUI.instances.get('EditBlockUI');
         function toolbarTemplate() {
             return kendo.template($("#toolbar").html());
@@ -43,7 +43,7 @@ angular.module('app')
         vm.editSubmit = function() {
             editBlock.start();
             $http({
-                url: _url+'('+ $stateParams.Id.replace(/['"]+/g, '') +')',
+                url: _url+'('+ $stateParams.ID.replace(/['"]+/g, '') +')',
                 method: 'PUT',
                 data: JSON.stringify(vm.model),
                 headers: {
@@ -149,9 +149,9 @@ angular.module('app')
             $('<input class="k-checkbox" id="' + guid + '" type="checkbox" name="Discontinued" data-type="boolean" data-bind="checked:Discontinued">').appendTo(container);
             $('<label class="k-checkbox-label" for="' + guid + '">&#8203;</label>').appendTo(container);
         }
-        function backToSourceClicked() {
+        function editBackToSourceClicked() {
             $state.go('app.creventsource.index');
-          }
+        }
     
     }]
 );

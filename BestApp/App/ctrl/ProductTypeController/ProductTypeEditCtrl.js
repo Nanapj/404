@@ -5,6 +5,8 @@ angular.module('app')
         var vm = this;
         vm.access_token = localStorage.getItem('access_token');
         vm.model = {};
+        vm.editProductTypeBack = editProductTypeBack;
+        
         $scope.initProductType = function() {
             $http({
                 method: 'GET',
@@ -27,6 +29,9 @@ angular.module('app')
             });
         }
         $scope.initProductType();
+        function editProductTypeBack(){
+            $state.go('app.producttype.index');
+        }
         vm.editSubmit = function() {
             $http({
                 url: _url+'('+ $stateParams.ID.replace(/['"]+/g, '') +')',
@@ -39,6 +44,7 @@ angular.module('app')
             }).then(function(response){
                 if(response.status == 204) {
                     toaster.pop('success', "Thành công", "Đã cập nhật xong");
+                    $state.go('app.producttype.index');
                 } else {
                     toaster.pop('error', "Lỗi", "Có lỗi trong quá trình cập nhật");
                 }

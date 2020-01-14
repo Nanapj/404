@@ -4,11 +4,14 @@
 </div>
 <div class="wrapper-sm" ng-controller="ProductTypeEditCtrl as vm">
     <toaster-container></toaster-container>
+    <div class="row" style="padding-left: 15px;">
+        <button class="btn m-b-xs w-xs btn-danger" ng-click="vm.editProductTypeBack()"><i class="glyphicon glyphicon-chevron-left icon text-light"></i>Back</button>
+    </div>
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-default" block-ui="EditProductTypeBlockUI">
                 <div class="panel-heading font-bold">Edit form</div>
-                <div class="panel-body" >
+                <div class="panel-body">
                     <form role="form">
                         <div class="form-group">
                             <label>Tên loại sản phẩm</label>

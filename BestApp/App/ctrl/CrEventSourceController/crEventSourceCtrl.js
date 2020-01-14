@@ -11,6 +11,7 @@ angular.module('app')
         vm.create = create;
         vm.edit = edit;
         vm.destroy = destroy;
+        vm.backToSourceClicked = backToSourceClicked;
         var blockui = blockUI.instances.get('BlockUI');
         
         function toolbarTemplate() {
@@ -20,11 +21,17 @@ angular.module('app')
             $state.go('app.creventsource.create');
             vm.editMode = false;
         }
-
+        function backToSourceClicked() {
+            $state.go('app.creventsource.index');
+        }
         function edit(){
-            $state.go('app.creventsource.edit', {
-                ID: vm.selectedEventType.ID
-            });
+            if(vm.selectedEventType.ID !== undefined && vm.selectedEventType.ID !== "") {
+                $state.go('app.creventsource.edit', {
+                    ID: vm.selectedEventType.ID
+                });
+            } else {
+                toaster.pop('info', "Chưa chọn", "Vui lòng chọn nguồn sản phẩm");
+            }
         }
 
         function destroy(){
@@ -49,7 +56,9 @@ angular.module('app')
                                 'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
                             },
                         }).then(function successCallback(response) {
-                            toaster.pop('success', "Thành công", "Đã xóa thông tin phòng ban");
+                            toaster.pop('success', "Thành công", "Đã xóa thông tin nguồn sự kiện");
+                            $('#crEventSourceGrid').data('kendoGrid').dataSource.read();
+                            $('#crEventSourceGrid').data('kendoGrid').refresh();
                         },function errorCallback(error) {
                             toaster.pop('error', "Thất bại", error.data.error.innererror.message);
                         });
@@ -115,7 +124,9 @@ angular.module('app')
               }).then(function(response){
                   if(response.status == 201) {
                       toaster.pop('success', "Thành công", "Đã tạo nguồn sự kiện");
-                      $state.go('app.creventsource.index');
+                      $state.go('app.creventsource.edit', {
+                        ID: response.data.ID
+                      });
                       blockui.stop();
                   }
               });

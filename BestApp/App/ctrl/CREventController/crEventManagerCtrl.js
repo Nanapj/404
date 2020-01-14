@@ -427,6 +427,7 @@ angular.module('app')
                     if(response.status == 204) {
                         var grid = $("#gridEditDetails").data("kendoGrid");
                         grid.dataSource.read();
+                        updateGrid();
                         toaster.pop('success', "Thành công", "Đã cập nhật xong");               
                     } else {
                         toaster.pop('error', "Lỗi", "Có lỗi trong quá trình cập nhật");
@@ -671,7 +672,10 @@ angular.module('app')
             }
         };
         $scope.listEventGridOptions = {
-            toolbar: ["search"],
+            toolbar: ["search", "excel"],
+            excel: {
+                fileName: "Test.xlsx"
+            },
             dataSource: {
                 type: "odata-v4",
                 transport: {
@@ -682,6 +686,7 @@ angular.module('app')
                       var events = [];
                       for (var i = 0; i < response.value.length; i++) {
                         var dateNoTime = new Date(response.value[i].CreatDate);
+                        var reminderDates = []; 
                         var event = {
                             ID: response.value[i].ID,
                             Code: response.value[i].Code,
@@ -699,6 +704,11 @@ angular.module('app')
                                 dateNoTime.getHours(),
                                 dateNoTime.getMinutes(),
                                 dateNoTime.getSeconds()
+                            ),
+                            DateNoTime: new Date(
+                                dateNoTime.getFullYear(),
+                                dateNoTime.getMonth(),
+                                dateNoTime.getDate()
                             ),
                             Note: response.value[i].Note,
                             DetailEvents: response.value[i].DetailEvents,
@@ -724,6 +734,7 @@ angular.module('app')
                         EventPurposeName: {type: "string"},
                         Status: {type: "string"},
                         CreatDate: { type: "date" },
+                        DateNoTime: {type: "date"},
                         Note: { type: "string" }
                       }
                     },
@@ -736,7 +747,11 @@ angular.module('app')
                     },
                     groupable: true,
                     reorderable: true,
-                }      
+                },
+                sort: {
+                    field: "CreatDate",
+                    dir: "desc"
+                }  
             },
             sortable: true,
             pageable: {
@@ -763,7 +778,7 @@ angular.module('app')
                     title: "Mã Phiếu"
                 },
                 {
-                    field:"CreatDate",
+                    field:"DateNoTime",
                     title:"Ngày tạo",
                     template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
                     groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #",
@@ -826,6 +841,7 @@ angular.module('app')
             e.preventDefault();
             var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
             vm.selectedEvent = dataItem;
+            delete vm.selectedEvent.DateNoTime;
             dataItem.Status = '1';
             $http({
                     url: _crEventURL +'('+ dataItem.ID +')',
@@ -906,7 +922,8 @@ angular.module('app')
                                     dateNoTime.getFullYear(),
                                     dateNoTime.getMonth(),
                                     dateNoTime.getDate()
-                                )
+                                ),
+                                Note: response[i].Note
                             };
                             details.push(detail);
                           }
@@ -923,6 +940,7 @@ angular.module('app')
                             AssociateName: { type: "string" },
                             CreatDate: { type: "date" },
                             CreatDateNoTime: { type: "date" },
+                            Note: {type: "string"}
                         }
                     }
                 },    
@@ -1210,7 +1228,8 @@ angular.module('app')
                                     dateNoTime.getFullYear(),
                                     dateNoTime.getMonth(),
                                     dateNoTime.getDate()
-                                )
+                                ),
+                                Note: response[i].Note
                             };
                             details.push(detail);
                           }
@@ -1227,6 +1246,7 @@ angular.module('app')
                             AssociateName: { type: "string" },
                             CreatDate: { type: "date" },
                             CreatDateNoTime: { type: "date" },
+                            Note: { type: "string"}
                         }
                     }
                 },    
@@ -1581,7 +1601,7 @@ angular.module('app')
                         template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
                         groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
                     },
-                    { field: "Note", title: "Ghi chú" }
+                    { field: "Note", title: "Kết quả hỗ trợ" }
                 ]
         };
         $scope.historyGridOption = {
@@ -1633,12 +1653,12 @@ angular.module('app')
                 { field: "Status",  title: "Trạng thái phiếu"},
                 {  
                     field:"CreatDate",
-                    title:"Ngày tạo",
+                    title:"Ngày chỉnh sửa",
                     template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
                     groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
                 },
                 {
-                    field: "Note", title: " Ghi chú"
+                    field: "Note", title: "Nhân viên chỉnh sửa"
                 }
             ]
         }
@@ -1865,7 +1885,7 @@ angular.module('app')
                     groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #" 
                 },
                 { field: "AssociateName", title:"Nhân viên bán" },    
-                { field: "Note", title: "Ghi chú", editor: $scope.noteEditor },
+                { field: "Note", title: "Kết quả hỗ trợ", editor: $scope.noteEditor },
                 {   
                     command: ["edit"], title: "&nbsp;", width: "250px" 
                 }
@@ -1880,6 +1900,7 @@ angular.module('app')
                     Note: e.model.Note,
                     AgencySold: e.model.AgencySold,
                     AssociateName: e.model.AssociateName,
+                    EventID: vm.selectedEvent.ID
                 }
                 if(model.Serial == "[object Object]"){
                     model.Serial = "Noinformation";
@@ -1897,6 +1918,8 @@ angular.module('app')
                     },
                 }).then(function(response){
                     if(response.status == 204) {
+                        var eventGrid = $("#eventGrid").data("kendoGrid");
+                        eventGrid.dataSource.read();
                         var grid = $("#editDetailsGrid").data("kendoGrid");
                         grid.dataSource.read();
                         toaster.pop('success', "Thành công", "Đã cập nhật xong");               

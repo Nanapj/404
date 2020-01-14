@@ -1,4 +1,4 @@
-﻿      <!-- navbar header -->
+﻿             <!-- navbar header -->
 <div class="navbar-header {{app.settings.navbarHeaderColor}}">
     <button class="pull-right visible-xs dk" ui-toggle-class="show" data-target=".navbar-collapse">
         <i class="glyphicon glyphicon-cog"></i>
@@ -98,6 +98,10 @@
             </a>
             <!-- dropdown -->
             <ul class="dropdown-menu animated fadeInRight w">
+                <li>
+                    <a href>{{app.username}}</a>
+                </li>
+                <li class="divider"></li>
                 <li>
                     <a ui-sref="app.profile">Profile</a>
                 </li>

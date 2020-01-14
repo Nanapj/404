@@ -9,6 +9,10 @@ angular.module('app')
         vm.model = {};
         vm.model.HasAccount = false;
         var editBlock = blockUI.instances.get('EditBlockUI');
+        vm.editStaffBack = editStaffBack;
+        function editStaffBack() {
+            $state.go('app.staff.index');
+        }
         $scope.initStaffEdit = function() {
             $http({
                 method: 'GET',

@@ -21,13 +21,14 @@ namespace BestApp.Services
         {
             DetailEvent Insert(DetailEventViewModel model, string CurrentId);
             Task<DetailEvent> InsertAsync(DetailEventViewModel model, string CurrentId);
-            Task<DetailEventViewModel> UpdateAsync(DetailEventViewModel model);
+            Task<DetailEventViewModel> UpdateAsync(DetailEventViewModel model, string CurrentId);
             Task<IQueryable<DetailEventViewModel>> GetAllDetailEventsAsync();
             IQueryable<DetailEventViewModel> GetAllDetailEvents();
             bool Delete(Guid Id);
         }
         private readonly EventService _eventService;
         private readonly ProductTypeService _productTypeService;
+        private readonly InteractionHistoryService _interactionHistoryService;
         private readonly IRepositoryAsync<DetailEvent> _repository;
         private readonly IRepository<ApplicationUser> _userRepository;
         protected readonly DataContext db;
@@ -36,11 +37,13 @@ namespace BestApp.Services
              EventService eventService,
              CustomerService customerService,
              ProductTypeService productTypeService,
+             InteractionHistoryService interactionHistoryService,
              IRepositoryAsync<ApplicationUser> userRepository) : base(repository)
         {
             _eventService = eventService;
             _userRepository = userRepository;
             _productTypeService = productTypeService;
+            _interactionHistoryService = interactionHistoryService;
             _repository = repository;
             db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
@@ -82,6 +85,7 @@ namespace BestApp.Services
             data.DateSold = model.DateSold;
             data.AgencySold = model.AgencySold;
             data.AssociateName = model.AssociateName;
+          
             //data.UserAccount = _userRepository.Find(HttpContext.Current.User.Identity.GetUserId());
             base.Insert(data);
             return data;
@@ -90,7 +94,7 @@ namespace BestApp.Services
         {
             return await Task.Run(() => Insert(model, CurrentId));
         }
-        public bool Update(DetailEventViewModel model)
+        public bool Update(DetailEventViewModel model, string CurrentId)
         {
             var data = Find(model.ID);
             if (data != null)
@@ -106,11 +110,21 @@ namespace BestApp.Services
             return true;
 
         }
-        public async Task<DetailEventViewModel> UpdateAsync(DetailEventViewModel model)
+        public async Task<DetailEventViewModel> UpdateAsync(DetailEventViewModel model, string CurrentId)
         {
             try
             {
-                await Task.Run(() => Update(model));
+                var interactionHistory = new InteractionHistoryViewModel()
+                {
+                    Type = "",
+                    Note = "Nhân viên " + _userRepository.Find(CurrentId).UserName + " Cập nhập phiếu " + _eventService.Find(model.EventID).Code,
+                    CreatDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
+                    Delete = false,
+                    EventID = model.EventID
+                };   
+                await Task.Run(() => Update(model, CurrentId));
+                await Task.Run(() => _interactionHistoryService.InsertAsync(interactionHistory, CurrentId));
                 return model;
             }
             catch (Exception e)

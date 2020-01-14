@@ -3,9 +3,13 @@
     <h1 class="m-n font-thin h3">Create Department</h1>
 </div>
 <div class="wrapper-sm" ng-controller="DepartmentCtrl as vm">
+    <div class="row" style="padding-left: 15px;">
+        <button class="btn m-b-xs w-xs btn-danger" ng-click="vm.departmentBack()"><i class="glyphicon glyphicon-chevron-left icon text-light"></i>Back</button>
+    </div>
+  
     <div class="row">
         <div class="col-md-6">
-            <div class="panel panel-default"  block-ui="BlockUI">
+            <div class="panel panel-default" block-ui="BlockUI">
                 <div class="panel-heading font-bold">Create form</div>
                 <div class="panel-body" style="height:500px;">
                     <form role="form">

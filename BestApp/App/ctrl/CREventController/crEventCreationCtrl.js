@@ -306,13 +306,13 @@ angular.module('app')
             console.log(vm.selectedEventData);
             if(vm.selectedEventData.Name !== " Nguồn sự kiện... ") {
                 var tabStrip = $("#eventTabstrip").kendoTabStrip().data("kendoTabStrip");
-                // $("#purposedropdown").data("kendoDropDownList").dataSource.read().then(function() {
-                //     $($("#purposedropdown").data("kendoDropDownList").dataItems()).each(function (item) {
-                //         if(this.parent_id !== vm.selectedEventData.id) {
-                //             $("#purposedropdown").data("kendoDropDownList").dataSource.remove(this);
-                //         }
-                //     });    
-                // });
+                 $("#purposedropdown").data("kendoDropDownList").dataSource.read().then(function() {
+                     $($("#purposedropdown").data("kendoDropDownList").dataItems()).each(function (item) {
+                        if(this.parent_id !== vm.selectedEventData.id) {
+                             $("#purposedropdown").data("kendoDropDownList").dataSource.remove(this);
+                         }
+                     });    
+                 });
                 vm.purposeData = vm.selectedEventData.EventPurposes;
                 $scope.purDis = 0;
             } else {
@@ -986,17 +986,13 @@ angular.module('app')
               })
               .then((willCreate) => {
                 if (willCreate) { 
-                    $scope.tab2Invisible = false;
-                    $scope.tab1Inisible = true;
-                    
-                    var tabstrip = $("#eventTabstrip").data("kendoTabStrip");
-                    tabstrip.disable(tabstrip.tabGroup.children().eq(0));
-                    tabstrip.enable(tabstrip.tabGroup.children().eq(1));
-                    var myTab = tabstrip.tabGroup.children("li").eq(1);
-                    tabstrip.select(myTab);
+                   
                     if(vm.systemCustomer.ID === undefined || vm.systemCustomer.ID === "") {
                         toaster.pop('error', "Thiếu thông tin", "Thiếu thông tin khách hàng");
-                    } else {              
+                    } else if(vm.selectedEventData.ID === undefined || vm.selectedPurposeData.ID === undefined) {
+                        toaster.pop('error', "Thiếu thông tin", "Chọn đủ nguồn sự kiện và mục đích sự kiện");
+                    } 
+                    else {              
                         if(vm.crtagSelectected.length < 1) {
                             toaster.pop('error', "Thiếu thông tin", "Vui lòng chọn ít nhất 1 tag");
                         } 
@@ -1059,6 +1055,14 @@ angular.module('app')
                                     Tags: [],
                                     EStatusLogs: []
                                 }
+                                $scope.tab2Invisible = false;
+                                $scope.tab1Inisible = true;
+                                
+                                var tabstrip = $("#eventTabstrip").data("kendoTabStrip");
+                                tabstrip.disable(tabstrip.tabGroup.children().eq(0));
+                                tabstrip.enable(tabstrip.tabGroup.children().eq(1));
+                                var myTab = tabstrip.tabGroup.children("li").eq(1);
+                                tabstrip.select(myTab);
                                 if(response.status == 201) {
                                     toaster.pop('success', "Thành công", "Đã tạo sự kiện");                 
                                 }
@@ -1067,11 +1071,15 @@ angular.module('app')
                     } 
                     
                 } else {
+                    debugger;
                     if(vm.systemCustomer.ID === undefined || vm.systemCustomer.ID === "") {
-                        toaster.pop('error', "Thiếu thông tin", "Thiếu thông tin khách hàng");
-                    } else {              
+                        toaster.pop({type: 'info', title: 'Thiếu thông tin', body: 'Thiếu thông tin khách hàng'})
+                    }else if(vm.selectedEventData.ID === undefined || vm.selectedPurposeData.ID === undefined || vm.selectedEventData.ID === "" || vm.selectedPurposeData.ID === "") {
+                        toaster.pop({type: 'info', title: 'Thiếu thông tin', body: 'Chọn đủ nguồn sự kiện và mục đích sự kiện'})
+                    }  
+                    else {              
                         if(vm.crtagSelectected.length < 1) {
-                            toaster.pop('error', "Thiếu thông tin", "Vui lòng chọn ít nhất 1 tag");
+                            toaster.pop('info', "Thiếu thông tin", "Vui lòng chọn ít nhất 1 tag");
                         } 
                         else {
                             var json = JSON.stringify( vm.crtagSelectected, function( key, value ) {
@@ -1110,6 +1118,19 @@ angular.module('app')
                                 },
                             }).error(function(response) {
                                 toaster.pop('error', "Thất bại", response);
+                            }).success(function(data, status, headers, config) {
+                                debugger;
+                                console.log(data);
+                                console.log(status);
+                                console.log(headers);
+                                console.log(config);
+                            }).
+                            error(function(data, status, headers, config) {
+                                debugger;
+                                console.log(data);
+                                console.log(status);
+                                console.log(headers);
+                                console.log(config);
                             })
                             .then(function(response){
                                 if(response.status == 201) {

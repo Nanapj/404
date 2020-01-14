@@ -22,11 +22,19 @@ angular.module('app')
         }
 
         function edit(){
-            $state.go('app.producttype.edit', {
-                ID: vm.selectedProductType.ID
-            });
+            if(vm.selectedProductType.ID !== undefined && vm.selectedProductType.ID !== "") {
+                $state.go('app.producttype.edit', {
+                    ID: vm.selectedProductType.ID
+                });
+            } else {
+                toaster.pop('info', "Chưa chọn", "Vui lòng chọn loại sản phẩm");
+            }
+           
         }
-
+        vm.productTypeBack = productTypeBack;
+        function productTypeBack() {
+            $state.go('app.producttype.index');
+        }
         function destroy(){
             vm.dialogVisible = true;
             if(vm.selectedProductType.ID != undefined && vm.selectedProductType.ID != null) {
@@ -53,6 +61,7 @@ angular.module('app')
                             $('#producttypegrid').data('kendoGrid').dataSource.read();
                             $('#producttypegrid').data('kendoGrid').refresh();
                              toaster.pop('success', "Thành công", "Đã xóa thông tin loại sản phẩm");
+                             
                          });
                    
                    }

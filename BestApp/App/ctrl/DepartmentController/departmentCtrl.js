@@ -11,8 +11,9 @@ angular.module('app')
         vm.create = create;
         vm.edit = edit;
         vm.destroy = destroy;
+        vm.departmentBack = departmentBack ;
         var blockui = blockUI.instances.get('BlockUI');
-        
+
         function toolbarTemplate() {
             return kendo.template($("#toolbar").html());
         }
@@ -22,9 +23,13 @@ angular.module('app')
         }
 
         function edit(){
-            $state.go('app.department.edit', {
-                ID: vm.selectedDepartment.ID
-            });
+            if(vm.selectedDepartment.ID !== undefined && vm.selectedDepartment.ID !== "") {
+                $state.go('app.department.edit', {
+                    ID: vm.selectedDepartment.ID
+                });
+            } else {
+                toaster.pop('info', "Chưa chọn", "Vui lòng chọn phòng ban");
+            }
         }
 
         function destroy(){
@@ -50,6 +55,9 @@ angular.module('app')
                             },
                         }).then(function successCallback(response) {
                             toaster.pop('success', "Thành công", "Đã xóa thông tin phòng ban");
+                            $('#departmentGrid').data('kendoGrid').dataSource.read().then(function(){
+                                $('#departmentGrid').data('kendoGrid').refresh();
+                            });
                         });
                   
                   } else {
@@ -73,6 +81,7 @@ angular.module('app')
             },
             sortable: true,
             pageable: true,
+            refresh:true,
             height: 500,
             dataBound: onDataBound,
             change: onChange,
@@ -98,6 +107,9 @@ angular.module('app')
             $('<input class="k-checkbox" id="' + guid + '" type="checkbox" name="Discontinued" data-type="boolean" data-bind="checked:Discontinued">').appendTo(container);
             $('<label class="k-checkbox-label" for="' + guid + '">&#8203;</label>').appendTo(container);
         }
+        function departmentBack() {
+            $state.go('app.department.index');
+        }
         vm.createSubmit = function() {
             blockui.start();
             if((vm.model.Name != "" && vm.model.Name != null) 
@@ -112,8 +124,10 @@ angular.module('app')
                   },
               }).then(function(response){
                   if(response.status == 201) {
-                      toaster.pop('success', "Thành công", "Đã tạo thông tin nhân viên");
-                      $state.go('app.department.index');
+                      toaster.pop('success', "Thành công", "Đã tạo thông tin phòng ban");
+                      $state.go('app.department.edit', {
+                        ID: response.data.ID
+                    });
                       blockui.stop();
                   }
               });

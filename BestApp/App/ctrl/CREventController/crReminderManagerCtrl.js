@@ -324,7 +324,11 @@ angular.module('app')
                     },
                     groupable: true,
                     reorderable: true,
-                }      
+                },
+                sort: {
+                    field: "CreatDate",
+                    dir: "desc"
+                }  
             },
             sortable: true,
             pageable: {

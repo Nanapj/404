@@ -29,8 +29,8 @@ namespace BestApp.Areas.Api.Controllers
         [EnableQuery]
         public async Task<IQueryable<ReminderNoteViewModel>> Get()
         {
-            //ApplicationUser test = GetCurrentUser();
-            return await _reminderNoteService.GetAllReminderNotesAsync();
+            string userId = GetCurrentUserID();
+            return await _reminderNoteService.GetAllReminderNotesAsync(userId);
         }
 
         [HttpPost]

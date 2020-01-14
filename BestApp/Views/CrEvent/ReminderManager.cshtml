@@ -23,21 +23,20 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group" style="padding-left: 15px;">
-                                    <h5>Ngày tạo</h5>
+                                <div class="form-group">
                                     @*<div kendo-date-range-picker
                                          id="dateRangeFilter"
                                          k-ng-model="vm.startDate, vm.endDate"
                                          k-on-change="onDateRangeChange()"
                                          k-options="{format: 'dd/MM/yyyy'}"
                                          style="width: 100%;" />*@
-                                    <h6>Start</h6>
+                                    <h5>Start</h5>
                                     <input kendo-date-picker
                                            k-ng-model="vm.startDate"
                                            k-options="{format: 'dd/MM/yyyy'}"
                                            k-on-change="onStartDateChange()"
                                            style="width: 50%;" />
-                                    <h6>End</h6>
+                                    <h5>End</h5>
                                     <input kendo-date-picker
                                            k-ng-model="vm.endDate"
                                            k-options="{format: 'dd/MM/yyyy'}"
@@ -45,22 +44,18 @@
                                            style="width: 50%;" />
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group" style="padding-left: 15px;">
+                                <div class="form-group">
                                     <h5>Phòng ban</h5>
                                     <select kendo-multi-select
                                             id="departMulDrop"
                                             k-options="vm.departmentSelectOptions"
                                             k-ng-model="vm.departmentSelectedIds"></select>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
                                 <div class="form-group">
                                     <div class="form-group">
                                         <div id="listOfCrTaga" title="Danh sách tag sự kiện">
-                                            <div class="form-group" style="padding: 15px; float: left;" ng-repeat="item in vm.crDepartmentListTag">
+                                            <div class="form-group" style="margin-bottom: 0px !important; padding-top:5px; float: left;" float: left;" ng-repeat="item in vm.crDepartmentListTag">
                                                 <label>{{item.department.Name}}</label>
                                                 <div class="row" style="padding:15px;">
                                                     <button id="filter{{child.ID}}"
@@ -76,6 +71,36 @@
                                 </div>
                             </div>
                         </div>
+                        @*<div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" style="padding-left: 15px;">
+                                    <h5>Phòng ban</h5>
+                                    <select kendo-multi-select
+                                            id="departMulDrop"
+                                            k-options="vm.departmentSelectOptions"
+                                            k-ng-model="vm.departmentSelectedIds"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <div id="listOfCrTaga" title="Danh sách tag sự kiện">
+                                            <div class="form-group" style="margin-bottom: 0px !important; padding-top:5px; float: left;" float: left;" ng-repeat="item in vm.crDepartmentListTag">
+                                                <label>{{//item.department.Name}}</label>
+                                                <div class="row" style="padding:15px;">
+                                                    <button id="filter{{//child.ID}}"
+                                                            ng-repeat="child in item.tagList"
+                                                            class="btn m-b-xs btn-default"
+                                                            ng-click="filterTagClicked(child,this,$index)">
+                                                        {{//child.NameTag}}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
                     </div>
                 </div>
             </div>

@@ -15,6 +15,7 @@ angular.module('app')
         vm.departmentId = $stateParams.ID.replace(/['"]+/g, '');
         vm.access_token = localStorage.getItem('access_token');
         vm.model = {};
+        vm.editDepartmentBack = editDepartmentBack ;
         var editBlock = blockUI.instances.get('EditBlockUI');
         function toolbarTemplate() {
             return kendo.template($("#toolbar").html());
@@ -44,7 +45,7 @@ angular.module('app')
         vm.editSubmit = function() {
             editBlock.start();
             $http({
-                url: _url+'('+ $stateParams.Id.replace(/['"]+/g, '') +')',
+                url: _url+'('+ $stateParams.ID.replace(/['"]+/g, '') +')',
                 method: 'PUT',
                 data: JSON.stringify(vm.model),
                 headers: {
@@ -146,6 +147,9 @@ angular.module('app')
             ],
             editable: "inline"
         };
+        function editDepartmentBack() {
+            $state.go('app.department.index');
+        }
         function customBoolEditor(container, options) {
             var guid = kendo.guid();
             $('<input class="k-checkbox" id="' + guid + '" type="checkbox" name="Discontinued" data-type="boolean" data-bind="checked:Discontinued">').appendTo(container);

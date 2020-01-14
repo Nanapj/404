@@ -64,8 +64,8 @@ namespace BestApp.Areas.Api.Controllers
             }
             catch (Exception ex)
             {
-               
-                throw ex.InnerException;
+
+                throw new Exception(ex.ToString());
             }
         }
         public async Task<IHttpActionResult> Put(Guid key, EventViewModel model)

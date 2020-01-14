@@ -13,15 +13,23 @@ angular.module('app')
         vm.edit = edit;
         vm.destroy = destroy;
         vm.dialogVisible = false;
+        vm.staffBack = staffBack;
+        function staffBack() {
+            $state.go('app.staff.index');
+        }
         function create(){
             $state.go('app.staff.create');
             vm.editMode = false;
         }
 
         function edit(){
-            $state.go('app.staff.edit', {
-                ID: vm.selectedStaff.ID
-            });
+            if(vm.selectedStaff.ID !== undefined && vm.selectedStaff.ID !== "") {
+                $state.go('app.staff.edit', {
+                    ID: vm.selectedStaff.ID
+                });
+            } else {
+                toaster.pop('info', "Chưa chọn", "Vui lòng chọn nhân viên");
+            }
         }
 
         function destroy(){
