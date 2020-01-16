@@ -1,5 +1,7 @@
-﻿using BestApp.Core.Models;
+﻿using BestApp.Core;
+using BestApp.Core.Models;
 using BestApp.Domain;
+using BestApp.Ultilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Repository.Pattern;
@@ -26,6 +28,8 @@ namespace BestApp.Services
             Task<EventViewModel> UpdateAsync(EventViewModel model, string CurrentId);
             Task<IQueryable<EventViewModel>> GetAllEventsAsync(SearchViewModel model);
             IQueryable<EventViewModel> GetAllEvents(SearchViewModel model);
+            IQueryable<EventViewModel> GetEventForPishop();
+            Task<IQueryable<EventViewModel>> GetEventForPishopAsync();
             IEnumerable<EventViewModel> GetEventByCustomer(SearchViewModel model);
             bool Delete(Guid Id);
         }
@@ -55,14 +59,36 @@ namespace BestApp.Services
             _userRepository = userRepository;
             db = new DataContext();
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
-
         }
+
+        public IQueryable<EventViewModel> GetEventForPishop()
+        {
+            var result = Queryable().Where(x => x.Delete == false
+                && x.Tags.Any(y => y.Departments.Id == Config.PishopID))
+                .Select(x => new EventViewModel() {
+                    CreatDate = x.CreatDate,
+                    ID = x.Id,
+                    Code = x.Code,
+                    CustomerID = x.Customer.Id,
+                    CustomerName = x.Customer.Name,
+                    Address = x.Customer.Address,
+                    PhoneNumber = x.Customer.PhoneNumber,
+                    EventPurposeID = x.EventPurposeId,
+                    EventTypeID = x.EventTypeId,
+                    Status = x.Status,
+                    UserName = x.UserAccount.UserName,
+                    Note = x.Note
+                });
+            return result;
+        }
+
+        public Task<IQueryable<EventViewModel>> GetEventForPishopAsync()
+        {
+            return Task.Run(() => GetEventForPishop());
+        }
+
         public IQueryable<EventViewModel> GetAllEvents(SearchViewModel model)
         {
-            //if (model.To != null)
-            //{
-            //    model.To = model.To.Value.AddDays(1);
-            //}
             if (model.Code != null)
             {
                 var findId = Queryable().Where(x => x.Code == model.Code).Select(x => x.Id).FirstOrDefault();
