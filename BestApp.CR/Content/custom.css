@@ -19,3 +19,8 @@
         padding-left: 0px;
     }
 }
+@media (max-width: 768px) {
+    .col-sm-3 {
+        width: 100%;
+    }
+}

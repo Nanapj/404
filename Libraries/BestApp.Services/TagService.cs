@@ -15,8 +15,10 @@ using static BestApp.Services.TagService;
 
 namespace BestApp.Services
 {
+
     public class TagService : Service<Tag>, ITagService
     {
+
         public interface ITagService : IService<Tag>
         {
             Tag Insert(TagViewModel model, string CurrentId);
@@ -26,6 +28,7 @@ namespace BestApp.Services
             IQueryable<TagViewModel> GetAllTags();
             bool Delete(Guid Id);
         }
+
         private readonly DepartmentService _departmentService;
         private readonly IRepositoryAsync<Tag> _repository;
         private readonly IRepository<ApplicationUser> _userRepository;
@@ -74,6 +77,7 @@ namespace BestApp.Services
                 data.NameTag = model.NameTag;
                 data.CodeTag = model.CodeTag;
                 data.Status = Core.Enum.StatusTag.New;
+
                 data.Departments = _departmentService.Find(model.DepartmentID);
                 data.UserAccount = _userRepository.Find(CurrentId);
                 data.CreatDate = DateTime.Now;

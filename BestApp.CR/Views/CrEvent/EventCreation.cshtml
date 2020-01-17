@@ -168,7 +168,7 @@
                     <p class="text-muted" ng-hide="!pitechInfoInvi">Pitech hiện chưa có thông tin khách hàng này</p>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" id="start-one">
                 <div class="col-sm-6">
                     <div class="panel panel-default">
                         <div class="panel-heading font-bold">PHÂN LOẠI PHIẾU</div>
@@ -320,7 +320,7 @@
                                                             <div class="row" style="padding:15px;">
                                                                 <button id="crbutton{{child.ID}}a"
                                                                         ng-repeat="child in item.tagList"
-                                                                        class="btn m-b-xs w-xs btn-default"
+                                                                        class="btn m-b-xs btn-default"
                                                                         ng-click="crTagItemClicked(child,this,$index)">
                                                                     {{child.NameTag}}
                                                                 </button>

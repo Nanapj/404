@@ -1064,7 +1064,10 @@ angular.module('app')
                                 var myTab = tabstrip.tabGroup.children("li").eq(1);
                                 tabstrip.select(myTab);
                                 if(response.status == 201) {
-                                    toaster.pop('success', "Thành công", "Đã tạo sự kiện");                 
+                                    toaster.pop('success', "Thành công", "Đã tạo sự kiện");        
+                                    $('html, body').animate({
+                                        scrollTop: $("#start-one").offset().top
+                                    }, 2000);         
                                 }
                             });
                         }  

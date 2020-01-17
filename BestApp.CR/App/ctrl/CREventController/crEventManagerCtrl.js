@@ -781,6 +781,7 @@ angular.module('app')
                     field:"DateNoTime",
                     title:"Ngày tạo",
                     template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
+                    aggregates: ["count"],
                     groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #",
                     filterable: {
                         ui: function (element) {

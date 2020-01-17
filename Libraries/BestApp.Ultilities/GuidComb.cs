@@ -39,5 +39,6 @@ namespace BestApp.Ultilities
 
             return new Guid(destinationArray);
         }
+
     }
 }
