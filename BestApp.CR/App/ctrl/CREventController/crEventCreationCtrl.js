@@ -13,9 +13,10 @@ angular.module('app')
         var _eventTypeURL = "/odata/EventTypes";
         var _productTypeOdata = "/odata/ProductTypes";
         var _interactURL = "/odata/InteractionHistories/";
-        var _pitechCusURL = "http://api.test.haveyougotpi.com/project404.aspx/GetCustomerInfoByPhone";
-        var _pitechDevURL = "http://api.test.haveyougotpi.com/project404.aspx/GetDeviceListByPhoneNumber";
-        var _pitechDeviceDetailsURL = "http://api.test.haveyougotpi.com/project404.aspx/GetDeviceInfoBySerialNo";
+        var _pitechCusURL = "https://pitechadminapiv3.azurewebsites.net/project404.aspx/GetCustomerInfoByPhone";
+        var _pitechDevURL = "https://pitechadminapiv3.azurewebsites.net/project404.aspx/GetDeviceListByPhoneNumber";
+        var _pitechDeviceDetailsURL = "https://pitechadminapiv3.azurewebsites.net/project404.aspx/GetDeviceInfoBySerialNo";
+        var _pitechSessionId = "2d0d89b1-0c3a-4579-4bec-cb5bf75fb3a6";
         vm.creUpdCusClicked = creUpdCusClicked;
         vm.access_token = localStorage.getItem('access_token');
         vm.secActived = false;
@@ -228,6 +229,13 @@ angular.module('app')
                         }
                     });
                 } else {
+                    if(vm.selectedDate !== undefined && vm.selectedDate !== ""){
+                        if(moment(vm.selectedDate).format('YYYY-MM-DDTHH:mm:ss') !== "Invalid date" && vm.selectedDate !== "" && vm.selectedDate !== undefined) {
+                            var time = moment(vm.selectedDate).format('YYYY-MM-DDTHH:mm:ss');
+                            time+='Z';
+                            vm.systemCustomer.Birthday = time;
+                        }
+                    }
                     $http({
                         url: _cusURL+"("+vm.systemCustomer.ID+")",
                         method: 'PUT',
@@ -331,7 +339,7 @@ angular.module('app')
                 url: _pitechDeviceDetailsURL,
                 method: 'POST',
                 data: JSON.stringify({
-                    "sessionId":"501b30b8-bc46-b1b6-46ba-68c2eb5f688c",
+                    "sessionId":_pitechSessionId,
                     "phoneNumber": vm.searchingNumber,
                     "serial":vm.serialSelectedData.device_serial,
                 }),
@@ -760,7 +768,7 @@ angular.module('app')
                 url: _pitechCusURL,
                 method: 'POST',
                 data: JSON.stringify({
-                    "sessionId":"501b30b8-bc46-b1b6-46ba-68c2eb5f688c",
+                    "sessionId":_pitechSessionId,
                     "phoneNumber": vm.searchingNumber
                 }),
                 headers: {
@@ -782,7 +790,7 @@ angular.module('app')
                         url: _pitechCusURL,
                         method: 'POST',
                         data: JSON.stringify({
-                            "sessionId":"501b30b8-bc46-b1b6-46ba-68c2eb5f688c",
+                            "sessionId":_pitechSessionId,
                             "phoneNumber": vm.searchingNumber
                         }),
                         headers: {
@@ -801,7 +809,7 @@ angular.module('app')
                                 url: _pitechDevURL,
                                 method: 'POST',
                                 data: JSON.stringify({
-                                    "sessionId":"501b30b8-bc46-b1b6-46ba-68c2eb5f688c",
+                                    "sessionId":_pitechSessionId,
                                     "phoneNumber": vm.searchingNumber
                                 }),
                                 headers: {
@@ -1022,7 +1030,6 @@ angular.module('app')
                                 time+='Z';
                                 vm.eventCRDetails.DateSold = time;
                             }
-                            debugger;
                             $http({
                                 url: _eventURL,
                                 method: 'POST',
@@ -1199,14 +1206,22 @@ angular.module('app')
             });
         }
         $scope.transferInfo = function() {
+            debugger;
             vm.systemCustomer.Name = vm.pitechCustomer.customer_fullname;
             vm.systemCustomer.Address = vm.pitechCustomer.customer_address;
             //Transfer the city from pitech information
-            if(vm.pitechCustomer.customer_province !== undefined && vm.pitechCustomer.customer_province !== "" && vm.serialSelectedData.device_serial !== undefined) {
+            if(vm.pitechCustomer.customer_province !== undefined && vm.pitechCustomer.customer_province ) {
                 var City = $('#citydropdown').data('kendoDropDownList');
-                City.select(function (dataItem) {
-                    return dataItem.name === vm.pitechCustomer.customer_province;
-                });
+                if(vm.pitechCustomer.customer_province.includes("Tp.")) {
+                    var cityName = vm.pitechCustomer.customer_province.slice(4, vm.pitechCustomer.customer_province.length);
+                    City.select(function (dataItem) {
+                        return dataItem.name === cityName;
+                    });
+                } else {                
+                    City.select(function (dataItem) {
+                        return dataItem.name === vm.pitechCustomer.customer_province;
+                    });
+                }
                 var itemSelected = City.dataItem();
                 vm.systemCustomer.City = City.text();
                 vm.cityCode = itemSelected.code;
@@ -1230,11 +1245,18 @@ angular.module('app')
                             vm.districtCode = response.data.value[0].code;
                             district.dataSource.read().then(function() {
                                 $scope.districtDis = 0;
+                                var District = $('#districtdropdown').data("kendoDropDownList");
+                                District.select(function(dataItem) {
+                                    $scope.districtDis = 0;                 
+                                    var iscorrect = dataItem.name_with_type.trim() === vm.systemCustomer.District.trim();
+                                    return dataItem.name_with_type.trim() === vm.systemCustomer.District.trim();
+                                });
+                                var districtSelected = District.dataItem();
+                                vm.systemCustomer.District = District.text();
                             });
-                            district.select(function(dataItem) {
-                                $scope.districtDis = 0;                 
-                                return dataItem.name_with_type === vm.systemCustomer.District;
-                            });
+                          
+                           
+                            
                             vm.systemCustomer.Ward = vm.pitechCustomer.customer_ward;
                             var ward = $('#warddropdown').data("kendoDropDownList");
                             //Check the code of district is loaded
@@ -1251,7 +1273,12 @@ angular.module('app')
                                     }
                                 }
                             );
-                           
+                            if(vm.pitechCustomer.customer_birthday !== "" && vm.pitechCustomer !== undefined) {
+                                var date = compareDate(vm.pitechCustomer.customer_birthday);
+                                vm.selectedDate = date;
+
+                                console.log(date);
+                            }
                           } else 
                           {
                             //If no found, show here
