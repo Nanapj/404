@@ -1,0 +1,38 @@
+[
+    {
+        "id": "1",
+        "name" : "CSKH sau 1 ngày",
+        "parent_id" : "1"
+    },
+    {
+        "id": "2",
+        "name" : "CSKH sau 14 ngày",
+        "parent_id" : "1"
+    },
+    {
+        "id": "3",
+        "name" : "CSKH sự cố",
+        "parent_id" : "1"
+    },
+    {
+        "id": "4",
+        "name" : "Kỹ thuật",
+        "parent_id" : "2"
+    },
+    {
+        "id": "5",
+        "name" : "Bán hàng",
+        "parent_id" : "2"
+    },
+    {
+        "id": "6",
+        "name" : "Đại lý",
+        "parent_id" : "2"
+    },
+    {
+        "id": "7",
+        "name" : "CSKH",
+        "parent_id" : "2"
+    }
+
+]

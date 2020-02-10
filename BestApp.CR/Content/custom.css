@@ -1,0 +1,31 @@
+﻿.bg-light.lter .cr-submit {
+    background-color: white !important;
+    border:none !important;
+}
+[ng-quill-editor] {
+    padding: 15px !important;
+}
+.tag-blue-color:hover, .tag-blue-color:focus, .tag-blue-color:active {
+    color: #fff !important;
+}
+.create-cr-btn {
+    padding-left: 0px;
+}
+.cus-profile-form {
+    margin-top: 50px;
+}
+@media(max-width: 992px) {
+    .cus-cr-btn {
+        padding-left: 0px;
+    }
+}
+@media (max-width: 768px) {
+    .col-sm-3 {
+        width: 100%;
+    }
+}
+@media (min-width: 768px) and (max-width: 1370px) {
+    .col-sm-3 {
+        width: 50%;
+    }
+}

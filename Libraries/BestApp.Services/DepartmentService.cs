@@ -64,7 +64,7 @@ namespace BestApp.Services
         }
         public Department Insert(DepartmentViewModel model, string CurrentId)
         {
-            var find = Queryable().Where(x => x.Name == model.Name).FirstOrDefault();
+            var find = Queryable().Where(x => x.Name == model.Name && x.Delete == false).FirstOrDefault();
             if (find != null)
             {
                 throw new Exception("Phòng ban đã tồn tại");

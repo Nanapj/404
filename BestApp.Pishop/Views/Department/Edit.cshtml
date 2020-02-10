@@ -1,0 +1,51 @@
+﻿<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Edit Department</h1>
+</div>
+<div class="wrapper-sm" ng-controller="DepartmentEditCtrl as vm">
+    <toaster-container></toaster-container>
+    <div class="row" style="padding-left: 15px;">
+        <button class="btn m-b-xs w-xs btn-danger" ng-click="vm.editDepartmentBack()"><i class="glyphicon glyphicon-chevron-left icon text-light"></i>Back</button>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading font-bold">Edit form</div>
+                <div class="panel-body" block-ui="EditBlockUI" style="height:500px;">
+                    <form role="form">
+                        <div class="form-group">
+                            <label>Fullname</label>
+                            <input type="text" class="form-control" ng-model="vm.model.Name">
+                        </div>
+                        <button type="submit" class="btn btn-success" ng-click="vm.editSubmit()">Cập nhật</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading font-bold">Department's Tag</div>
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <div id="departmentTagGrid"
+                             kendo-grid
+                             k-options="tagGridOptions"
+                             k-selectable="true"
+                             k-sortable="true"
+                             k-reorderable="true"
+                             k-toolbar="['create']"></div>
+                    </div>
+                </div>
+            </div>
+            <script type="text/x-kendo-template" id="toolbar">
+                <div class="toolbar">
+                    <!-- Use your own button -->
+                    <button class="k-button k-grid-add">Add Row</button>
+                    <!-- Use the default HTML rendering of the built-in command -->
+                    <a class="k-button k-button-icontext k-grid-add" href="\\#">
+                        <span class="k-icon k-add"></span>Add new record
+                    </a>
+                </div>
+            </script>
+        </div>
+    </div>
+</div>

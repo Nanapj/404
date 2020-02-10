@@ -10,6 +10,5 @@ namespace BestApp.Core.Enum
     {
         Open,
         Closed,
-
     }
 }

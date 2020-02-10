@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.438
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestApp", "BestApp\BestApp.csproj", "{18F4B099-D7FF-4DEC-8FB6-ED24D5209989}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestApp.CR", "BestApp.CR\BestApp.CR.csproj", "{18F4B099-D7FF-4DEC-8FB6-ED24D5209989}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{577D8424-CC0E-4C47-8960-F0757C98B565}"
 EndProject
@@ -16,6 +16,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestApp.Core", "Libraries\BestApp.Core\BestApp.Core.csproj", "{181336C9-2465-4847-8143-3E5CA5CF105E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestApp.Ultilities", "Libraries\BestApp.Ultilities\BestApp.Ultilities.csproj", "{F20D8112-E0DC-4CDB-874B-19A234D016E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestApp.Admin", "BestApp.Admin\BestApp.Admin.csproj", "{4E2376B1-7A73-4D32-B962-9EC0A1A2595A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestApp.Pishop", "BestApp.Pishop\BestApp.Pishop.csproj", "{FED5DD0B-83EF-4C82-9B7F-E6886BEB6D4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +51,14 @@ Global
 		{F20D8112-E0DC-4CDB-874B-19A234D016E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F20D8112-E0DC-4CDB-874B-19A234D016E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F20D8112-E0DC-4CDB-874B-19A234D016E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E2376B1-7A73-4D32-B962-9EC0A1A2595A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E2376B1-7A73-4D32-B962-9EC0A1A2595A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E2376B1-7A73-4D32-B962-9EC0A1A2595A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E2376B1-7A73-4D32-B962-9EC0A1A2595A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FED5DD0B-83EF-4C82-9B7F-E6886BEB6D4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FED5DD0B-83EF-4C82-9B7F-E6886BEB6D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FED5DD0B-83EF-4C82-9B7F-E6886BEB6D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FED5DD0B-83EF-4C82-9B7F-E6886BEB6D4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

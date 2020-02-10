@@ -60,7 +60,7 @@ namespace BestApp.Services
         }
         public EventPurpose Insert(EventPurposeViewModel model, string CurrentId)
         {
-            var find = Queryable().Where(x => x.Name == model.Name && x.EventType.Id == model.EventTypeID).FirstOrDefault();
+            var find = Queryable().Where(x => x.Name == model.Name && x.EventType.Id == model.EventTypeID && x.Delete == false).FirstOrDefault();
             if (find != null)
             {
                 throw new Exception("Mục đích đã tồn tại");

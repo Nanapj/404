@@ -109,6 +109,10 @@
       <Project>{6B6AE5BB-3480-494E-BF28-0BD273B5B92B}</Project>
       <Name>BestApp.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BestApp.Ultilities\BestApp.Ultilities.csproj">
+      <Project>{F20D8112-E0DC-4CDB-874B-19A234D016E4}</Project>
+      <Name>BestApp.Ultilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

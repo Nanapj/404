@@ -17,7 +17,7 @@ namespace BestApp.Domain
         public string CustomerName { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
-        public DateTime Birthday { get; set; }
+        public DateTime? Birthday { get; set; }
         public string Type { get; set; }
         public string Note { get; set; }
         public string EventTypeName { get; set; }
@@ -32,7 +32,7 @@ namespace BestApp.Domain
         public DateTime LastModifiedDate { get; set; }
         public string UserName { get; set; }
         public bool Delete { get; set; }
-        public Guid ProductID { get; set; }
+        public Guid? ProductID { get; set; }
      
     }
 }
