@@ -251,6 +251,8 @@
     <Compile Include="Areas\Api\Controllers\EventTypesController.cs" />
     <Compile Include="Areas\Api\Controllers\InteractionHistoriesController.cs" />
     <Compile Include="Areas\Api\Controllers\ODataBaseController.cs" />
+    <Compile Include="Areas\Api\Controllers\PiShop\BlogPSsController.cs" />
+    <Compile Include="Areas\Api\Controllers\PiShop\TopicPSController.cs" />
     <Compile Include="Areas\Api\Controllers\ProductTypesController.cs" />
     <Compile Include="Areas\Api\Controllers\ReminderNotesController.cs" />
     <Compile Include="Areas\Api\Controllers\StaffsController.cs" />
@@ -318,6 +320,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Api\Models\" />
+    <Folder Include="Areas\Api\Views\BlogPSs\" />
     <Folder Include="Areas\Api\Views\Citys\" />
     <Folder Include="Areas\Api\Views\Customers\" />
     <Folder Include="Areas\Api\Views\Department\" />
@@ -333,6 +336,7 @@
     <Folder Include="Areas\Api\Views\ReminderNotes\" />
     <Folder Include="Areas\Api\Views\Shared\" />
     <Folder Include="Areas\Api\Views\Tags\" />
+    <Folder Include="Areas\Api\Views\TopicPS\" />
     <Folder Include="Areas\Api\Views\Wards\" />
     <Folder Include="Views\Json\" />
   </ItemGroup>

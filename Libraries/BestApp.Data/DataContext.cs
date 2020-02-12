@@ -1,4 +1,5 @@
 using BestApp.Core.Models;
+using BestApp.Core.Models.PiShop;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Repository.DataContext;
 using System;
@@ -39,7 +40,8 @@ namespace Repository.Pattern
         public DbSet<EventPurpose> EventPurposes { get; set; }
         public DbSet<EventType> EventTypes { get; set; }
         public DbSet<EStatusLog> EStatusLogs { get; set; }
-
+        public DbSet<TopicPS> TopicPSs { get; set; }
+        public DbSet<BlogPS> BlogPSs { get; set; }
         public override int SaveChanges()
         {
             var changes = base.SaveChanges();

@@ -88,6 +88,8 @@
     <Compile Include="EventTypeService.cs" />
     <Compile Include="InteractionHistoryService.cs" />
     <Compile Include="IService.cs" />
+    <Compile Include="PiShop\BlogPSService.cs" />
+    <Compile Include="PiShop\TopicPSService.cs" />
     <Compile Include="ProductTypeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReminderNoteService.cs" />

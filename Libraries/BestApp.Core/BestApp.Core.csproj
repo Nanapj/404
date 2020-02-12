@@ -73,6 +73,8 @@
     <Compile Include="Models\EventPurpose.cs" />
     <Compile Include="Models\EventType.cs" />
     <Compile Include="Models\InteractionHistory.cs" />
+    <Compile Include="Models\PiShop\BlogPS.cs" />
+    <Compile Include="Models\PiShop\TopicPS.cs" />
     <Compile Include="Models\ProductType.cs" />
     <Compile Include="Models\ReminderNote.cs" />
     <Compile Include="Models\Staff.cs" />
@@ -96,5 +98,6 @@
       <Name>BestApp.Ultilities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

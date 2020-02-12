@@ -1,6 +1,7 @@
 using BestApp.Controllers;
 using BestApp.Core.Models;
 using BestApp.Services;
+using BestApp.Services.PiShop;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Repository.DataContext;
@@ -25,6 +26,8 @@ using static BestApp.Services.EventPurposeService;
 using static BestApp.Services.EventService;
 using static BestApp.Services.EventTypeService;
 using static BestApp.Services.InteractionHistoryService;
+using static BestApp.Services.PiShop.BlogPSService;
+using static BestApp.Services.PiShop.TopicPSService;
 using static BestApp.Services.ProductTypeService;
 using static BestApp.Services.ReminderNoteService;
 using static BestApp.Services.StaffService;
@@ -70,7 +73,9 @@ namespace BestApp
                 .RegisterType<ICityService, CityService>()
                 .RegisterType<IEventTypeService, EventTypeService>()
                 .RegisterType<IEventPurposeService, EventPurposeService>()
-                .RegisterType<IEStatusLogService, EStatusLogService>();
+                .RegisterType<IEStatusLogService, EStatusLogService>()
+                .RegisterType<ITopicPSService, TopicPSService>()
+                .RegisterType<IBlogPSService, BlogPSService>();
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);
