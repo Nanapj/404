@@ -23,14 +23,14 @@ angular.module('app')
             return kendo.template($("#toolbar").html());
         }
         function edit(){
-            // if(vm.selectedBlog.ID !== undefined && vm.selectedBlog.ID !== "") {
-            //     console.log(vm.selectedBlog.ID);
-            //     $state.go('app.blog.edit', {
-            //         ID: vm.selectedBlog.ID
-            //     });
-            // } else {
-            //     toaster.pop('info', "Chưa chọn", "Vui lòng chọn phòng ban");
-            // }
+            if(vm.selectedTopic.ID !== undefined && vm.selectedTopic.ID !== "") {
+                console.log(vm.selectedTopic.ID);
+                $state.go('app.topic.edit', {
+                    ID: vm.selectedTopic.ID
+                });
+            } else {
+                toaster.pop('info', "Chưa chọn", "Vui lòng chọn bài viết");
+            }
         }
         function topicBack() {
            $state.go('app.topic.index');

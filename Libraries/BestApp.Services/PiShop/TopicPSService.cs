@@ -42,6 +42,7 @@ namespace BestApp.Services.PiShop
         }
         public IQueryable<TopicPS> GetAllTopicPSs()
         {
+           
             return _repository.Queryable();
         }
         public Task<IQueryable<TopicPSViewModel>> GetAllTopicPSsAsync()
@@ -52,7 +53,7 @@ namespace BestApp.Services.PiShop
                 ID = x.Id,
                 Title = x.Title,
                 Decription = x.Decription,
-                Content = x.Content,
+                Content =  x.Content,
                 BlogPSID = x.BlogPS.Id,
                 CreatDate = x.CreatDate,
                 LastModifiedDate = x.LastModifiedDate,

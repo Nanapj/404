@@ -233,6 +233,7 @@ angular.module('app')
                             }]
                         }
                     })
+                    //topic
                     .state('app.topic', {
                         abstract: true,
                         url: '/topic',
@@ -251,6 +252,16 @@ angular.module('app')
                         url:'/create',
                         templateUrl: '/topic/Create'
                     })
+                    .state('app.topic.edit', {
+                        url: '/edit/:ID',
+                        templateUrl: '/topic/Edit',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/TopicController/topicEditCtrl.js'); // Resolve promise and load before view 
+                            }]
+                        }
+                    })
+                    //blog
                     .state('app.blog', {
                         abstract: true,
                         url: '/blog',
