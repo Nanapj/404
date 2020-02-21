@@ -33,7 +33,7 @@ angular.module('app')
                         data: "UserName=" + vm.user.email + "&Password=" + vm.user.password + "&grant_type=" + 'password'
                     }).then(function(response){
                         console.log(response);
-                        debugger;
+                        
                         $rootScope.UserLogged = response.data.userName;
                         $rootScope.access_token = response.data.access_token;
                         $rootScope.expiredDate = response.data['.expires'];

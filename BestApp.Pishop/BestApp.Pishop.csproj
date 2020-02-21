@@ -251,12 +251,15 @@
     <Compile Include="Areas\Api\Controllers\EventTypesController.cs" />
     <Compile Include="Areas\Api\Controllers\InteractionHistoriesController.cs" />
     <Compile Include="Areas\Api\Controllers\ODataBaseController.cs" />
+    <Compile Include="Areas\Api\Controllers\PiShop\BlogPSsController.cs" />
+    <Compile Include="Areas\Api\Controllers\PiShop\TopicPSsController.cs" />
     <Compile Include="Areas\Api\Controllers\ProductTypesController.cs" />
     <Compile Include="Areas\Api\Controllers\ReminderNotesController.cs" />
     <Compile Include="Areas\Api\Controllers\StaffsController.cs" />
     <Compile Include="Areas\Api\Controllers\TagsController.cs" />
     <Compile Include="Areas\Api\Controllers\WardsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\CatController.cs" />
     <Compile Include="Controllers\CrEventController.cs" />
     <Compile Include="Controllers\CrEventSourceController.cs" />
@@ -267,6 +270,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProductTypeController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
+    <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -367,6 +371,11 @@
     <Content Include="Views\CrEventSource\Index.cshtml" />
     <Content Include="Views\CrEventSource\Edit.cshtml" />
     <Content Include="Views\CrEventSource\Create.cshtml" />
+    <Content Include="Views\Blog\Create.cshtml" />
+    <Content Include="Views\Blog\Index.cshtml" />
+    <Content Include="Views\Blog\Edit.cshtml" />
+    <Content Include="Views\Topic\Index.cshtml" />
+    <Content Include="Views\Topic\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\BestApp.Core\BestApp.Core.csproj">

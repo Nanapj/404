@@ -46,7 +46,7 @@ namespace BestApp.Services.PiShop
         }
         public Task<IQueryable<TopicPSViewModel>> GetAllTopicPSsAsync()
         {
-            return Task.Run(() => GetAllTopicPSs().Where(x=> x.Delete == false)
+            return Task.Run(() => GetAllTopicPSs().Where(x => x.Delete == false)
             .Select(x => new TopicPSViewModel()
             {
                 ID = x.Id,
@@ -56,6 +56,7 @@ namespace BestApp.Services.PiShop
                 BlogPSID = x.BlogPS.Id,
                 CreatDate = x.CreatDate,
                 LastModifiedDate = x.LastModifiedDate,
+                BlogCategory = x.BlogPS.Category,
                 Delete = x.Delete
             }));
         }
@@ -68,7 +69,7 @@ namespace BestApp.Services.PiShop
             data.CreatDate = DateTime.Now;
             data.LastModifiedDate = DateTime.Now;
             data.Delete = false;
-            //data.BlogPS = _blogPSService.Queryable()
+            data.BlogPS = _blogPSService.Find(model.BlogPSID);
             base.Insert(data);
             return data;
         }

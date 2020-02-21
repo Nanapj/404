@@ -1,5 +1,6 @@
 ﻿using BestApp.Core.Models;
 using BestApp.Domain;
+using BestApp.Domain.PiShop;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.OData.Edm;
@@ -43,6 +44,8 @@ namespace BestApp
             builder.EntitySet<EventPurposeViewModel>("EventPurposes");
             builder.EntitySet<EventTypeViewModel>("EventTypes");
             builder.EntitySet<EStatusLogViewModel>("EStatusLogs");
+            builder.EntitySet<TopicPSViewModel>("TopicPSs");
+            builder.EntitySet<BlogPSViewModel>("BlogPSs");
             config.Formatters.Remove(config.Formatters.XmlFormatter);
             IEdmModel model = builder.GetEdmModel();
             // Web API routes

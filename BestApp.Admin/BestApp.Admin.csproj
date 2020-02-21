@@ -252,7 +252,7 @@
     <Compile Include="Areas\Api\Controllers\InteractionHistoriesController.cs" />
     <Compile Include="Areas\Api\Controllers\ODataBaseController.cs" />
     <Compile Include="Areas\Api\Controllers\PiShop\BlogPSsController.cs" />
-    <Compile Include="Areas\Api\Controllers\PiShop\TopicPSController.cs" />
+    <Compile Include="Areas\Api\Controllers\PiShop\TopicPSsController.cs" />
     <Compile Include="Areas\Api\Controllers\ProductTypesController.cs" />
     <Compile Include="Areas\Api\Controllers\ReminderNotesController.cs" />
     <Compile Include="Areas\Api\Controllers\StaffsController.cs" />

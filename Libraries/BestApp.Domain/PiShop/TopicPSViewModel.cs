@@ -13,6 +13,7 @@ namespace BestApp.Domain.PiShop
         public string Decription { get; set; }
         public string Content { get; set; }
         public Guid BlogPSID { get; set; }
+        public string BlogCategory { get; set; }
         public DateTime CreatDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public bool Delete { get; set; }

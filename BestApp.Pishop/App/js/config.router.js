@@ -233,6 +233,52 @@ angular.module('app')
                             }]
                         }
                     })
+                    .state('app.topic', {
+                        abstract: true,
+                        url: '/topic',
+                        template: '<div ui-view class="fade-in-down"></div>',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/TopicController/topicCtrl.js'); // Resolve promise and load before view 
+                            }]
+                        }
+                    })
+                    .state('app.topic.index', {
+                        url: '/index',
+                        templateUrl: '/topic/Index'
+                    })
+                    .state('app.topic.create', {
+                        url:'/create',
+                        templateUrl: '/topic/Create'
+                    })
+                    .state('app.blog', {
+                        abstract: true,
+                        url: '/blog',
+                        template: '<div ui-view class="fade-in-down"></div>',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/BlogController/blogCtrl.js'); // Resolve promise and load before view 
+                            }]
+                        }
+                    }).
+                    state('app.blog.index', {
+                        url: '/index',
+                        templateUrl: '/blog/Index'
+                    })
+                    .state('app.blog.create', {
+                        url:'/create',
+                        templateUrl: '/blog/Create'
+                    })
+                    .state('app.blog.edit', {
+                        url: '/edit/:ID',
+                        templateUrl: '/blog/Edit',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/BlogController/blogEditCtrl.js'); // Resolve promise and load before view 
+                            }]
+                        }
+                    })
+                    
                     .state('account', {
                         url: '/account',
                         template: '<div ui-view class="fade-in-right-big smooth"></div>'
