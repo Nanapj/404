@@ -29,6 +29,14 @@ namespace BestApp.Areas.Api.Controllers.PiShop
             var result = await _topicPSService.GetAllTopicPSsAsync();
             return result;
         }
+        [HttpGet]
+        [EnableQuery]
+        public async Task<IHttpActionResult> Get([FromODataUri] Guid ID)
+        {
+            var result =  _topicPSService.GetTopicPSs(ID);
+            result.Content = HttpContext.Current.Server.HtmlDecode(result.Content);
+            return Ok(result);
+        }
         [HttpPost]
         [AllowAnonymous]
         public async Task<IHttpActionResult> Post(TopicPSViewModel model)

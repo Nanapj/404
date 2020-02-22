@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-default" block-ui="BlockUI">
-                <div class="panel-heading font-bold">Tạo bài viết mới</div>
+                <div class="panel-heading font-bold">Cập nhập bài viết</div>
                 <div class="panel-body" style="height:500px;">
                     <form role="form">
                         <div class="form-group">
@@ -24,6 +24,7 @@
                                 k-option-label="' Loại chủ đề... '"
                                 k-ng-model="vm.selectedBlogData"
                                 k-on-change="onBlogSelChanged()"
+                                k-data-auto-bind = false
                                 k-filter="'contains'"
                                 style="width: 100%">
                             </select>
@@ -37,17 +38,17 @@
                             <input type="text" class="form-control" ng-model="vm.model.Decription">
                         </div>
                         
-                        <button type="submit" class="btn btn-success" ng-click="vm.editSubmit()">Tạo bài viết</button>
+                        <button type="submit" class="btn btn-success" ng-click="vm.editSubmit()">Cập nhập bài viết</button>
                     </form>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="panel panel-default" block-ui="BlockUI">
-            <div class="panel-heading font-bold">Tạo bài viết mới</div>
+            <div class="panel-heading font-bold">Cập nhập bài viết</div>
                 <div class="panel-body" style="height:500px;">
                     <div class="form-group">
-                        <textarea kendo-editor k-ng-model="vm.model.Content"  rows="10" cols="30" style="height:440px">
+                        <textarea kendo-editor k-options="toolEdit" k-ng-model="vm.model.Content"  rows="10" cols="30" style="height:440px">
                         </textarea>
                     </div>
                 </div>

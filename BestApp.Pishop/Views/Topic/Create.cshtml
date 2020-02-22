@@ -1,11 +1,11 @@
-<div class="bg-light lter b-b wrapper-md">
+﻿<div class="bg-light lter b-b wrapper-md">
     <h1 class="m-n font-thin h3">Create Topic</h1>
 </div>
 <div class="wrapper-sm" ng-controller="TopicCtrl as vm">
     <div class="row" style="padding-left: 15px;">
         <button class="btn m-b-xs w-xs btn-danger" ng-click="vm.topicBack()"><i class="glyphicon glyphicon-chevron-left icon text-light"></i>Back</button>
     </div>
-  
+
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-default" block-ui="BlockUI">
@@ -13,19 +13,18 @@
                 <div class="panel-body" style="height:500px;">
                     <form role="form">
                         <div class="form-group">
-                            <label>Loại chủ đề</label> <br/>
+                            <label>Loại chủ đề</label> <br />
                             <select id="blogdropdown"
-                                kendo-drop-down-list
-                                ng-disabled="eventTypeDis === 1"
-                                k-data-text-field="'Category'"
-                                k-data-value-field="'ID'"
-                                k-data-source="vm.blogData"
-                                k-option-label="' Loại chủ đề... '"
-                                k-ng-model="vm.selectedBlogData"
-                                k-on-change="onBlogSelChanged()"
-                                k-filter="'contains'"
-                                style="width: 100%">
-                            </select>
+                                    kendo-drop-down-list
+                                    ng-disabled="eventTypeDis === 1"
+                                    k-data-text-field="'Category'"
+                                    k-data-value-field="'ID'"
+                                    k-data-source="vm.blogData"
+                                    k-option-label="' Loại chủ đề... '"
+                                    k-ng-model="vm.selectedBlogData"
+                                    k-on-change="onBlogSelChanged()"
+                                    k-filter="'contains'"
+                                    style="width: 100%"></select>
                         </div>
                         <div class="form-group">
                             <label>Tiêu đề</label>
@@ -35,7 +34,7 @@
                             <label>Tóm tắt</label>
                             <input type="text" class="form-control" ng-model="vm.model.Decription">
                         </div>
-                        
+
                         <button type="submit" class="btn btn-success" ng-click="vm.createSubmit()">Tạo bài viết</button>
                     </form>
                 </div>
@@ -43,7 +42,7 @@
         </div>
         <div class="col-md-6">
             <div class="panel panel-default" block-ui="BlockUI">
-            <div class="panel-heading font-bold">Tạo bài viết mới</div>
+                <div class="panel-heading font-bold">Tạo bài viết mới</div>
                 <div class="panel-body" style="height:500px;">
                     <div class="form-group">
                         <textarea id="editor" rows="10" cols="30" ng-model="vm.model.Content" style="height:440px" aria-label="editor">
@@ -57,9 +56,54 @@
 <script>
     $(document).ready(function() {
         // create Editor from textarea HTML element with default set of tools
-        $("#editor").kendoEditor({ resizable: {
+        $("#editor").kendoEditor({ 
+            resizable: {
             content: true,
-            toolbar: true
-        }});
+            toolbar: true,
+            
+        },
+        tools: [
+                "bold",
+                "italic",
+                "underline",
+                "strikethrough",
+                "justifyLeft",
+                "justifyCenter",
+                "justifyRight",
+                "justifyFull",
+                "insertUnorderedList",
+                "insertOrderedList",
+                "indent",
+                "outdent",
+                "createLink",
+                "unlink",
+                "insertImage",
+                "insertFile",
+                "subscript",
+                "superscript",
+                "tableWizard",
+                "createTable",
+                "addRowAbove",
+                "addRowBelow",
+                "addColumnLeft",
+                "addColumnRight",
+                "deleteRow",
+                "deleteColumn",
+                "mergeCellsHorizontally",
+                "mergeCellsVertically",
+                "splitCellHorizontally",
+                "splitCellVertically",
+                "viewHtml",
+                "formatting",
+                "cleanFormatting",
+                "copyFormat",
+                "applyFormat",
+                "fontName",
+                "fontSize",
+                "foreColor",
+                "backColor",
+                "print"
+            ]
+        });
     });
 </script>

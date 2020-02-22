@@ -63,40 +63,40 @@ angular.module('app')
            
         }
         function destroy(){
-            // if(vm.selectedBlog.ID != undefined && vm.selectedBlog.ID != null) {
-            //     swal({
-            //        title: "Xác nhận xóa?",
-            //        text: "Bạn có chắc xóa tiêu đề",
-            //        icon: "warning",
-            //        buttons: true,
-            //        dangerMode: true,
-            //     })
-            //     .then((willDelete) => {
-            //        if (willDelete) {
-            //              //   swal("Poof! Your imaginary file has been deleted!", {
-            //              //     icon: "success",
-            //              //   });
-            //              $http({
-            //                  method: 'DELETE',
-            //                  url: _url+'(' + vm.selectedBlog.ID +')',
-            //                  headers: {
-            //                      'Content-Type': 'application/json',
-            //                      'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
-            //                  },
-            //              }).then(function successCallback(response) {
-            //                  toaster.pop('success', "Thành công", "Đã xóa thông tin tiêu đề");
-            //                  $('#blogGrid').data('kendoGrid').dataSource.read().then(function(){
-            //                      $('#blogGrid').data('kendoGrid').refresh();
-            //                  });
-            //              });
+            if(vm.selectedTopic.ID != undefined && vm.selectedTopic.ID != null) {
+                swal({
+                   title: "Xác nhận xóa?",
+                   text: "Bạn có chắc xóa bài viết",
+                   icon: "warning",
+                   buttons: true,
+                   dangerMode: true,
+                })
+                .then((willDelete) => {
+                   if (willDelete) {
+                         //   swal("Poof! Your imaginary file has been deleted!", {
+                         //     icon: "success",
+                         //   });
+                         $http({
+                             method: 'DELETE',
+                             url: _url+'(' + vm.selectedTopic.ID +')',
+                             headers: {
+                                 'Content-Type': 'application/json',
+                                 'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                             },
+                         }).then(function successCallback(response) {
+                             toaster.pop('success', "Thành công", "Đã xóa bài viết");
+                             $('#topicGrid').data('kendoGrid').dataSource.read().then(function(){
+                                 $('#topicGrid').data('kendoGrid').refresh();
+                             });
+                         });
                    
-            //        } else {
+                   } else {
                    
-            //        }
-            //     });
-            // } else {
-            //  toaster.pop('warning', "Chưa chọn", "Không có thông tin nào được chọn");
-            // }
+                   }
+                });
+            } else {
+             toaster.pop('warning', "Chưa chọn", "Không có bài viết nào được chọn");
+            }
         }
 
         //data dropdownlist category blog
