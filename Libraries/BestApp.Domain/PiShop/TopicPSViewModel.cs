@@ -19,5 +19,7 @@ namespace BestApp.Domain.PiShop
         public DateTime CreatDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public bool Delete { get; set; }
+        public string Thumbnail { get; set; }
+        public string LinkVid { get; set; }
     }
 }

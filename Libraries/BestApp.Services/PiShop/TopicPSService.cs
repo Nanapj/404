@@ -51,7 +51,7 @@ namespace BestApp.Services.PiShop
         }
         public Task<IQueryable<TopicPSViewModel>> GetAllTopicPSsAsync()
         {
-            return Task.Run(() => GetAllTopicPSs().Where(x => x.Delete == false)
+            return Task.Run(() => GetAllTopicPSs().Where(x => x.Delete == false).OrderByDescending(x=> x.CreatDate)
             .Select(x => new TopicPSViewModel()
             {
                 ID = x.Id,
@@ -62,7 +62,9 @@ namespace BestApp.Services.PiShop
                 CreatDate = x.CreatDate,
                 LastModifiedDate = x.LastModifiedDate,
                 BlogCategory = x.BlogPS.Category,
-                Delete = x.Delete
+                Delete = x.Delete,
+                LinkVid = x.LinkVid,
+                Thumbnail = x.Thumbnail
             }));
         }
         public TopicPSViewModel GetTopicPSs(Guid ID)
@@ -78,6 +80,8 @@ namespace BestApp.Services.PiShop
                 CreatDate = x.CreatDate,
                 LastModifiedDate = x.LastModifiedDate,
                 BlogCategory = x.BlogPS.Category,
+                LinkVid = x.LinkVid,
+                Thumbnail = x.Thumbnail,
                 Delete = x.Delete
             }).FirstOrDefault();
             return result;
@@ -97,6 +101,8 @@ namespace BestApp.Services.PiShop
             data.LastModifiedDate = DateTime.Now;
             data.Delete = false;
             data.BlogPS = _blogPSService.Find(model.BlogPSID);
+            data.Thumbnail = model.Thumbnail;
+            data.LinkVid = model.LinkVid;
             base.Insert(data);
             return data;
         }
@@ -122,6 +128,8 @@ namespace BestApp.Services.PiShop
             if (data != null)
             {
                 data.Content = model.Content;
+                data.Thumbnail = model.Thumbnail;
+                data.LinkVid = model.LinkVid;
                 data.Content = model.Content;
                 data.Title = model.Title;
                 data.Decription = model.Decription;

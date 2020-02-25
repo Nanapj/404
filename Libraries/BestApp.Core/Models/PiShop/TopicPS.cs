@@ -12,5 +12,8 @@ namespace BestApp.Core.Models.PiShop
         public string Decription { get; set; }
         public string Content { get; set; }
         public virtual BlogPS BlogPS { get; set; }
+        public string Thumbnail { get; set; }
+        public string LinkVid { get; set; }
+
     }
 }
