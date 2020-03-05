@@ -30,22 +30,18 @@ namespace BestApp.Services.PiShop
             bool Delete(Guid Id);
         }
         private readonly ProductTypeService _productTypeService;
-        private readonly IRepositoryAsync<ProductAttribute> _repository;
-        private readonly IRepository<ApplicationUser> _userRepository;
-        protected readonly DataContext db;
         protected UserManager<ApplicationUser> userManager;
         public ProductAttributeService(IRepositoryAsync<ProductAttribute> repository,
             ProductTypeService productTypeService) : base(repository)
         {
-            _repository = repository;
+           
             _productTypeService = productTypeService;
-            db = new DataContext();
-            userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+           
         }
         public IQueryable<ProductAttribute> GetAllProductAttributes()
         {
 
-            return _repository.Queryable();
+            return Queryable();
         }
         public Task<IQueryable<ProductAttributeViewModel>> GetAllProductAttributesAsync()
         {
@@ -82,7 +78,6 @@ namespace BestApp.Services.PiShop
             data.ProductType = _productTypeService.Find(model.ProductTypeID);
             data.CreatDate = DateTime.Now;
             data.LastModifiedDate = DateTime.Now;
-            data.UserAccount = _userRepository.Find(CurrentId);
             base.Insert(data);
             return data;
         }

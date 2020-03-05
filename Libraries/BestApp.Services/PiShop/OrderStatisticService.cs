@@ -29,18 +29,9 @@ namespace BestApp.Services.PiShop
             IQueryable<OrderStatisticViewModel> GetAllOrderStatistics();
             bool Delete(Guid Id);
         }
-        private readonly ProductTypeService _productTypeService;
-        private readonly OrderDetailService _orderDetailService;
-        private readonly OrderService _orderService;
-        protected UserManager<ApplicationUser> userManager;
-        public OrderStatisticService(IRepositoryAsync<OrderStatistic> repository,
-             ProductTypeService productTypeService,
-             OrderDetailService orderDetailService,
-             OrderService orderService) : base(repository)
+        public OrderStatisticService(IRepositoryAsync<OrderStatistic> repository) : base(repository)
         {
-            _orderDetailService = orderDetailService;
-            _productTypeService = productTypeService;
-            _orderService = orderService;
+            
         }
         public Task<IQueryable<OrderStatisticViewModel>> GetAllOrderStatisticsAsync()
         {

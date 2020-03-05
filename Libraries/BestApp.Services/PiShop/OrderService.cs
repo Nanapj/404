@@ -28,38 +28,32 @@ namespace BestApp.Services.PiShop
             Task<IQueryable<OrderViewModel>> GetAllOrdersAsync(SearchViewModel model);
             IQueryable<OrderViewModel> GetAllOrders(SearchViewModel model);
             IEnumerable<OrderViewModel> GetOrderByPhoneNumber(SearchViewModel model);
-            bool Delete(Guid Id);
-            
+            bool Delete(Guid Id);            
         }
+        private readonly IRepositoryAsync<Order> _repository;
         private readonly CustomerService _customerService;
-        private readonly ProductTypeService _productTypeService;
         private readonly OrderDetailService _orderDetailService;
         private readonly OrderStatisticService _orderStatisticService;
-        private readonly IRepositoryAsync<Order> _repository;
         private readonly IRepositoryAsync<OrderDetail> _repositoryDetail;
         private readonly IRepositoryAsync<OrderStatistic> _repositoryStatistic;
         private readonly IRepository<ApplicationUser> _userRepository;
         protected readonly DataContext db;
-        protected UserManager<ApplicationUser> userManager;
         public OrderService(IRepositoryAsync<Order> repository,
              CustomerService customerService,
-             ProductTypeService productTypeService,
              OrderDetailService orderDetailService,
              OrderStatisticService orderStatisticService,
              IRepositoryAsync<OrderDetail> repositoryDetail,
              IRepositoryAsync<OrderStatistic> repositoryStatistic,
-        IRepositoryAsync<ApplicationUser> userRepository) : base(repository)
+             IRepositoryAsync<ApplicationUser> userRepository
+             ) : base(repository)
         {
+            _repository = repository;
             _customerService = customerService;
             _orderDetailService = orderDetailService;
-            _productTypeService = productTypeService;
             _orderStatisticService = orderStatisticService;
-            _repository = repository;
             _repositoryDetail = repositoryDetail;
             _repositoryStatistic = repositoryStatistic;
             _userRepository = userRepository;
-            db = new DataContext();
-            userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
         }
         public Task<IQueryable<OrderViewModel>> GetAllOrdersAsync(SearchViewModel model)
         {
@@ -70,7 +64,7 @@ namespace BestApp.Services.PiShop
         {
             if (model.Code != null)
             {
-                var findId = Queryable().Where(x => x.Code == model.Code).Select(x => x.Id).FirstOrDefault();
+                var findId = _repository.Queryable().Where(x => x.Code == model.Code).Select(x => x.Id).FirstOrDefault();
                 if (findId != null)
                 {
                     model.ID = findId;
@@ -112,7 +106,7 @@ namespace BestApp.Services.PiShop
                     model.CustomerID = findId;
                 }
             }
-            var result = _repository.Queryable().Where(x => x.Delete == false
+            var result = Queryable().Where(x => x.Delete == false
             && ((!(model.CustomerID == null)) || (model.CustomerID == x.Customer.Id))
             && ((!model.From.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
             && ((!model.To.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) <= DbFunctions.TruncateTime(model.To))))
@@ -143,12 +137,12 @@ namespace BestApp.Services.PiShop
             Random generator = new Random();
             var r = generator.Next(0, 999999).ToString("D6");
             var CodeOrder = "PSHCM" + DateTime.Now.ToString("yyyy") + DateTime.Now.ToString("MM") + r;
-            var find = Queryable().Where(x => x.Code == CodeOrder).Any();
+            var find = _repository.Queryable().Where(x => x.Code == CodeOrder).Any();
             do
             {
                 r = generator.Next(0, 999999).ToString("D6");
                 CodeOrder = "PSHCM" + DateTime.Now.ToString("yyyy") + DateTime.Now.ToString("MM") + r;
-                find = Queryable().Where(x => x.Code == CodeOrder).Any();
+                find = _repository.Queryable().Where(x => x.Code == CodeOrder).Any();
             } while (find == true);
 
             data.Code = CodeOrder;
@@ -189,21 +183,21 @@ namespace BestApp.Services.PiShop
                 }
             }
             data.Total = model.OrderDetails.Sum(x => x.Quantity * x.Price);
-            base.Insert(data);
-            db.SaveChanges();
+            _repository.Insert(data);
+            
             model.ID = data.Id;
             
             //Thêm data vào bảng OrderStatisticService
             foreach(var item in model.OrderDetails)
             {
                 //nếu sản phẩm có thuộc tính
-                if (item.OrderStatistics != null)
+                if (item.OrderStatistics.Count != 0)
                 {
                     foreach(var item1 in item.OrderStatistics)
                     {
                         var dataProduct = new OrderStatistic();
                         dataProduct.OrderId = model.ID;
-                        dataProduct.ProductAttributeId = item1.ID;
+                        dataProduct.ProductAttributeId = item1.ProductAttributeId;
                         dataProduct.ProductAttributeName = item1.ProductAttributeName;
                         dataProduct.ProductAttributeNote = item1.ProductAttributeNote;
                         dataProduct.CreatDate = DateTime.Now;
@@ -356,7 +350,7 @@ namespace BestApp.Services.PiShop
                     }
                 }
                 //Xóa phiếu
-                _repository.Delete(Phieu);
+                Delete(Phieu);
             }
             
             return true;

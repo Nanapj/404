@@ -28,32 +28,25 @@ namespace BestApp.Services.PiShop
             IQueryable<OrderDetailViewModel> GetOrderDetailByOrder(SearchViewModel model);
             bool Delete(Guid Id);
         }
-        private readonly CustomerService _customerService;
         private readonly OrderStatisticService _orderStatisticService;
-        private readonly ProductTypeService _productTypeService;
-        private readonly OrderService _orderService;
-        private readonly IRepositoryAsync<OrderDetail> _repository;
+
         private readonly IRepositoryAsync<OrderStatistic> _repositoryOrderStatic;
+        private readonly IRepositoryAsync<Order> _repositoryOrder;
         private readonly IRepository<ApplicationUser> _userRepository;
         protected readonly DataContext db;
-        protected UserManager<ApplicationUser> userManager;
         public OrderDetailService(IRepositoryAsync<OrderDetail> repository,
-             CustomerService customerService,
-             ProductTypeService productTypeService,
              OrderStatisticService orderStatisticService,
-             OrderService orderService,
              IRepositoryAsync<OrderStatistic> repositoryOrderStatic,
-             IRepositoryAsync<ApplicationUser> userRepository) : base(repository)
+             IRepositoryAsync<Order> repositoryOrder,
+             IRepositoryAsync<ApplicationUser> userRepository
+             ) : base(repository)
         {
-            _customerService = customerService;
+            
             _orderStatisticService = orderStatisticService;
-            _orderService = orderService;
-            _productTypeService = productTypeService;
-            _repository = repository;
+            _repositoryOrder = repositoryOrder;
             _repositoryOrderStatic = repositoryOrderStatic;
-            _userRepository = userRepository;
             db = new DataContext();
-            userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+
         }
         public Task<IQueryable<OrderDetailViewModel>> GetOrderDetailsAsync(SearchViewModel model)
         {
@@ -61,7 +54,7 @@ namespace BestApp.Services.PiShop
         }
         public IQueryable<OrderDetailViewModel> GetOrderDetailByOrder(SearchViewModel model)
         {
-            var result = _repository.Queryable().Where(x => x.Delete == false &&  x.Order.Id == model.OrderID
+            var result = Queryable().Where(x => x.Delete == false &&  x.Order.Id == model.OrderID
             && ((!model.From.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
             && ((!model.To.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) <= DbFunctions.TruncateTime(model.To)))).
             Select(x => new OrderDetailViewModel
@@ -100,7 +93,7 @@ namespace BestApp.Services.PiShop
         public OrderDetail Insert(OrderDetailViewModel model, string CurrentId)
         {
             var data = new OrderDetail();
-            data.Order = _orderService.Find(model.OrderID);
+            data.Order = _repositoryOrder.Find(model.OrderID);
             data.ProductId = model.ProductID;
             data.Quantity = model.Quantity;
             data.Price = model.Price;
