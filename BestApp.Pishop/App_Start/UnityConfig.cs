@@ -27,6 +27,10 @@ using static BestApp.Services.EventService;
 using static BestApp.Services.EventTypeService;
 using static BestApp.Services.InteractionHistoryService;
 using static BestApp.Services.PiShop.BlogPSService;
+using static BestApp.Services.PiShop.OrderDetailService;
+using static BestApp.Services.PiShop.OrderService;
+using static BestApp.Services.PiShop.OrderStatisticService;
+using static BestApp.Services.PiShop.ProductAttributeService;
 using static BestApp.Services.PiShop.TopicPSService;
 using static BestApp.Services.ProductTypeService;
 using static BestApp.Services.ReminderNoteService;
@@ -75,7 +79,11 @@ namespace BestApp
                 .RegisterType<IEventPurposeService, EventPurposeService>()
                 .RegisterType<IEStatusLogService, EStatusLogService>()
                 .RegisterType<ITopicPSService, TopicPSService>()
-                .RegisterType<IBlogPSService, BlogPSService>();
+                .RegisterType<IBlogPSService, BlogPSService>()
+                .RegisterType<IOrderService, OrderService>()
+                .RegisterType<IOrderDetailService, OrderDetailService>()
+                .RegisterType<IOrderStatisticService, OrderStatisticService>()
+                .RegisterType<IProductAttributeService, ProductAttributeService>();
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);

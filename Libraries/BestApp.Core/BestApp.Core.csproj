@@ -58,6 +58,7 @@
     <Compile Include="DataContext\IDataContextAsync.cs" />
     <Compile Include="Enum\StatusEvent.cs" />
     <Compile Include="Enum\ProcessStatus.cs" />
+    <Compile Include="Enum\StatusOrder.cs" />
     <Compile Include="Enum\StatusTag.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\Cat.cs" />
@@ -74,6 +75,10 @@
     <Compile Include="Models\EventType.cs" />
     <Compile Include="Models\InteractionHistory.cs" />
     <Compile Include="Models\PiShop\BlogPS.cs" />
+    <Compile Include="Models\PiShop\Order.cs" />
+    <Compile Include="Models\PiShop\OrderDetail.cs" />
+    <Compile Include="Models\PiShop\OrderStatistic.cs" />
+    <Compile Include="Models\PiShop\ProductAttribute.cs" />
     <Compile Include="Models\PiShop\TopicPS.cs" />
     <Compile Include="Models\ProductType.cs" />
     <Compile Include="Models\ReminderNote.cs" />

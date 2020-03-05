@@ -252,6 +252,10 @@
     <Compile Include="Areas\Api\Controllers\InteractionHistoriesController.cs" />
     <Compile Include="Areas\Api\Controllers\ODataBaseController.cs" />
     <Compile Include="Areas\Api\Controllers\PiShop\BlogPSsController.cs" />
+    <Compile Include="Areas\Api\Controllers\PiShop\OrderDetailsController.cs" />
+    <Compile Include="Areas\Api\Controllers\PiShop\OrdersController.cs" />
+    <Compile Include="Areas\Api\Controllers\PiShop\OrderStatisticsController.cs" />
+    <Compile Include="Areas\Api\Controllers\PiShop\ProductAttributesController.cs" />
     <Compile Include="Areas\Api\Controllers\PiShop\TopicPSsController.cs" />
     <Compile Include="Areas\Api\Controllers\ProductTypesController.cs" />
     <Compile Include="Areas\Api\Controllers\ReminderNotesController.cs" />
@@ -333,6 +337,10 @@
     <Folder Include="Areas\Api\Views\EventTypes\" />
     <Folder Include="Areas\Api\Views\InteractionHistorys\" />
     <Folder Include="Areas\Api\Views\ODataBase\" />
+    <Folder Include="Areas\Api\Views\OrderDetails\" />
+    <Folder Include="Areas\Api\Views\OrderStatistics\" />
+    <Folder Include="Areas\Api\Views\Orders\" />
+    <Folder Include="Areas\Api\Views\ProductAttributes\" />
     <Folder Include="Areas\Api\Views\ProductType\" />
     <Folder Include="Areas\Api\Views\ReminderNotes\" />
     <Folder Include="Areas\Api\Views\Shared\" />

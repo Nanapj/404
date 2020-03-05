@@ -1,4 +1,5 @@
 ﻿using BestApp.Core.Models;
+using BestApp.Core.Models.PiShop;
 using Repository.Repositories;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,15 @@ namespace Service.Pattern
     public abstract class Service<TEntity> : IService<TEntity> where TEntity : class
     {
         private readonly IRepositoryAsync<TEntity> _repository;
+        private IRepositoryAsync<Order> repository;
 
         protected Service(IRepositoryAsync<TEntity> repository) { _repository = repository; }
 
-       
+        protected Service(IRepositoryAsync<Order> repository)
+        {
+            this.repository = repository;
+        }
+
         public virtual TEntity Find(params object[] keyValues) { return _repository.Find(keyValues); }
 
         public virtual IQueryable<TEntity> SelectQuery(string query, params object[] parameters) { return _repository.SelectQuery(query, parameters).AsQueryable(); }
