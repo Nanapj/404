@@ -48,6 +48,7 @@ angular.module('app')
             }).then(function(response){
                 if(response.status == 204) {
                     editBlock.stop();
+                    $state.go('app.staff.index');
                     toaster.pop('success', "Thành công", "Đã cập nhật xong");
                 } else {
                     toaster.pop('error', "Lỗi", "Có lỗi trong quá trình cập nhật");

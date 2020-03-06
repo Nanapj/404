@@ -60,7 +60,7 @@ namespace BestApp
             };
 
             // Enable the application to use bearer tokens to authenticate users
-            app.UseOAuthBearerTokens(OAuthOptions);
+            app.UseOAuthBearerTokens(OAuthOptions); //cách thức truyền token vào trong HTTP Header sử dụng Bearer Schema
 
 
             // Enables the application to temporarily store user information when they are verifying the second factor in the two-factor authentication process.

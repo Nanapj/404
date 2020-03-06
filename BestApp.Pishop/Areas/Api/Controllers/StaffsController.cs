@@ -13,6 +13,8 @@ using static BestApp.Services.StaffService;
 
 namespace BestApp.Areas.Api.Controllers
 {
+    [HttpBasicAuthorize]
+    [RequireHttps]
     public class StaffsController : ODataBaseController
     {
         private readonly IStaffService _staffService;
@@ -32,6 +34,7 @@ namespace BestApp.Areas.Api.Controllers
         }
 
         [HttpPost]
+      
         public async Task<IHttpActionResult> Post(StaffViewModel model)
         {
             if (!ModelState.IsValid)

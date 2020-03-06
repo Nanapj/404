@@ -33,11 +33,12 @@ angular.module('app')
         var colandlineData = {
             datasets: [{
               label: 'Bar Dataset',
-              data: [10, 20, 30, 40],
+                data: [60, 20, 30, 40],
+
               backgroundColor: 'rgba(255,0,0,0.2)'
             }, {
                 label: 'Line Dataset',
-                data: [50, 50, 50, 50],
+                data: [50, 30, 50, 50],
                 // Changes this dataset to become a line
                 type: 'line',
                 backgroundColor: 'rgba(135,206,250,0.2)'
