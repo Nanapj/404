@@ -356,7 +356,7 @@ namespace BestApp.Services.PiShop
         }
         public bool Delete(Guid Id)
         {
-            var result = Find(Id);
+            var result = _repository.Find(Id);
             if (result != null)
             {
                 //Xóa phiếu
