@@ -1,9 +1,12 @@
 ﻿using BestApp.Core.Models;
 using BestApp.Domain;
+using BestApp.Domain.PiShop;
 using BestApp.Services;
+using BestApp.Services.PiShop;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Repository.Pattern;
+using Repository.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,36 +17,24 @@ namespace BestApp.Controllers
 {
     public class JsonController : Controller
     {
-        private readonly DepartmentService _departmentService;
-        private readonly TagService _tagService;
-        private readonly EventService _eventService;
-        private readonly DetailEventService _detailEventService;
-        private readonly InteractionHistoryService _interactionHistoryService;
-        private readonly CustomerService _customerService;
-        private readonly DataContext db;
-        private UserManager<ApplicationUser> userManager;
-        public JsonController(
-           DepartmentService departmentService,
-           TagService tagService,
-           EventService eventService,
-           DetailEventService detailEventService,
-           InteractionHistoryService interactionHistoryService,
-           CustomerService customerService
-           )
+        private readonly IUnitOfWorkAsync _unitOfWorkAsync;
+        private readonly OrderService _orderService;
+        
+        public JsonController(OrderService orderService, IUnitOfWorkAsync unitOfWorkAsync)
         {
-            _departmentService = departmentService;
-            _tagService = tagService;
-            _eventService = eventService;
-            _detailEventService = detailEventService;
-            _interactionHistoryService = interactionHistoryService;
-            db = new DataContext();
-            userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+           
+            _orderService = orderService;
+            _unitOfWorkAsync = unitOfWorkAsync;
         }
-       
-        //public ActionResult GetInteractionHistoryByCustomer(SearchViewModel model)
-        //{
 
-        //}
+        public ActionResult UpdateStatusOrder(OrderViewModel model)
+        {
+            
+            var r = _orderService.UpdateStatus(model);
+            _unitOfWorkAsync.SaveChanges();
+            return Json(r, JsonRequestBehavior.AllowGet);
+
+        }
     }
    
 }
