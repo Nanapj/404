@@ -1,0 +1,85 @@
+﻿
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Order Management</h1>
+</div>
+<div class="wrapper-sm" ng-controller="OrderCtrl as vm">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default" block-ui="BlockUI">
+                <div class="panel-heading font-bold">Filter</div>
+                <div class="panel-body">
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            <label class="font-bold">Theo ngày tạo:</label>
+                            <div>
+                                <h5>Start</h5>
+                                <input kendo-date-picker
+                                       k-ng-model="vm.startCreateDate"
+                                       k-options="{format: 'dd/MM/yyyy'}"
+                                       k-on-change="onStartDateChange()" 
+                                       style="width:60%"/>
+                            </div>
+                            <div style="margin-top:5%">
+                                <h5>End</h5>
+                                <input kendo-date-picker
+                                       k-ng-model="vm.endCreateDate"
+                                       k-options="{format: 'dd/MM/yyyy'}"
+                                       k-on-change="onEndDateChange()" style="width:60%"/>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6" >
+                        <div class="form-group">
+                            <label class="font-bold">Theo thời gian hẹn:</label>
+                            <div>
+                                <h5>Start</h5>
+                                <input kendo-date-picker
+                                       k-ng-model="vm.startDate"
+                                       k-options="{format: 'dd/MM/yyyy'}"
+                                       k-on-change="onStartDateChange()"style="width:60%" />
+                            </div>
+                            <div style="margin-top:5%">
+                                <h5>End </h5>
+                                <input kendo-date-picker
+                                       k-ng-model="vm.endDate"
+                                       k-options="{format: 'dd/MM/yyyy'}"
+                                       k-on-change="onEndDateChange()"style="width:60%" />
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div id="listOrderGrid"
+                 kendo-grid
+                 k-options="mainGridOptions"
+                 k-selectable="true"
+                 k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'
+                 k-toolbar='[ { template: vm.toolbarTemplate() } ]'></div>
+        </div>
+    </div>
+</div>
+<script type="text/x-kendo-template" id="toolbar">
+    <div>
+        <div class="toolbar">
+            <div style="float:left">
+                <button class="btn btn-success k-button-large" ng-click="vm.receive(this)"><span class="fa fa-check"></span>&nbsp;Nhận</button>
+                <button class="btn btn-info k-button-large" ng-click="vm.edit(this)"><span class="fa fa-pencil"></span>&nbsp;Hẹn lại</button>
+                <button class="btn btn-danger k-button-large" ng-click="vm.cancel(this)"><span class="fa fa-trash"></span>&nbsp;Hủy đơn</button>
+            </div>
+            <div style="float:right">
+
+                <button class='k-button k-button-icontext k-grid-excel'><span class='k-icon k-i-file-excel'></span>Export to Excel</button>
+                <span class="k-textbox k-grid-search k-display-flex" style="width:150px"><input autocomplete="off" placeholder="Search..." title="Search..." class="k-input"><span class="k-input-icon"><span class="k-icon k-i-search"></span></span></span>
+            </div>
+           
+        </div>
+    </div>
+   
+</script>
+

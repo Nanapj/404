@@ -6,15 +6,18 @@ angular.module('app')
             function ($rootScope, $state, $stateParams) {
                 $rootScope.$state = $state;
                 $rootScope.$stateParams = $stateParams;
-                
+        
                 $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                   if (localStorage.getItem("UserLogged") != null) {
                       $rootScope.UserLogged = JSON.parse(localStorage.getItem("UserLogged"));
-                  } else {
+                    
+                  }
+                  else {
                       if (toState.name != 'account.login' && toState.name != 'account.register') {
                           event.preventDefault();
                           $state.go('account.login');
                       }
+                      
                   }
                 });
 
@@ -289,7 +292,29 @@ angular.module('app')
                             }]
                         }
                     })
-                    
+                    //order
+                    .state('app.order', {
+                        abstract: true,
+                        url: '/order',
+                        template: '<div ui-view class="fade-in-down"></div>',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/OrderController/orderCtrl.js'); // Resolve promise and load before view 
+                            }]
+                        }
+                    }).
+                    state('app.order.index', {
+                        url: '/index',
+                        templateUrl: '/order/Index'
+                    })
+                    .state('app.order.create', {
+                        url: '/create',
+                        templateUrl: '/order/Create'
+                    })
+                    .state('app.order.detailorder', {
+                        url: '/detail/:id',
+                        templateUrl: '/order/DetailOrder'
+                    })
                     .state('account', {
                         url: '/account',
                         template: '<div ui-view class="fade-in-right-big smooth"></div>'

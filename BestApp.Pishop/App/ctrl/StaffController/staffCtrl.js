@@ -83,7 +83,7 @@ angular.module('app')
                     data: JSON.stringify(vm.model),
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                        'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/, '')
                     },
                 }).error(function(response) {
                     toaster.pop('error', "Thất bại", response.error.innererror.message);

@@ -12,12 +12,13 @@ using static BestApp.Services.EventTypeService;
 
 namespace BestApp.Areas.Api.Controllers
 {
+    [Authorize]
     public class EventTypesController : ODataBaseController
     {
         private readonly IEventTypeService _eventTypeService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
-        // GET: Api/Department
-        public EventTypesController(IEventTypeService eventTypeService, IUnitOfWorkAsync unitOfWorkAsync)
+  
+        public EventTypesController(IEventTypeService eventTypeService, IUnitOfWorkAsync unitOfWorkAsync) 
         {
             _eventTypeService = eventTypeService;
             _unitOfWorkAsync = unitOfWorkAsync;

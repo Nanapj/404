@@ -117,10 +117,10 @@ angular.module('app')
                   url: _url,
                   method: 'POST',
                   data: JSON.stringify(vm.model),
-                  headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
-                  },
+                  //headers: {
+                  //    'Content-Type': 'application/json',
+                  //    'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
+                  //},
               }).then(function(response){
                   if(response.status == 201) {
                       toaster.pop('success', "Thành công", "Đã tạo nguồn sự kiện");

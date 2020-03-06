@@ -26,9 +26,9 @@ angular.module('app')
                 method: 'POST',
                 data: JSON.stringify(vm.user),
             }).then(function(response){
-                if(response.data == true){
+                if(response.data == true){ // successfully login!
                     $http({
-                        url: '/Token',
+                        url: '/Token', //....
                         method: 'POST',
                         data: "UserName=" + vm.user.email + "&Password=" + vm.user.password + "&grant_type=" + 'password'
                     }).then(function(response){
