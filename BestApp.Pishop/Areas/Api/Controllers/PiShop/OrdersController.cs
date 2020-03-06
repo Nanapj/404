@@ -9,62 +9,57 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using static BestApp.Services.PiShop.TopicPSService;
+using static BestApp.Services.PiShop.OrderService;
 
 namespace BestApp.Areas.Api.Controllers.PiShop
 {
-    public class TopicPSsController : ODataBaseController
+    public class OrdersController : ODataBaseController
     {
-        private readonly ITopicPSService _topicPSService;
+        private readonly IOrderService _orderService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
-        public TopicPSsController(ITopicPSService topicPSService, IUnitOfWorkAsync unitOfWorkAsync)
+        // GET: Api/Tags
+        public OrdersController(IOrderService orderService, IUnitOfWorkAsync unitOfWorkAsync)
         {
-            _topicPSService = topicPSService;
+            _orderService = orderService;
             _unitOfWorkAsync = unitOfWorkAsync;
         }
         [HttpGet]
         [EnableQuery]
-        public async Task<IQueryable<TopicPSViewModel>> Get()
+        public async Task<IQueryable<OrderViewModel>> Get([FromUri] SearchViewModel model)
         {
-            var result = await _topicPSService.GetAllTopicPSsAsync();
-            return result;
-        }
-        [HttpGet]
-        [EnableQuery]
-        public async Task<IHttpActionResult> Get([FromODataUri] Guid ID)
-        {
-            var result =  _topicPSService.GetTopicPSs(ID);
-            result.Content = HttpContext.Current.Server.HtmlDecode(result.Content);
-            return Ok(result);
+            return await _orderService.GetAllOrdersAsync(model);
         }
         [HttpPost]
-        [AllowAnonymous]
-        public async Task<IHttpActionResult> Post(TopicPSViewModel model)
+        public async Task<IHttpActionResult> Post(OrderViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
             try
             {
-                var stf = await _topicPSService.InsertAsync(model);
-                var resultObject = new TopicPSViewModel()
+                var stf = await _orderService.InsertAsync(model, GetCurrentUserID());
+                _unitOfWorkAsync.Commit();
+                var resultObject = new OrderViewModel()
                 {
                     ID = stf.Id,
-                   BlogPSID = stf.BlogPS.Id,
-                   Title = stf.Title
+                    Code = stf.Code,
+                    Total = stf.Total,
+                    IsGift = stf.IsGift,
+                    Note = stf.Note,
+                    CreatDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now
                 };
-                _unitOfWorkAsync.Commit();
                 return Created(resultObject);
-
             }
             catch (Exception ex)
             {
 
-                throw new Exception(ex.ToString());
+                throw ex;
             }
         }
-        public async Task<IHttpActionResult> Put(TopicPSViewModel model)
+        public async Task<IHttpActionResult> Put(Guid key, OrderViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -72,7 +67,7 @@ namespace BestApp.Areas.Api.Controllers.PiShop
             }
             try
             {
-                await _topicPSService.UpdateAsync(model);
+                await _orderService.UpdateAsync(model, GetCurrentUserID());
                 _unitOfWorkAsync.Commit();
                 return Updated(model);
             }
@@ -82,9 +77,10 @@ namespace BestApp.Areas.Api.Controllers.PiShop
             }
         }
         [HttpDelete]
+
         public IHttpActionResult Delete(Guid key)
         {
-            _topicPSService.Delete(key);
+            _orderService.Delete(key);
             _unitOfWorkAsync.Commit();
             return StatusCode(HttpStatusCode.OK);
 

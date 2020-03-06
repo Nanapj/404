@@ -16,5 +16,6 @@ namespace BestApp.Domain
         public DateTime? From { get; set; }
         public DateTime? To { get; set; }
         public Guid? CustomerID { get; set; }
+        public Guid? OrderID { get; set; }
     }
 }

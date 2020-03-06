@@ -10,24 +10,22 @@ angular.module('app')
         $scope.initTopic = function() {
             $http({
                 method: 'GET',
-                url: _url+'?$filter=Id eq ' + $stateParams.ID.replace(/['"]+/g, ''),
+                url: _url+'?ID=' + $stateParams.ID.replace(/['"]+/g, '')  ,
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer '+ vm.access_token.replace(/['"]+/g, '')
                 },
               }).then(function successCallback(response) {
-                  if(response.data.value.length > 0) { 
-                    var staff = response.data.value[0];
+                  console.log()
+                  
+                    var staff = response.data;
                     vm.model = staff;
                     vm.blogData.Category = staff.BlogCategory;
                     vm.blogData.ID = staff.BlogPSID;
                     console.log("blog" + vm.blogData.Category);
                     console.log("Topic");
                     console.log(vm.model)
-                  } else 
-                  {
-                    toaster.pop('warning', "Rỗng", "Không tìm thấy thông tin bài viết");
-                  }
+                  
                 
                 }, function errorCallback(response) {
                   console.log(response);
@@ -50,6 +48,55 @@ angular.module('app')
         $scope.initTopic();
         function topicBack(){
             $state.go('app.topic.index');
+        }
+        $scope.toolEdit={
+            tools: [
+                "bold",
+                "italic",
+                "underline",
+                "strikethrough",
+                "justifyLeft",
+                "justifyCenter",
+                "justifyRight",
+                "justifyFull",
+                "insertUnorderedList",
+                "insertOrderedList",
+                "indent",
+                "outdent",
+                "createLink",
+                "unlink",
+                "insertImage",
+                "insertFile",
+                "subscript",
+                "superscript",
+                "tableWizard",
+                "createTable",
+                "addRowAbove",
+                "addRowBelow",
+                "addColumnLeft",
+                "addColumnRight",
+                "deleteRow",
+                "deleteColumn",
+                "mergeCellsHorizontally",
+                "mergeCellsVertically",
+                "splitCellHorizontally",
+                "splitCellVertically",
+                "viewHtml",
+                "formatting",
+                "cleanFormatting",
+                "copyFormat",
+                "applyFormat",
+                "fontName",
+                "fontSize",
+                "foreColor",
+                "backColor",
+                "print"
+            ],
+            resizable: {
+                content: true,
+                toolbar: true,
+                
+            },
         }
         vm.editSubmit = function() {
             $http({

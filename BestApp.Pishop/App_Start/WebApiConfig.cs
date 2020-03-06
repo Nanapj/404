@@ -46,6 +46,10 @@ namespace BestApp
             builder.EntitySet<EStatusLogViewModel>("EStatusLogs");
             builder.EntitySet<TopicPSViewModel>("TopicPSs");
             builder.EntitySet<BlogPSViewModel>("BlogPSs");
+            builder.EntitySet<ProductAttributeViewModel>("ProductAttributes");
+            builder.EntitySet<OrderViewModel>("Orders");
+            builder.EntitySet<OrderDetailViewModel>("OrderDetails");
+            builder.EntitySet<OrderStatisticViewModel>("OrderStatistics");
             config.Formatters.Remove(config.Formatters.XmlFormatter);
             IEdmModel model = builder.GetEdmModel();
             // Web API routes

@@ -9,62 +9,55 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using static BestApp.Services.PiShop.TopicPSService;
+using static BestApp.Services.PiShop.ProductAttributeService;
 
 namespace BestApp.Areas.Api.Controllers.PiShop
 {
-    public class TopicPSsController : ODataBaseController
+    public class ProductAttributesController : ODataBaseController
     {
-        private readonly ITopicPSService _topicPSService;
+        private readonly IProductAttributeService _productAttributeService;
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
-        public TopicPSsController(ITopicPSService topicPSService, IUnitOfWorkAsync unitOfWorkAsync)
+        // GET: Api/Tags
+        public ProductAttributesController(IProductAttributeService productAttributeService, IUnitOfWorkAsync unitOfWorkAsync)
         {
-            _topicPSService = topicPSService;
+            _productAttributeService = productAttributeService;
             _unitOfWorkAsync = unitOfWorkAsync;
         }
         [HttpGet]
         [EnableQuery]
-        public async Task<IQueryable<TopicPSViewModel>> Get()
+        public async Task<IQueryable<ProductAttributeViewModel>> Get()
         {
-            var result = await _topicPSService.GetAllTopicPSsAsync();
-            return result;
-        }
-        [HttpGet]
-        [EnableQuery]
-        public async Task<IHttpActionResult> Get([FromODataUri] Guid ID)
-        {
-            var result =  _topicPSService.GetTopicPSs(ID);
-            result.Content = HttpContext.Current.Server.HtmlDecode(result.Content);
-            return Ok(result);
+            return await _productAttributeService.GetAllProductAttributesAsync();
         }
         [HttpPost]
-        [AllowAnonymous]
-        public async Task<IHttpActionResult> Post(TopicPSViewModel model)
+        public async Task<IHttpActionResult> Post(ProductAttributeViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
             try
             {
-                var stf = await _topicPSService.InsertAsync(model);
-                var resultObject = new TopicPSViewModel()
+                var stf = await _productAttributeService.InsertAsync(model, GetCurrentUserID());
+                _unitOfWorkAsync.Commit();
+                var resultObject = new ProductAttributeViewModel()
                 {
                     ID = stf.Id,
-                   BlogPSID = stf.BlogPS.Id,
-                   Title = stf.Title
+                    Name = stf.Name,
+                    ProductName = stf.ProductType.Name,
+                    ProductCode = stf.ProductType.Code
+                   
                 };
-                _unitOfWorkAsync.Commit();
                 return Created(resultObject);
-
             }
             catch (Exception ex)
             {
 
-                throw new Exception(ex.ToString());
+                throw ex;
             }
         }
-        public async Task<IHttpActionResult> Put(TopicPSViewModel model)
+        public async Task<IHttpActionResult> Put(Guid key, ProductAttributeViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -72,7 +65,7 @@ namespace BestApp.Areas.Api.Controllers.PiShop
             }
             try
             {
-                await _topicPSService.UpdateAsync(model);
+                await _productAttributeService.UpdateAsync(model);
                 _unitOfWorkAsync.Commit();
                 return Updated(model);
             }
@@ -82,9 +75,10 @@ namespace BestApp.Areas.Api.Controllers.PiShop
             }
         }
         [HttpDelete]
+
         public IHttpActionResult Delete(Guid key)
         {
-            _topicPSService.Delete(key);
+            _productAttributeService.Delete(key);
             _unitOfWorkAsync.Commit();
             return StatusCode(HttpStatusCode.OK);
 

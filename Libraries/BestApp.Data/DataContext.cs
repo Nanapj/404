@@ -12,16 +12,11 @@ namespace Repository.Pattern
 {
     public class DataContext : IdentityDbContext<ApplicationUser>, IDataContext
     {
-        private readonly Guid _instanceId;
-
         public DataContext() : base("DefaultConnection", throwIfV1Schema: false)
         {
-            _instanceId = Guid.NewGuid();
             Configuration.LazyLoadingEnabled = false;
             Configuration.ProxyCreationEnabled = false;
         }
-
-        public Guid InstanceId => _instanceId;
 
         public DbSet<Cat> Cats { get; set; }
         public DbSet<Staff> Staffs { get; set; }
@@ -42,6 +37,10 @@ namespace Repository.Pattern
         public DbSet<EStatusLog> EStatusLogs { get; set; }
         public DbSet<TopicPS> TopicPSs { get; set; }
         public DbSet<BlogPS> BlogPSs { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<OrderStatistic> OrderStatistics { get; set; }
+        public DbSet<ProductAttribute> ProductAttributes { get; set; }
         public override int SaveChanges()
         {
             var changes = base.SaveChanges();

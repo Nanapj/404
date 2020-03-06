@@ -55,6 +55,10 @@
     <Compile Include="InteractionHistoryGroupViewModel.cs" />
     <Compile Include="InteractionHistoryViewModel.cs" />
     <Compile Include="PiShop\BlogPSViewModel.cs" />
+    <Compile Include="PiShop\OrderDetailViewModel.cs" />
+    <Compile Include="PiShop\OrderStatisticViewModel.cs" />
+    <Compile Include="PiShop\OrderViewModel.cs" />
+    <Compile Include="PiShop\ProductAttributeViewModel.cs" />
     <Compile Include="PiShop\TopicPSViewModel.cs" />
     <Compile Include="ProductTypeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
