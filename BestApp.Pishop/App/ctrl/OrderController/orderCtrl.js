@@ -2,14 +2,14 @@
 
 angular.module('app')
     .controller('OrderCtrl', ['$scope', '$state', '$stateParams', '$http', 'toaster', 'blockUI', function ($scope, $state, $stateParams, $http, toaster, blockUI) {
-        var _url = "/odata/Departments";
+        var _url = "/odata/Orders";
         var vm = this;
         vm.model = {};
         vm.access_token = localStorage.getItem('access_token');
         
         vm.toolbarTemplate = toolbarTemplate;
         vm.create = create;
-       
+        vm.selectedOrder = {};
 
         vm.orderBack = orderBack;
         var blockui = blockUI.instances.get('BlockUI');
@@ -74,8 +74,8 @@ angular.module('app')
             serverFiltering: true,
             height: 700,
       
-            //dataBound: onDataBound,
-            //change: onChange,
+            dataBound: onDataBound,
+            change: onChange,
             columns: [
                 {
                     field: "CreatDate",
@@ -83,12 +83,12 @@ angular.module('app')
                     width: "120px"
                 },
                 {
-                    field: "Phone",
+                    field: "PhoneNumber",
                     title: "SĐT",
                     width: "120px"
                 },
                 {
-                    field: "Phone",
+                    field: "CustomerName",
                     title: "Tên KH",
                     width: "120px"
                 },
@@ -98,36 +98,44 @@ angular.module('app')
                     width: "120px"
                 },
                 {
-                    field: "Address",
+                    field: "Birthday",
+                    title: "Ngày sinh",
+                    width: "120px"
+                },
+                {
+                    field: "Appointment",
                     title: "Thời gian hẹn",
                     width: "120px"
                 },
                 {
-                    field: "Address",
-                    title: "Tên NV bán",
-                    width: "120px"
-                },
-                {
-                    field: "Address",
+                    field: "TypeOrder",
                     title: "Mục KH",
                     width: "120px"
                 },
                 {
-                    field: "Address",
+                    field: "StatusOrder",
                     title: "Trạng thái",
                     width: "120px"
                 },
                 {
-                    field: "Address",
+                    field: "Note",
                     title: "Ghi chú",
                     width: "120px"
                 },
                 {
-                    field: "Address",
+                    field: "Total",
                     title: "Tổng giá",
                     width: "120px"
                 },
             ]
         };
+        function onDataBound(e) {
+            this.expandRow(this.tbody.find("tr.k-master-row").first());
+        }
+        function onChange(e) {
+            var grid = $('#listOrderGrid').data('kendoGrid');
+            var selectedItem = grid.dataItem(grid.select());
+            vm.selectedOrder = selectedItem;
+        }
 
 }]);
