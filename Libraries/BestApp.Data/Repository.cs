@@ -74,7 +74,7 @@ namespace Repository.Pattern
 
         public virtual void Delete(TEntity entity)
         {
-            _dbSet.Attach(entity);
+            _dbSet.Remove(entity);
         }
 
         public virtual async Task<TEntity> FindAsync(params object[] keyValues)

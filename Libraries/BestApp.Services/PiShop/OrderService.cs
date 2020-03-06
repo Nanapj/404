@@ -247,7 +247,7 @@ namespace BestApp.Services.PiShop
         public bool Update(OrderViewModel model, string CurrentId)
         {
             //tìm phiếu order
-            var Phieu = Find(model.ID);
+            var Phieu = _repository.Find(model.ID);
             if (Phieu != null)
             {
                 Phieu.Delete = false;
@@ -310,15 +310,14 @@ namespace BestApp.Services.PiShop
                     }
                 }
                 data.Total = model.OrderDetails.Sum(x => x.Quantity * x.Price);
-                base.Insert(data);
-                db.SaveChanges();
+                _repository.Insert(data);
                 model.ID = data.Id;
 
                 //Thêm data vào bảng OrderStatisticService
                 foreach (var item in model.OrderDetails)
                 {
                     //nếu sản phẩm có thuộc tính
-                    if (item.OrderStatistics != null)
+                    if (item.OrderStatistics.Count != 0)
                     {
                         foreach (var item1 in item.OrderStatistics)
                         {
@@ -351,14 +350,14 @@ namespace BestApp.Services.PiShop
                     }
                 }
                 //Xóa phiếu
-                Delete(Phieu);
+                _repository.Delete(Phieu.Id);
             }
             
             return true;
         }
         public bool Delete(Guid Id)
         {
-            var result = Find(Id);
+            var result = _repository.Find(Id);
             if (result != null)
             {
                 //Xóa phiếu
