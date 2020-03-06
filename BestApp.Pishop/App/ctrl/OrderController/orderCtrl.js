@@ -6,7 +6,7 @@ angular.module('app')
         var vm = this;
         vm.model = {};
         vm.access_token = localStorage.getItem('access_token');
-        
+
         vm.toolbarTemplate = toolbarTemplate;
         vm.create = create;
         vm.selectedOrder = {};
@@ -24,6 +24,51 @@ angular.module('app')
         function orderBack() {
             $state.go('app.order.index');
         }
+        vm.receive = function () {
+            if (vm.selectedOrder.ID !== undefined && vm.selectedOrder.ID !== "") {
+                //update status order 
+                vm.model.StausOrder = 1;
+                $http({
+                    method: 'PUT',
+                    url: _url + '(' + vm.selectedOrder.ID + ')',
+                    data: JSON.stringify(vm.model),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + vm.access_token.replace(/['"]+/g, '')
+                    },
+                }).then(function successCallback(response) {
+                    $('#listOrderGrid').data('kendoGrid').dataSource.read();
+                    $('#listOrderGrid').data('kendoGrid').refresh();
+                    toaster.pop('success', "Thành công", "Nhận đơn hàng thành công");
+                });
+            }
+            else
+            {
+            toaster.pop('info', "Chưa chọn", "Vui lòng chọn đơn hàng");
+            }
+        }
+        vm.cancel = function () {
+            if (vm.selectedOrder.ID != undefined && vm.selectedOrder.ID != null) {
+                swal({
+                    title: "Xác nhận hủy đơn?",
+                    text: "Bạn có chắc hủy đơn",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                      
+                            //update status order closed
+                            
+                        }
+                    });
+            }
+            else {
+                toaster.pop('info', "Chưa chọn", "Vui lòng chọn đơn hàng");
+            }
+        }
+                    
         vm.createSubmit = function () {
             blockui.start();
             if ((vm.model.Name != "" && vm.model.Name != null)
@@ -80,8 +125,10 @@ angular.module('app')
                 {
                     field: "CreatDate",
                     title: "Ngày tạo",
-                    width: "120px"
+                    width: "120px",
+                    template: "#= kendo.toString(kendo.parseDate(CreatDate, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"
                 },
+               
                 {
                     field: "PhoneNumber",
                     title: "SĐT",
@@ -97,14 +144,15 @@ angular.module('app')
                     title: "Địa chỉ",
                     width: "120px"
                 },
-                {
-                    field: "Birthday",
-                    title: "Ngày sinh",
-                    width: "120px"
-                },
+             
                 {
                     field: "Appointment",
                     title: "Thời gian hẹn",
+                    width: "120px"
+                },
+                {
+                    field: "SaleEmployeeName",
+                    title: "Tên NV xử lý",
                     width: "120px"
                 },
                 {

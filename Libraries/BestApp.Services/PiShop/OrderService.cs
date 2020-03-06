@@ -85,6 +85,7 @@ namespace BestApp.Services.PiShop
                 SaleEmployeeID = x.SaleEmployeeID,
                 IsGift = x.IsGift,
                 Note = x.Note,
+                TypeOrder = x.TypeOrder,
                 CustomerName = x.Customer.Name,
                 CustomerID  = x.Customer.Id,
                 Address = x.Customer.Address,
