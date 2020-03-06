@@ -355,6 +355,22 @@ namespace BestApp.Services.PiShop
             
             return true;
         }
+        public bool UpdateStatus(OrderViewModel model)
+        {
+            var Phieu = _repository.Find(model.ID);
+            if (Phieu != null)
+            {
+                Phieu.StatusOrder = model.StatusOrder;
+                Phieu.LastModifiedDate = DateTime.Now;
+                return true;
+            }
+            else
+            {
+                throw new Exception("Không tìm thấy phiếu");
+            }
+
+        }
+        
         public bool Delete(Guid Id)
         {
             var result = _repository.Find(Id);
