@@ -54,12 +54,17 @@ namespace BestApp.Services.PiShop
         }
         public IQueryable<OrderDetailViewModel> GetOrderDetailByOrder(SearchViewModel model)
         {
-            var result = Queryable().Where(x => x.Delete == false &&  x.Order.Id == model.OrderID
+            var result = Queryable().Where(x => x.Delete == false
             && ((!model.From.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
             && ((!model.To.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) <= DbFunctions.TruncateTime(model.To)))).
             Select(x => new OrderDetailViewModel
             {
                 ID = x.Id,
+                ProductID = x.ProductId,
+                ProductName = x.ProductName,
+                Quantity = x.Quantity,
+                Price = x.Price,
+                Serial = x.Serial,
                 CreatDate = x.CreatDate,
                 IsGift = x.IsGift,
                 UserName = x.UserAccount.UserName,

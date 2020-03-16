@@ -94,6 +94,7 @@ namespace BestApp.Services.PiShop
                 Appointment = x.Appointment,
                 StatusOrder = x.StatusOrder,
                 Source = x.Source
+                
             });
             return result;
         }
@@ -183,7 +184,7 @@ namespace BestApp.Services.PiShop
                     item.ID = o.Id;
                 }
             }
-            data.Total = model.OrderDetails.Sum(x => x.Quantity * x.Price);
+            data.Total = model.Total;
             _repository.Insert(data);
             
             model.ID = data.Id;
@@ -361,6 +362,10 @@ namespace BestApp.Services.PiShop
             if (Phieu != null)
             {
                 Phieu.StatusOrder = model.StatusOrder;
+                if (model.Note!= null)
+                    Phieu.Note = model.Note;
+                if(model.Appointment != null)
+                    Phieu.Appointment = model.Appointment;
                 Phieu.LastModifiedDate = DateTime.Now;
                 return true;
             }

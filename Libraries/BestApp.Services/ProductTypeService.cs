@@ -41,7 +41,8 @@ namespace BestApp.Services
             {
                 ID = x.Id,
                 Name = x.Name,
-                Code = x.Code
+                Code = x.Code,
+                Price = x.Price
             });
         }
         public Task<IQueryable<ProductTypeViewModel>> GetAllProductTypesAsync(SearchViewModel model)

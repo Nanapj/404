@@ -1,0 +1,28 @@
+﻿
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Hủy đơn hàng </h1>
+</div>
+<div class="wrapper-sm" ng-controller="OrderAppointCtrl as vm">
+    <toaster-container></toaster-container>
+    <div class="row" style="padding-left: 15px;">
+        <button class="btn m-b-xs w-xs btn-danger" ng-click="vm.orderBack()"><i class="glyphicon glyphicon-chevron-left icon text-light"></i>Back</button>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="panel panel-default" block-ui="BlockUI">
+                <div class="panel-heading font-bold">Lý do hủy</div>
+                <div class="panel-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label>Ghi chú(Lý do hủy)</label>
+                            <input type="text" class="form-control" ng-model="vm.model.Note">
+                        </div>
+                        <button type="submit" class="btn btn-success" ng-click="vm.cancelSubmit()">Cập nhật</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

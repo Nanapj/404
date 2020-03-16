@@ -1,0 +1,34 @@
+﻿
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Đơn hàng hẹn lại</h1>
+</div>
+<div class="wrapper-sm" ng-controller="OrderAppointCtrl as vm">
+    <toaster-container></toaster-container>
+    <div class="row" style="padding-left: 15px;">
+        <button class="btn m-b-xs w-xs btn-danger" ng-click="vm.orderBack()"><i class="glyphicon glyphicon-chevron-left icon text-light"></i>Back</button>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="panel panel-default" block-ui="BlockUI">
+                <div class="panel-heading font-bold">Hẹn lại</div>
+                <div class="panel-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <p>Thời gian hẹn</p>
+                            <input kendo-date-picker
+                                   k-ng-model="vm.model.Appointment"
+                                   k-options="{format: 'dd/MM/yyyy'}"
+                                   style="width: 50%;" />
+                        </div>
+                        <div class="form-group">
+                            <label>Ghi chú</label>
+                            <input type="text" class="form-control" ng-model="vm.model.Note">
+                        </div>
+                        <button type="submit" class="btn btn-success" ng-click="vm.appointSubmit()">Cập nhật</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

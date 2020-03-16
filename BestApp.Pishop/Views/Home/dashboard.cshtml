@@ -34,10 +34,46 @@
             </div>
             
             <div class="wrapper-sm">
-                <div kendo-scheduler k-options="schedulerOptions">
-                    <span k-event-template class='custom-event'>{{dataItem.title}}</span>
-                    <div k-all-day-event-template class='custom-all-day-event'>{{dataItem.title}}</div>
+                @*<div kendo-scheduler k-options="schedulerOptions">
+            <span k-event-template class='custom-event'>{{dataItem.title}}</span>
+            <div k-all-day-event-template class='custom-all-day-event'>{{dataItem.title}}</div>
+        </div>*@
+                <div class="col-md-12">
+                    <div class="panel panel-default" block-ui="BlockUI">
+                        <div class="panel-heading font-bold">List Products</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <table class="table">
+                                    <thead style="background:darkgrey;color:black">
+                                        <tr>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Thuộc tính</th>
+                                            <th>Quà tặng</th>
+                                            <th>Giá</th>
+                                            <th>Số lượng</th>
+                                            <th>Tổng giá</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="x in vm.OrderDetail">
+                                            <td>{{x.ProductName}}</td>
+                                            <td>
+                                                <p ng-repeat="y in x.OrderStatistics"> {{y.ProductAttributeName}} {{y.ProductAttributeNote}}</p>
+                                            </td>
+                                            <td>{{x.IsGift}}</td>
+                                            <td>{{x.Price |  number : fractionSize}}</td>
+                                            <td>{{x.Quantity}}</td>
+                                            <td>{{x.Price * x.Quantity |  number : fractionSize}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
+
                 <div class="row">
                     <canvas id="canvasChart" width="400" height="50"></canvas>
                 </div>
