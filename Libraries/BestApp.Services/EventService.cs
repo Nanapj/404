@@ -28,8 +28,8 @@ namespace BestApp.Services
             Task<EventViewModel> UpdateAsync(EventViewModel model, string CurrentId);
             Task<IQueryable<EventViewModel>> GetAllEventsAsync(SearchViewModel model);
             IQueryable<EventViewModel> GetAllEvents(SearchViewModel model);
-            IQueryable<EventViewModel> GetEventForPishop();
-            Task<IQueryable<EventViewModel>> GetEventForPishopAsync();
+            IQueryable<EventViewModel> GetEventForPishop(SearchViewModel model);
+            Task<IQueryable<EventViewModel>> GetEventForPishopAsync(SearchViewModel model);
             IEnumerable<EventViewModel> GetEventByCustomer(SearchViewModel model);
             bool Delete(Guid Id);
         }
@@ -61,10 +61,12 @@ namespace BestApp.Services
             userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
         }
 
-        public IQueryable<EventViewModel> GetEventForPishop()
+        public IQueryable<EventViewModel> GetEventForPishop(SearchViewModel model)
         {
             var result = Queryable().Where(x => x.Delete == false
-                && x.Tags.Any(y => y.Departments.Id == Config.PishopID))
+                && x.Tags.Any(y => y.Departments.Id == Config.PishopID)
+                && ((!model.From.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
+                && ((!model.To.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) <= DbFunctions.TruncateTime(model.To))))
                 .Select(x => new EventViewModel() {
                     CreatDate = x.CreatDate,
                     ID = x.Id,
@@ -82,9 +84,9 @@ namespace BestApp.Services
             return result;
         }
 
-        public Task<IQueryable<EventViewModel>> GetEventForPishopAsync()
+        public Task<IQueryable<EventViewModel>> GetEventForPishopAsync(SearchViewModel model)
         {
-            return Task.Run(() => GetEventForPishop());
+            return Task.Run(() => GetEventForPishop(model));
         }
 
         public IQueryable<EventViewModel> GetAllEvents(SearchViewModel model)

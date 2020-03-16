@@ -1,5 +1,6 @@
 ﻿using BestApp.Domain;
 using BestApp.Domain.PiShop;
+using BestApp.Models;
 using Microsoft.AspNet.OData;
 using Repository.UnitOfWork;
 using System;
@@ -13,6 +14,8 @@ using static BestApp.Services.PiShop.OrderService;
 
 namespace BestApp.Areas.Api.Controllers.PiShop
 {
+    [Authorize]
+    [AuthorizeUser]
     public class OrdersController : ODataBaseController
     {
         private readonly IOrderService _orderService;
@@ -28,6 +31,13 @@ namespace BestApp.Areas.Api.Controllers.PiShop
         public async Task<IQueryable<OrderViewModel>> Get([FromUri] SearchViewModel model)
         {
             return await _orderService.GetAllOrdersAsync(model);
+        }
+        [HttpGet]
+        [EnableQuery]
+        public IEnumerable<OrderViewModel> GetOrderByPhoneNumber([FromUri] SearchViewModel model)
+        {
+            var result = _orderService.GetOrderByPhoneNumber(model);
+            return result;
         }
         [HttpPost]
         public async Task<IHttpActionResult> Post(OrderViewModel model)
