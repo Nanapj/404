@@ -64,6 +64,8 @@ namespace BestApp
             // Web API routes
             config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             config.MapODataServiceRoute("odata", "odata", model);
+
+           
         }
     }
 }

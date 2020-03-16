@@ -41,7 +41,7 @@ namespace BestApp.Areas.Api.Controllers.PiShop
         }
         [HttpPost]
         public async Task<IHttpActionResult> Post(OrderViewModel model)
-        {
+            {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

@@ -17,7 +17,11 @@ namespace BestApp.Controllers
         {
             return PartialView();
         }
-        public ActionResult DetailOrder()
+        public ActionResult Appoint()
+        {
+            return PartialView();
+        }
+        public ActionResult Cancel()
         {
             return PartialView();
         }

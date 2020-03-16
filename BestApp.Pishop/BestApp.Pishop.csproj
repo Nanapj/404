@@ -288,6 +288,8 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App\ctrl\OrderController\orderAppointCtrl.js" />
+    <Content Include="App\ctrl\OrderController\orderCreateCtrl.js" />
     <Content Include="Content\custom.css" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
@@ -387,6 +389,10 @@
     <Content Include="Views\Blog\Create.cshtml" />
     <Content Include="Views\Blog\Edit.cshtml" />
     <Content Include="Views\Topic\Create.cshtml" />
+    <Content Include="Views\Order\Create.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
+    <Content Include="Views\Order\Appoint.cshtml" />
+    <Content Include="Views\Order\Cancel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\BestApp.Core\BestApp.Core.csproj">

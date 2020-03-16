@@ -1302,7 +1302,7 @@ angular.module('app')
                 "Maximize",
                 "Close"
             ],
-            position: { top: "25%" , left: "20%" },
+            position: { top: "40%" , left: "20%" },
             close: onHistoryClose,
             modal: false,
         }

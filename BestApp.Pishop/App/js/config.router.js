@@ -302,19 +302,39 @@ angular.module('app')
                                 return $ocLazyLoad.load('/App/ctrl/OrderController/orderCtrl.js'); // Resolve promise and load before view 
                             }]
                         }
-                    }).
-                    state('app.order.index', {
+                    })
+                    .state('app.order.index', {
                         url: '/index',
                         templateUrl: '/order/Index'
                     })
+                    .state('app.order.appoint', {
+                        url: '/appoint/:ID',
+                        templateUrl: '/order/Appoint',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/OrderController/orderAppointCtrl.js'); // Resolve promise and load before view 
+                            }]
+                        }
+                    })
+                    .state('app.order.cancel', {
+                        url: '/cancel/:ID',
+                        templateUrl: '/order/Cancel',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/OrderController/orderAppointCtrl.js'); // Resolve promise and load before view 
+                            }]
+                        }
+                    })
                     .state('app.order.create', {
                         url: '/create',
-                        templateUrl: '/order/Create'
+                        templateUrl: '/order/Create',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/OrderController/orderCreateCtrl.js'); // Resolve promise and load before view 
+                            }]
+                        }
                     })
-                    .state('app.order.detailorder', {
-                        url: '/detail/:id',
-                        templateUrl: '/order/DetailOrder'
-                    })
+                   
                     .state('account', {
                         url: '/account',
                         template: '<div ui-view class="fade-in-right-big smooth"></div>'

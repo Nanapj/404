@@ -2,13 +2,15 @@
 <div class="bg-light lter b-b wrapper-md">
     <h1 class="m-n font-thin h3">Order Management</h1>
 </div>
+
+
 <div class="wrapper-sm" ng-controller="OrderCtrl as vm">
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default" block-ui="BlockUI">
                 <div class="panel-heading font-bold">Filter</div>
                 <div class="panel-body">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
 
                             <label class="font-bold">Theo ngày tạo:</label>
@@ -17,40 +19,63 @@
                                 <input kendo-date-picker
                                        k-ng-model="vm.startCreateDate"
                                        k-options="{format: 'dd/MM/yyyy'}"
-                                       k-on-change="onStartDateChange()" 
-                                       style="width:60%"/>
+                                       k-on-change="onStartCreateDateChange()"
+                                       style="width:60%" />
                             </div>
                             <div style="margin-top:5%">
                                 <h5>End</h5>
                                 <input kendo-date-picker
                                        k-ng-model="vm.endCreateDate"
                                        k-options="{format: 'dd/MM/yyyy'}"
-                                       k-on-change="onEndDateChange()" style="width:60%"/>
+                                       k-on-change="onEndCreateDateChange()" style="width:60%" />
                             </div>
 
                         </div>
                     </div>
-                    <div class="col-md-6" >
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="font-bold">Theo thời gian hẹn:</label>
                             <div>
                                 <h5>Start</h5>
                                 <input kendo-date-picker
-                                       k-ng-model="vm.startDate"
+                                       k-ng-model="vm.startAppointmentDate"
                                        k-options="{format: 'dd/MM/yyyy'}"
-                                       k-on-change="onStartDateChange()"style="width:60%" />
+                                       k-on-change="onStartAppointmentDateChange()" style="width:60%" />
                             </div>
                             <div style="margin-top:5%">
                                 <h5>End </h5>
                                 <input kendo-date-picker
-                                       k-ng-model="vm.endDate"
+                                       k-ng-model="vm.endAppointmentDate"
                                        k-options="{format: 'dd/MM/yyyy'}"
-                                       k-on-change="onEndDateChange()"style="width:60%" />
+                                       k-on-change="onEndAppointmentDateChange()" style="width:60%" />
                             </div>
-
                         </div>
                     </div>
+                    <div class="col-md-4">
+                            <div class="form-group">
+                                <p class="font-bold">Lịch nhắc đến thời gian khách hẹn:</p>
+                                <span style="display: block;">
+                                    Hôm nay: <span class="ng-binding" style="font-size: large;">{{vm.gettoday | date:'dd/MM/yyyy'}}</span> 
+                                    <button class="btn btn-info btn-sm" title="Refresh lại dữ liệu" ng-click="vm.refreshData()"><i class="fa fa-refresh"></i> Refresh</button>
+                                </span>
+                               
+                                <button class="button " id="button-5" ng-click="vm.Today()" title="Có {{vm.countAppointmentToday}} đơn hàng chưa xử lý">
+                                    <div id="translate"></div>
+                                    <a href="">Hôm nay<span class="badge badge-sm up bg-danger pull-right-xs">{{vm.countAppointmentToday}}</span></a>
+                                </button>
+                                <button class="button " id="button-5" ng-click="vm.Tomorrow()" title="Có {{vm.countAppointmentTomorrow}} đơn hàng chưa xử lý">
+                                    <div id="translate"></div>
+                                    <a href="">Ngày mai<span class="badge badge-sm up bg-danger pull-right-xs">{{ vm.countAppointmentTomorrow}}</span></a>
+                                </button>
+                                <button class="button " id="button-5" ng-click="vm.NextWeek()"  title="Có {{vm.countAppointmentNextWeek}} đơn hàng chưa xử lý">
+                                    <div id="translate"></div>
+                                    <a href="">Tuần tới<span class="badge badge-sm up bg-danger pull-right-xs">{{vm.countAppointmentNextWeek}}</span></a>
+                                </button>
+                            </div>
 
+                       
+                       
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,23 +88,67 @@
                  k-toolbar='[ { template: vm.toolbarTemplate() } ]'></div>
         </div>
     </div>
+    <!--Xem chi tiết đơn hàng-->
+    <div kendo-window="win2" id="windowDetail"
+         k-options="windowOptions"
+         k-on-open="win2visible = true"
+         k-on-close="win2visible = false">
+        <div class="row col-md-12">
+            <div class="col-md-12">
+                <div class="panel panel-default" block-ui="BlockUI">
+                    <div class="panel-heading font-bold">List Products</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <table class="table">
+                                <thead style="background:darkgrey;color:black">
+                                    <tr>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Thuộc tính</th>
+                                        <th>Quà tặng</th>
+                                        <th>Giá</th>
+                                        <th>Số lượng</th>
+                                        <th>Tổng giá</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="x in vm.OrderDetail">
+                                        <td>{{x.ProductName}}</td>
+                                        <td>
+                                            <p ng-repeat="y in x.OrderStatistics"> {{y.ProductAttributeName}} {{y.ProductAttributeNote}}</p>
+                                        </td>
+                                        <td>{{x.IsGift}}</td>
+                                        <td>{{x.Price |  number : fractionSize}}</td>
+                                        <td>{{x.Quantity}}</td>
+                                        <td>{{x.Price * x.Quantity |  number : fractionSize}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/x-kendo-template" id="toolbar">
     <div>
         <div class="toolbar">
             <div style="float:left">
-                <button class="btn btn-success k-button-large" ng-click="vm.receive(this)"><span class="fa fa-check"></span>&nbsp;Nhận</button>
-                <button class="btn btn-info k-button-large" ng-click="vm.edit(this)"><span class="fa fa-pencil"></span>&nbsp;Hẹn lại</button>
+                <button class="btn btn-success k-button-large" ng-click="vm.receive(this)"><span class="fa fa-check"></span>&nbsp;Đã Nhận</button>
+                <button class="btn btn-info k-button-large" ng-click="vm.appoint(this)"><span class="fa fa-pencil"></span>&nbsp;Hẹn lại</button>
                 <button class="btn btn-danger k-button-large" ng-click="vm.cancel(this)"><span class="fa fa-trash"></span>&nbsp;Hủy đơn</button>
+            
+                <button class="btn btn-warning k-button-large" ng-click="vm.viewDetail()"><span class="fa fa-eye"></span>&nbsp;Xem chi tiết</button>
             </div>
             <div style="float:right">
 
-                <button class='k-button k-button-icontext k-grid-excel'><span class='k-icon k-i-file-excel'></span>Export to Excel</button>
+                @*<button class='k-button k-button-icontext k-grid-excel'><span class='k-icon k-i-file-excel'></span>Export to Excel</button>*@
                 <span class="k-textbox k-grid-search k-display-flex" style="width:150px"><input autocomplete="off" placeholder="Search..." title="Search..." class="k-input"><span class="k-input-icon"><span class="k-icon k-i-search"></span></span></span>
             </div>
-           
+
         </div>
     </div>
-   
 </script>
 
