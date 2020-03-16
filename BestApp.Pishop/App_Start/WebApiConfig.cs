@@ -17,6 +17,7 @@ namespace BestApp
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
+
             var builder = new ODataConventionModelBuilder();
             config.Count().Filter().OrderBy().Expand().Select().MaxTop(null);
 
@@ -37,6 +38,10 @@ namespace BestApp
                 .Collection
                 .Function("GetEventByCustomer")
                 .ReturnsCollectionFromEntitySet<EventViewModel>("Events");
+            builder.EntityType<EventViewModel>()
+                .Collection
+                .Function("GetEventForPishop")
+                .ReturnsCollectionFromEntitySet<EventViewModel>("Events");
             builder.EntitySet<ProductTypeViewModel>("ProductTypes");
             builder.EntitySet<WardViewModel>("Wards");
             builder.EntitySet<CityViewModel>("Cities");
@@ -48,6 +53,10 @@ namespace BestApp
             builder.EntitySet<BlogPSViewModel>("BlogPSs");
             builder.EntitySet<ProductAttributeViewModel>("ProductAttributes");
             builder.EntitySet<OrderViewModel>("Orders");
+            builder.EntityType<OrderViewModel>()
+               .Collection
+               .Function("GetOrderByPhoneNumber")
+               .ReturnsCollectionFromEntitySet<OrderViewModel>("Orders");
             builder.EntitySet<OrderDetailViewModel>("OrderDetails");
             builder.EntitySet<OrderStatisticViewModel>("OrderStatistics");
             config.Formatters.Remove(config.Formatters.XmlFormatter);

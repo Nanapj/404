@@ -42,5 +42,20 @@ namespace BestApp.Controllers
         {
             return PartialView();
         }
+        [HttpGet]
+        public ActionResult CheckAuth()
+        {
+            Request.RequestContext.HttpContext.Response.AddHeader("Access-Control-Allow-Origin", "*");
+            Request.RequestContext.HttpContext.Response.AddHeader("Access-Control-Allow-Header", "*");
+            if (User.Identity.IsAuthenticated)
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

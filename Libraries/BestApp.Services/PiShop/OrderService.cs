@@ -37,6 +37,7 @@ namespace BestApp.Services.PiShop
         private readonly IRepositoryAsync<OrderDetail> _repositoryDetail;
         private readonly IRepositoryAsync<OrderStatistic> _repositoryStatistic;
         private readonly IRepository<ApplicationUser> _userRepository;
+        private readonly IRepository<Staff> _staff;
         protected readonly DataContext db;
         public OrderService(IRepositoryAsync<Order> repository,
              CustomerService customerService,
@@ -44,7 +45,8 @@ namespace BestApp.Services.PiShop
              OrderStatisticService orderStatisticService,
              IRepositoryAsync<OrderDetail> repositoryDetail,
              IRepositoryAsync<OrderStatistic> repositoryStatistic,
-             IRepositoryAsync<ApplicationUser> userRepository
+             IRepositoryAsync<ApplicationUser> userRepository,
+             IRepository<Staff> staff
              ) : base(repository)
         {
             _repository = repository;
@@ -54,6 +56,7 @@ namespace BestApp.Services.PiShop
             _repositoryDetail = repositoryDetail;
             _repositoryStatistic = repositoryStatistic;
             _userRepository = userRepository;
+            _staff = staff;
         }
         public Task<IQueryable<OrderViewModel>> GetAllOrdersAsync(SearchViewModel model)
         {
@@ -106,7 +109,7 @@ namespace BestApp.Services.PiShop
                     model.CustomerID = findId;
                 }
             }
-            var result = Queryable().Where(x => x.Delete == false
+            var result = _repository.Queryable().Where(x => x.Delete == false
             && ((!(model.CustomerID == null)) || (model.CustomerID == x.Customer.Id))
             && ((!model.From.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) >= DbFunctions.TruncateTime(model.From)))
             && ((!model.To.HasValue) || (DbFunctions.TruncateTime(x.CreatDate) <= DbFunctions.TruncateTime(model.To))))
@@ -154,8 +157,18 @@ namespace BestApp.Services.PiShop
             data.CreatDate = DateTime.Now;
             data.LastModifiedDate = DateTime.Now;
             data.Appointment = model.Appointment;
-            data.SaleEmployeeName = model.SaleEmployeeName;
-            data.SaleEmployeeID = model.SaleEmployeeID;
+            if(model.SaleEmployeeID == null)
+            {
+                data.SaleEmployeeID = _staff.Queryable().Where(x=> x.UserAccount.Id == CurrentId).FirstOrDefault().Id;
+                data.SaleEmployeeName = _staff.Queryable().Where(x => x.UserAccount.Id == CurrentId).FirstOrDefault().FullName;
+
+            }
+            else
+            {
+                data.SaleEmployeeName = model.SaleEmployeeName;
+                data.SaleEmployeeID = model.SaleEmployeeID;
+            }
+            
             data.TypeOrder = model.TypeOrder;
             data.Source = model.Source;
             OrderDetail o;

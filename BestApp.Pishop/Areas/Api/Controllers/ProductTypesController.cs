@@ -1,4 +1,5 @@
 ﻿using BestApp.Domain;
+using BestApp.Models;
 using Microsoft.AspNet.OData;
 using Repository.UnitOfWork;
 using System;
@@ -12,6 +13,8 @@ using static BestApp.Services.ProductTypeService;
 
 namespace BestApp.Areas.Api.Controllers
 {
+    //[Authorize]
+    //[AuthorizeUser]
     public class ProductTypesController : ODataBaseController
     {
         private readonly IProductTypeService _productTypeService;

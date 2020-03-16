@@ -35,6 +35,12 @@ namespace BestApp.Areas.Api.Controllers
             var result =  _eventService.GetEventByCustomer(model);
             return result;
         }
+        [EnableQuery]
+        public Task<IQueryable<EventViewModel>> GetEventForPishop([FromUri] SearchViewModel model)
+        {
+            var result = _eventService.GetEventForPishopAsync(model);
+            return result;
+        }
         [HttpPost]
         [AllowAnonymous]
         public async Task<IHttpActionResult> Post(EventViewModel model)

@@ -1,5 +1,6 @@
 ﻿using BestApp.Domain;
 using BestApp.Domain.PiShop;
+using BestApp.Models;
 using Microsoft.AspNet.OData;
 using Repository.UnitOfWork;
 using System;
@@ -13,6 +14,8 @@ using static BestApp.Services.PiShop.OrderDetailService;
 
 namespace BestApp.Areas.Api.Controllers.PiShop
 {
+    [Authorize]
+    [AuthorizeUser]
     public class OrderDetailsController : ODataBaseController
     {
         private readonly IOrderDetailService _orderDetailService;
