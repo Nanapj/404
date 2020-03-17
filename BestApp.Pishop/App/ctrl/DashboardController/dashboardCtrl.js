@@ -6,6 +6,8 @@ angular.module('app')
         var piectx = document.getElementById('pieChart').getContext('2d');
         var colandlinectx = document.getElementById('columnAndLineChart').getContext('2d');
         var barctx = document.getElementById('barChart').getContext('2d');
+        var vm = this;
+        vm.access_token = localStorage.getItem('access_token');
         $scope.initialDashboard = function() {
         }
         $scope.initialDashboard();
@@ -162,6 +164,43 @@ angular.module('app')
                   ]
               }
           ]
-      };
-    }
-]);
+        };
+
+        //get event for pishop
+        $scope.init = function () {
+            $http({
+                method: 'GET',
+                url: "odata/Events/GetEventForPishop",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + vm.access_token.replace(/['"]+/g, '')
+                },
+            }).then(function successCallback(response) {
+                vm.EventForPishop = response.data.value;
+                console.log(response.data.value);
+            });
+        }
+        $scope.init();
+        //seen event
+        //window orderdetail
+        $scope.windowOptions = {
+            title: 'Chi tiết sự kiện',
+            width: "70%",
+            height: 500,
+            visible: false,
+            resizable: false,
+            actions: [
+                "Pin",
+                "Minimize",
+                "Maximize",
+                "Close"
+            ],
+
+            modal: false,
+        }
+        vm.Seen = function (ID) {
+            var dialog = $("#windowDetail").data("kendoWindow");
+            dialog.center().open();
+            console.log(ID);
+        }
+    }]);
