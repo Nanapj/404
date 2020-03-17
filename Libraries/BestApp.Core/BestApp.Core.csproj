@@ -59,6 +59,7 @@
     <Compile Include="Enum\StatusEvent.cs" />
     <Compile Include="Enum\ProcessStatus.cs" />
     <Compile Include="Enum\StatusOrder.cs" />
+    <Compile Include="Enum\StatusSeen.cs" />
     <Compile Include="Enum\StatusTag.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\Cat.cs" />

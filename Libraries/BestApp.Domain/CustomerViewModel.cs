@@ -12,7 +12,7 @@ namespace BestApp.Domain
         public string Name { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
-        public DateTime Birthday { get; set; }
+        public DateTime? Birthday { get; set; }
         public string Type { get; set; }
         public string Note { get; set; }
         public List<CustomerTagViewModel> CustomerTags { get; set; } = new List<CustomerTagViewModel>();

@@ -31,6 +31,7 @@ namespace BestApp.Services
             IQueryable<EventViewModel> GetEventForPishop(SearchViewModel model);
             Task<IQueryable<EventViewModel>> GetEventForPishopAsync(SearchViewModel model);
             IEnumerable<EventViewModel> GetEventByCustomer(SearchViewModel model);
+            bool UpdateStatusSeen(Guid Id, string CurrentId);
             bool Delete(Guid Id);
         }
         private readonly TagService _tagService;
@@ -78,6 +79,7 @@ namespace BestApp.Services
                     EventPurposeID = x.EventPurposeId,
                     EventTypeID = x.EventTypeId,
                     Status = x.Status,
+                    StatusSeen = x.StatusSeen,
                     UserName = x.UserAccount.UserName,
                     Note = x.Note
                 }).ToList();
@@ -125,6 +127,7 @@ namespace BestApp.Services
                 EventPurposeID = x.EventPurposeId,
                 EventTypeID = x.EventTypeId,
                 Status = x.Status,
+                StatusSeen = x.StatusSeen,
                 UserName = x.UserAccount.UserName,
                 Note = x.Note,
                 Tags = x.Tags.Select(t => new TagViewModel
@@ -208,6 +211,7 @@ namespace BestApp.Services
                 EventPurposeID = x.EventPurposeId,
                 EventTypeID = x.EventTypeId,
                 Status = x.Status,
+                StatusSeen = x.StatusSeen,
                 UserName = x.UserAccount.UserName,
                 Note = x.Note,
                 Tags = x.Tags.Select(t => new TagViewModel
@@ -284,6 +288,7 @@ namespace BestApp.Services
             data.Code = CodeEvent;
             data.Customer = _customerService.Find(model.CustomerID);
             data.Status = model.Status;
+            data.StatusSeen = 0;
             data.EventPurposeId = model.EventPurposeID;
             data.UserAccount = _userRepository.Find(CurrentId);
             data.EventTypeId = model.EventTypeID;
@@ -408,6 +413,7 @@ namespace BestApp.Services
                     });
                 }
                 data.Note = model.Note;
+                data.StatusSeen = model.StatusSeen;
                 data.Status = model.Status;
                 if(data.Tags != null)
                 {
@@ -466,6 +472,28 @@ namespace BestApp.Services
                 result.LastModifiedDate = DateTime.Now;
                 return true;
 
+            }
+            else
+            {
+                throw new Exception("Không tìm thấy phiếu");
+            }
+        }
+        public bool UpdateStatusSeen(Guid Id, string CurrentId)
+        {
+            var data = _repository.Find(Id);
+            if (data != null)
+            {
+                data.StatusSeen = Core.Enum.StatusSeen.Seen;
+                data.EStatusLogs.Add(new EStatusLog()
+                {
+                    CreatDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
+                    Status = Core.Enum.StatusEvent.Seen,
+                    Note = "Nhân viên " + _userRepository.Find(CurrentId).UserName + " cập nhập Status phiếu " + data.Code,
+                    UserAccount = _userRepository.Find(CurrentId),
+                    Delete = false
+                });
+                return true;
             }
             else
             {

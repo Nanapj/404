@@ -19,11 +19,16 @@ namespace BestApp.Controllers
     {
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
         private readonly OrderService _orderService;
-        
-        public JsonController(OrderService orderService, IUnitOfWorkAsync unitOfWorkAsync)
+        private readonly EventService _eventService;
+
+       
+        public JsonController(OrderService orderService,
+            EventService eventService,
+            IUnitOfWorkAsync unitOfWorkAsync)
         {
            
             _orderService = orderService;
+            _eventService = eventService;
             _unitOfWorkAsync = unitOfWorkAsync;
         }
 
@@ -31,6 +36,14 @@ namespace BestApp.Controllers
         {
             
             var r = _orderService.UpdateStatus(model);
+            _unitOfWorkAsync.SaveChanges();
+            return Json(r, JsonRequestBehavior.AllowGet);
+
+        }
+        public ActionResult UpdateStatusEvent(Guid Id)
+        {
+            var CurrentId = HttpContext.User.Identity.GetUserId();
+            var r = _eventService.UpdateStatusSeen(Id, CurrentId);
             _unitOfWorkAsync.SaveChanges();
             return Json(r, JsonRequestBehavior.AllowGet);
 

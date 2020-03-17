@@ -23,6 +23,7 @@ namespace BestApp.Domain
         public string EventTypeName { get; set; }
         public string EventPurposeName { get; set; }
         public StatusEvent Status { get; set; }
+        public StatusSeen StatusSeen { get; set; }
         public List<TagViewModel> Tags { get; set; } = new List<TagViewModel>();
         public List<DetailEventViewModel> DetailEvents { get; set; } = new List<DetailEventViewModel>();
         public List<InteractionHistoryViewModel> InteractionHistories { get; set; } = new List<InteractionHistoryViewModel>();
