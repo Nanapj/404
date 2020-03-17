@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace BestApp.Core.Enum
 {
-    public enum StatusEvent
+    public enum  StatusSeen
     {
-        Open,
+        Unseen,
         Seen,
-        Closed,
     }
 }

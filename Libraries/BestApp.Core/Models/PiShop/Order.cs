@@ -27,6 +27,7 @@ namespace BestApp.Core.Models.PiShop
         //Loại mục khách hàng: mua hoặc tham khảo
         public string TypeOrder { get; set; }
         public StatusOrder StatusOrder { get; set; }
+        public StatusSeen StatusSeen { get; set; }
         public void TotalCal()
         {
             Total = OrderDetails.Sum(x => x.Quantity * x.Price);

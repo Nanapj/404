@@ -13,6 +13,7 @@ namespace BestApp.Core.Models
         public Guid EventTypeId { get; set; }
         public Guid EventPurposeId { get; set; }
         public StatusEvent Status { get; set; }
+        public StatusSeen StatusSeen { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
         public List<DetailEvent> DetailEvents { get; set; }
         public List<InteractionHistory> InteractionHistories { get; set; } = new List<InteractionHistory>();
