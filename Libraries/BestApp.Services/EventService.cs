@@ -82,8 +82,16 @@ namespace BestApp.Services
                     StatusSeen = x.StatusSeen,
                     UserName = x.UserAccount.UserName,
                     Note = x.Note
-                });
-            return result;
+                }).ToList();
+            foreach (var item in result)
+            {
+                item.EventPurposeName = _eventPurposeService.Queryable()
+                     .Where(t => t.Delete == false && t.Id == item.EventPurposeID).FirstOrDefault().Name;
+                item.EventTypeName = _eventTypeService.Queryable()
+                    .Where(t => t.Delete == false && t.Id == item.EventTypeID).FirstOrDefault().Name;
+            }
+
+            return result.AsQueryable();
         }
 
         public Task<IQueryable<EventViewModel>> GetEventForPishopAsync(SearchViewModel model)

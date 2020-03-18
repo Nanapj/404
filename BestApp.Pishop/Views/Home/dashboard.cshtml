@@ -32,39 +32,49 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="wrapper-sm">
                 @*<div kendo-scheduler k-options="schedulerOptions">
-            <span k-event-template class='custom-event'>{{dataItem.title}}</span>
-            <div k-all-day-event-template class='custom-all-day-event'>{{dataItem.title}}</div>
-        </div>*@
-                <div class="col-md-12">
+                <span k-event-template class='custom-event'>{{dataItem.title}}</span>
+                <div k-all-day-event-template class='custom-all-day-event'>{{dataItem.title}}</div>
+            </div>*@
+                <div class="row">
                     <div class="panel panel-default" block-ui="BlockUI">
-                        <div class="panel-heading font-bold">List Products</div>
+                        <div class="panel-heading font-bold">List Events</div>
                         <div class="panel-body">
-                            <div class="form-group">
+                            <div class="form-group" style="overflow-x:auto">
                                 <table class="table">
-                                    <thead style="background:darkgrey;color:black">
-                                        <tr>
-                                            <th>Tên sản phẩm</th>
-                                            <th>Thuộc tính</th>
-                                            <th>Quà tặng</th>
-                                            <th>Giá</th>
-                                            <th>Số lượng</th>
-                                            <th>Tổng giá</th>
+                                    <thead style="background:#9baeb3;color:black">
 
+                                        <tr>
+                                            <th scope="col">Mã sự kiện</th>
+                                            <th scope="col">Ngày tạo</th>
+                                            <th scope="col">SĐT</th>
+                                            <th scope="col">Tên KH</th>
+                                            <th scope="col">Địa chỉ</th>
+                                            <th scope="col">Loại</th>
+                                            <th scope="col">Mục đích</th>
+                                            <th scope="col">Ghi chú</th>
+                                            <th scope="col">Trạng thái</th>
+                                            <th scope="col"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="x in vm.OrderDetail">
-                                            <td>{{x.ProductName}}</td>
+                                        <tr ng-repeat="x in vm.EventForPishop">
                                             <td>
-                                                <p ng-repeat="y in x.OrderStatistics"> {{y.ProductAttributeName}} {{y.ProductAttributeNote}}</p>
+                                                {{x.Code}}
                                             </td>
-                                            <td>{{x.IsGift}}</td>
-                                            <td>{{x.Price |  number : fractionSize}}</td>
-                                            <td>{{x.Quantity}}</td>
-                                            <td>{{x.Price * x.Quantity |  number : fractionSize}}</td>
+                                            <td>{{x.CreatDate | date:'M/d/yyyy HH:mm:ss'}}</td>
+                                            <td>
+                                                {{x.PhoneNumber}}
+                                            </td>
+                                            <td>{{x.CustomerName}}</td>
+                                            <td>{{x.Address}}</td>
+                                            <td>{{x.EventTypeName}}</td>
+                                            <td>{{x.EventPurposeName}}</td>
+                                            <td>{{x.Note}}</td>
+                                            <td>Đã xem  </td>
+                                            <th><button ng-click="vm.Seen(x.ID)" title="Xem chi tiết"><i class="fa fa-reply" aria-hidden="true"></i></button></th>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -87,8 +97,32 @@
                     <canvas id="barChart" width="400" height="50"></canvas>
                 </div>
             </div>
+
+            <!--View event detail-->
+            <div kendo-window="win2" id="windowDetail"
+                 k-options="windowOptions"
+                 k-on-open="win2visible = true"
+                 k-on-close="win2visible = false">
+                <div class="row col-md-12">
+                    <div class="col-md-12">
+                        <div class="panel panel-default" block-ui="BlockUI">
+                            <div class="panel-heading font-bold">List Events</div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <!-- / main header -->    
+        <!-- / main header -->
     </div>
     <!-- / main -->
 </div>
+
+
+
+<style>
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+</style>
