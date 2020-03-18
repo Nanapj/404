@@ -98,9 +98,12 @@ namespace BestApp.Services
                 data.Name = model.Name;
                 data.PhoneNumber = model.PhoneNumber;
                 data.Address = model.Address;
-                data.District = model.District;
-                data.Ward = model.Ward;
-                data.City = model.City;
+                if (model.District != null || model.Ward != null || model.City != null)
+                {
+                    data.District = model.District;
+                    data.Ward = model.Ward;
+                    data.City = model.City;
+                }
                 data.Note = model.Note;
                 data.Birthday = model.Birthday;
                 data.LastModifiedDate = DateTime.Now;
