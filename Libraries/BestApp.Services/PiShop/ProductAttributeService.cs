@@ -23,8 +23,8 @@ namespace BestApp.Services.PiShop
             ProductAttribute Insert(ProductAttributeViewModel model, string CurrentId);
             Task<ProductAttribute> InsertAsync(ProductAttributeViewModel model, string CurrentId);
             Task<IQueryable<ProductAttributeViewModel>> GetAllProductAttributesAsync();
-            ProductAttributeViewModel GetProductAttributes(Guid ID);
-            Task<ProductAttributeViewModel> GetProductAttributesAsync(Guid ID);
+            IQueryable<ProductAttributeViewModel> GetProductAttributes(Guid ID);
+            Task<IQueryable<ProductAttributeViewModel>> GetProductAttributesAsync(Guid ID);
             IQueryable<ProductAttribute> GetAllProductAttributes();
             Task<ProductAttributeViewModel> UpdateAsync(ProductAttributeViewModel model);
             bool Delete(Guid Id);
@@ -54,22 +54,22 @@ namespace BestApp.Services.PiShop
                 ProductName = x.ProductType.Name
             }));
         }
-        public ProductAttributeViewModel GetProductAttributes(Guid ID)
+        public IQueryable<ProductAttributeViewModel> GetProductAttributes(Guid ID)
         {
-            var result = GetAllProductAttributes().Where(x => x.Delete == false && x.Id == ID)
+            var result = GetAllProductAttributes().Where(x => x.Delete == false && x.ProductType.Id == ID)
             .Select(x => new ProductAttributeViewModel()
             {
                 ID = x.Id,
                 Name = x.Name,
                 ProductCode = x.ProductType.Code,
                 ProductName = x.ProductType.Name
-            }).FirstOrDefault();
+            });
             return result;
         }
 
-        public Task<ProductAttributeViewModel> GetProductAttributesAsync(Guid ID)
+        public Task<IQueryable<ProductAttributeViewModel>> GetProductAttributesAsync(Guid ID)
         {
-            return Task.Run(() => GetProductAttributes(ID));
+            return  Task.Run(() => GetProductAttributes(ID));
         }
         public ProductAttribute Insert(ProductAttributeViewModel model, string CurrentId)
         {

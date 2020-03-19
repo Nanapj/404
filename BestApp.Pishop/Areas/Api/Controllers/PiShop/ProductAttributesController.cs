@@ -29,6 +29,12 @@ namespace BestApp.Areas.Api.Controllers.PiShop
         {
             return await _productAttributeService.GetAllProductAttributesAsync();
         }
+        [HttpGet]
+        [EnableQuery]
+        public async Task<IQueryable<ProductAttributeViewModel>> GetProductAttributesByP(Guid ID)
+        {
+            return await _productAttributeService.GetProductAttributesAsync(ID);
+        }
         [HttpPost]
         public async Task<IHttpActionResult> Post(ProductAttributeViewModel model)
         {

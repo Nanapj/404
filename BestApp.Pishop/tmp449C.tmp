@@ -39,12 +39,13 @@
       <remove name="TelemetryCorrelationHttpModule" />
       <add name="TelemetryCorrelationHttpModule" type="Microsoft.AspNet.TelemetryCorrelation.TelemetryCorrelationHttpModule, Microsoft.AspNet.TelemetryCorrelation" preCondition="integratedMode,managedHandler" />
     </modules>
-  <handlers>
+    <handlers>
       <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
       <remove name="OPTIONSVerbHandler" />
       <remove name="TRACEVerbHandler" />
       <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
-    </handlers></system.webServer>
+    </handlers>
+  </system.webServer>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
       <dependentAssembly>
@@ -106,6 +107,10 @@
       <dependentAssembly>
         <assemblyIdentity name="System.Web.Http" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-5.2.7.0" newVersion="5.2.7.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="EntityFramework" culture="neutral" publicKeyToken="b77a5c561934e089" />
+        <codeBase version="6.0.0.0" href="file:///E:/Github/404/packages/EntityFramework.6.1.0/lib/net45/EntityFramework.DLL" />
       </dependentAssembly>
     </assemblyBinding>
   </runtime>
