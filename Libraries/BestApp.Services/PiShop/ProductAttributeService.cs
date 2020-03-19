@@ -56,7 +56,7 @@ namespace BestApp.Services.PiShop
         }
         public ProductAttributeViewModel GetProductAttributes(Guid ID)
         {
-            var result = GetAllProductAttributes().Where(x => x.Delete == false && x.Id == ID)
+            var result = GetAllProductAttributes().Where(x => x.Delete == false && x.ProductType.Id == ID)
             .Select(x => new ProductAttributeViewModel()
             {
                 ID = x.Id,

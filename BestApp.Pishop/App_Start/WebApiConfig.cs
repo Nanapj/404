@@ -52,6 +52,10 @@ namespace BestApp
             builder.EntitySet<TopicPSViewModel>("TopicPSs");
             builder.EntitySet<BlogPSViewModel>("BlogPSs");
             builder.EntitySet<ProductAttributeViewModel>("ProductAttributes");
+            builder.EntityType<ProductAttributeViewModel>()
+               .Collection
+               .Function("GetProductAttributesByP")
+               .ReturnsCollectionFromEntitySet<OrderViewModel>("Orders");
             builder.EntitySet<OrderViewModel>("Orders");
             builder.EntityType<OrderViewModel>()
                .Collection
