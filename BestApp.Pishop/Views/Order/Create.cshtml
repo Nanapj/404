@@ -10,125 +10,125 @@
         <div class="col-md-5">
             <div class="panel panel-default" block-ui="BlockUI">
                 <div class="panel-heading font-bold">Customer Information</div>
-                <div class="panel-body" >
-                        <div class="col-md-6">
+                <div class="panel-body">
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <div class="form-group">
-                                <div class="form-group">
-                                    <p>SĐT</p>
-                                    
-                                        <input type="text" id="numberphone" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="vm.Customer.PhoneNumber" aria-invalid="false" style="width: 81%; display: inline;">
-                                        <button type="submit" class="btn btn-success" ng-click="vm.SearchPhone()">TÌM</button>
-                                   
-                                </div>
+                                <p>SĐT</p>
+
+                                <input type="text" id="numberphone" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="vm.Customer.PhoneNumber" aria-invalid="false" style="width: 70%; display: inline;">
+                                <button type="submit" class="btn btn-success" ng-click="vm.SearchPhone()">Tìm</button>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label>Họ tên</label>
+                                <input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="vm.Customer.Name" aria-invalid="false">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-group">
+                                <h5>Ngày sinh</h5>
+                                <input kendo-date-picker
+                                       k-ng-model="vm.Customer.Birthday"
+                                       k-options="{format: 'dd/MM/yyyy'}"
+                                       k-on-change="onStartDateChange()"
+                                       style="width: 100%;" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Tỉnh/Thành phố</label> <br />
+                            <select id="citydropdown"
+                                    kendo-drop-down-list
+                                    k-ng-model="vm.selectedCity"
+                                    k-data-text-field="'name_with_type'"
+                                    k-data-value-field="'code'"
+                                    k-data-source="vm.cityData"
+                                    k-option-label="' Thành phố... '"
+                                    k-filter="'contains'"
+                                    k-on-change="onCityChanged()"
+                                    style="width: 100%"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Quận/Huyện</label> <br />
+                            <select id="districtdropdown"
+                                    kendo-drop-down-list
+                                    ng-disabled="districtDis"
+                                    k-data-text-field="'name_with_type'"
+                                    k-data-value-field="'code'"
+                                    k-data-source="vm.districtData"
+                                    k-option-label="' Quận / Huyện... '"
+                                    k-filter="'contains'"
+                                    k-ng-model="vm.selectedDistrict"
+                                    k-on-change="onDistrictChanged()"
+                                    style="width: 100%"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Phường</label> <br />
+                            <select id="warddropdown"
+                                    kendo-drop-down-list
+                                    ng-disabled="wardDis"
+                                    k-data-text-field="'name_with_type'"
+                                    k-data-value-field="'code'"
+                                    k-data-source="vm.wardData"
+                                    k-option-label="' Phường / Xã '"
+                                    k-ng-model="vm.selectedWard"
+                                    k-on-change="onWardChanged()"
+                                    k-filter="'contains'"
+                                    style="width: 100%"></select>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label>Địa chỉ nhà</label>
+                                <input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="vm.Customer.Address" aria-invalid="false">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label>Nguồn tạo</label>
+                                <input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="vm.model.Source" aria-invalid="false">
                             </div>
                             <div class="form-group">
                                 <div class="form-group">
-                                    <label>Họ tên</label>
-                                    <input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="vm.Customer.Name" aria-invalid="false">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="form-group">
-                                    <h5>Ngày sinh</h5>
+                                    <h5>Thời gian hẹn</h5>
                                     <input kendo-date-picker
-                                           k-ng-model="vm.Customer.Birthday"
+                                           k-ng-model="vm.model.Appointment"
                                            k-options="{format: 'dd/MM/yyyy'}"
-                                           k-on-change="onStartDateChange()"
-                                           style="width: 80%;" />
+                                           style="width: 100%;" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Tỉnh/Thành phố</label> <br />
-                                <select id="citydropdown"
-                                        kendo-drop-down-list
-                                        k-ng-model="vm.selectedCity"
-                                        k-data-text-field="'name_with_type'"
-                                        k-data-value-field="'code'"
-                                        k-data-source="vm.cityData"
-                                        k-option-label="' Thành phố... '"
-                                        k-filter="'contains'"
-                                        k-on-change="onCityChanged()"
-                                        style="width: 100%"></select>
+                                <label>Ghi chú</label>
+                                <input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="vm.model.Note" aria-invalid="false">
                             </div>
                             <div class="form-group">
-                                <label>Quận/Huyện</label> <br />
-                                <select id="districtdropdown"
-                                        kendo-drop-down-list
-                                        ng-disabled="districtDis"
-                                        k-data-text-field="'name_with_type'"
-                                        k-data-value-field="'code'"
-                                        k-data-source="vm.districtData"
-                                         k-option-label="' Quận / Huyện... '"
-                                        k-filter="'contains'"
-                                        k-ng-model="vm.selectedDistrict"
-                                        k-on-change="onDistrictChanged()"
-                                        style="width: 100%"></select>
-                            </div>
-                            <div class="form-group">
-                                <label>Phường</label> <br />
-                                <select id="warddropdown"
-                                        kendo-drop-down-list
-                                       ng-disabled="wardDis"
-                                        k-data-text-field="'name_with_type'"
-                                        k-data-value-field="'code'"
-                                        k-data-source="vm.wardData"
-                                        k-option-label="' Phường / Xã '"
-                                        k-ng-model="vm.selectedWard"
-                                        k-on-change="onWardChanged()"
-                                        k-filter="'contains'"
-                                        style="width: 100%"></select>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-group">
-                                    <label>Địa chỉ nhà</label>
-                                    <input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="vm.Customer.Address" aria-invalid="false">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <div class="form-group">
-                                    <label>Nguồn tạo</label>
-                                    <input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="vm.model.Source" aria-invalid="false">
-                                </div>
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <h5>Thời gian hẹn</h5>
-                                        <input kendo-date-picker
-                                               k-ng-model="vm.model.Appointment"
-                                               k-options="{format: 'dd/MM/yyyy'}"
-                                               style="width: 80%;" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Ghi chú</label>
-                                    <input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="vm.model.Note" aria-invalid="false">
-                                </div>
-                                <div class="form-group">
-                                    <p>Mục khách hàng</p>
-                                    <input type="radio" name="engine" id="engine1" ng-model='vm.model.TypeOrder' ng-value='"Mua"' checked="checked">
-                                    <label class="" for="engine1">Mua</label>
+                                <p>Mục khách hàng</p>
+                                <input type="radio" name="engine" id="engine1" ng-model='vm.model.TypeOrder' ng-value='"Mua"' checked="checked">
+                                <label class="" for="engine1">Mua</label>
 
 
-                                    <input type="radio" name="engine" id="engine2" ng-model='vm.model.TypeOrder' ng-value='"Tham khảo"' style="margin-left:5%">
-                                    <label class="" for="engine2">Tham khảo</label>
-                                </div>
-                                <div class="form-group">
-                                    <label>Tên nhân viên bán</label> <br />
-                                    <select id="staffnamedropdown"
-                                            kendo-drop-down-list
-                                            k-data-text-field="'FullName'"
-                                            k-data-value-field="'Id'"
-                                            k-data-source="vm.staffData"
-                                            k-option-label="' Tên nhân viên '"
-                                            k-ng-model="vm.selectedStaff"
-                                            k-on-change="onStaffChanged()"
-                                            k-filter="'contains'"
-                                            style="width: 100%"></select>
-                                </div>
+                                <input type="radio" name="engine" id="engine2" ng-model='vm.model.TypeOrder' ng-value='"Tham khảo"' style="margin-left:5%">
+                                <label class="" for="engine2">Tham khảo</label>
+                            </div>
+                            <div class="form-group">
+                                <label>Tên nhân viên bán</label> <br />
+                                <select id="staffnamedropdown"
+                                        kendo-drop-down-list
+                                        k-data-text-field="'FullName'"
+                                        k-data-value-field="'Id'"
+                                        k-data-source="vm.staffData"
+                                        k-option-label="' Tên nhân viên '"
+                                        k-ng-model="vm.selectedStaff"
+                                        k-on-change="onStaffChanged()"
+                                        k-filter="'contains'"
+                                        style="width: 100%"></select>
                             </div>
                         </div>
+                    </div>
 
                 </div>
             </div>
@@ -137,51 +137,56 @@
             <div class="panel panel-default" block-ui="BlockUI">
                 <div class="panel-heading font-bold">Product Information</div>
                 <div class="panel-body">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Sản phẩm</label> <br />
-                            <select id="productsdropdown"
-                                    kendo-drop-down-list
-                                    ng-disabled="eventTypeDis === 1"
-                                    k-data-text-field="'Name'"
-                                    k-data-value-field="'Id'"
-                                    k-data-source="vm.productsData"
-                                    k-option-label="' Sản phẩm '"
-                                    k-ng-model="vm.selectedProductsData"
-                                    k-on-change="onProductsSelChanged()"
-                                    k-filter="'contains'"
-                                    style="width: 100%"></select>
-                        </div>
-                        <div class="form-group">
-                            <div>
-                                <label>Số lượng</label>
-                                <input id="quantity" ng-change="changeQuantity()"  disabled type="number" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="vm.Quantity" aria-invalid="false" min="1">
+                    <form name="form">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Sản phẩm</label> <br />
+                                <select id="productsdropdown"
+                                        kendo-drop-down-list
+                                        ng-disabled="eventTypeDis === 1"
+                                        k-data-text-field="'Name'"
+                                        k-data-value-field="'Id'"
+                                        k-data-source="vm.productsData"
+                                        k-option-label="' Sản phẩm '"
+                                        k-ng-model="vm.selectedProductsData"
+                                        k-on-change="onProductsSelChanged()"
+                                        k-filter="'contains'"
+                                        style="width: 100%"></select>
+                            </div>
+
+                            <div class="form-group">
+                                @*<div>
+                    <label>Số lượng</label>
+                    <input id="quantity" ng-change="changeQuantity()" disabled type="number" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="vm.Quantity" aria-invalid="false" min="1">
+                </div>*@
+                                <div>
+                                    <label>Serial</label>
+                                    <input id="serial" disabled type="text" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="vm.Serial" aria-invalid="false" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div>
+                                    <label>Giá</label>
+                                    <input type="text" ng-change="changeTotal()" id="price" disabled class="form-control ng-pristine ng-untouched ng-valid ng-empty"  number-input ng-model="vm.Total"   aria-invalid="false" required>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div>
-                                <label>Giá</label>
-                                <input type="text" ng-change="changeTotal()" id="price" disabled class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="vm.Total"  aria-invalid="false">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                        <form name="form">
+                        <div class="col-md-9">
                             <div class="form-group">
                                 <div class="form-group">
                                     <label style="font-weight:bold">DANH SÁCH THUỘC TÍNH</label>
                                     <table class="table">
-                                        <thead style="background:darkgrey;color:black">
+                                        <thead style="background:#9baeb3;color:black">
                                             <tr>
                                                 <th>Tên thuộc tính</th>
                                                 <th>Chi tiết thuộc tính</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="fade-in-down" ng-repeat="x in  vm.listAttribute">
+                                            <tr class="fade-in-up" ng-repeat="x in  vm.listAttribute">
                                                 <td>{{x.Name}}</td>
                                                 <td>
-                                                    <input  type="text" ng-model="vm.listAttribute.note[($index)]" required/>
+                                                    <input type="text" ng-model="vm.listAttribute.note[($index)]" required />
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -193,10 +198,11 @@
                                     <input type="checkbox" ng-model="checkGiftModel.value1" ng-true-value="true" ng-false-value="false">
                                     <span>Quà tặng</span>
                                 </label>
-                                <button type="submit" class="btn btn-success btn-sm"  ng-disabled="form.$invalid" ng-click="vm.AddProduct()">THÊM SẢN PHẨM</button>
+                                <button type="submit" class="btn btn-success btn-sm" ng-disabled="form.$invalid" ng-click="vm.AddProduct()">THÊM SẢN PHẨM</button>
                             </div>
-                         </form>
-                    </div>
+                        </div>
+                    </form>
+                   
                 </div>
             </div>
         </div>
@@ -206,14 +212,14 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <table class="table">
-                            <thead style="background:darkgrey;color:black">
+                            <thead style="background:#9baeb3;color:black">
                                 <tr>
                                     <th>Tên sản phẩm</th>
                                     <th>Thuộc tính</th>
                                     <th>Quà tặng</th>
+                       
+                                    <th>Serial</th>
                                     <th>Giá</th>
-                                    <th>Số lượng</th>
-                                    <th>Tổng giá</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -224,9 +230,9 @@
                                         <p ng-repeat="y in x.OrderStatistics"> {{y.ProductAttributeName}}: {{y.ProductAttributeNote}}</p>
                                     </td>
                                     <td> <input type="checkbox" ng-checked="{{x.IsGift}}" disabled /></td>
+
+                                    <td>{{x.Serial}}</td>
                                     <td>{{x.Price | number : fractionSize}}</td>
-                                    <td>{{x.Quantity}}</td>
-                                    <td>{{x.Price * x.Quantity | number : fractionSize}}</td>
                                     <td><a ng-click="vm.delete1Item($index)"><i class="glyphicon glyphicon-remove" style="color:red"></i></a></td>
                                 </tr>
                             </tbody>
@@ -239,11 +245,11 @@
                         </div>
                         <div class="form-group" style="float: right;">
                             <span style="font-weight:bold">Thành tiền:</span>
-                            <input type="text" readonly="" class="form-control ng-pristine ng-untouched ng-valid ng-not-empty"  value="{{vm.model.Total | number : fractionSize}}" aria-invalid="false" style="display:inline;width: 60%;"> <span>VNĐ</span>
+                            <input type="text" readonly="" class="form-control ng-pristine ng-untouched ng-valid ng-not-empty" value="{{vm.model.Total | number : fractionSize}}" aria-invalid="false" style="display:inline;width: 60%;"> <span>VNĐ</span>
                         </div>
 
                     </div>
-                   
+
                 </div>
             </div>
         </div>
@@ -275,3 +281,12 @@
         return /^-?\d*$/.test(value);
     });
 </script>
+
+
+<style>
+    tbody:before {
+        line-height: 1em;
+        content: "\200C";
+        display: block;
+    }
+</style>

@@ -51,7 +51,6 @@
                                             <th scope="col">Ngày tạo</th>
                                             <th scope="col">SĐT</th>
                                             <th scope="col">Tên KH</th>
-                                            <th scope="col">Địa chỉ</th>
                                             <th scope="col">Loại</th>
                                             <th scope="col">Mục đích</th>
                                             <th scope="col">Ghi chú</th>
@@ -69,12 +68,11 @@
                                                 {{x.PhoneNumber}}
                                             </td>
                                             <td>{{x.CustomerName}}</td>
-                                            <td>{{x.Address}}</td>
                                             <td>{{x.EventTypeName}}</td>
                                             <td>{{x.EventPurposeName}}</td>
                                             <td>{{x.Note}}</td>
-                                            <td>Đã xem  </td>
-                                            <th><button ng-click="vm.Seen(x.ID)" title="Xem chi tiết"><i class="fa fa-reply" aria-hidden="true"></i></button></th>
+                                            <td>{{x.StatusSeen}}</td>
+                                            <th><button ng-click="vm.Seen(x)" title="Xem chi tiết"><i class="fa fa-reply" aria-hidden="true"></i></button></th>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -103,12 +101,43 @@
                  k-options="windowOptions"
                  k-on-open="win2visible = true"
                  k-on-close="win2visible = false">
-                <div class="row col-md-12">
-                    <div class="col-md-12">
-                        <div class="panel panel-default" block-ui="BlockUI">
-                            <div class="panel-heading font-bold">List Events</div>
-
+                <div kendo-tab-strip k-content-urls="[ null, null]">
+                    <!-- tab list -->
+                    <ul>
+                        <li class="k-state-active">Chi tiết phiếu</li>
+                        <li>Lịch sử tương tác</li>
+                        <li>Tags</li>
+                        <li>Lịch sử hẹn</li>
+                    </ul>
+                    <div style="padding: 1em">
+                        <div class="col-md-12">
+                            <div id="eventDetailsGrid"
+                                 kendo-grid
+                                 k-options="detailsGridOption"
+                                 k-selectable="true"
+                                 k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
                         </div>
+                    </div>
+                    <div style="padding: 1em">
+                        <div id="historyDetailsGrid"
+                             kendo-grid
+                             k-options="historyGridOption"
+                             k-selectable="true"
+                             k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
+                    </div>
+                    <div>
+                        <div id="tagDetailsGrid"
+                             kendo-grid
+                             k-options="tagDetailsOption"
+                             k-selectable="true"
+                             k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
+                    </div>
+                    <div>
+                        <div id="reminderDetailsGrid"
+                             kendo-grid
+                             k-options="reminderDetailsOption"
+                             k-selectable="true"
+                             k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'></div>
                     </div>
                 </div>
             </div>
@@ -125,4 +154,5 @@
     tr:nth-child(even) {
         background-color: #f2f2f2;
     }
+   
 </style>

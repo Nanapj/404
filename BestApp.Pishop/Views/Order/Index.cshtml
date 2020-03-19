@@ -10,71 +10,68 @@
             <div class="panel panel-default" block-ui="BlockUI">
                 <div class="panel-heading font-bold">Filter</div>
                 <div class="panel-body">
-                    <div class="col-md-4">
+                    <div class="col-md-7">
                         <div class="form-group">
-
                             <label class="font-bold">Theo ngày tạo:</label>
                             <div>
-                                <h5>Start</h5>
                                 <input kendo-date-picker
                                        k-ng-model="vm.startCreateDate"
                                        k-options="{format: 'dd/MM/yyyy'}"
                                        k-on-change="onStartCreateDateChange()"
-                                       style="width:60%" />
-                            </div>
-                            <div style="margin-top:5%">
-                                <h5>End</h5>
+                                       style="width:45%" />
+
+                                <i class="fa fa-long-arrow-right " aria-hidden="true"></i>
                                 <input kendo-date-picker
                                        k-ng-model="vm.endCreateDate"
                                        k-options="{format: 'dd/MM/yyyy'}"
-                                       k-on-change="onEndCreateDateChange()" style="width:60%" />
+                                       k-on-change="onEndCreateDateChange()" style="width:45%" />
                             </div>
-
                         </div>
-                    </div>
-                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="font-bold">Theo thời gian hẹn:</label>
                             <div>
-                                <h5>Start</h5>
+
                                 <input kendo-date-picker
                                        k-ng-model="vm.startAppointmentDate"
                                        k-options="{format: 'dd/MM/yyyy'}"
-                                       k-on-change="onStartAppointmentDateChange()" style="width:60%" />
-                            </div>
-                            <div style="margin-top:5%">
-                                <h5>End </h5>
+                                       k-on-change="onStartAppointmentDateChange()" style="width:45%" />
+
+                                <i class="fa fa-long-arrow-right " aria-hidden="true"></i>
                                 <input kendo-date-picker
                                        k-ng-model="vm.endAppointmentDate"
                                        k-options="{format: 'dd/MM/yyyy'}"
-                                       k-on-change="onEndAppointmentDateChange()" style="width:60%" />
+                                       k-on-change="onEndAppointmentDateChange()" style="width:45%" />
                             </div>
                         </div>
                     </div>
+                   
+                    <div class="col-md-1"></div>
                     <div class="col-md-4">
-                            <div class="form-group">
-                                <p class="font-bold">Lịch nhắc đến thời gian khách hẹn:</p>
-                                <span style="display: block;">
-                                    Hôm nay: <span class="ng-binding" style="font-size: large;">{{vm.gettoday | date:'dd/MM/yyyy'}}</span> 
-                                    <button class="btn btn-info btn-sm" title="Refresh lại dữ liệu" ng-click="vm.refreshData()"><i class="fa fa-refresh"></i> Refresh</button>
-                                </span>
-                               
-                                <button class="button " id="button-5" ng-click="vm.Today()" title="Có {{vm.countAppointmentToday}} đơn hàng chưa xử lý">
-                                    <div id="translate"></div>
-                                    <a href="">Hôm nay<span class="badge badge-sm up bg-danger pull-right-xs">{{vm.countAppointmentToday}}</span></a>
-                                </button>
-                                <button class="button " id="button-5" ng-click="vm.Tomorrow()" title="Có {{vm.countAppointmentTomorrow}} đơn hàng chưa xử lý">
-                                    <div id="translate"></div>
-                                    <a href="">Ngày mai<span class="badge badge-sm up bg-danger pull-right-xs">{{ vm.countAppointmentTomorrow}}</span></a>
-                                </button>
-                                <button class="button " id="button-5" ng-click="vm.NextWeek()"  title="Có {{vm.countAppointmentNextWeek}} đơn hàng chưa xử lý">
-                                    <div id="translate"></div>
-                                    <a href="">Tuần tới<span class="badge badge-sm up bg-danger pull-right-xs">{{vm.countAppointmentNextWeek}}</span></a>
-                                </button>
-                            </div>
+                        <div class="form-group">
+                            <p class="font-bold">Lịch nhắc đến thời gian khách hẹn:</p>
+                            <span style="display: block;">
+                                Hôm nay: <span class="ng-binding" style="font-size: large;">{{vm.gettoday | date:'dd/MM/yyyy'}}</span>
+                                <button class="btn btn-info btn-sm" title="Refresh lại dữ liệu" ng-click="vm.refreshData()"><i class="fa fa-refresh"></i> Refresh</button>
+                            </span>
 
-                       
-                       
+                            <button class="button " id="button-5" ng-click="vm.Today()" title="Có {{vm.countAppointmentToday}} đơn hàng chưa xử lý">
+                                <div id="translate"></div>
+                                <a href="">
+                                    Hôm nay<span class="badge badge-sm up bg-danger pull-right-xs ng-binding" style="top: -1px; margin-left: 3px;">{{vm.countAppointmentToday}} </span>
+                                </a>
+                            </button>
+                            <button class="button " id="button-5" ng-click="vm.Tomorrow()" title="Có {{vm.countAppointmentTomorrow}} đơn hàng chưa xử lý">
+                                <div id="translate"></div>
+                                <a href="">Ngày mai<span class="badge badge-sm up bg-danger pull-right-xs" style="top: -1px; margin-left: 3px;">{{ vm.countAppointmentTomorrow}}</span></a>
+                            </button>
+                            <button class="button " id="button-5" ng-click="vm.NextWeek()" title="Có {{vm.countAppointmentNextWeek}} đơn hàng chưa xử lý">
+                                <div id="translate"></div>
+                                <a href="">Tuần tới<span class="badge badge-sm up bg-danger pull-right-xs" style="top: -1px; margin-left: 3px;">{{vm.countAppointmentNextWeek}}</span></a>
+                            </button>
+                        </div>
+
+
+
                     </div>
                 </div>
             </div>
@@ -100,27 +97,29 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <table class="table">
-                                <thead style="background:darkgrey;color:black">
+                                <thead style="background:#9baeb3;color:black">
                                     <tr>
+                                        <th>Serial</th>
                                         <th>Tên sản phẩm</th>
                                         <th>Thuộc tính</th>
                                         <th>Quà tặng</th>
-                                        <th>Giá</th>
-                                        <th>Số lượng</th>
-                                        <th>Tổng giá</th>
+                                        <th>Giá (VNĐ)</th>
+                                    
+                                     
 
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="x in vm.OrderDetail">
+                                        <td>{{x.Serial}}</td>
                                         <td>{{x.ProductName}}</td>
                                         <td>
                                             <p ng-repeat="y in x.OrderStatistics"> {{y.ProductAttributeName}} {{y.ProductAttributeNote}}</p>
                                         </td>
                                         <td>{{x.IsGift}}</td>
                                         <td>{{x.Price |  number : fractionSize}}</td>
-                                        <td>{{x.Quantity}}</td>
-                                        <td>{{x.Price * x.Quantity |  number : fractionSize}}</td>
+                                   
+                                 
                                     </tr>
                                 </tbody>
                             </table>
@@ -136,7 +135,7 @@
     <div>
         <div class="toolbar">
             <div style="float:left">
-                <button class="btn btn-success k-button-large" ng-click="vm.receive(this)"><span class="fa fa-check"></span>&nbsp;Đã Nhận</button>
+                <button class="btn btn-success k-button-large" ng-click="vm.receive(this)"><span class="fa fa-check"></span>&nbsp;Đã nhận</button>
                 <button class="btn btn-info k-button-large" ng-click="vm.appoint(this)"><span class="fa fa-pencil"></span>&nbsp;Hẹn lại</button>
                 <button class="btn btn-danger k-button-large" ng-click="vm.cancel(this)"><span class="fa fa-trash"></span>&nbsp;Hủy đơn</button>
             
@@ -151,4 +150,3 @@
         </div>
     </div>
 </script>
-

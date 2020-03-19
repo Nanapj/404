@@ -81,7 +81,47 @@ namespace BestApp.Services
                     Status = x.Status,
                     StatusSeen = x.StatusSeen,
                     UserName = x.UserAccount.UserName,
-                    Note = x.Note
+                    Note = x.Note,
+                    Tags = x.Tags.Select(t => new TagViewModel
+                    {
+                        ID = t.Id,
+                        NameTag = t.NameTag,
+                        CodeTag = t.CodeTag,
+                        DepartmentName = t.Departments.Name
+                    }).ToList(),
+                    DetailEvents = x.DetailEvents.Select(t => new DetailEventViewModel
+                    {
+                        ID = t.Id,
+                        Serial = t.Serial,
+                        CreatDate = t.CreatDate,
+                        ProductCode = t.ProductType.Code,
+                        ProductName = t.ProductType.Name,
+                        AgencySold = t.AgencySold,
+                        DateSold = t.DateSold,
+                        AssociateName = t.AssociateName,
+                        EventCode = t.Event.Code,
+                        EventID = t.Event.Id,
+                        Note = t.Note
+                    }).ToList(),
+                    ReminderNotes = x.ReminderNotes.Select(t => new ReminderNoteViewModel
+                    {
+                        Note = t.Note,
+                        CreatDate = t.CreatDate,
+                        Serial = t.Serial,
+                        ID = t.Id,
+                        ReminderDate = t.ReminderDate,
+
+                    }).ToList(),
+                    InteractionHistories = x.InteractionHistories.Select(t => new InteractionHistoryViewModel
+                    {
+                        ID = t.Id,
+                        Type = t.Type,
+                        Note = t.Note,
+                        CreatDate = t.CreatDate,
+                        EmployeeCall = t.EmployeeCall,
+                        EmployeeID = t.EmployeeID,
+                        EventCode = t.Event.Code
+                    }).ToList()
                 }).ToList();
             foreach (var item in result)
             {

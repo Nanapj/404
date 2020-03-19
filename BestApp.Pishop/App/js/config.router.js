@@ -279,6 +279,15 @@ angular.module('app')
                         url: '/index',
                         templateUrl: '/blog/Index'
                     })
+                    .state('app.blog.topic', {
+                        url: '/topic/index',
+                        templateUrl: '/topic/Index',
+                        resolve: {
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load('/App/ctrl/TopicController/topicCtrl.js'); // Resolve promise and load before view 
+                            }]
+                        }
+                    })
                     .state('app.blog.create', {
                         url:'/create',
                         templateUrl: '/blog/Create'

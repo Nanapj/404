@@ -158,16 +158,18 @@ angular.module('app')
             if (vm.selectedProductsData !== undefined && vm.selectedProductsData.Name !== " Sản phẩm ") {
                 $("#price").prop("disabled", false);
                 $("#quantity").prop("disabled", false);
+                $("#serial").prop("disabled", false);
             }
             else {
                 $("#price").prop("disabled", true);
                 $("#quantity").prop("disabled", true);
+                $("#serial").prop("disabled", true);
             }
             vm.Price = vm.selectedProductsData.Price;
             vm.Total = vm.selectedProductsData.Price * vm.Quantity;
-           
-          
-            
+    
+
+        
             
             //hien attribute tuong ung
             $http({
@@ -212,13 +214,14 @@ angular.module('app')
                 vm.Product.ProductID = vm.selectedProductsData.ID
                 vm.Product.ProductName = vm.selectedProductsData.Name;
                 vm.Product.Quantity = vm.Quantity;
+                vm.Product.Serial = vm.Serial;
                 vm.Product.Price = vm.Total / vm.Quantity; //lưu giá quantity = 1
                 if ($scope.checkGiftModel.value1) {
                     vm.Product.IsGift = true;
                 } else {
                     vm.Product.IsGift = false;
                 }
-                
+
                 //thêm thuộc tính vào OrderStatistics
 
                 vm.Product.OrderStatistics = [];
@@ -227,32 +230,34 @@ angular.module('app')
 
                     vm.Attribute.ProductAttributeId = vm.listAttribute[i].ID;
                     vm.Attribute.ProductAttributeName = vm.listAttribute[i].Name;
-                    
+
                     vm.Attribute.ProductAttributeNote = vm.listAttribute.note[i];
-                    
+
                     vm.Product.OrderStatistics.push(vm.Attribute);
                 }
 
 
                 //them vào list product
                 vm.model.OrderDetails.push(vm.Product);
-                
+
                 //sum total
                 vm.model.Total = 0;
                 for (var i = 0; i < vm.model.OrderDetails.length; i++) {
                     vm.model.Total += (vm.model.OrderDetails[i].Price * vm.model.OrderDetails[i].Quantity);
                 }
-               
+
                 //reset Product Information 
                 vm.Quantity = 1;
                 vm.Price = 0;
                 vm.Total = 0;
                 vm.initTotal = 0;
+                vm.Serial = "";
                 $scope.checkGiftModel.value1 = false;
                 vm.selectedProductsData = $('#productsdropdown').optionLabel;
                 vm.listAttribute = {};
                 $("#quantity").prop("disabled", true);
                 $("#price").prop("disabled", true);
+                $("#serial").prop("disabled", true);
             }
             else {
                 toaster.pop('warning', "Chưa chọn sản phẩm", "Vui lòng chọn sản phẩm");
@@ -375,4 +380,5 @@ angular.module('app')
         }
     }])
 
+    
    

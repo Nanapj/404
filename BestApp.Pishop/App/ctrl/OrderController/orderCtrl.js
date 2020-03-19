@@ -57,7 +57,7 @@ angular.module('app')
                         },
                     }).then(function successCallback(response) {
                         vm.countAppointmentToday = response.data.value.length;
-                       
+                        console.log(vm.countAppointmentToday);
                         });
                     $http({
                         method: 'GET',
@@ -118,16 +118,22 @@ angular.module('app')
             dataSource: {
                 type: "odata-v4",
                 transport: {
-                    read: _url 
+                    read: _url
                    
                 },
-                pageSize: 50,
+                pageSize: 25,
                 serverPaging: true,
-                serverSorting: true
+                serverSorting: true,
+                sort: {
+                    field: "CreatDate",
+                    dir: "desc"
+                }  
             },
            
             sortable: true,
-            pageable: true,
+            pageable: {
+                pageSizes: [10, 20, 50]
+            },
             refresh: true,
           
       
@@ -164,13 +170,13 @@ angular.module('app')
              
                 {
                     field: "Appointment",
-                    title: "Thời gian hẹn",
+                    title: "Ngày hẹn",
                     width: "120px",
                     template: "#= kendo.toString(kendo.parseDate(Appointment, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"
                 },
                 {
                     field: "SaleEmployeeName",
-                    title: "Tên NV bán",
+                    title: "NV bán",
                     width: "120px"
                 },
                 {
@@ -178,19 +184,20 @@ angular.module('app')
                     title: "Mục KH",
                     width: "100px"
                 },
-                {
-                    field: "StatusOrder",
-                    title: "Trạng thái",
-                    width: "120px"
-                },
+               
                 {
                     field: "Note",
                     title: "Ghi chú",
                     width: "120px"
                 },
                 {
+                    field: "StatusOrder",
+                    title: "Trạng thái",
+                    width: "120px"
+                },
+                {
                     field: "Total",
-                    title: "Tổng giá (VNĐ)",
+                    title: "Tổng giá",
                     width: "120px",
                     template: "#= kendo.toString(Total, '00,0') #"
                 },

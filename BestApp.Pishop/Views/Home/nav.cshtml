@@ -9,12 +9,34 @@
             <span class="font-bold">Dashboard</span>
         </a>
     </li>
-    <li ng-class="{active:$state.includes('app.department')}">
-    <li ui-sref-active="active">
-        <a ui-sref="app.department.index">
-            <i class="fa fa-institution icon text-light"></i><span class="font-bold">Phòng ban</span>
+    @*<li ng-class="{active:$state.includes('app.department')}">
+        <li ui-sref-active="active">
+            <a ui-sref="app.department.index">
+                <i class="fa fa-institution icon text-light"></i><span class="font-bold">Phòng ban</span>
+            </a>
+        </li>
+        </li>*@
+    <li ng-class="{active:$state.includes('app.order')}">
+        <a class="auto">
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="fa fa-envelope-o text-light"></i>
+            <span class="font-bold">Đơn hàng</span>
         </a>
-    </li>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active">
+                <a ui-sref="app.order.create">
+                    <span>Tạo đơn hàng</span>
+                </a>
+            </li>
+            <li ui-serf-active="active">
+                <a ui-sref="app.order.index">
+                    <span>Quản lý đơn hàng</span>
+                </a>
+            </li>
+        </ul>
     </li>
     <li ng-class="{active:$state.includes('app.staff')}">
     <li ui-sref-active="active">
@@ -36,13 +58,14 @@
         </a>
     </li>
     </li>
-    <li ui-sref-active="active">
-        <a ui-sref="account.login">
-            <i class="glyphicon glyphicon-user icon text-light"></i>
-            <span class="font-bold">Logout</span>
-        </a>
-    </li>
-    <li ng-class="{active:$state.includes('app.blog')}">
+    @*<li ui-sref-active="active">
+            <a ui-sref="account.login">
+                <i class="glyphicon glyphicon-user icon text-light"></i>
+                <span class="font-bold">Logout</span>
+            </a>
+        </li>*@
+
+    @*<li ng-class="{active:$state.includes('app.blog')}">
     <li ui-sref-active="active">
         <a ui-sref="app.blog.index">
             <i class="fa fa-institution icon text-light"></i><span class="font-bold">Chủ đề</span>
@@ -55,25 +78,26 @@
             <i class="fa fa-suitcase icon text-light"></i><span class="font-bold">Bài viết</span>
         </a>
     </li>
-    </li>
-    <li ng-class="{active:$state.includes('app.order')}">
+    </li>*@
+    <!-- / test blog topic -->
+    <li ng-class="{active:$state.includes('app.topic')}">
         <a class="auto">
             <span class="pull-right text-muted">
                 <i class="fa fa-fw fa-angle-right text"></i>
                 <i class="fa fa-fw fa-angle-down text-active"></i>
             </span>
-            <i class="fa fa-envelope-o text-light"></i>
-            <span class="font-bold">Đơn hàng</span>
+            <i class="fa fa-institution icon text-light"></i>
+            <span class="font-bold">Quản lý tin tức</span>
         </a>
         <ul class="nav nav-sub dk">
             <li ui-sref-active="active">
-                <a ui-sref="app.order.create">
-                    <span>Tạo đơn hàng</span>
+                <a ui-sref="app.blog.index">
+                    <span>Chủ đề</span>
                 </a>
             </li>
             <li ui-serf-active="active">
-                <a ui-sref="app.order.index">
-                    <span>Quản lý đơn hàng</span>
+                <a ui-sref="app.blog.topic">
+                    <span>Bài viết</span>
                 </a>
             </li>
         </ul>
