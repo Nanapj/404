@@ -121,9 +121,9 @@ angular.module('app')
                     read: _url
                    
                 },
-                pageSize: 25,
-                serverPaging: true,
-                serverSorting: true,
+                pageSize: 30,
+                //serverPaging: true,
+                //serverSorting: true,
                 sort: {
                     field: "CreatDate",
                     dir: "desc"
@@ -132,14 +132,14 @@ angular.module('app')
            
             sortable: true,
             pageable: {
-                pageSizes: [10, 20, 50]
+                pageSizes: [20, 40, 50]
             },
             refresh: true,
           
       
             selectable: true,
        
-            serverFiltering: true,
+            //serverFiltering: true,
             height: 700,
       
             dataBound: onDataBound,
@@ -341,5 +341,5 @@ angular.module('app')
             vm.endAppointmentDate = moment().add(1, 'weeks').endOf('isoWeek').utc().format('YYYY-MM-DDT[00:00:00Z]');
             $scope.onStartAppointmentDateChange();
         }
-        console.log(moment().add(1, 'weeks').endOf('isoWeek').utc().format('YYYY-MM-DDT[00:00:00Z]'));
+        
     }]);

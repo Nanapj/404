@@ -76,7 +76,7 @@ namespace BestApp.Services
                 data.Ward = model.Ward;
                 data.City = model.City;
                 data.Note = model.Note;
-                data.Birthday = (DateTime)model.Birthday;
+                data.Birthday = model.Birthday;
                 data.CreatDate = DateTime.Now;
                 data.Delete = false;
                 data.LastModifiedDate = DateTime.Now;

@@ -775,11 +775,13 @@ angular.module('app')
                 },
                 {
                     field: "Code",
-                    title: "Mã Phiếu"
+                    title: "Mã Phiếu",
+                    width: "135px"
                 },
                 {
                     field:"DateNoTime",
-                    title:"Ngày tạo",
+                    title: "Ngày tạo",
+                    width: "110px",
                     template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
                     aggregates: ["count"],
                     groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #",
@@ -805,37 +807,44 @@ angular.module('app')
                 },
                 {
                     field: "CustomerName",
-                    title: "Tên khách hàng"
+                    title: "Tên KH",
+                    width: "120px"
                 },
                 {
                     field: "PhoneNumber",
-                    title: "Số điện thoại"
+                    title: "SĐT",
+                    width: "100px"
                 },
                 {
                     field: "Address",
-                    title: "Địa chỉ"
+                    title: "Địa chỉ",
+                    width: "110px"
                 },
                 {
                     field: "Status",
-                    title: "Trạng thái phiếu"
+                    title: "Trạng thái",
+                    width: "108px"
                 },
                 {
                     field: "EventTypeName",
-                    title: "Loại sự kiện"
+                    title: "Loại sự kiện",
+                    width: "122px"
                 },
                 {
                     field: "EventPurposeName",
-                    title: "Mục đích"
+                    title: "Mục đích",
+                    width: "101px"
                 },
                 {
                     field: "Note",
-                    title: "Ghi chú sự kiện"
+                    title: "Ghi chú",
+                    width: "100px"
                 },
                 { command: [{ text: "Chi tiết", click: showDetails },{text: "Sửa", click: showEditDetails , 
                     visible: function(dataItem) { return dataItem.Status ==="Open" }
                 },{text:"Đóng phiếu", click: closeEvent , 
                     visible: function(dataItem) { return dataItem.Status ==="Open" }
-                }], title: " Tùy chỉnh ", width: "300px" }
+                }], title: " Tùy chỉnh ", width: "80px" }
             ]
         };
         function closeEvent(e) {

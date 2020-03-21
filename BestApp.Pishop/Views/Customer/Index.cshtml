@@ -5,7 +5,7 @@
     </div>
     <div class="bg-light lter b-b wrapper-md" ng-controller="CustomerCtrl as vm">
             <div class="row">
-                <kendo-grid options="mainGridOptions" >
+                <kendo-grid options="mainGridOptions"  k-filterable='{ extra: false, messages: { info: "Filter by: " }, operators: { string: { contains: "Contains", startswith: "Starts with" } } }'>
                 </kendo-grid>
             </div>
     </div>

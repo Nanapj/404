@@ -46,8 +46,22 @@ angular.module('app')
                     vm.Customer.District = vm.InforCustomer.District;
                     vm.Customer.Ward = vm.InforCustomer.Ward;
                     vm.Customer.Address = vm.InforCustomer.Address;
-                    vm.selectedCity = vm.InforCustomer.City; // chưa lay dc city lên dropdown
-                    //gán city district ward 
+                    //vm.selectedCity = vm.InforCustomer.City;
+                    //gán city district ward
+                    var city = $('#citydropdown').data("kendoDropDownList");
+                    var district = $('#districtdropdown').data("kendoDropDownList");
+                    var ward = $('#warddropdown').data("kendoDropDownList");
+                    city.select(function (dataItem) {
+                        return dataItem.name_with_type === vm.InforCustomer.City;
+                    });
+                    district.select(function (dataItem) {
+                        return dataItem.name_with_type === vm.InforCustomer.District;
+                    });
+                    ward.select(function (dataItem) {
+                        return dataItem.name_with_type === vm.InforCustomer.Ward;
+                    });
+                    $scope.districtDis = false;
+                    $scope.wardDis = false;  
                 }
                 else {
                     vm.model.CustomerID = "";
@@ -58,6 +72,21 @@ angular.module('app')
                     vm.Customer.Ward = "";
                     vm.Customer.Address = "";
                     checkSearchPhone = false;
+
+                    var city = $('#citydropdown').data("kendoDropDownList");
+                    var district = $('#districtdropdown').data("kendoDropDownList");
+                    var ward = $('#warddropdown').data("kendoDropDownList");
+                    city.select(function (dataItem) {
+                        return dataItem.name_with_type === " Thành phố... ";
+                    });
+                    district.select(function (dataItem) {
+                        return dataItem.name_with_type === " Quận / Huyện... ";
+                    });
+                    ward.select(function (dataItem) {
+                        return dataItem.name_with_type === " Phường / Xã... ";
+                    });
+                    $scope.districtDis = true;
+                    $scope.wardDis = true;  
                     toaster.pop('warning', "Thông báo", "Không có thông tin khách hàng");
                 }
             });
@@ -68,7 +97,7 @@ angular.module('app')
             //phải có sản phẩm, SDT tên KH != null
         
             if (vm.model.OrderDetails.length > 0) {
-                if (vm.Customer.PhoneNumber !== "" && vm.Customer.PhoneNumber !== undefined && vm.Customer.Name !== "" && vm.Customer.Name !== undefined && vm.Customer.Birthday != null && vm.Customer.Birthday !== "" && vm.Customer.Birthday !== undefined) {
+                if (vm.Customer.PhoneNumber !== "" && vm.Customer.PhoneNumber !== undefined && vm.Customer.Name !== "" && vm.Customer.Name !== undefined ) {
                    
                     //check trong OrderDetails có item nào là IsGift không?
                     for (var i = 0; i < vm.model.OrderDetails.length; i++) {
@@ -78,9 +107,10 @@ angular.module('app')
                     }
                     if (checkSearchPhone === false) //tạo thông tin khách hàng khi không tìm thầy thông tin KH
                     {
-                        console.log(vm.model);
+                        if (vm.Customer.Birthday == null || vm.Customer.Birthday === "" || vm.Customer.Birthday === undefined)
+                            vm.Customer.Birthday = null;
                         $http({
-                            url: "odata/Customers",
+                            url: "/odata/Customers",
                             method: 'POST',
                             data: JSON.stringify(vm.Customer),
                             headers: {
@@ -89,6 +119,7 @@ angular.module('app')
                             },
                         }).then(function (response) {
                             if (response.status == 201) {
+                                
                                 //lay customerID gan vao model
 
                                 vm.model.CustomerID = response.data.ID;
@@ -215,6 +246,7 @@ angular.module('app')
                 vm.Product.ProductName = vm.selectedProductsData.Name;
                 vm.Product.Quantity = vm.Quantity;
                 vm.Product.Serial = vm.Serial;
+                vm.Product.Serial = angular.uppercase(vm.Product.Serial);
                 vm.Product.Price = vm.Total / vm.Quantity; //lưu giá quantity = 1
                 if ($scope.checkGiftModel.value1) {
                     vm.Product.IsGift = true;

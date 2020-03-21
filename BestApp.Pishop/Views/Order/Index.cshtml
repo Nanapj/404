@@ -1,6 +1,6 @@
 ﻿
 <div class="bg-light lter b-b wrapper-md">
-    <h1 class="m-n font-thin h3">Order Management</h1>
+    <h1 class="m-n font-thin h3">Quản lý đơn hàng</h1>
 </div>
 
 
@@ -50,7 +50,7 @@
                         <div class="form-group">
                             <p class="font-bold">Lịch nhắc đến thời gian khách hẹn:</p>
                             <span style="display: block;">
-                                Hôm nay: <span class="ng-binding" style="font-size: large;">{{vm.gettoday | date:'dd/MM/yyyy'}}</span>
+                                Today:  <span class="ng-binding" style="font-size: large;font-family: Verdana, Geneva, sans-serif;">{{vm.gettoday | date:'dd/MM/yyyy'}}</span>
                                 <button class="btn btn-info btn-sm" title="Refresh lại dữ liệu" ng-click="vm.refreshData()"><i class="fa fa-refresh"></i> Refresh</button>
                             </span>
 

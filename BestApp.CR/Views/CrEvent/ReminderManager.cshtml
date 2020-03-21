@@ -13,40 +13,41 @@
         }
     </style>
 </head>
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Quản lý phiếu hẹn</h1>
+</div>
 <div class="col">
     <div class="bg-light lter b-b wrapper-md" ng-controller="crReminderManagerCtrl as vm">
-        <h4>Quản lý phiếu hẹn</h4>
+ 
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading font-bold">Filter</div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    @*<div kendo-date-range-picker
-                                         id="dateRangeFilter"
-                                         k-ng-model="vm.startDate, vm.endDate"
-                                         k-on-change="onDateRangeChange()"
-                                         k-options="{format: 'dd/MM/yyyy'}"
-                                         style="width: 100%;" />*@
-                                    <h5>Start</h5>
-                                    <input kendo-date-picker
-                                           k-ng-model="vm.startDate"
-                                           k-options="{format: 'dd/MM/yyyy'}"
-                                           k-on-change="onStartDateChange()"
-                                           style="width: 50%;" />
-                                    <h5>End</h5>
-                                    <input kendo-date-picker
-                                           k-ng-model="vm.endDate"
-                                           k-options="{format: 'dd/MM/yyyy'}"
-                                           k-on-change="onEndDateChange()"
-                                           style="width: 50%;" />
+              
+                                    <label class="font-bold">Theo ngày tạo:</label>
+                                    <div>
+                                        <input kendo-date-picker
+                                               k-ng-model="vm.startDate"
+                                               k-options="{format: 'dd/MM/yyyy'}"
+                                               k-on-change="onStartDateChange()"
+                                               style="width:45%" />
+
+                                        <i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+                                        <input kendo-date-picker
+                                               k-ng-model="vm.endDate"
+                                               k-options="{format: 'dd/MM/yyyy'}"
+                                               k-on-change="onEndDateChange()" style="width:45%" />
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-5">
                                 <div class="form-group">
-                                    <h5>Phòng ban</h5>
+                                    <label class="font-bold">Phòng ban:</label>
                                     <select kendo-multi-select
                                             id="departMulDrop"
                                             k-options="vm.departmentSelectOptions"
