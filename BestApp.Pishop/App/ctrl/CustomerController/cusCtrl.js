@@ -6,88 +6,95 @@ angular.module('app')
         var _eventURL = "/odata/Events";
         vm.selectedCus = {};
         $scope.mainGridOptions = {
-            toolbar:['search'],
+           
             dataSource: {
                 type: "odata-v4",
                 transport: {
                     read: _cusURL
                 },
-                schema: {
-                    parse: function(response) {
-                      var customers = [];
-                      for (var i = 0; i < response.value.length; i++) {
-                        var birthDayNo = new Date(response.value[i].Birthday);
-                        var dateNoTime = new Date(response.value[i].CreatDate);
-                        var customer = {
-                            ID: response.value[i].ID,
-                            Address: response.value[i].Address,
-                            City: response.value[i].City,
-                            District: response.value[i].District,
-                            Ward: response.value[i].Ward,
-                            Name: response.value[i].Name,
-                            PhoneNumber: response.value[i].PhoneNumber,
-                            CreatDate: new Date(
-                                dateNoTime.getFullYear(),
-                                dateNoTime.getMonth(),
-                                dateNoTime.getDate(),
-                                dateNoTime.getHours(),
-                                dateNoTime.getMinutes(),
-                                dateNoTime.getSeconds()
-                            ),
-                            Birthday: new Date(
-                                birthDayNo.getFullYear(),
-                                birthDayNo.getMonth(),
-                                birthDayNo.getDate(),
-                                birthDayNo.getHours(),
-                                birthDayNo.getMinutes(),
-                                birthDayNo.getSeconds()
-                            ),
-                            Note: response.value[i].Note
-                        };
-                        customers.push(customer);
-                      }
-                      return customers;
-                    },
-                    total: function (response) {
-                        return response.length;
-                    },
-                    model: {
-                      fields: {
-                        ID: {type: "string"},
-                        Address: {type: "string"},
-                        City: {type: "string"},
-                        District: {type: "string"},
-                        Ward: {type: "string"},
-                        Name: {type: "string"},
-                        PhoneNumber: {type: "string"},
-                        CreatDate: { type: "date" },
-                        Birthday: { type: "date" },
-                        Note: { type: "string" }
-                      }
-                    },
-                    serverPaging: true,
-                    serverFiltering: true,
-                    serverSorting: true,
-                    pageable: {
-                        pageSize: 10,
-                        refresh: true
-                    },
-                    groupable: true,
-                    reorderable: true,
-                },
-                pageSize: 19,
-                serverPaging: true,
-                serverSorting: true
+                //schema: {
+                //    parse: function(response) {
+                //      var customers = [];
+                //      for (var i = 0; i < response.value.length; i++) {
+                //        var birthDayNo = new Date(response.value[i].Birthday);
+                //        var dateNoTime = new Date(response.value[i].CreatDate);
+                //        var customer = {
+                //            ID: response.value[i].ID,
+                //            Address: response.value[i].Address,
+                //            City: response.value[i].City,
+                //            District: response.value[i].District,
+                //            Ward: response.value[i].Ward,
+                //            Name: response.value[i].Name,
+                //            PhoneNumber: response.value[i].PhoneNumber,
+                //            CreatDate: new Date(
+                //                dateNoTime.getFullYear(),
+                //                dateNoTime.getMonth(),
+                //                dateNoTime.getDate(),
+                //                dateNoTime.getHours(),
+                //                dateNoTime.getMinutes(),
+                //                dateNoTime.getSeconds()
+                //            ),
+                //            Birthday: new Date(
+                //                birthDayNo.getFullYear(),
+                //                birthDayNo.getMonth(),
+                //                birthDayNo.getDate(),
+                //                birthDayNo.getHours(),
+                //                birthDayNo.getMinutes(),
+                //                birthDayNo.getSeconds()
+                //            ),
+                //            Note: response.value[i].Note
+                //        };
+                //        customers.push(customer);
+                //      }
+                //      return customers;
+                //    },
+                //    total: function (response) {
+                //        return response.length;
+                //    },
+                //    //model: {
+                //    //  fields: {
+                //    //    ID: {type: "string"},
+                //    //    Address: {type: "string"},
+                //    //    City: {type: "string"},
+                //    //    District: {type: "string"},
+                //    //    Ward: {type: "string"},
+                //    //    Name: {type: "string"},
+                //    //    PhoneNumber: {type: "string"},
+                //    //    CreatDate: { type: "date" },
+                //    //    Birthday: { type: "date" },
+                //    //    Note: { type: "string" }
+                //    //  }
+                //    //},
+                //    //serverPaging: true,
+                //    //serverFiltering: true,
+                //    //serverSorting: true,
+                //    //pageable: {
+                //    //    pageSize: 10,
+                //    //    refresh: true
+                //    //},
+                //    //groupable: true,
+                //    //reorderable: true,
+                //},
+                pageSize: 15,
+                //serverPaging: true,
+                //serverSorting: true,
+              
             },
+          
+            //serverFiltering: true,
             sortable: true,
-            pageable: true,
-            groupable: true,
-            filterable: {
-                extra: false
+            toolbar: ['search'],
+         /*   groupable: true,*/ //co search groupable not working
+            pageable: {
+                refresh: true, 
             },
+         
+            
+            //filterable: {
+            //    extra: true
+            //},
             selectable: true,
             height: 500,
-            serverFiltering: true,
             dataBound: function() {
                 this.expandRow(this.tbody.find("tr.k-master-row").first());
             },
@@ -99,7 +106,7 @@ angular.module('app')
                 {
                 field: "Name",
                 title: "Họ tên khách hàng",
-                width: "120px"
+                width: "150px"
                 },{
                 field: "PhoneNumber",
                 title: "Số điện thoại",
@@ -122,7 +129,7 @@ angular.module('app')
                     field:"Birthday",
                     title:"Ngày sinh",
                     width: "120px",
-                    template: "#= kendo.toString(Birthday, 'dd/MM/yyyy HH:mm:ss') #",
+                    template: "#= kendo.toString(kendo.parseDate(Birthday, 'yyyy-MM-dd'), 'dd/MM/yyyy') #",
                     groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #",
                     filterable: {
                         ui: function (element) {

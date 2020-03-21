@@ -51,7 +51,8 @@ namespace BestApp.Services.PiShop
                 ID = x.Id,
                 Name = x.Name,
                 ProductCode = x.ProductType.Code,
-                ProductName = x.ProductType.Name
+                ProductName = x.ProductType.Name,
+                ProductTypeID = x.ProductType.Id
             }));
         }
         public IQueryable<ProductAttributeViewModel> GetProductAttributes(Guid ID)

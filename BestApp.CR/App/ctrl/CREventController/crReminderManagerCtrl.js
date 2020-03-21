@@ -352,39 +352,47 @@ angular.module('app')
                 },
                 {
                     field: "Code",
-                    title: "Mã Phiếu"
+                    title: "Mã Phiếu",
+                    width:"135px"
                 },
                 {
                     field:"CreatDate",
                     title:"Ngày tạo",
                     template: "#= kendo.toString(CreatDate, 'dd/MM/yyyy HH:mm:ss') #",
-                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #"
+                    groupHeaderTemplate: "#= kendo.toString(value, 'dd/MM/yyyy') #",
+                    width: "120px"
                 },
                 {
                     field: "CustomerName",
-                    title: "Tên khách hàng"
+                    title: "Tên KH",
+                    width: "120px"
                 },
                 {
                     field: "PhoneNumber",
-                    title: "Số điện thoại"
+                    title: "SĐT",
+                    width: "120px"
                 },
                 {
                     field: "Address",
-                    title: "Địa chỉ"
+                    title: "Địa chỉ",
+                    width: "120px"
                 },
                 {
                     field: "Status",
-                    title: "Trạng thái phiếu"
+                    title: "Trạng thái",
+                    width: "120px"
                 },
                 {
                     field: "EventTypeName",
-                    title: "Loại sự kiện"
+                    title: "Loại sự kiện",
+                    width: "120px"
                 },
                 {
                     field: "EventPurposeName",
-                    title: "Mục đích"
+                    title: "Mục đích",
+                    width: "120px"
                 },
-                { command: [{ text: "Chi tiết", click: showDetails }], title: " Tùy chỉnh ", width: "200px" }
+                { command: [{ text: "Chi tiết", click: showDetails }], title: " Tùy chỉnh ", width: "85px" }
             ]
         };
         function showDetails(e) {
